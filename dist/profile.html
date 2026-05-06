@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THRiVE Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" crossorigin href="/assets/style-CIE_Idhm.css">
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans min-h-screen flex flex-col relative">
+    <nav class="absolute top-6 left-6 z-50 print:hidden">
+        <a href="index.html" class="flex items-center gap-2 text-slate-400 hover:text-blue-600 font-bold transition-all no-underline">
+            &larr; Back to Home
+        </a>
+    </nav>
+    <div id="root"></div>
+    <script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+// =========================================================================
+// ⚙️ DEVELOPER SETTINGS (PASTE YOUR KEYS HERE TO SAVE THEM PERMANENTLY)
+// Because the preview completely resets when I update the code, 
+// pasting your key here ensures it is NEVER lost during our session!
+// =========================================================================
+const ELEVENLABS_API_KEY = "%VITE_ELEVENLABS_API_KEY%"; // <--- PASTE YOUR API KEY INSIDE THESE QUOTES
+const HARDCODED_ELEVENLABS_VOICE_ID = "4EfJOraSN0d4Lt6iDXwh"; // Default: Rachel
+// =========================================================================
+
+// --- CONFIGURATION & DATA ---
+const defaultElevenLabsVoiceId = "21m00Tcm4TlvDq8ikWAM"; // Default: Rachel
+
+const traitsPromptText = "Let's start with Traits (T). Traits are the core qualities central to who you are. Read through the Superpower Inventory, take your time, and then pick one or more of the clever questions below to help me understand what traits best describe you. Remember, you will need to end up with at least 3 (ideally 5) traits, or the system won't let you move on! Have a conversation with your Interviewer about the questions. Don't worry about structural organization, we'll fix that later!";
+
+const TraitsContent = (
+  <div className="max-h-[60vh] md:max-h-96 overflow-y-auto pr-3 space-y-8 custom-scrollbar text-slate-700">
+    <div className="text-lg text-slate-800 leading-relaxed">
+      {traitsPromptText}
+    </div>
+
+    {/* Superpower Inventory */}
+    <div className="bg-white border border-slate-200 rounded-xl p-5 md:p-6 shadow-sm">
+      <h3 className="font-black text-xl text-slate-800 mb-4 border-b border-slate-100 pb-2">🦸‍♂️ The Superpower Inventory (20 Traits)</h3>
+      <div className="space-y-4">
+        <p><strong>Adaptable 🦎:</strong> You treat plot twists as unexpected upgrades rather than script errors.</p>
+        <p><strong>Analytical 🔬:</strong> You can strip the emotion out of a chaotic room and spot the hidden variables driving the madness.</p>
+        <p><strong>Authentic 💯:</strong> Your absolute refusal to wear a mask is your ultimate, undeniable competitive advantage.</p>
+        <p><strong>Bold 🔴:</strong> You have a well-documented, highly entertaining habit of pressing the big red button just to see what happens.</p>
+        <p><strong>Collaborative 🤝:</strong> You are the ultimate multiplier, turning a room full of soloists into a symphony.</p>
+        <p><strong>Compassionate ❤️:</strong> You possess the rare ability to read the subtext of a room and hold safe space for the people in it.</p>
+        <p><strong>Creative 🎨:</strong> You don't just think outside the box; you regularly dismantle the box to build something much cooler.</p>
+        <p><strong>Curious 🔍:</strong> Your default setting is a relentless, unapologetic "Why?" that makes you a magnet for new ideas.</p>
+        <p><strong>Decisive ⚡:</strong> You would rather make a sharp left turn and adjust later than sit paralyzed in the intersection.</p>
+        <p><strong>Disciplined 🗓️:</strong> You treat your commitments to your "Future Self" as absolute, non-negotiable contracts.</p>
+        <p><strong>Energetic ☕:</strong> You are the human equivalent of a double-shot of espresso for whatever project you touch.</p>
+        <p><strong>Humorous 😂:</strong> You use levity as a tactical weapon to disarm tension, win the room, and keep things entirely too fun.</p>
+        <p><strong>Idealistic 🌟:</strong> You stubbornly refuse to accept the world as it is, insisting on building it exactly as it should be.</p>
+        <p><strong>Intuitive 🔮:</strong> Your gut consistently makes million-dollar calls while your brain is still trying to crunch the numbers.</p>
+        <p><strong>Loyal 🛡️:</strong> You are the fiercely protective anchor in the storm for the people lucky enough to be in your inner circle.</p>
+        <p><strong>Optimistic 🌈:</strong> You view massive obstacles as poorly disguised opportunities just waiting for a rebrand.</p>
+        <p><strong>Patient ⏳:</strong> You play the long game with the terrifying, quiet calm of a chess grandmaster setting up a trap.</p>
+        <p><strong>Persuasive 🗣️:</strong> You can sell a vision so vividly that people immediately start packing their bags to move there.</p>
+        <p><strong>Resilient 🥊:</strong> You have an uncanny, almost frustrating ability to bounce back from a knockout punch with a smirk.</p>
+        <p><strong>Strategic ♟️:</strong> You are playing 4D chess while everyone else is still trying to figure out the rules of checkers.</p>
+      </div>
+    </div>
+
+    {/* Trait Menu */}
+    <div className="bg-blue-50 border border-blue-100 rounded-xl p-5 md:p-6 shadow-sm">
+      <h3 className="font-black text-xl text-blue-900 mb-4 border-b border-blue-200 pb-2">🍽️ The Trait Menu (5 Clever Questions)</h3>
+      <p className="text-sm uppercase tracking-widest font-bold text-blue-800 mb-4">Choose a question to spark your answer!</p>
+      <div className="space-y-5 text-blue-950">
+        <p><strong>The Trojan Horse 🐴:</strong> What is the trait you list on a dating profile or resume that sounds sweet and innocent, but is actually your secret weapon for total world domination?</p>
+        <p><strong>The Warning Label ⚠️:</strong> If you came with a legally mandated warning label stitched to your collar regarding your most overpowering trait, what exactly does it say?</p>
+        <p><strong>The Rom-Com "Meet Cute" 🎬:</strong> You are the lead in a romantic comedy. Which of your traits is 100% responsible for causing the chaotic, embarrassing, but endearing scenario where you meet your co-star?</p>
+        <p><strong>The Drunk History Edit 🍻:</strong> If your best friend was describing your finest hour on an episode of Drunk History, which of your traits would they aggressively emphasize with a spilled drink?</p>
+        <p><strong>The Zombie Apocalypse Resume 🧟:</strong> The apocalypse just dropped. Which trait guarantees you survive to Season 2, and what highly specific job does it get you in the survivor camp?</p>
+      </div>
+    </div>
+  </div>
+);
+
+const hobbiesPromptText = "Next up: Hobbies (H) — The Energy Generators! 🔋 The goal here is to uncover the activities that charge your battery and spark a flow state without the pressure of monetization. Read through the Hobby Menu below, and pick one or more of the questions to help me understand what you do for fun. Remember, you will need to end up with at least 3 (ideally 5) activities, or the system won't let you move on! Have a conversation with your Interviewer, and don't worry about making it perfect!";
+
+const HobbiesContent = (
+  <div className="max-h-[60vh] md:max-h-96 overflow-y-auto pr-3 space-y-8 custom-scrollbar text-slate-700">
+    <div className="text-lg text-slate-800 leading-relaxed">
+      {hobbiesPromptText}
+    </div>
+
+    {/* Hobby Menu */}
+    <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-5 md:p-6 shadow-sm">
+      <h3 className="font-black text-xl text-emerald-900 mb-4 border-b border-emerald-200 pb-2">🎯 The Hobby Menu (5 Clever Questions)</h3>
+      <p className="text-sm uppercase tracking-widest font-bold text-emerald-800 mb-4">Choose a question to spark your answer!</p>
+      <div className="space-y-5 text-emerald-950">
+        <p><strong>The Sunday Morning Sanctuary ☕:</strong> The world is quiet, your inbox is paused, and you have two hours entirely to yourself. Where are you and what are you doing?</p>
+        <p><strong>The "Embrace the Suck" Sandbox 🛝:</strong> What is something you are happily, unapologetically terrible at, but you refuse to stop doing because it’s just too fun?</p>
+        <p><strong>The Analog Escape 🪵:</strong> If all screens, Wi-Fi, and grids vanished for 48 hours, what physical activity or craft are you immediately defaulting to?</p>
+        <p><strong>The Flow State Trigger 🌊:</strong> What is the one activity that instantly quiets your mental chatter and makes the concept of time completely disappear?</p>
+        <p><strong>The 10,000-Hour Fantasy ⏳:</strong> If you were given a fully funded sabbatical to master one non-essential craft, what are you dedicating 10,000 hours to?</p>
+      </div>
+    </div>
+  </div>
+);
+
+const relationshipsPromptText = "Let's talk about Relationships (R) — The Ensemble Cast! 🎭 The goal here is to map the energy dynamics of your social ecosystem, identifying the key players who elevate your 'Main Character' trajectory. Read through the Relationship Menu below, and pick one or more of the questions to spark your answer. Remember, you will need to end up with at least 3 (ideally 5) people, or the system won't let you move on! Have a conversation with your Interviewer, and don't worry about making it perfect!";
+
+const RelationshipsContent = (
+  <div className="max-h-[60vh] md:max-h-96 overflow-y-auto pr-3 space-y-8 custom-scrollbar text-slate-700">
+    <div className="text-lg text-slate-800 leading-relaxed">
+      {relationshipsPromptText}
+    </div>
+
+    {/* Relationship Menu */}
+    <div className="bg-amber-50 border border-amber-100 rounded-xl p-5 md:p-6 shadow-sm">
+      <h3 className="font-black text-xl text-amber-900 mb-4 border-b border-amber-200 pb-2">👥 The Relationship Menu (5 Clever Questions)</h3>
+      <p className="text-sm uppercase tracking-widest font-bold text-amber-800 mb-4">Choose a question to spark your answer!</p>
+      <div className="space-y-5 text-amber-950">
+        <p><strong>The Board of Directors 🏢:</strong> If your life were a high-growth startup, who currently holds the three most important advisory seats in your ear?</p>
+        <p><strong>The 3 AM Lifeline 📞:</strong> The plot just twisted hard and the stakes are incredibly high. Who is the very first person you are calling?</p>
+        <p><strong>The Hype Copilot 🚀:</strong> Who celebrates your wins louder and more unapologetically than you do?</p>
+        <p><strong>The Accountability Mirror 👁️:</strong> Who is the one person who can tell you the absolute, uncomfortable truth about yourself with zero sugarcoating—and you’ll actually listen?</p>
+        <p><strong>The Energy Audit 🔋:</strong> Who in your life makes you feel like you just drank a double espresso, and who feels like a low-battery warning?</p>
+      </div>
+    </div>
+  </div>
+);
+
+const interestsPromptText = "Moving to Interests (I) — The Rabbit Holes! 🕳️ The goal here is to track your intellectual curiosity, mapping where your attention naturally and effortlessly gravitates when no one is watching. Read through the Interest Menu below, and pick one or more of the questions to spark your answer. Remember, you will need to end up with at least 3 (ideally 5) topics, or the system won't let you move on! Have a conversation with your Interviewer, and don't worry about making it perfect!";
+
+const InterestsContent = (
+  <div className="max-h-[60vh] md:max-h-96 overflow-y-auto pr-3 space-y-8 custom-scrollbar text-slate-700">
+    <div className="text-lg text-slate-800 leading-relaxed">
+      {interestsPromptText}
+    </div>
+
+    {/* Interest Menu */}
+    <div className="bg-purple-50 border border-purple-100 rounded-xl p-5 md:p-6 shadow-sm">
+      <h3 className="font-black text-xl text-purple-900 mb-4 border-b border-purple-200 pb-2">🐇 The Interest Menu (5 Clever Questions)</h3>
+      <p className="text-sm uppercase tracking-widest font-bold text-purple-800 mb-4">Choose a question to spark your answer!</p>
+      <div className="space-y-5 text-purple-950">
+        <p><strong>The Unprepared TED Talk 🎤:</strong> You are pushed onto a stage and have to speak for 20 minutes with zero preparation. What is the topic you can absolutely crush?</p>
+        <p><strong>The Algorithm Confessional 📱:</strong> Based strictly on your YouTube, TikTok, or Instagram explore page, what does the algorithm think your actual job is?</p>
+        <p><strong>The Midnight Wikipedia Dive 🦉:</strong> What incredibly obscure or niche topic kept you up clicking hyperlinks way past your bedtime recently?</p>
+        <p><strong>The Bookstore Compass 🧭:</strong> When you walk into a massive, multi-level bookstore, which highly specific section acts as your magnetic north?</p>
+        <p><strong>The Conversation Hijacker 🗣️:</strong> What is the one topic that, if mentioned at a polite gathering, will instantly cause you to monopolize the conversation?</p>
+      </div>
+    </div>
+  </div>
+);
+
+const valuesPromptText = "Almost there! Step 5 is Values (V) — The Non-Negotiables! ⚖️ The goal here is to define your internal operating system—the core algorithms and boundaries that dictate your decisions and establish your integrity. Read through the Value Menu below, and pick one or more of the questions to spark your answer. Remember, you will need to end up with at least 3 (ideally 5) values, or the system won't let you move on! Have a conversation with your Interviewer, and don't worry about making it perfect!";
+
+const ValuesContent = (
+  <div className="max-h-[60vh] md:max-h-96 overflow-y-auto pr-3 space-y-8 custom-scrollbar text-slate-700">
+    <div className="text-lg text-slate-800 leading-relaxed">
+      {valuesPromptText}
+    </div>
+
+    {/* Value Menu */}
+    <div className="bg-slate-100 border border-slate-200 rounded-xl p-5 md:p-6 shadow-sm">
+      <h3 className="font-black text-xl text-slate-900 mb-4 border-b border-slate-300 pb-2">🧭 The Value Menu (5 Clever Questions)</h3>
+      <p className="text-sm uppercase tracking-widest font-bold text-slate-600 mb-4">Choose a question to spark your answer!</p>
+      <div className="space-y-5 text-slate-900">
+        <p><strong>The "Hell Yes or No" Filter 🚦:</strong> What is the single, non-negotiable criterion that makes a project or opportunity an immediate 'yes' for you?</p>
+        <p><strong>The Hill to Die On ⛰️:</strong> What is a core principle you will ruthlessly defend, even if it costs you money, status, or a relationship?</p>
+        <p><strong>The Dealbreaker 🚫:</strong> In business or personal life, what is the absolute fastest way someone can permanently lose your trust?</p>
+        <p><strong>The Redefinition 📖:</strong> Which heavy word—like "success," "wealth," or "power"—have you completely redefined for yourself in the last 5 years?</p>
+        <p><strong>The Legacy North Star ✨:</strong> When people are talking about you 50 years from now, what is the single, defining word you want associated with your name?</p>
+      </div>
+    </div>
+  </div>
+);
+
+const experiencesPromptText = "We made it to the final step! Experiences (E) — The Highlight Reel! 🗺️ The goal here is to explore the moments that have shaped you, your flow states, and your peak memories. Read through the Experience Menu below, and pick one or more of the questions to spark your answer. Remember, you will need to end up with at least 3 (ideally 5) experiences, or the system won't let you move on! Have a conversation with your Interviewer, and don't worry about making it perfect!";
+
+const ExperiencesContent = (
+  <div className="max-h-[60vh] md:max-h-96 overflow-y-auto pr-3 space-y-8 custom-scrollbar text-slate-700">
+    <div className="text-lg text-slate-800 leading-relaxed">
+      {experiencesPromptText}
+    </div>
+
+    {/* Experience Menu */}
+    <div className="bg-rose-50 border border-rose-100 rounded-xl p-5 md:p-6 shadow-sm">
+      <h3 className="font-black text-xl text-rose-900 mb-4 border-b border-rose-200 pb-2">🎬 The Experience Menu (5 Clever Questions)</h3>
+      <p className="text-sm uppercase tracking-widest font-bold text-rose-800 mb-4">Choose a question to spark your answer!</p>
+      <div className="space-y-5 text-rose-950">
+        <p><strong>The Highlight Reel 🎞️:</strong> If a Hollywood studio was making a 30-second "Best Of" trailer of your life so far, which three scenes—victories, adventures, or total surprises—must be in the final cut?</p>
+        <p><strong>The "Main Character" Moment 🌟:</strong> Think of a time you felt completely "on your game," like the universe was conspiring in your favor. What was the setting, and what were you actually doing when you felt that power?</p>
+        <p><strong>The Micro-Dose of Joy ☕:</strong> What is a "small-fry" moment in your week—something that costs $0 and takes 10 minutes—that weirdly makes you feel like a functional, happy human?</p>
+        <p><strong>The "Bliss" Audit 💖:</strong> Joseph Campbell talked about following your bliss. When was the last time you felt a "Yes!" in your chest rather than just a "Sure" in your head? What triggered it?</p>
+        <p><strong>The "Why Not?" Experiment 🚀:</strong> What is a "someday" experience that you’ve been gatekeeping from yourself? If we removed the "but it’s not the right time" excuse, what would we be booking today?</p>
+      </div>
+    </div>
+  </div>
+);
+
+const SECTIONS = [
+  { 
+    id: 1, 
+    key: 'traits', 
+    title: 'Traits (T)', 
+    icon: '🧬', 
+    color: 'blue', 
+    prompt: traitsPromptText,
+    content: TraitsContent 
+  },
+  { 
+    id: 2, 
+    key: 'hobbies', 
+    title: 'Hobbies (H)', 
+    icon: '🎨', 
+    color: 'emerald', 
+    prompt: hobbiesPromptText,
+    content: HobbiesContent 
+  },
+  { 
+    id: 3, 
+    key: 'relationships', 
+    title: 'Relationships (R)', 
+    icon: '🤝', 
+    color: 'amber', 
+    prompt: relationshipsPromptText,
+    content: RelationshipsContent 
+  },
+  { 
+    id: 4, 
+    key: 'interests', 
+    title: 'Interests (I)', 
+    icon: '🕯️', 
+    color: 'purple', 
+    prompt: interestsPromptText, 
+    content: InterestsContent
+  },
+  { 
+    id: 5, 
+    key: 'values', 
+    title: 'Values (V)', 
+    icon: '⚖️', 
+    color: 'slate', 
+    prompt: valuesPromptText,
+    content: ValuesContent
+  },
+  { 
+    id: 6, 
+    key: 'experiences', 
+    title: 'Experiences (E)', 
+    icon: '🗺️', 
+    color: 'rose', 
+    prompt: experiencesPromptText,
+    content: ExperiencesContent 
+  },
+];
+
+const apiKey = ""; // Gemini API Key injected by environment
+
+// --- API & TTS HELPERS ---
+
+// This function cleans up text specifically so AI voices read it with natural inflection.
+function prepareTextForTTS(text) {
+  return text
+    .replace(/THRiVE/g, "Thrive") // Fix pronunciation of branding
+    .replace(/\(([^)]+)\)/g, ", $1,") // Convert (parentheses) to commas to prevent unnatural pitch drops
+    .replace(/([.!?])\s+/g, "$1 <break time=\"0.8s\" /> "); // Add natural 0.8s breathing pauses
+}
+
+async function cleanTextWithGemini(text) {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+  const payload = {
+    contents: [{ parts: [{ text: `Organize the following dictated text into clear bullet points. Remove conversational filler words (like "ums", "ahs", "OK great", "yeah", "I would say", "basically", etc.) and clean up the phrasing so it reads professionally and directly. Do NOT remove any core details or stories. Format it into a clean, bulleted list for maximum readability. Text:\n\n${text}` }] }],
+    systemInstruction: { parts: [{ text: "You are a helpful assistant. Return ONLY the bullet points. Each point must start with a standard bullet character (•). Strip out conversational cruft and ensure the output is polished and direct, preserving the core meaning." }] }
+  };
+
+  const delays = [1000, 2000, 4000, 8000, 16000];
+  for (let i = 0; i < 5; i++) {
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (!response.ok) throw new Error('API Error');
+      const data = await response.json();
+      return data.candidates?.[0]?.content?.parts?.[0]?.text || text;
+    } catch (err) {
+      if (i === 4) return "• " + text.split('. ').join('.\n• '); // Fallback formatting
+      await new Promise(r => setTimeout(r, delays[i]));
+    }
+  }
+}
+
+// --- ICONS ---
+const MicIcon = ({ className }) => <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path></svg>;
+const StopMicIcon = ({ className }) => <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path><path strokeLinecap="round" strokeLinejoin="round" d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"></path></svg>;
+const CheckIcon = ({ className }) => <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"></path></svg>;
+const SparkleIcon = ({ className }) => <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>;
+const CopyIcon = ({ className }) => <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>;
+const ArrowRightIcon = ({ className }) => <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>;
+const ArrowLeftIcon = ({ className }) => <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>;
+const SpeakerIcon = ({ className }) => <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15.536 8.464a5 5 0 010 7.072M17.657 6.343a8 8 0 010 11.314M11 5L6 9H2v6h4l5 4V5z"></path></svg>;
+const PdfIcon = ({ className }) => <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>;
+const CloudIcon = ({ className }) => <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>;
+const GearIcon = ({ className }) => <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>;
+const CloseIcon = ({ className }) => <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>;
+
+// --- MAIN APP COMPONENT ---
+function App() {
+  const [step, setStep] = useState(0); // 0 = Intro, 1-6 = Sections, 7 = Final
+  const [reportData, setReportData] = useState({});
+  const [copied, setCopied] = useState(false);
+  
+  // Pre-filled defaults for rapid testing
+  const [userDetails, setUserDetails] = useState({ 
+    interviewee: 'John Doe', 
+    interviewer: 'John Smith', 
+    email: 'johnsmith@gmail.com' 
+  });
+  
+  const [elevenLabsKey, setElevenLabsKey] = useState(() => {
+    return ELEVENLABS_API_KEY || localStorage.getItem('thriveElevenLabsKey') || "";
+  });
+  
+  const [elevenLabsVoiceId, setElevenLabsVoiceId] = useState(() => {
+    return HARDCODED_ELEVENLABS_VOICE_ID || localStorage.getItem('thriveElevenLabsVoiceId') || "21m00Tcm4TlvDq8ikWAM";
+  });
+
+  useEffect(() => {
+    localStorage.setItem('thriveElevenLabsKey', elevenLabsKey);
+  }, [elevenLabsKey]);
+
+  useEffect(() => {
+    localStorage.setItem('thriveElevenLabsVoiceId', elevenLabsVoiceId);
+  }, [elevenLabsVoiceId]);
+
+  const currentSection = SECTIONS[step - 1];
+
+  const handleCompleteSection = (sectionKey, cleanedText) => {
+    setReportData(prev => ({ ...prev, [sectionKey]: cleanedText }));
+    setStep(prev => prev + 1);
+  };
+
+  const handleBack = () => {
+    setStep(prev => Math.max(0, prev - 1));
+  };
+
+  const copyToClipboard = () => {
+    const headerTitle = userDetails.interviewee ? `${userDetails.interviewee.toUpperCase()}'S THRIVE REPORT` : "MY THRiVE REPORT";
+    const interviewerInfo = userDetails.interviewer ? ` • Interviewed by ${userDetails.interviewer}` : "";
+
+    let reportText = `${headerTitle}\nCreated by Dr. Steve Huff • Based on the Strengths Model • Powered by Gemini${interviewerInfo}\n\n`;
+    SECTIONS.forEach(sec => {
+      reportText += `${sec.title}\n${reportData[sec.key] || 'No data provided.'}\n\n`;
+    });
+    
+    // Create a temporary textarea to perform the copy
+    const el = document.createElement('textarea');
+    el.value = reportText;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+    
+    setCopied(true);
+    setTimeout(() => setCopied(false), 3000);
+  };
+
+  return (
+    <div className="min-h-screen bg-slate-50 font-sans p-4 md:p-12 text-slate-600 selection:bg-blue-100 selection:text-blue-900">
+      <style dangerouslySetInnerHTML={{__html: `
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        @media print {
+          body { -webkit-print-color-adjust: exact; print-color-adjust: exact; background: white; }
+          .print\\:hidden { display: none !important; }
+          .print\\:shadow-none { box-shadow: none !important; }
+          .print\\:border-none { border: none !important; }
+        }
+      `}} />
+      <div className="max-w-3xl mx-auto">
+        
+        {/* Header - Hidden on Final Report for cleaner layout */}
+        {step < 7 && (
+          <header className="mb-8 text-center animate-in fade-in slide-in-from-top-4 duration-500 print:hidden">
+            <h1 className="text-slate-800 font-black text-4xl md:text-5xl mb-2 tracking-tight">The THRiVE Report 🌱</h1>
+            <p className="text-slate-500 uppercase tracking-widest font-bold text-xs md:text-sm">Created by Dr. Steve Huff • Based on the Strengths Model • Powered by Gemini</p>
+          </header>
+        )}
+
+        <main className="bg-white p-6 md:p-8 lg:p-10 rounded-2xl shadow-xl border border-slate-100 mb-6 transition-all duration-500 print:shadow-none print:border-none print:p-0">
+          
+          {step === 0 && (
+            <IntroScreen 
+              onStart={() => setStep(1)} 
+              elevenLabsKey={elevenLabsKey} 
+              setElevenLabsKey={setElevenLabsKey} 
+              elevenLabsVoiceId={elevenLabsVoiceId}
+              setElevenLabsVoiceId={setElevenLabsVoiceId}
+              userDetails={userDetails}
+              setUserDetails={setUserDetails}
+            />
+          )}
+          
+          {step > 0 && step < 7 && (
+            <ChatSection 
+              section={currentSection} 
+              stepNumber={step} 
+              initialDraft={reportData[currentSection.key] || ''}
+              elevenLabsKey={elevenLabsKey}
+              elevenLabsVoiceId={elevenLabsVoiceId}
+              onBack={handleBack}
+              onComplete={(cleanedText) => handleCompleteSection(currentSection.key, cleanedText)} 
+            />
+          )}
+
+          {step === 7 && (
+            <FinalReport 
+              data={reportData} 
+              userDetails={userDetails}
+              onCopy={copyToClipboard} 
+              copied={copied} 
+              onBack={handleBack}
+            />
+          )}
+        </main>
+
+        {/* Post-Report Callout */}
+        {step === 7 && (
+          <footer className="space-y-8 mb-16 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-300 fill-mode-both">
+            <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6 md:p-8 shadow-md">
+              <div className="flex flex-col md:flex-row gap-6 items-center mb-8">
+                <div className="text-6xl drop-shadow-md">🍌</div>
+                <div className="flex-1 text-center md:text-left">
+                  <p className="text-sm uppercase tracking-widest font-bold text-amber-800 mb-2">Make it Visual! (Coming Soon)</p>
+                  <p className="text-amber-950 leading-relaxed text-lg">
+                    Ready to visualize your unique strengths? Soon you will be able to take your THRiVE report and plug it into an image generator like <strong>Nano Banana 2</strong> to create a powerful, personalized reflection map based <em>only</em> on who you are!
+                  </p>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="rounded-xl overflow-hidden shadow-lg border-4 border-white transform transition hover:scale-[1.02]">
+                  <img src="Generated Image March 13, 2026 - 11_45AM.jpg" alt="Space Avatar Concept" className="w-full h-auto object-cover" onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/600x400/e2e8f0/475569?text=Space+Avatar+Sample'; }} />
+                </div>
+                <div className="rounded-xl overflow-hidden shadow-lg border-4 border-white transform transition hover:scale-[1.02]">
+                  <img src="THRiVE Report Image LEGO - for Steve Huff.jpeg" alt="Lego Avatar Concept" className="w-full h-auto object-cover" onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/600x400/e2e8f0/475569?text=LEGO+Avatar+Sample'; }} />
+                </div>
+              </div>
+            </div>
+          </footer>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// --- SUB-COMPONENTS ---
+
+function IntroScreen({ onStart, elevenLabsKey, setElevenLabsKey, elevenLabsVoiceId, setElevenLabsVoiceId, userDetails, setUserDetails }) {
+  const isReady = userDetails.interviewee.trim().length > 0;
+  const [showSettings, setShowSettings] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const audioRef = useRef(null);
+
+  // We break the spoken text into shorter sentences and remove parentheses for much better AI inflection.
+  // The visual text on the screen remains the same!
+  const spokenIntroText = "Welcome! The Thrive Report is a mini-autobiography about you. It is best created as a guided conversation between two people, an Interviewer and an Interviewee. This takes approximately 30 minutes. The purpose of the Thrive Report is to help you uncover your unique strengths and resources to better help you achieve goals and solve problems. If you're flying solo today, that's totally OK too! Just be your own best interviewer, follow your bliss, and let's get to it. Together, we are going to explore what makes you, you.";
+
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+      window.speechSynthesis.cancel();
+    };
+  }, []);
+
+  const fallbackTTS = () => {
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(spokenIntroText);
+    utterance.onend = () => setIsSpeaking(false);
+    window.speechSynthesis.speak(utterance);
+  };
+
+  const handleSpeakIntro = async () => {
+    if (isSpeaking) {
+      setIsSpeaking(false);
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+      window.speechSynthesis.cancel();
+      return;
+    }
+
+    setIsSpeaking(true);
+    
+    const apiKeyToUse = elevenLabsKey ? elevenLabsKey.trim() : "";
+    const voiceIdToUse = elevenLabsVoiceId && elevenLabsVoiceId.trim() !== "" ? elevenLabsVoiceId.trim() : defaultElevenLabsVoiceId;
+
+    // Apply our TTS formatting to ensure natural breathing and pacing
+    const textWithPauses = prepareTextForTTS(spokenIntroText);
+
+    if (apiKeyToUse) {
+      try {
+        const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceIdToUse}`, {
+          method: 'POST',
+          headers: {
+            'Accept': 'audio/mpeg',
+            'xi-api-key': apiKeyToUse,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            text: textWithPauses,
+            model_id: 'eleven_turbo_v2_5', 
+            voice_settings: { stability: 0.5, similarity_boost: 0.75 }
+          })
+        });
+
+        if (!response.ok) throw new Error("API Error");
+
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+        audioRef.current = new Audio(url);
+        audioRef.current.onended = () => setIsSpeaking(false);
+        
+        try {
+          await audioRef.current.play();
+        } catch (playError) {
+          console.warn("Audio playback prevented by browser:", playError);
+          fallbackTTS();
+        }
+
+      } catch (error) {
+        console.warn("ElevenLabs TTS failed, using standard voice fallback.");
+        fallbackTTS(); 
+      }
+    } else {
+      fallbackTTS();
+    }
+  };
+
+  return (
+    <div className="animate-in fade-in duration-500 relative">
+      
+      <div className="absolute top-0 right-0 flex items-center gap-2 z-10">
+        <button 
+          onClick={handleSpeakIntro}
+          className={`p-2 rounded-full transition-colors ${isSpeaking ? 'bg-blue-100 text-blue-600' : 'text-slate-400 hover:text-blue-600 hover:bg-blue-50'}`}
+          title={isSpeaking ? "Stop Reading" : "Read Aloud"}
+        >
+          <SpeakerIcon className="w-6 h-6" />
+        </button>
+        <button 
+          onClick={() => setShowSettings(true)}
+          className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors"
+          title="Premium Voice Settings"
+        >
+          <GearIcon className="w-6 h-6" />
+        </button>
+      </div>
+
+      <div className="mb-8 border-b border-slate-100 pb-8">
+        <h2 className="text-slate-800 font-bold text-3xl mb-4 pr-16">Welcome! 👋</h2>
+        <p className="text-slate-700 leading-relaxed mb-6 text-lg">
+          The THRiVE Report is a mini-autobiography about you, best created as a guided conversation between two people (an <strong>Interviewer</strong> and an <strong>Interviewee</strong>) that takes approximately 30 minutes. The purpose of the THRiVE Report is to help you uncover your unique strengths and resources to better help you achieve goals and solve problems. (More on that later!) If you're flying solo today, that's totally OK too! Just be your own best interviewer (feel free to use different voices 🎭), follow your bliss, and let's get to it. Together, we are going to explore what makes you, <em>you</em>.
+        </p>
+        
+        <div className="bg-blue-50 border border-blue-100 rounded-xl p-5 flex gap-4 md:gap-5 shadow-sm mb-8">
+          <div className="text-3xl md:text-4xl mt-1">🎙️</div>
+          <div>
+            <p className="text-sm uppercase tracking-widest font-black text-blue-800 mb-2">Ditch the Keyboard</p>
+            <p className="text-blue-900 leading-relaxed">
+              For the best experience, we encourage you to use the microphone button to just talk! Don't worry about rambling, stumbling over words, or missing punctuation. Just speak your mind, and our AI will organize it for you before you submit.
+            </p>
+          </div>
+        </div>
+
+        {/* Report Details Form */}
+        <div className="bg-slate-50 border border-slate-200 rounded-xl p-5 md:p-6 mb-8 space-y-5">
+          <h3 className="font-black text-slate-800 text-lg border-b border-slate-200 pb-2">Report Details</h3>
+          
+          <div>
+            <label className="block text-sm uppercase tracking-widest font-bold text-slate-600 mb-2">Interviewee Name (or Alias) <span className="text-blue-600">*</span></label>
+            <input 
+              type="text" 
+              value={userDetails.interviewee} 
+              onChange={(e) => setUserDetails(prev => ({...prev, interviewee: e.target.value}))}
+              placeholder="Who is this report for?"
+              className="w-full border-2 border-slate-200 rounded-xl p-3 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition-all text-slate-700 text-lg font-medium"
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div>
+              <label className="block text-sm uppercase tracking-widest font-bold text-slate-600 mb-2">Interviewer Name <span className="text-slate-400 font-normal normal-case">(Optional)</span></label>
+              <input 
+                type="text" 
+                value={userDetails.interviewer} 
+                onChange={(e) => setUserDetails(prev => ({...prev, interviewer: e.target.value}))}
+                placeholder="Who is asking the questions?"
+                className="w-full border-2 border-slate-200 rounded-xl p-3 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition-all text-slate-700"
+              />
+            </div>
+            <div>
+              <label className="block text-sm uppercase tracking-widest font-bold text-slate-600 mb-2">Email Address <span className="text-slate-400 font-normal normal-case">(Optional)</span></label>
+              <input 
+                type="email" 
+                value={userDetails.email} 
+                onChange={(e) => setUserDetails(prev => ({...prev, email: e.target.value}))}
+                placeholder="For sending your final PDF"
+                className="w-full border-2 border-slate-200 rounded-xl p-3 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition-all text-slate-700"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div className="flex flex-col sm:flex-row justify-end items-center gap-4">
+        {/* TEMPORARY ADMIN BUTTON */}
+        <button 
+          onClick={onStart}
+          className="w-full sm:w-auto text-rose-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl font-bold transition-all px-4 py-3 flex items-center justify-center text-xs uppercase tracking-widest"
+          title="Skip intro screen"
+        >
+          Admin Skip ⏩
+        </button>
+
+        <button 
+          onClick={onStart}
+          disabled={!isReady}
+          className={`w-full sm:w-auto text-white rounded-full font-bold transition-all px-8 py-4 shadow-md flex items-center justify-center gap-2 text-lg
+            ${isReady ? 'bg-blue-600 hover:bg-blue-700 hover:shadow-xl' : 'bg-slate-400 opacity-50 cursor-not-allowed'}
+          `}
+        >
+          {isReady ? "Let's Get Started" : "Enter Name to Start"} <ArrowRightIcon className="w-5 h-5" />
+        </button>
+      </div>
+
+      {/* Premium Voice Settings Modal */}
+      {showSettings && (
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-in fade-in duration-200">
+          <div className="bg-white rounded-2xl shadow-2xl border border-slate-100 w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="flex justify-between items-center p-5 border-b border-slate-100 bg-slate-50">
+              <h3 className="font-black text-slate-800 text-lg">Premium Voice Settings</h3>
+              <button 
+                onClick={() => setShowSettings(false)} 
+                className="text-slate-400 hover:text-slate-600 p-1.5 rounded-full hover:bg-slate-200 transition-colors"
+              >
+                <CloseIcon className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="p-6 space-y-5 bg-white">
+              <div>
+                <label className="block text-sm uppercase tracking-widest font-bold text-slate-600 mb-2">ElevenLabs API Key</label>
+                <input 
+                  type="password" 
+                  value={elevenLabsKey} 
+                  onChange={(e) => setElevenLabsKey(e.target.value)}
+                  placeholder="Paste API key here..."
+                  className="w-full border-2 border-slate-200 rounded-xl p-3 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition-all text-slate-700 font-mono text-sm"
+                />
+              </div>
+              <div>
+                <label className="block text-sm uppercase tracking-widest font-bold text-slate-600 mb-2">ElevenLabs Voice ID</label>
+                <input 
+                  type="text" 
+                  value={elevenLabsVoiceId} 
+                  onChange={(e) => setElevenLabsVoiceId(e.target.value)}
+                  placeholder="Voice ID..."
+                  className="w-full border-2 border-slate-200 rounded-xl p-3 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition-all text-slate-700 font-mono text-sm"
+                />
+                <p className="text-xs text-slate-500 mt-2 font-medium">Default: 21m00Tcm4TlvDq8ikWAM (Rachel)</p>
+              </div>
+            </div>
+            <div className="p-5 border-t border-slate-100 bg-slate-50 flex justify-end">
+              <button 
+                onClick={() => setShowSettings(false)} 
+                className="bg-blue-600 hover:bg-blue-700 text-white rounded-full font-bold transition-all px-6 py-2 shadow-md hover:shadow-lg"
+              >
+                Save & Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ChatSection({ section, stepNumber, initialDraft, elevenLabsKey, elevenLabsVoiceId, onComplete, onBack }) {
+  const [draft, setDraft] = useState('');
+  const [chatState, setChatState] = useState('initial'); // 'initial', 'digging', 'cleaning', 'approval'
+  const [isListening, setIsListening] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const recognitionRef = useRef(null);
+  const textAreaRef = useRef(null);
+  const audioRef = useRef(null);
+
+  // Reset state when section changes or populate if going backward
+  useEffect(() => {
+    setDraft(initialDraft);
+    // If they go back and already have a clean draft, jump straight to the approval state
+    setChatState(initialDraft ? 'approval' : 'initial'); 
+    setIsListening(false);
+    setIsSpeaking(false);
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+    }
+    window.speechSynthesis.cancel();
+    if (recognitionRef.current) {
+      recognitionRef.current.stop();
+    }
+  }, [section, initialDraft]);
+
+  // Speech Recognition Setup
+  useEffect(() => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      const recognition = new SpeechRecognition();
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      
+      recognition.onresult = (event) => {
+        let finalTranscript = '';
+        let interimTranscript = '';
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          if (event.results[i].isFinal) {
+            finalTranscript += event.results[i][0].transcript + ' ';
+          } else {
+            interimTranscript += event.results[i][0].transcript;
+          }
+        }
+        
+        // Append final transcript
+        if (finalTranscript) {
+          setDraft(prev => (prev + ' ' + finalTranscript).trim());
+        }
+      };
+
+      recognition.onerror = (e) => {
+        console.error("Speech Recognition Error", e);
+        setIsListening(false);
+      };
+
+      recognition.onend = () => {
+        setIsListening(false);
+      };
+
+      recognitionRef.current = recognition;
+    }
+    
+    return () => {
+      if (recognitionRef.current) recognitionRef.current.stop();
+      window.speechSynthesis.cancel();
+    };
+  }, []);
+
+  const toggleListen = () => {
+    if (!recognitionRef.current) {
+      alert("Dictation is not supported in this browser. Please type your answers.");
+      return;
+    }
+    
+    if (isListening) {
+      recognitionRef.current.stop();
+    } else {
+      recognitionRef.current.start();
+      setIsListening(true);
+      if (textAreaRef.current) textAreaRef.current.focus();
+    }
+  };
+
+  const handlePreSubmit = () => {
+    if (draft.trim().length === 0) return;
+    
+    // Digging Deeper Logic: If text is relatively short, push back
+    if (draft.length < 80 && chatState === 'initial') {
+      setChatState('digging');
+    } else {
+      handleCleanUp();
+    }
+  };
+
+  const handleCleanUp = async () => {
+    setChatState('cleaning');
+    const cleaned = await cleanTextWithGemini(draft);
+    setDraft(cleaned);
+    setChatState('approval');
+  };
+
+  const fallbackTTS = () => {
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(section.prompt);
+    utterance.onend = () => setIsSpeaking(false);
+    window.speechSynthesis.speak(utterance);
+  };
+
+  const handleSpeakPrompt = async () => {
+    if (isSpeaking) {
+      setIsSpeaking(false);
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+      window.speechSynthesis.cancel();
+      return;
+    }
+
+    setIsSpeaking(true);
+    
+    const apiKeyToUse = elevenLabsKey ? elevenLabsKey.trim() : "";
+    const voiceIdToUse = elevenLabsVoiceId && elevenLabsVoiceId.trim() !== "" ? elevenLabsVoiceId.trim() : "21m00Tcm4TlvDq8ikWAM";
+
+    // Apply our TTS formatting to ensure natural breathing and pacing
+    const textWithPauses = prepareTextForTTS(section.prompt);
+
+    if (apiKeyToUse) {
+      try {
+        const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceIdToUse}`, {
+          method: 'POST',
+          headers: {
+            'Accept': 'audio/mpeg',
+            'xi-api-key': apiKeyToUse,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            text: textWithPauses,
+            model_id: 'eleven_turbo_v2_5', 
+            voice_settings: { stability: 0.5, similarity_boost: 0.75 }
+          })
+        });
+
+        if (!response.ok) {
+          const errData = await response.json().catch(() => null);
+          const errMsg = errData?.detail?.message || `HTTP error ${response.status}`;
+          throw new Error(errMsg);
+        }
+
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+        audioRef.current = new Audio(url);
+        audioRef.current.onended = () => setIsSpeaking(false);
+        
+        try {
+          await audioRef.current.play();
+        } catch (playError) {
+          console.warn("Audio playback prevented by browser:", playError);
+          fallbackTTS();
+        }
+
+      } catch (error) {
+        console.warn("ElevenLabs TTS failed, using standard voice fallback."); // Cleaned up the console log so it doesn't look like a critical crash
+        fallbackTTS(); // Fallback if API fails
+      }
+    } else {
+      fallbackTTS(); // Fallback if no API key is provided
+    }
+  };
+
+  const isCleaning = chatState === 'cleaning';
+  
+  // Calculate items to enforce the "At least 3" rule
+  const bulletCount = (draft.match(/•/g) || []).length;
+  const hasEnoughItems = bulletCount >= 3;
+
+  return (
+    <div className="space-y-6 animate-in fade-in duration-500 relative print:hidden">
+      <div className="text-center mb-8 border-b border-slate-100 pb-4">
+        <span className="text-slate-400 text-xs md:text-sm uppercase tracking-widest font-black">{section.title.split(' ')[0]}: Step {stepNumber} of 6</span>
+      </div>
+
+      {/* Primary AI Prompt */}
+      <div className="flex gap-4 items-start">
+        <div className={`w-10 h-10 md:w-12 md:h-12 bg-slate-900 rounded-full flex items-center justify-center text-white shrink-0 shadow-md text-xl md:text-2xl`}>
+          {section.icon}
+        </div>
+        <div className="bg-slate-50 border border-slate-200 rounded-2xl rounded-tl-none p-4 md:p-6 text-slate-700 leading-relaxed shadow-sm flex-1 overflow-hidden">
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex-1 w-full overflow-hidden">
+              {section.content ? section.content : <p className="text-slate-800 text-lg mb-2">{section.prompt}</p>}
+            </div>
+            <button 
+              onClick={handleSpeakPrompt}
+              className={`shrink-0 p-2 rounded-full transition-colors ${isSpeaking ? 'bg-blue-100 text-blue-600' : 'text-slate-400 hover:text-blue-600 hover:bg-blue-50'}`}
+              title={isSpeaking ? "Stop Reading" : "Read Aloud"}
+            >
+              <SpeakerIcon className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Digging Deeper AI Prompt */}
+      {chatState === 'digging' && (
+        <div className="flex gap-4 items-start mt-6 animate-in slide-in-from-bottom-4 fade-in duration-300">
+          <div className="w-10 h-10 md:w-12 md:h-12 bg-emerald-500 rounded-full flex items-center justify-center text-white shrink-0 shadow-md">
+            <SparkleIcon className="w-5 h-5 md:w-6 md:h-6" />
+          </div>
+          <div className="bg-emerald-50 border border-emerald-100 rounded-2xl rounded-tl-none p-4 md:p-6 text-emerald-900 leading-relaxed shadow-sm">
+            <p className="font-bold mb-1 text-lg">That's a great start! 🌟</p>
+            <p>But I want to know a little bit more. Tell me a quick story, or give me a specific example. Tap the mic and just let the thoughts flow!</p>
+          </div>
+        </div>
+      )}
+
+      {/* Interaction Area */}
+      <div className="mt-8 relative">
+        {chatState === 'approval' && (
+          <div className={`flex items-center gap-2 mb-3 font-bold text-xs md:text-sm uppercase tracking-widest animate-in fade-in ${hasEnoughItems ? 'text-emerald-600' : 'text-amber-600'}`}>
+            {hasEnoughItems ? (
+              <>
+                <CheckIcon className="w-5 h-5" />
+                <span>Text organized! How does this look?</span>
+              </>
+            ) : (
+              <>
+                <span className="text-lg">⚠️</span>
+                <span>Almost there! We only found {bulletCount} item{bulletCount === 1 ? '' : 's'}. We need at least 3 (but 5 is ideal!)</span>
+              </>
+            )}
+          </div>
+        )}
+
+        <textarea 
+          ref={textAreaRef}
+          rows={chatState === 'approval' ? 8 : 6} 
+          className={`w-full border-2 rounded-2xl p-4 md:p-5 pb-16 outline-none transition-all text-slate-700 leading-relaxed resize-none text-base md:text-lg
+            ${chatState === 'approval' 
+              ? (hasEnoughItems ? 'border-emerald-300 bg-emerald-50/50 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100' : 'border-amber-300 bg-amber-50/50 focus:border-amber-500 focus:ring-4 focus:ring-amber-100')
+              : 'border-slate-200 bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-50'
+            }
+            ${isCleaning ? 'opacity-50 pointer-events-none' : ''}
+          `}
+          placeholder={chatState === 'approval' ? "Feel free to manually edit this text..." : "Tap the microphone icon to start talking or start typing here..."}
+          value={draft}
+          onChange={(e) => setDraft(e.target.value)}
+        ></textarea>
+        
+        {/* Floating Dictation Button */}
+        {chatState !== 'approval' ? (
+          <button 
+            onClick={toggleListen}
+            disabled={isCleaning}
+            className={`absolute bottom-4 left-4 rounded-full p-3 transition-all flex items-center justify-center shadow-md border 
+              ${isListening 
+                ? 'bg-red-500 text-white border-red-600 animate-pulse' 
+                : 'bg-blue-50 text-blue-600 border-blue-200 hover:bg-blue-100 hover:text-blue-700'
+              }
+            `}
+            title="Toggle Dictation"
+          >
+            {isListening ? <StopMicIcon className="w-6 h-6" /> : <MicIcon className="w-6 h-6" />}
+          </button>
+        ) : (
+          <button 
+            onClick={() => setChatState('initial')}
+            className="absolute bottom-4 left-4 bg-slate-900 text-white hover:bg-slate-800 rounded-full p-3 transition-all flex items-center justify-center shadow-md"
+            title="Edit / Add More Details"
+          >
+            <MicIcon className="w-6 h-6" />
+          </button>
+        )}
+      </div>
+
+      {/* Action Buttons */}
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-6 w-full">
+        {/* Back Button & Admin Skip */}
+        <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+          <button 
+            onClick={onBack}
+            className="w-full sm:w-auto text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-xl font-bold transition-all px-6 py-3 flex items-center justify-center gap-2"
+          >
+            <ArrowLeftIcon className="w-5 h-5" /> Back
+          </button>
+          
+          {/* TEMPORARY ADMIN BUTTON */}
+          <button 
+            onClick={() => onComplete(draft || "• Admin Skipped 1\n• Admin Skipped 2\n• Admin Skipped 3")}
+            className="w-full sm:w-auto text-rose-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl font-bold transition-all px-4 py-3 flex items-center justify-center text-xs uppercase tracking-widest"
+            title="Skip this section for testing"
+          >
+            Admin Skip ⏩
+          </button>
+        </div>
+
+        {/* Primary Actions */}
+        <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
+          {chatState === 'approval' ? (
+            <>
+               <div className={`text-sm italic ${hasEnoughItems ? 'text-slate-500' : 'text-amber-600 font-bold'}`}>
+                {hasEnoughItems ? 'Tap the mic to add more details!' : 'Tap the mic to add more items to reach 3!'}
+              </div>
+              <button 
+                onClick={() => onComplete(draft)}
+                disabled={!hasEnoughItems}
+                className={`w-full sm:w-auto text-white rounded-full font-bold transition-all px-8 py-4 shadow-md flex items-center justify-center gap-2 text-lg
+                  ${hasEnoughItems ? 'bg-blue-600 hover:bg-blue-700 hover:shadow-lg' : 'bg-slate-400 cursor-not-allowed opacity-70'}
+                `}
+              >
+                Approve & Continue <CheckIcon className="w-5 h-5" />
+              </button>
+            </>
+          ) : (
+            <>
+              {(draft.length > 0 || chatState === 'digging') && (
+                <button 
+                  onClick={handleCleanUp}
+                  disabled={isCleaning || draft.trim() === ''}
+                  className="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-white rounded-full font-bold transition-all px-6 py-4 shadow-md flex items-center justify-center gap-2 disabled:opacity-50 text-lg"
+                >
+                  {isCleaning ? '✨ Organizing...' : '✨ Clean Up Text'}
+                </button>
+              )}
+
+              <button 
+                onClick={handlePreSubmit}
+                disabled={draft.trim().length === 0 || isCleaning}
+                className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white rounded-full font-bold transition-all px-8 py-4 shadow-md hover:shadow-lg flex items-center justify-center gap-2 disabled:opacity-50 text-lg"
+              >
+                Submit <ArrowRightIcon className="w-5 h-5" />
+              </button>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function FinalReport({ data, userDetails, onCopy, copied, onBack }) {
+  const [isSavingCloud, setIsSavingCloud] = useState(false);
+
+  const handleSaveCloud = () => {
+    setIsSavingCloud(true);
+    // Simulate API call to save to thrivecoaching.ai
+    setTimeout(() => setIsSavingCloud(false), 3000);
+  };
+
+  return (
+    <div className="animate-in fade-in slide-in-from-bottom-8 duration-700">
+      
+      <div className="text-center mb-12 print:hidden">
+        <div className="inline-flex items-center justify-center w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full mb-6 shadow-inner border-4 border-white transform hover:rotate-12 transition-transform">
+          <span className="text-4xl">🎉</span>
+        </div>
+        <h2 className="text-slate-800 font-black text-4xl md:text-5xl mb-4 tracking-tight">Congratulations{userDetails.interviewee ? `, ${userDetails.interviewee.split(' ')[0]}` : ''}!</h2>
+        <p className="text-slate-600 text-lg md:text-xl leading-relaxed max-w-2xl mx-auto">
+          You've done incredible work uncovering your core strengths. Here is your official THRiVE Report, ready for action.
+        </p>
+      </div>
+
+      <div className="bg-slate-50 border-2 border-slate-100 p-6 md:p-10 rounded-3xl mb-12 relative overflow-hidden shadow-inner print:shadow-none print:border-none print:p-0 print:bg-white">
+        
+        {/* Branding Header */}
+        <div className="border-b-2 border-slate-200 pb-6 mb-8 text-center md:text-left">
+          <h3 className="text-slate-800 font-black text-3xl mb-2">
+            {userDetails.interviewee ? `${userDetails.interviewee.toUpperCase()}'S THRIVE REPORT` : 'YOUR THRIVE REPORT'}
+          </h3>
+          <p className="text-slate-500 uppercase tracking-widest font-bold text-sm leading-relaxed">
+            Created by Dr. Steve Huff • Based on the Strengths Model • Powered by Gemini
+            {userDetails.interviewer && <><br/><span className="text-blue-600">Interviewed by {userDetails.interviewer}</span></>}
+          </p>
+        </div>
+
+        {/* 6 Sections Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10 text-slate-700">
+          {SECTIONS.map((sec) => (
+            <div key={sec.id} className="group">
+              <div className="flex items-center gap-3 mb-4">
+                <div className={`w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-xl border border-slate-100`}>
+                  {sec.icon}
+                </div>
+                <h4 className={`text-slate-800 font-black text-lg uppercase tracking-widest border-b-2 pb-1 border-${sec.color}-200 group-hover:border-${sec.color}-400 transition-colors`}>
+                  {sec.title}
+                </h4>
+              </div>
+              <div className="text-slate-600 leading-relaxed whitespace-pre-wrap pl-2 border-l-2 border-slate-200">
+                {data[sec.key] || "No response provided."}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Action Buttons Container */}
+      <div className="flex flex-col gap-6 print:hidden">
+        
+        {/* Primary Save Actions */}
+        <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+          <button 
+            onClick={() => window.print()}
+            className="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-white rounded-full font-bold transition-all px-8 py-4 shadow-lg hover:shadow-xl flex items-center justify-center gap-3 text-lg"
+          >
+            <PdfIcon className="w-6 h-6" /> Save as PDF
+          </button>
+
+          <button 
+            onClick={handleSaveCloud}
+            className={`w-full sm:w-auto rounded-full font-bold transition-all px-8 py-4 shadow-lg hover:shadow-xl flex items-center justify-center gap-3 text-lg
+              ${isSavingCloud ? 'bg-purple-500 text-white ring-4 ring-purple-100' : 'bg-purple-600 hover:bg-purple-700 text-white'}
+            `}
+          >
+            {isSavingCloud ? <><CheckIcon className="w-6 h-6" /> Saved to thrivecoaching.ai!</> : <><CloudIcon className="w-6 h-6" /> Save to Free Account</>}
+          </button>
+
+          <button 
+            onClick={onCopy}
+            className={`w-full sm:w-auto rounded-full font-bold transition-all px-8 py-4 shadow-lg hover:shadow-xl flex items-center justify-center gap-3 text-lg
+              ${copied ? 'bg-emerald-500 text-white ring-4 ring-emerald-100' : 'bg-blue-600 hover:bg-blue-700 text-white'}
+            `}
+          >
+            {copied ? <><CheckIcon className="w-6 h-6" /> Copied!</> : <><CopyIcon className="w-6 h-6" /> Copy Text</>}
+          </button>
+        </div>
+
+        {/* Secondary Action */}
+        <div className="flex justify-center mt-4">
+          <button 
+            onClick={onBack}
+            className="text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-full font-bold transition-all px-8 py-3 flex items-center justify-center gap-2 text-md"
+          >
+            <ArrowLeftIcon className="w-5 h-5" /> Back to Edit Responses
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+    </script>
+</body>
+</html>
