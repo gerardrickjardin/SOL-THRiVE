@@ -26,7 +26,7 @@ const { useState, useEffect, useRef } = React;
 // Because the preview completely resets when I update the code, 
 // pasting your key here ensures it is NEVER lost during our session!
 // =========================================================================
-const HARDCODED_ELEVENLABS_API_KEY = "sk_d2fc2ac281afdb8a56178f44c8ebca76f21da62f7a256bf8"; // <--- PASTE YOUR API KEY INSIDE THESE QUOTES
+const ELEVENLABS_API_KEY = "%VITE_ELEVENLABS_API_KEY%"; // <--- PASTE YOUR API KEY INSIDE THESE QUOTES
 const HARDCODED_ELEVENLABS_VOICE_ID = "4EfJOraSN0d4Lt6iDXwh"; // Default: Rachel
 // =========================================================================
 
@@ -320,7 +320,7 @@ function App() {
   });
   
   const [elevenLabsKey, setElevenLabsKey] = useState(() => {
-    return HARDCODED_ELEVENLABS_API_KEY || localStorage.getItem('thriveElevenLabsKey') || "";
+    return ELEVENLABS_API_KEY || localStorage.getItem('thriveElevenLabsKey') || "";
   });
   
   const [elevenLabsVoiceId, setElevenLabsVoiceId] = useState(() => {
