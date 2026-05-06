@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOL Theory Flow Survey</title>
+    
+    <!-- ========================================== -->
+    <!-- ⚙️ DEVELOPER CONFIGURATION                 -->
+    <!-- ========================================== -->
+    <script>
+        // HARDCODE YOUR ELEVENLABS CREDENTIALS HERE:
+        const ELEVENLABS_API_KEY = ""; // e.g. "sk_..."
+        const elevenLabsVoiceId = "4EfJOraSN0d4Lt6iDXwh"; 
+
+        // API Configuration (Gemini API runtime injection)
+        const apiKey = ""; 
+    </script>
+    <!-- ========================================== -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        .flow-segment {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: center;
+        }
+        input[type="radio"]:checked + div {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+        }
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.5); }
+            70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans min-h-screen flex flex-col relative">
+
+    <nav class="absolute top-6 left-6 z-50">
+        <a href="index.html" class="flex items-center gap-2 text-slate-400 hover:text-blue-600 font-bold transition-all no-underline">
+            &larr; Back to Home
+        </a>
+    </nav>
+
+    <!-- Global Header -->
+    <header class="text-center py-8" id="global-header">
+        <h1 class="text-4xl mb-2 flex items-center justify-center gap-3 font-bold text-slate-800">
+            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-blue-500">
+                <path d="M2 6c1.6 0 2.4-1.6 4-1.6s2.4 1.6 4 1.6 2.4-1.6 4-1.6 2.4 1.6 4 1.6"/>
+                <path d="M2 12c1.6 0 2.4-1.6 4-1.6s2.4 1.6 4 1.6 2.4-1.6 4-1.6 2.4 1.6 4 1.6"/>
+                <path d="M2 18c1.6 0 2.4-1.6 4-1.6s2.4 1.6 4 1.6 2.4-1.6 4-1.6 2.4 1.6 4 1.6"/>
+            </svg>
+            The Flow Survey
+        </h1>
+        <p class="text-slate-500 italic">Let's see how much friction you're experiencing.</p>
+    </header>
+
+    <main class="flex-grow w-full max-w-4xl mx-auto p-4 md:p-8">
+        
+        <!-- ================= INTRO SCREEN ================= -->
+        <div id="step-intro" class="bg-white p-8 md:p-12 rounded-2xl shadow-xl border border-slate-100 text-center max-w-2xl mx-auto relative">
+            
+            <div class="mb-6 flex justify-center">
+                <button onclick="playAudio('Before we can help you find your flow, we need to know exactly what kind of friction is slowing you down. Are we talking slightly annoying pebble in your shoe or swimming upstream in peanut butter? This quick survey measures the specific Ugg in one area of your life, so the Thrive method can help you reclaim your sanity and uncover your future potential. If you prefer talking to typing, you will be able to use your microphone to describe your problem on the next screen. Let\'s do this!', this)" id="play-intro-btn" class="text-2xl p-3 bg-slate-50 rounded-full hover:bg-blue-50 hover:text-blue-600 transition-all shadow-sm border border-slate-100" title="Read Aloud">
+                    🔊
+                </button>
+            </div>
+
+            <div id="intro-text-content">
+                <p class="text-lg text-slate-600 mb-4 leading-relaxed pt-2">
+                    Before we can help you find your flow, we need to know exactly what kind of friction is slowing you down.
+                </p>
+                <p class="text-sm italic text-slate-400 mb-6">
+                    (Are we talking "slightly annoying pebble in your shoe" or "swimming upstream in peanut butter"?)
+                </p>
+                <p class="text-lg text-slate-600 mb-4 leading-relaxed">
+                    This quick survey measures the specific "Ugg" in one area of your life, so the <strong>THRiVE method</strong> can help you reclaim your sanity and uncover your future potential. 
+                </p>
+                <p class="text-sm text-blue-600 font-medium mb-8 bg-blue-50 p-3 rounded-lg inline-block">
+                    🎙️ Prefer talking to typing? You'll be able to use your microphone to describe your problem on the next screen. Let's do this!
+                </p>
+            </div>
+            
+            <button onclick="goToStep(1)" class="bg-blue-600 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-blue-700 transition-all shadow-lg hover:shadow-blue-500/30 inline-flex items-center justify-center gap-2">
+                🏎️ Start your engines
+            </button>
+        </div>
+
+        <!-- ================= STEP 1: WHAT IS IT? ================= -->
+        <div id="step-1" class="hidden bg-white p-8 rounded-2xl shadow-xl border border-slate-100 max-w-2xl mx-auto">
+            <div class="flex justify-between items-start mb-2">
+                <div>
+                    <div class="mb-2 text-sm font-bold text-slate-400 uppercase tracking-widest">Section 1</div>
+                    <h2 class="text-3xl font-bold">What is it?</h2>
+                </div>
+                <button onclick="playAudio('Section 1. What is it? Name it to tame it. Think of a specific area in your life where you feel friction, tension, or frustration. Describe it below in 2 to 3 sentences.', this)" class="text-xl p-2 bg-slate-50 rounded-full hover:bg-blue-50 hover:text-blue-600 transition-all border border-slate-100" title="Read Aloud">🔊</button>
+            </div>
+            <p class="text-slate-500 italic mb-6">“Name it to tame it.”</p>
+            
+            <p class="mb-4 text-slate-700">Think of a specific area in your life where you feel friction, tension, or frustration. Describe it below in 2 to 3 sentences.</p>
+            
+            <div class="bg-amber-50 border border-amber-200 p-4 rounded-lg mb-6">
+                <span class="font-bold text-amber-800">💡 Pro Tip: Be as specific as possible.</span>
+                <span class="text-amber-700 text-sm block mt-1">Instead of saying "Parenting," say "I am having difficulty helping my 10-year-old son complete his homework on time without a fight."</span>
+            </div>
+
+            <div class="relative mb-6">
+                <textarea id="problem-description" class="w-full border-2 border-slate-200 rounded-xl p-4 pb-14 min-h-[160px] focus:border-blue-500 focus:ring-4 focus:ring-blue-50 outline-none transition-all" placeholder="Describe the friction here... (or click the microphone to talk)"></textarea>
+                
+                <!-- Dictation & Clean Up Controls -->
+                <div class="absolute bottom-3 left-3 right-3 flex justify-between items-center bg-white pt-2 border-t border-slate-100">
+                    <button onclick="toggleDictation()" id="dictation-btn" class="flex items-center gap-2 text-sm font-bold text-slate-600 hover:text-blue-600 px-3 py-2 rounded-lg hover:bg-slate-50 transition-all">
+                        <span class="text-xl" id="mic-icon">🎙️</span> <span id="dictation-text">Dictate</span>
+                    </button>
+                    
+                    <button onclick="cleanUpText()" id="cleanup-btn" class="flex items-center gap-2 text-sm font-bold text-purple-600 hover:bg-purple-50 px-3 py-2 rounded-lg border border-purple-200 transition-all bg-white shadow-sm">
+                        <span class="text-lg">✨</span> Clean Up Text
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex justify-end">
+                <button onclick="goToStep(2)" class="bg-slate-900 text-white px-8 py-3 rounded-full font-bold hover:bg-slate-800 transition-all">Next Step</button>
+            </div>
+        </div>
+
+        <!-- ================= STEP 2: WHAT IS IT LIKE? ================= -->
+        <div id="step-2" class="hidden bg-white p-8 rounded-2xl shadow-xl border border-slate-100 max-w-3xl mx-auto">
+            <div class="flex justify-between items-start mb-2">
+                <div>
+                    <div class="mb-2 text-sm font-bold text-slate-400 uppercase tracking-widest">Section 2</div>
+                    <h2 class="text-3xl font-bold">What is it like?</h2>
+                </div>
+                <button onclick="playAudio('Section 2. What is it like? Looking at the problem you just described, which of these metaphors best describes your daily experience right now? The Treadmill. The Parking Brake. Beating my head against a wall. Herding cats in a thunderstorm. Swimming in Molasses. The sinking life raft. Or, your own metaphor.', this)" class="text-xl p-2 bg-slate-50 rounded-full hover:bg-blue-50 hover:text-blue-600 transition-all border border-slate-100" title="Read Aloud">🔊</button>
+            </div>
+            <p class="text-slate-500 mb-6">Looking at the problem you just described, which of these metaphors best describes your daily experience right now?</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                <label class="cursor-pointer"><input type="radio" name="metaphor" class="hidden"><div class="border-2 border-slate-100 rounded-xl p-4 transition-all hover:border-blue-300 h-full"><div class="text-2xl mb-2">🏃‍♂️</div><h3 class="font-bold text-slate-800">The Treadmill</h3><p class="text-sm text-slate-600 mt-1">I’m running as fast as I can, but I’m staying in the exact same place.</p></div></label>
+                <label class="cursor-pointer"><input type="radio" name="metaphor" class="hidden"><div class="border-2 border-slate-100 rounded-xl p-4 transition-all hover:border-blue-300 h-full"><div class="text-2xl mb-2">💨</div><h3 class="font-bold text-slate-800">The Parking Brake</h3><p class="text-sm text-slate-600 mt-1">I’m trying to move forward, but something unseen is dragging and smelling like smoke.</p></div></label>
+                <label class="cursor-pointer"><input type="radio" name="metaphor" class="hidden"><div class="border-2 border-slate-100 rounded-xl p-4 transition-all hover:border-blue-300 h-full"><div class="text-2xl mb-2">🧱</div><h3 class="font-bold text-slate-800">Beating My Head Against a Wall</h3><p class="text-sm text-slate-600 mt-1">I keep trying the same things, and it just hurts more every time.</p></div></label>
+                <label class="cursor-pointer"><input type="radio" name="metaphor" class="hidden"><div class="border-2 border-slate-100 rounded-xl p-4 transition-all hover:border-blue-300 h-full"><div class="text-2xl mb-2">🐈</div><h3 class="font-bold text-slate-800">Herding Cats in a Thunderstorm</h3><p class="text-sm text-slate-600 mt-1">Everything is chaotic, out of my control, and slightly terrifying.</p></div></label>
+                <label class="cursor-pointer"><input type="radio" name="metaphor" class="hidden"><div class="border-2 border-slate-100 rounded-xl p-4 transition-all hover:border-blue-300 h-full"><div class="text-2xl mb-2">🍯</div><h3 class="font-bold text-slate-800">Swimming in Molasses</h3><p class="text-sm text-slate-600 mt-1">Every single movement—no matter how small—requires massive effort.</p></div></label>
+                <label class="cursor-pointer"><input type="radio" name="metaphor" class="hidden"><div class="border-2 border-slate-100 rounded-xl p-4 transition-all hover:border-blue-300 h-full"><div class="text-2xl mb-2">🛶</div><h3 class="font-bold text-slate-800">The Sinking Life Raft</h3><p class="text-sm text-slate-600 mt-1">I’m busy plugging holes just to stay afloat, with no time to actually row.</p></div></label>
+                <label class="cursor-pointer md:col-span-2"><input type="radio" name="metaphor" class="hidden" onchange="document.getElementById('custom-metaphor-input').classList.remove('hidden')"><div class="border-2 border-slate-100 rounded-xl p-4 transition-all hover:border-blue-300"><div class="text-2xl mb-2">🖊️</div><h3 class="font-bold text-slate-800">Your Own Metaphor</h3><p class="text-sm text-slate-600 mt-1 mb-3">If none of these land for you, describe your own.</p><input type="text" id="custom-metaphor-input" class="hidden w-full border-2 border-slate-200 rounded-lg p-2 focus:border-blue-500 outline-none" placeholder="It feels like..."></div></label>
+            </div>
+
+            <div class="flex justify-between items-center">
+                <button onclick="goToStep(1)" class="text-slate-400 font-bold hover:text-slate-700 transition-all">&larr; Back</button>
+                <button onclick="goToStep(3)" class="bg-slate-900 text-white px-8 py-3 rounded-full font-bold hover:bg-slate-800 transition-all">Begin Survey</button>
+            </div>
+        </div>
+
+        <!-- ================= STEP 3: THE FLOW SURVEY & VISUAL ================= -->
+        <div id="step-3" class="hidden grid grid-cols-1 lg:grid-cols-2 gap-8 items-start relative">
+            
+            <!-- Left Side: The Survey UI / Results -->
+            <div id="survey-container" class="bg-white p-6 rounded-2xl shadow-xl border border-slate-100">
+                <!-- Question Card -->
+                <div id="question-card">
+                    <div class="flex items-center gap-2 mb-2 text-blue-600">
+                        <span id="category-icon">🕯️</span>
+                        <span id="category-name" class="font-bold uppercase tracking-wider text-sm">Agency</span>
+                    </div>
+                    <div class="flex justify-between items-start mb-1">
+                        <h2 class="text-xl font-semibold pr-4" id="question-prompt">When this problem comes to mind...</h2>
+                        <button onclick="playCurrentQuestion(this)" class="text-lg p-2 bg-slate-50 rounded-full hover:bg-blue-50 hover:text-blue-600 transition-all border border-slate-100 shrink-0" title="Read Aloud">🔊</button>
+                    </div>
+                    <p class="text-lg mb-6" id="question-text">I feel a sense of hope that the problem can be resolved.</p>
+
+                    <!-- Score Buttons Grid -->
+                    <div class="grid grid-cols-6 gap-2 mb-1">
+                        <button onclick="recordScore(0)" class="p-3 rounded-lg border-2 border-slate-200 hover:border-blue-500 hover:bg-blue-50 transition-all text-center">0</button>
+                        <button onclick="recordScore(1)" class="p-3 rounded-lg border-2 border-slate-200 hover:border-blue-500 hover:bg-blue-50 transition-all text-center">1</button>
+                        <button onclick="recordScore(2)" class="p-3 rounded-lg border-2 border-slate-200 hover:border-blue-500 hover:bg-blue-50 transition-all text-center">2</button>
+                        <button onclick="recordScore(3)" class="p-3 rounded-lg border-2 border-slate-200 hover:border-blue-500 hover:bg-blue-50 transition-all text-center">3</button>
+                        <button onclick="recordScore(4)" class="p-3 rounded-lg border-2 border-slate-200 hover:border-blue-500 hover:bg-blue-50 transition-all text-center">4</button>
+                        <button onclick="recordScore(5)" class="p-3 rounded-lg border-2 border-slate-200 hover:border-blue-500 hover:bg-blue-50 transition-all text-center">5</button>
+                    </div>
+
+                    <!-- Labels -->
+                    <div class="grid grid-cols-6 gap-2 text-[10px] leading-tight text-slate-400 font-medium uppercase tracking-tighter">
+                        <div class="text-center">Never</div>
+                        <div class="text-center">Almost Never</div>
+                        <div class="text-center">Rarely</div>
+                        <div class="text-center">Often</div>
+                        <div class="text-center">Almost Always</div>
+                        <div class="text-center">Always</div>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div class="w-full bg-slate-100 rounded-full h-1.5 mt-8 mb-4">
+                        <div id="survey-progress-bar" class="bg-blue-600 h-1.5 rounded-full transition-all duration-300" style="width: 5%"></div>
+                    </div>
+
+                    <div class="flex justify-between items-center text-sm text-slate-400 font-medium border-t border-slate-50 pt-4">
+                        <button onclick="goBackQuestion()" class="hover:text-slate-700 transition-all">&larr; Back</button>
+                        <span>Question <span id="current-q-num">1</span> of 20</span>
+                        <div class="w-12"></div> 
+                    </div>
+                </div>
+
+                <!-- Results Card -->
+                <div id="results-card" class="hidden text-center">
+                    <h2 class="text-3xl font-bold mb-4">Your Results</h2>
+                    <div class="mb-6">
+                        <div class="flex items-baseline justify-center gap-2 mb-1">
+                            <div class="text-5xl font-black text-blue-600" id="final-score">0</div>
+                            <div class="text-2xl font-bold text-slate-400">/ 100</div>
+                        </div>
+                        <div class="text-slate-500 uppercase tracking-widest text-sm">Current Flow Score</div>
+                    </div>
+                    <div class="bg-blue-50 p-4 rounded-xl mb-6">
+                        <p class="text-sm text-blue-800">With the THRiVE method, our target is to reach:</p>
+                        <div class="flex justify-center items-baseline gap-1 mt-1">
+                            <p class="text-3xl font-bold text-blue-600" id="target-score">0</p>
+                            <p class="text-lg font-bold text-blue-400">/ 100</p>
+                        </div>
+                        <p class="text-xs text-blue-500 mt-1">Bridging 60% of the Friction Gap</p>
+                    </div>
+                    <div class="flex flex-col gap-3">
+                        <button onclick="showDetailedSummary()" class="bg-blue-600 text-white px-8 py-3 rounded-full font-bold hover:bg-blue-700 transition-all w-full flex items-center justify-center gap-2">
+                            <span class="text-xl">📊</span> View Detailed Interpretation
+                        </button>
+                        <button onclick="location.reload()" class="bg-slate-900 text-white px-8 py-3 rounded-full font-bold hover:bg-slate-800 transition-all w-full">Start Over</button>
+                    </div>
+                </div>
+
+                <!-- Detailed Summary Card (NEW FINGERPRINT UI) -->
+                <div id="detailed-summary-card" class="hidden text-left pb-4">
+                    <h2 class="text-3xl font-bold mb-6 text-center border-b border-slate-100 pb-4 flex items-center justify-center gap-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-slate-800">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M7.864 4.243A7.5 7.5 0 0119.5 10.5c0 2.92-.556 5.709-1.568 8.268M5.742 6.364A7.465 7.465 0 004.5 10.5a7.464 7.464 0 01-1.15 3.993m1.989 3.559A11.209 11.209 0 008.25 10.5a3.75 3.75 0 117.5 0c0 .527-.021 1.049-.064 1.565M12 10.5a14.94 14.94 0 01-3.6 9.75m6.633-4.596a18.666 18.666 0 01-2.485 5.33" />
+                        </svg>
+                        Your Flow Fingerprint
+                    </h2>
+                    
+                    <div class="mb-6">
+                        <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-2">1. The Friction</h3>
+                        <div class="bg-amber-50 rounded-xl p-4 border border-amber-100">
+                            <p class="text-slate-700 italic mb-4 text-sm font-medium" id="summary-problem">"..."</p>
+                            <div class="bg-white border border-amber-200 rounded-lg p-3">
+                                <div class="flex items-center gap-2 text-amber-800 font-bold text-sm mb-1">
+                                    <span id="summary-metaphor-icon"></span> <span id="summary-metaphor-text"></span>
+                                </div>
+                                <p class="text-[13px] text-slate-600 leading-tight" id="summary-metaphor-desc"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-6">
+                        <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-2">2. The Math</h3>
+                        <div class="grid grid-cols-3 gap-2 text-center">
+                            <div class="bg-slate-50 rounded-xl p-3 border border-slate-200">
+                                <div class="flex items-baseline justify-center gap-1">
+                                    <div class="text-2xl font-black text-slate-700" id="summary-current">0</div>
+                                    <div class="text-xs font-bold text-slate-400">/ 100</div>
+                                </div>
+                                <div class="text-[10px] uppercase text-slate-500 font-bold mt-1">Current</div>
+                            </div>
+                            <div class="bg-blue-50 rounded-xl p-3 border border-blue-200">
+                                <div class="flex items-baseline justify-center gap-1">
+                                    <div class="text-2xl font-black text-blue-600" id="summary-target">0</div>
+                                    <div class="text-xs font-bold text-blue-400">/ 100</div>
+                                </div>
+                                <div class="text-[10px] uppercase text-blue-500 font-bold mt-1">Target</div>
+                            </div>
+                            <div class="bg-green-50 rounded-xl p-3 border border-green-200 shadow-sm shadow-green-100">
+                                <div class="flex items-baseline justify-center gap-1">
+                                    <div class="text-2xl font-black text-green-600" id="summary-future">0</div>
+                                </div>
+                                <div class="text-[10px] uppercase text-green-600 font-bold mt-1">Future</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-8">
+                        <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4">3. Flow Dimensions</h3>
+                        <div class="space-y-3" id="summary-categories">
+                            <!-- Injected via JS -->
+                        </div>
+                    </div>
+
+                    <!-- AI Diagnosis Section -->
+                    <div class="mb-6 border-t-2 border-slate-100 pt-6">
+                        <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4">4. Your Custom Diagnosis</h3>
+                        <div class="bg-indigo-50 border border-indigo-100 rounded-2xl p-5 relative">
+                            <span class="absolute -top-3 -right-3 text-3xl">🩺</span>
+                            <div id="custom-diagnosis-content" class="text-[14px] text-slate-700 leading-relaxed space-y-3">
+                                <!-- Injected via JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons Container -->
+                    <div id="blueprint-buttons" class="flex flex-col gap-3 mt-6">
+                        <button onclick="downloadImage()" class="bg-slate-900 text-white px-8 py-4 rounded-full font-bold hover:bg-slate-800 transition-all flex justify-center items-center gap-2 shadow-lg">
+                            <span class="text-xl">📸</span> Save as Image (JPG)
+                        </button>
+                        <button onclick="location.reload()" class="bg-blue-100 text-blue-700 px-8 py-4 rounded-full font-bold hover:bg-blue-200 transition-all flex justify-center items-center gap-2 shadow-sm">
+                            <span class="text-xl">🔄</span> Take Another Survey
+                        </button>
+                        <button onclick="hideDetailedSummary()" class="text-slate-400 font-bold hover:text-slate-700 transition-all text-center mt-2">&larr; Back</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side: The Visual Anchor -->
+            <div id="visual-anchor" class="sticky top-8 flex flex-col items-center transition-all duration-300">
+                <h2 id="visual-title" class="text-3xl font-bold mb-6 text-center border-b border-slate-100 pb-4 hidden w-full">Your Flow Circle</h2>
+                
+                <div class="relative w-full max-w-[350px] aspect-square">
+                    <!-- Quadrant Labels -->
+                    <div class="absolute inset-0 pointer-events-none z-10">
+                        <span class="absolute top-1 right-2 text-[10px] font-bold text-blue-500 uppercase tracking-widest">Agency</span>
+                        <span class="absolute bottom-1 right-2 text-[10px] font-bold text-emerald-500 uppercase tracking-widest">Actions</span>
+                        <span class="absolute bottom-1 left-2 text-[10px] font-bold text-amber-500 uppercase tracking-widest">Support</span>
+                        <span class="absolute top-1 left-2 text-[10px] font-bold text-purple-500 uppercase tracking-widest">Tools</span>
+                    </div>
+
+                    <svg viewBox="0 0 100 100" class="w-full h-full -rotate-90">
+                        <!-- Background Circles -->
+                        <circle cx="50" cy="50" r="45" fill="none" stroke="#f1f5f9" stroke-width="0.5" />
+                        <circle cx="50" cy="50" r="31.5" fill="none" stroke="#f1f5f9" stroke-width="0.5" />
+                        
+                        <!-- Segments Container -->
+                        <g id="visual-segments"></g>
+                        <!-- Target Overlay (Ghost) -->
+                        <g id="target-segments" class="opacity-20 pointer-events-none"></g>
+
+                        <circle cx="50" cy="50" r="13" fill="#ffffff" />
+                    </svg>
+                    
+                    <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-20">
+                        <span class="text-3xl font-black text-slate-800 mt-1" id="live-score">0</span>
+                        <span class="text-[9px] uppercase font-bold text-slate-400 -mt-1">Flow</span>
+                    </div>
+                </div>
+                <p class="text-sm text-slate-400 mt-6 text-center px-4" id="visual-caption">The lighter outer ring shows your Future Potential — the flow we will reclaim together.</p>
+                
+                <!-- THRiVE CTA Block -->
+                <div id="thrive-cta" class="mt-6 mb-2 bg-blue-50 border-2 border-blue-100 rounded-2xl p-5 text-left shadow-sm hidden w-full">
+                    <div class="flex items-center gap-3 mb-3">
+                        <span class="text-3xl">🚀</span>
+                        <h3 class="text-xl font-black text-slate-800 leading-tight">The Diagnosis is Complete.<br>Ready for the Treatment?</h3>
+                    </div>
+                    <p class="text-[13px] text-slate-700 mb-3 leading-relaxed">
+                        Diagnosing your current level of friction is just the first step. The treatment is a 6-week program called <strong>THRiVE Coaching</strong>. 
+                    </p>
+                    <p class="text-[13px] text-slate-700 mb-3 leading-relaxed">
+                        Join a class with 19 other adults—parents, aunts, uncles, and grandparents. We are the adults in the room, and we have a responsibility to help our kids. We use AI as a tool to help them, not harm them.
+                    </p>
+                    <div class="bg-white rounded-xl p-3 mb-3 border border-blue-100">
+                        <ul class="text-[13px] font-bold text-slate-800 space-y-1.5">
+                            <li class="flex items-center gap-2"><span>⏱️</span> 6 Weeks</li>
+                            <li class="flex items-center gap-2"><span>💵</span> $600 Total</li>
+                            <li class="flex items-start gap-2"><span>🛡️</span> <span>60% improvement in your flow score, or your money back guaranteed.</span></li>
+                        </ul>
+                    </div>
+                    <p class="text-[13px] text-slate-700 mb-4 leading-relaxed">
+                        Run by Dr. Steve Huff, a 30-year veteran in the mental health community collaborating with AI to create a method that <em>actually</em> works. Stop just reading more books and watching more YouTube videos, and get to work on reducing the friction in your parenting.
+                    </p>
+                    <a href="https://thrivecoaching.ai" target="_blank" class="block w-full bg-blue-600 text-white text-center px-6 py-3.5 rounded-xl font-bold hover:bg-blue-700 transition-all shadow-md text-sm">
+                        Visit thrivecoaching.ai to watch the video
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // ==========================================
+        // 1. SETTINGS & AUDIO LOGIC
+        // ==========================================
+        
+        let currentAudio = null;
+
+        async function playAudio(text, btnElement) {
+            if (!ELEVENLABS_API_KEY) {
+                alert("Developer Note: Please add your ElevenLabs API key to the 'ELEVENLABS_API_KEY' variable in the code.");
+                return;
+            }
+
+            const voiceId = elevenLabsVoiceId || '21m00Tcm4TlvDq8ikWAM';
+
+            const originalText = btnElement.innerText;
+            btnElement.classList.add('animate-pulse');
+            btnElement.innerText = "⏳";
+
+            try {
+                const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'audio/mpeg',
+                        'xi-api-key': ELEVENLABS_API_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        text: text,
+                        model_id: "eleven_monolingual_v1",
+                        voice_settings: { stability: 0.5, similarity_boost: 0.5 }
+                    })
+                });
+
+                if (!response.ok) throw new Error("Audio generation failed. Check your API key.");
+                
+                const blob = await response.blob();
+                const audioUrl = URL.createObjectURL(blob);
+                
+                if (currentAudio) {
+                    currentAudio.pause();
+                }
+                
+                currentAudio = new Audio(audioUrl);
+                currentAudio.onended = () => {
+                    btnElement.innerText = originalText;
+                    btnElement.classList.remove('animate-pulse');
+                };
+                currentAudio.play();
+                btnElement.innerText = "🔊";
+                btnElement.classList.remove('animate-pulse');
+
+            } catch (error) {
+                console.error(error);
+                alert("Failed to generate audio. Make sure your ElevenLabs API key is correct.");
+                btnElement.innerText = originalText;
+                btnElement.classList.remove('animate-pulse');
+            }
+        }
+
+        function playCurrentQuestion(btnElement) {
+            const q = questions[currentQ];
+            const textToRead = `When this problem comes to mind... ${q.text}`;
+            playAudio(textToRead, btnElement);
+        }
+
+        // ==========================================
+        // 2. DICTATION & CLEAN UP LOGIC
+        // ==========================================
+        let recognition = null;
+        let isRecording = false;
+
+        function toggleDictation() {
+            const btn = document.getElementById('dictation-btn');
+            const icon = document.getElementById('mic-icon');
+            const text = document.getElementById('dictation-text');
+            const textArea = document.getElementById('problem-description');
+
+            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                alert("Speech recognition is not supported in your browser. Please type instead.");
+                return;
+            }
+
+            if (!recognition) {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                recognition = new SpeechRecognition();
+                recognition.continuous = true;
+                recognition.interimResults = true;
+
+                recognition.onresult = (event) => {
+                    let interimTranscript = '';
+                    let finalTranscript = '';
+
+                    for (let i = event.resultIndex; i < event.results.length; ++i) {
+                        if (event.results[i].isFinal) {
+                            finalTranscript += event.results[i][0].transcript;
+                        } else {
+                            interimTranscript += event.results[i][0].transcript;
+                        }
+                    }
+                    if (finalTranscript) {
+                        textArea.value += (textArea.value ? ' ' : '') + finalTranscript;
+                    }
+                };
+
+                recognition.onerror = (e) => {
+                    console.error("Speech error", e);
+                    stopDictation();
+                };
+                
+                recognition.onend = () => {
+                    if (isRecording) recognition.start(); // Keep going if it paused automatically
+                };
+            }
+
+            if (isRecording) {
+                stopDictation();
+            } else {
+                startDictation();
+            }
+        }
+
+        function startDictation() {
+            isRecording = true;
+            recognition.start();
+            document.getElementById('dictation-btn').classList.add('text-red-500', 'pulse-animation');
+            document.getElementById('mic-icon').innerText = '🔴';
+            document.getElementById('dictation-text').innerText = 'Listening... (Click to Stop)';
+        }
+
+        function stopDictation() {
+            isRecording = false;
+            recognition.stop();
+            document.getElementById('dictation-btn').classList.remove('text-red-500', 'pulse-animation');
+            document.getElementById('mic-icon').innerText = '🎙️';
+            document.getElementById('dictation-text').innerText = 'Dictate';
+        }
+
+        async function cleanUpText() {
+            const textArea = document.getElementById('problem-description');
+            const rawText = textArea.value.trim();
+            const btn = document.getElementById('cleanup-btn');
+
+            if (!rawText) return alert("Please dictate or type something first!");
+
+            btn.innerHTML = '<span class="text-lg animate-spin">⏳</span> Cleaning...';
+            btn.disabled = true;
+
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: `Take this rambling problem description and clean it up into a single, clear, concise 2-3 sentence statement. Keep the user's original tone and meaning, but make it read professionally. Return ONLY the final cleaned statement. DO NOT provide options, introductory text, or conversational filler: "${rawText}"` }] }]
+                    })
+                });
+
+                if (!response.ok) throw new Error("Cleanup failed");
+                const data = await response.json();
+                const cleanedText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+                
+                if (cleanedText) textArea.value = cleanedText;
+
+            } catch (error) {
+                console.error("Cleanup Error:", error);
+                alert("The AI cleanup tool requires the platform API key. For this demo, please manually edit your text.");
+            } finally {
+                btn.innerHTML = '<span class="text-lg">✨</span> Clean Up Text';
+                btn.disabled = false;
+            }
+        }
+
+
+        // ==========================================
+        // 3. STEP NAVIGATION & VISUAL LOGIC
+        // ==========================================
+        function goToStep(stepNum) {
+            document.getElementById('step-intro').classList.add('hidden');
+            document.getElementById('step-1').classList.add('hidden');
+            document.getElementById('step-2').classList.add('hidden');
+            document.getElementById('step-3').classList.add('hidden');
+            
+            if(stepNum === 0) document.getElementById('step-intro').classList.remove('hidden');
+            if(stepNum === 1) document.getElementById('step-1').classList.remove('hidden');
+            if(stepNum === 2) document.getElementById('step-2').classList.remove('hidden');
+            if(stepNum === 3) {
+                document.getElementById('step-3').classList.remove('hidden');
+                initVisual();
+            }
+            window.scrollTo(0,0);
+        }
+
+        const questions = [
+            { id: 1, cat: "Agency", icon: "🕯️", text: "I feel a sense of hope that the problem can be resolved.", color: "#3b82f6" },
+            { id: 2, cat: "Agency", icon: "🕯️", text: "I believe I have the power to change the outcome.", color: "#3b82f6" },
+            { id: 3, cat: "Agency", icon: "🕯️", text: "I stay calm enough to think clearly rather than just reacting.", color: "#3b82f6" },
+            { id: 4, cat: "Agency", icon: "🕯️", text: "I see this as a temporary challenge rather than a permanent problem.", color: "#3b82f6" },
+            { id: 5, cat: "Agency", icon: "🕯️", text: "I feel 'in the driver’s seat' of my emotional response.", color: "#3b82f6" },
+            { id: 6, cat: "Actions", icon: "🗺️", text: "I have clear, positive steps I can take right now to resolve it.", color: "#10b981" },
+            { id: 7, cat: "Actions", icon: "🗺️", text: "I often break this problem down into small actions.", color: "#10b981" },
+            { id: 8, cat: "Actions", icon: "🗺️", text: "I consistently take small actions to resolve the problem.", color: "#10b981" },
+            { id: 9, cat: "Actions", icon: "🗺️", text: "I have a specific method that I apply to solve this problem.", color: "#10b981" },
+            { id: 10, cat: "Actions", icon: "🗺️", text: "I am very aware of what is both within my control and what isn't.", color: "#10b981" },
+            { id: 11, cat: "Support", icon: "🤝", text: "I have people in my life who give me genuine, non-judgmental support.", color: "#f59e0b" },
+            { id: 12, cat: "Support", icon: "🤝", text: "I have people who allow me to vent and brainstorm new solutions.", color: "#f59e0b" },
+            { id: 13, cat: "Support", icon: "🤝", text: "I feel comfortable asking for help with this specific issue.", color: "#f59e0b" },
+            { id: 14, cat: "Support", icon: "🤝", text: "I have a community or coach that understands my journey.", color: "#f59e0b" },
+            { id: 15, cat: "Support", icon: "🤝", text: "I feel seen and heard by the people closest to me.", color: "#f59e0b" },
+            { id: 16, cat: "Tools", icon: "⚙️", text: "I have tools (apps, frameworks, visual aids) to help me find new strategies.", color: "#8b5cf6" },
+            { id: 17, cat: "Tools", icon: "⚙️", text: "I can easily find a 'Plan B' when my initial approach doesn't work.", color: "#8b5cf6" },
+            { id: 18, cat: "Tools", icon: "⚙️", text: "I have access to resources from experts on how to resolve the problem.", color: "#8b5cf6" },
+            { id: 19, cat: "Tools", icon: "⚙️", text: "I am confident that my resources are based in best practices.", color: "#8b5cf6" },
+            { id: 20, cat: "Tools", icon: "⚙️", text: "I feel equipped with the right 'gear' for this specific climb.", color: "#8b5cf6" }
+        ];
+
+        let currentQ = 0;
+        let scores = new Array(20).fill(0);
+        const segmentsGroup = document.getElementById('visual-segments');
+        const targetGroup = document.getElementById('target-segments');
+        let visualInitialized = false;
+
+        function initVisual() {
+            if (visualInitialized) return;
+            segmentsGroup.innerHTML = '';
+            for (let i = 0; i < 20; i++) {
+                const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                path.setAttribute('id', `seg-${i}`);
+                path.setAttribute('class', 'flow-segment');
+                path.setAttribute('fill', questions[i].color);
+                path.setAttribute('stroke', 'white');
+                path.setAttribute('stroke-width', '0.2');
+                updateSegmentPath(path, i, 0);
+                segmentsGroup.appendChild(path);
+            }
+            visualInitialized = true;
+            document.getElementById('survey-progress-bar').style.width = ((currentQ + 1) / 20 * 100) + '%';
+        }
+
+        function updateSegmentPath(el, index, score) {
+            const innerRadius = 13;
+            const maxRadius = 45;
+            const radius = innerRadius + (score / 5) * (maxRadius - innerRadius);
+            
+            const startAngle = (index * 18) * (Math.PI / 180);
+            const endAngle = ((index + 1) * 18) * (Math.PI / 180);
+            
+            const x1 = 50 + radius * Math.cos(startAngle);
+            const y1 = 50 + radius * Math.sin(startAngle);
+            const x2 = 50 + radius * Math.cos(endAngle);
+            const y2 = 50 + radius * Math.sin(endAngle);
+            
+            const d = `M 50 50 L ${x1} ${y1} A ${radius} ${radius} 0 0 1 ${x2} ${y2} Z`;
+            el.setAttribute('d', d);
+        }
+
+        function recordScore(val) {
+            scores[currentQ] = val;
+            updateSegmentPath(document.getElementById(`seg-${currentQ}`), currentQ, val);
+            
+            const total = scores.reduce((a, b) => a + b, 0);
+            document.getElementById('live-score').innerText = total;
+
+            currentQ++;
+            if (currentQ < 20) {
+                renderQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function goBackQuestion() {
+            if (currentQ > 0) {
+                currentQ--; 
+                scores[currentQ] = 0;
+                updateSegmentPath(document.getElementById(`seg-${currentQ}`), currentQ, 0);
+                document.getElementById('live-score').innerText = scores.reduce((a, b) => a + b, 0);
+                renderQuestion();
+            } else {
+                goToStep(2);
+            }
+        }
+
+        function renderQuestion() {
+            const q = questions[currentQ];
+            document.getElementById('category-name').innerText = q.cat;
+            document.getElementById('category-icon').innerText = q.icon;
+            document.getElementById('question-text').innerText = q.text;
+            document.getElementById('current-q-num').innerText = currentQ + 1;
+            document.getElementById('survey-progress-bar').style.width = ((currentQ + 1) / 20 * 100) + '%';
+        }
+
+        function showResults() {
+            document.getElementById('question-card').classList.add('hidden');
+            document.getElementById('results-card').classList.remove('hidden');
+            
+            const currentTotal = scores.reduce((a, b) => a + b, 0);
+            const gap = 100 - currentTotal;
+            const target = Math.round(currentTotal + (0.6 * gap));
+
+            document.getElementById('final-score').innerText = currentTotal;
+            document.getElementById('target-score').innerText = target;
+            
+            targetGroup.innerHTML = '';
+            scores.forEach((s, i) => {
+                const targetScoreForQ = s + (0.6 * (5 - s));
+                const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                path.setAttribute('fill', questions[i].color);
+                updateSegmentPath(path, i, targetScoreForQ);
+                targetGroup.appendChild(path);
+            });
+        }
+
+        // ==========================================
+        // 4. CUSTOM DIAGNOSIS & EXPORT LOGIC
+        // ==========================================
+        function generateDiagnosis(cats) {
+            let highCats = [];
+            let lowCats = [];
+
+            cats.forEach(c => {
+                const total = c.scores.reduce((a, b) => a + b, 0);
+                if (total >= 15) highCats.push(c.name);
+                else lowCats.push(c.name);
+            });
+
+            let diagnosisHTML = "";
+
+            if (highCats.length > 0) {
+                diagnosisHTML += `<p>Based on your Flow Fingerprint, your superpowers right now are in <strong>${highCats.join(' and ')}</strong>. This is a fantastic starting point—it means you already have real strengths to lean on.</p>`;
+            } else {
+                diagnosisHTML += `<p>Right now, friction is hitting you from all sides, which is why everything feels so heavy. You are running on an empty tank.</p>`;
+            }
+
+            if (lowCats.length > 0) {
+                diagnosisHTML += `<p>However, the specific "Ugg" you're experiencing is stemming from a drop in <strong>${lowCats.join(' and ')}</strong>.</p>`;
+                
+                // Add specific insights
+                if (lowCats.includes("Agency")) diagnosisHTML += `<p class="pl-4 border-l-2 border-indigo-200"><em>When Agency is low, the problem drives you, leading to reactive overwhelm.</em></p>`;
+                if (lowCats.includes("Actions")) diagnosisHTML += `<p class="pl-4 border-l-2 border-indigo-200"><em>When Actions drop, the path gets confusing, leading to analysis paralysis.</em></p>`;
+                if (lowCats.includes("Support")) diagnosisHTML += `<p class="pl-4 border-l-2 border-indigo-200"><em>When Support is lacking, you carry the whole burden alone, leading to isolation.</em></p>`;
+                if (lowCats.includes("Tools")) diagnosisHTML += `<p class="pl-4 border-l-2 border-indigo-200"><em>When Tools are low, you're forced to rely on outdated strategies that just don't work anymore.</em></p>`;
+            }
+
+            diagnosisHTML += `<p class="font-bold mt-2">The Good News:</p>
+            <p>In THRiVE Coaching, we don't try to "fix everything." We take your existing strengths and use them to build up your low areas step-by-step, aiming to reduce this exact friction by 60%.</p>`;
+
+            return diagnosisHTML;
+        }
+
+        function downloadImage() {
+            window.scrollTo(0, 0);
+            const actionButtons = document.getElementById('blueprint-buttons');
+            actionButtons.classList.add('hidden');
+
+            const mainContainer = document.getElementById('step-3');
+            const visualAnchor = document.getElementById('visual-anchor');
+            
+            const origMain = mainContainer.className;
+            const origVisual = visualAnchor.className;
+
+            mainContainer.className = 'flex flex-col w-[768px] max-w-[768px] mx-auto bg-white rounded-2xl shadow-none p-8';
+            visualAnchor.className = 'w-full flex flex-col items-center pt-8 mt-8 border-t-2 border-slate-100';
+
+            setTimeout(() => {
+                html2canvas(mainContainer, {
+                    scale: 2,
+                    useCORS: true, 
+                    scrollY: -window.scrollY,
+                    backgroundColor: '#ffffff'
+                }).then(canvas => {
+                    const imgData = canvas.toDataURL('image/jpeg', 0.95);
+                    const link = document.createElement('a');
+                    link.download = 'My_Flow_Fingerprint.jpg';
+                    link.href = imgData;
+                    link.click();
+                    actionButtons.classList.remove('hidden');
+                    mainContainer.className = origMain;
+                    visualAnchor.className = origVisual;
+                });
+            }, 150);
+        }
+
+        function toggleDimension(index) {
+            const contentDiv = document.getElementById(`dim-content-${index}`);
+            const iconSpan = document.getElementById(`dim-icon-${index}`);
+            if (contentDiv.classList.contains('hidden')) {
+                contentDiv.classList.remove('hidden');
+                iconSpan.innerText = '−';
+            } else {
+                contentDiv.classList.add('hidden');
+                iconSpan.innerText = '+';
+            }
+        }
+
+        function hideDetailedSummary() {
+            document.getElementById('detailed-summary-card').classList.add('hidden');
+            document.getElementById('results-card').classList.remove('hidden');
+            const visualAnchor = document.getElementById('visual-anchor');
+            visualAnchor.classList.remove('bg-white', 'p-6', 'rounded-2xl', 'shadow-xl', 'border', 'border-slate-100');
+            visualAnchor.classList.add('sticky', 'top-8');
+            document.getElementById('visual-title').classList.add('hidden');
+            document.getElementById('thrive-cta').classList.add('hidden');
+        }
+
+        function showDetailedSummary() {
+            document.getElementById('results-card').classList.add('hidden');
+            document.getElementById('detailed-summary-card').classList.remove('hidden');
+
+            const visualAnchor = document.getElementById('visual-anchor');
+            visualAnchor.classList.add('bg-white', 'p-6', 'rounded-2xl', 'shadow-xl', 'border', 'border-slate-100');
+            visualAnchor.classList.remove('sticky', 'top-8');
+            document.getElementById('visual-title').classList.remove('hidden');
+            document.getElementById('thrive-cta').classList.remove('hidden');
+
+            // Set Friction Inputs
+            const problemDesc = document.getElementById('problem-description').value || "No specific friction described.";
+            document.getElementById('summary-problem').innerText = `"${problemDesc}"`;
+
+            let metaphorText = "None selected";
+            let metaphorIcon = "❓";
+            let metaphorDesc = "";
+            const selectedRadio = document.querySelector('input[name="metaphor"]:checked');
+            if (selectedRadio) {
+                const h3 = selectedRadio.nextElementSibling.querySelector('h3');
+                const p = selectedRadio.nextElementSibling.querySelector('p');
+                const icon = selectedRadio.nextElementSibling.querySelector('.text-2xl').innerText;
+                
+                if (h3.innerText === "Your Own Metaphor") {
+                    metaphorText = document.getElementById('custom-metaphor-input').value || "Custom metaphor";
+                    metaphorIcon = "🖊️";
+                    metaphorDesc = "A custom description of your current friction.";
+                } else {
+                    metaphorText = h3.innerText;
+                    metaphorIcon = icon;
+                    metaphorDesc = p.innerText;
+                }
+            }
+            document.getElementById('summary-metaphor-text').innerText = metaphorText;
+            document.getElementById('summary-metaphor-icon').innerText = metaphorIcon;
+            document.getElementById('summary-metaphor-desc').innerText = metaphorDesc;
+
+            // Set Math Inputs
+            const currentTotal = scores.reduce((a, b) => a + b, 0);
+            const gap = 100 - currentTotal;
+            const target = Math.round(currentTotal + (0.6 * gap));
+            const recovered = target - currentTotal;
+
+            document.getElementById('summary-current').innerText = currentTotal;
+            document.getElementById('summary-target').innerText = target;
+            document.getElementById('summary-future').innerText = `+${recovered}`;
+
+            // Define Categories
+            const cats = [
+                { 
+                    name: "Agency", icon: "🕯️", color: "bg-blue-500", scores: scores.slice(0, 5),
+                    lowDesc: "You might feel overwhelmed, highly reactive, or trapped by circumstances. It feels like the problem is driving you.",
+                    highDesc: "You stay calm, centered, and maintain hope. You are confidently in the driver's seat of your own emotional response."
+                },
+                { 
+                    name: "Actions", icon: "🗺️", color: "bg-emerald-500", scores: scores.slice(5, 10),
+                    lowDesc: "The path forward feels confusing or too big to tackle, leading to paralysis or repeating the same frustrating mistakes.",
+                    highDesc: "You can easily break the problem down into Simple, Practical, and Fun (SPF) steps and consistently execute them."
+                },
+                { 
+                    name: "Support", icon: "🤝", color: "bg-amber-500", scores: scores.slice(10, 15),
+                    lowDesc: "You feel isolated, judged, or like you have to carry the entire burden completely on your own.",
+                    highDesc: "You have a trusted, non-judgmental community or coach to brainstorm with and you feel truly seen and heard."
+                },
+                { 
+                    name: "Tools", icon: "⚙️", color: "bg-purple-500", scores: scores.slice(15, 20),
+                    lowDesc: "You feel empty-handed or heavily reliant on outdated strategies and reactions that just don't work anymore.",
+                    highDesc: "You are equipped with the right 'gear' and best-practice frameworks (like Plan B's and reset moves) for this specific climb."
+                }
+            ];
+
+            // Generate HTML for Breakdown
+            const catContainer = document.getElementById('summary-categories');
+            catContainer.innerHTML = '';
+            cats.forEach((c, index) => {
+                const total = c.scores.reduce((a, b) => a + b, 0);
+                const percent = (total / 25) * 100;
+                
+                catContainer.innerHTML += `
+                    <div class="border border-slate-200 rounded-xl overflow-hidden bg-white shadow-sm">
+                        <button onclick="toggleDimension(${index})" class="w-full flex items-center justify-between p-3 hover:bg-slate-50 transition-all text-left">
+                            <div class="flex-grow pr-4">
+                                <div class="flex justify-between text-xs font-bold text-slate-600 mb-1">
+                                    <span>${c.icon} ${c.name}</span>
+                                    <span>${total} / 25</span>
+                                </div>
+                                <div class="w-full bg-slate-100 rounded-full h-2">
+                                    <div class="${c.color} h-2 rounded-full transition-all duration-1000" style="width: ${percent}%"></div>
+                                </div>
+                            </div>
+                            <div class="text-slate-400 text-2xl font-light leading-none w-6 text-center" id="dim-icon-${index}">−</div>
+                        </button>
+                        <div id="dim-content-${index}" class="p-4 bg-slate-50 border-t border-slate-100 text-sm text-slate-700">
+                            <p class="mb-2"><span class="font-bold text-slate-900">When Low (0-10):</span> ${c.lowDesc}</p>
+                            <p><span class="font-bold text-slate-900">When High (15-25):</span> ${c.highDesc}</p>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Trigger AI Diagnosis
+            document.getElementById('custom-diagnosis-content').innerHTML = generateDiagnosis(cats);
+        }
+    </script>
+</body>
+</html>
