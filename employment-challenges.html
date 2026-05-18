@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employment Challenges - THRiVE Coaching</title>
+    <meta name="description" content="Explore scenarios and recommendations for employment challenges.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Add background-pan animation for the gradient text */
+        @keyframes background-pan {
+            from { background-position: 0% center; }
+            to { background-position: -200% center; }
+        }
+        .animate-background-pan {
+            animation: background-pan 3s linear infinite;
+        }
+        .bg-300\% {
+            background-size: 300%;
+        }
+        /* Ensure footer stays at bottom */
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        main {
+            flex-grow: 1;
+        }
+        /* Override tailwind conflicting with style.css header */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+        .footer {
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-600 flex flex-col min-h-screen font-sans">
+    <header class="header">
+        <nav class="nav-left">
+            <button class="hamburger" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </nav>
+        <div class="logo"><a href="index.html" style="text-decoration: none; color: inherit;">THRiVE Coaching</a></div>
+        <div class="nav-right desktop-menu">
+            <ul>
+                <li><a href="survey.html">Flow Survey</a></li>
+                <li><a href="profile.html">THRiVE Report</a></li>
+                <li><a href="approach.html">Our Approach</a></li>
+                <li class="dropdown">
+                    <a href="how-to-use.html">How To Use This Page</a>
+                    <div class="dropdown-content">
+                        <a href="rebuilding-life-challenges.html">Rebuilding Life Challenges</a>
+                        <a href="employment-challenges.html">Employment Challenges</a>
+                    </div>
+                </li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#video-section">Video</a></li>
+            </ul>
+        </div>
+
+        <div class="nav-menu">
+            <div class="menu-title">FIND YOUR FLOW</div>
+            <ul>
+                <li><a href="survey.html">Flow Survey</a></li>
+                <li><a href="profile.html">THRiVE Report</a></li>
+                <li><a href="approach.html">Our Approach</a></li>
+                <li class="dropdown">
+                    <a href="how-to-use.html">How To Use This Page</a>
+                    <div class="dropdown-content">
+                        <a href="rebuilding-life-challenges.html">Rebuilding Life Challenges</a>
+                        <a href="employment-challenges.html">Employment Challenges</a>
+                    </div>
+                </li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#video-section">Video</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <main class="flex-grow container mx-auto py-16 sm:py-24 px-4 sm:px-6 lg:px-8 mt-20">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-4xl font-extrabold tracking-tight sm:text-6xl text-center mb-16 bg-gradient-to-r from-purple-600 via-pink-500 to-red-400 bg-300% animate-background-pan bg-clip-text text-transparent py-2" style="font-family: 'Nunito', sans-serif;">
+                Employment Challenges
+            </h1>
+            <div class="space-y-20" style="font-family: 'Poppins', sans-serif;">
+                
+                <div class="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+                    <div class="text-gray-700 space-y-4">
+                        <h2 class="text-2xl font-bold text-gray-900" style="font-family: 'Nunito', sans-serif;">1. The Job Hunt</h2>
+                        <p class="font-semibold">This is not actually my challenge, but if it was, what would you recommend?</p>
+                        <p class="italic">"I have sent out dozens of resumes and cover letters over the last three months, but I rarely get a response. When I do get an interview, I get really nervous and feel like I'm rambling, and then I never hear back. I'm starting to lose confidence and worry that I'm unhireable or looking in the wrong places."</p>
+                        <p>Give me a short insight about this challenge. Then, give me five creative next steps I could take to address this challenge. If I have content in the "Other Notes" section of Personos, use that content to customize the next steps so they are specific to me.</p>
+                    </div>
+                    <div class="flex items-center justify-center">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/studio-4892448610-1a77b.firebasestorage.app/o/A%20person%20looking.webp?alt=media&token=1247bea5-429a-4c60-a852-3a10396c08f3" alt="A person looking stressed at a desk, with thought bubbles showing lack of confidence." width="400" height="200" class="rounded-lg shadow-md border-4 border-white transition-transform duration-300 hover:scale-105" loading="lazy">
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+                    <div class="text-gray-700 space-y-4">
+                        <h2 class="text-2xl font-bold text-gray-900" style="font-family: 'Nunito', sans-serif;">2. Career Stagnation</h2>
+                        <p class="font-semibold">This is not actually my challenge, but if it was, what would you recommend?</p>
+                        <p class="italic">"I've been in the same role for four years and I know the job inside and out, but I feel completely stuck. I see other people getting promoted or working on exciting new projects, but I keep getting passed over. I want to move up to the next level, but I don't know how to prove to my boss that I'm ready for more responsibility."</p>
+                        <p>Give me a short insight about this challenge. Then, give me five creative next steps I could take to address this challenge. If I have content in the "Other Notes" section of Personos, use that content to customize the next steps so they are specific to me.</p>
+                    </div>
+                    <div class="flex items-center justify-center">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/studio-4892448610-1a77b.firebasestorage.app/o/Stucked%20and%20Unnoticed.webp?alt=media&token=b48de8c5-ffd9-4906-89df-b6ad7f932625" alt="A person stuck in a crowd, feeling unnoticed at work." width="400" height="200" class="rounded-lg shadow-md border-4 border-white transition-transform duration-300 hover:scale-105" loading="lazy">
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+                    <div class="text-gray-700 space-y-4">
+                        <h2 class="text-2xl font-bold text-gray-900" style="font-family: 'Nunito', sans-serif;">3. Difficult Workplace Dynamics</h2>
+                        <p class="font-semibold">This is not actually my challenge, but if it was, what would you recommend?</p>
+                        <p class="italic">"I really like the actual work I do, but the environment is becoming toxic because of a specific manager who micromanages everything and takes credit for my ideas. I dread going into the office on Mondays, and I spend so much energy navigating their mood swings that my actual productivity is suffering."</p>
+                        <p>Give me a short insight about this challenge. Then, give me five creative next steps I could take to address this challenge. If I have content in the "Other Notes" section of Personos, use that content to customize the next steps so they are specific to me.</p>
+                    </div>
+                    <div class="flex items-center justify-center">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/studio-4892448610-1a77b.firebasestorage.app/o/Toxic%20Environment%20%26%20Dread.webp?alt=media&token=dce4412f-ccd1-4105-a23b-833de77216f9" alt="A person in a toxic work environment feeling dread." width="400" height="200" class="rounded-lg shadow-md border-4 border-white transition-transform duration-300 hover:scale-105" loading="lazy">
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+                    <div class="text-gray-700 space-y-4">
+                        <h2 class="text-2xl font-bold text-gray-900" style="font-family: 'Nunito', sans-serif;">4. The Major Career Pivot</h2>
+                        <p class="font-semibold">This is not actually my challenge, but if it was, what would you recommend?</p>
+                        <p class="italic">"I've spent ten years building a career in this field, but I've realized I'm burned out and it doesn't align with my values anymore. I have a dream of switching to a totally different industry, but I'm terrified of taking a pay cut or starting over from the bottom when I have a mortgage and family to support."</p>
+                        <p>Give me a short insight about this challenge. Then, give me five creative next steps I could take to address this challenge. If I have content in the "Other Notes" section of Personos, use that content to customize the next steps so they are specific to me.</p>
+                    </div>
+                    <div class="flex items-center justify-center">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/studio-4892448610-1a77b.firebasestorage.app/o/Career%20Change%20Fear%20%26%20Responsibility.webp?alt=media&token=6ac94773-6749-44f3-8bbb-5287ba36af26" alt="A person contemplating a career change, weighing fear and responsibility." width="400" height="200" class="rounded-lg shadow-md border-4 border-white transition-transform duration-300 hover:scale-105" loading="lazy">
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+                    <div class="text-gray-700 space-y-4">
+                        <h2 class="text-2xl font-bold text-gray-900" style="font-family: 'Nunito', sans-serif;">5. Resignation and Departure</h2>
+                        <p class="font-semibold">This is not actually my challenge, but if it was, what would you recommend?</p>
+                        <p class="italic">"I have finally found a new opportunity and I know it's time to leave, but I am terrified of the resignation conversation. My team is understaffed, and I feel guilty for leaving them in a lurch. I want to leave on good terms without burning bridges, but I don't know how to word my notice or handle the exit interview gracefully."</p>
+                        <p>Give me a short insight about this challenge. Then, give me five creative next steps I could take to address this challenge. If I have content in the "Other Notes" section of Personos, use that content to customize the next steps so they are specific to me.</p>
+                    </div>
+                    <div class="flex items-center justify-center">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/studio-4892448610-1a77b.firebasestorage.app/o/Terror%20%26%20Guilt%20of%20Resignation.webp?alt=media&token=438c851a-9abb-47b8-97c8-da3fcd6f7765" alt="A person feeling terror and guilt about resigning from a job." width="400" height="200" class="rounded-lg shadow-md border-4 border-white transition-transform duration-300 hover:scale-105" loading="lazy">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer mt-auto">
+        <div class="footer-content">
+            <div class="footer-contact">
+                <a href="mailto:team@thrivecoaching.ai">team@thrivecoaching.ai</a>
+                <span class="separator">|</span>
+                <a href="tel:7205882002">(720) 588-2002</a>
+            </div>
+            <div class="footer-copyright">
+                &copy; 2026 Thrive Coaching AI. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>
