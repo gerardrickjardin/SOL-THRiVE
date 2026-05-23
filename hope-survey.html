@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HoPE Index Survey - SOL THRiVE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Removed Recharts -->
+    
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans min-h-screen flex flex-col relative overflow-x-hidden">
+    
+    <!-- THRiVE Global Header -->
+    <header class="header print:hidden z-50 relative">
+        <nav class="nav-left">
+            <button class="hamburger" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </nav>
+        <div class="logo"><a href="index.html" style="text-decoration: none; color: inherit;">THRiVE Coaching</a></div>
+        <div class="nav-right desktop-menu">
+            <ul>
+                <li><a href="survey.html">Flow Survey</a></li>
+                <li><a href="profile.html">THRiVE Report</a></li>
+                <li><a href="hope-survey.html" class="text-blue-600 font-bold">HoPE Survey</a></li>
+                <li><a href="approach.html">Our Approach</a></li>
+                <li class="dropdown">
+                    <a href="how-to-use.html">How To Use This Page</a>
+                    <div class="dropdown-content">
+                        <a href="rebuilding-life-challenges.html">Rebuilding Life Challenges</a>
+                        <a href="employment-challenges.html">Employment Challenges</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </header>
+
+    <div id="root"></div>
+
+    <script type="text/babel">
+const { useState, useEffect, useRef } = window.React;
+
+// --- DATA STRUCTURE ---
+const surveyQuestions = [
+    // DIMENSION 1: PLACES
+    {
+        id: "ops_home",
+        space: "Outer Physical Space (OPS)",
+        dimension: "Dimension 1: Places",
+        title: "1.1 Home Experience",
+        concept: "Think of this as the physical \"hotel room\" you sleep in every night. Is it warm, dry, quiet, and secure? Does it provide a peaceful sanctuary where you can truly rest?",
+        anchors: {
+            5.0: "Secure, quiet, comfortable, and fully supportive of your peace of mind.",
+            2.5: "Physically intact but crowded, noisy, or lacking privacy. Feels temporary.",
+            0.0: "Unsafe, structurally compromised, unlivable, or lacking stable shelter."
+        }
+    },
+    {
+        id: "ops_neighborhood",
+        space: "Outer Physical Space (OPS)",
+        dimension: "Dimension 1: Places",
+        title: "1.2 Neighborhood Experience",
+        concept: "Evaluate the surrounding blocks, parks, and streets outside your home. Is it clean, well-lit, and physically safe to walk through?",
+        anchors: {
+            5.0: "Calm, clean, well-lit, and physically safe to navigate at any hour.",
+            2.5: "Calm during day, but sporadic crime or unease at night. Must remain cautious.",
+            0.0: "Active danger zone; constant immediate threats of physical harm."
+        }
+    },
+    {
+        id: "ops_thirdspaces",
+        space: "Outer Physical Space (OPS)",
+        dimension: "Dimension 1: Places",
+        title: "1.3 Third Spaces Experience",
+        concept: "Evaluate the other public physical environments you frequent (school, office, gym). Do these facilities feel welcoming, clean, and built to support you?",
+        anchors: {
+            5.0: "Premium public physical spaces that feel welcoming, clean, and highly supportive.",
+            2.5: "Accessible but sterile, institutional, or poorly maintained. No inspiration.",
+            0.0: "Completely blocked; zero access to safe, welcoming spaces outside home."
+        }
+    },
+    // DIMENSION 2: BODY
+    {
+        id: "ops_functionality",
+        space: "Outer Physical Space (OPS)",
+        dimension: "Dimension 2: Body",
+        title: "2.1 Functionality Experience",
+        concept: "Think of your body as a car. Can you physically move, play, work, and perform daily tasks without pain or severe limitations?",
+        anchors: {
+            5.0: "Peak physical performance; fully capable and free of chronic pain or limitations.",
+            2.5: "Functions for basic tasks, but frequent fatigue, minor aches, or limitations.",
+            0.0: "Complete physical breakdown; debilitating physical crisis or acute illness."
+        }
+    },
+    {
+        id: "ops_energy",
+        space: "Outer Physical Space (OPS)",
+        dimension: "Dimension 2: Body",
+        title: "2.2 Energy & Vitality Experience",
+        concept: "Evaluate your daily \"fuel tank.\" Do you wake up feeling recharged and have sustained vitality required to power through your day?",
+        anchors: {
+            5.0: "Abundant, clean energy; waking up completely refreshed and ready.",
+            2.5: "Highly inconsistent energy. Rely heavily on caffeine/sugar/willpower.",
+            0.0: "Complete battery depletion; profound, paralyzing physical fatigue."
+        }
+    },
+    {
+        id: "ops_bodyimage",
+        space: "Outer Physical Space (OPS)",
+        dimension: "Dimension 2: Body",
+        title: "2.3 Body Image Experience",
+        concept: "How comfortable, confident, and accepting do you feel in your own physical skin?",
+        anchors: {
+            5.0: "High physical confidence; exceptionally comfortable, proud, and accepting.",
+            2.5: "Neutral or indifferent. You tolerate your reflection but lack confidence.",
+            0.0: "Severe self-loathing or physical shame; experiencing deep anxiety."
+        }
+    },
+    // DIMENSION 3: RESOURCES
+    {
+        id: "ops_finances",
+        space: "Outer Physical Space (OPS)",
+        dimension: "Dimension 3: Resources",
+        title: "3.1 Finances Experience",
+        concept: "Evaluate your financial liquidity. Does your current money experience feel stable and abundant, or is it a survival struggle?",
+        anchors: {
+            5.0: "Financial abundance and security; easily covering bills and saving.",
+            2.5: "Paycheck to paycheck. Basic needs met but zero margin for error.",
+            0.0: "Absolute financial destitution; zero income, savings, or assets."
+        }
+    },
+    {
+        id: "ops_technology",
+        space: "Outer Physical Space (OPS)",
+        dimension: "Dimension 3: Resources",
+        title: "3.2 Technology Experience",
+        concept: "Evaluate your digital toolkit. Do you have reliable access to the hardware and networks required to study, work, and build your goals?",
+        anchors: {
+            5.0: "High-speed connectivity; up-to-date devices that fully empower work.",
+            2.5: "Connection is slow/unreliable, hardware is outdated. Limits productivity.",
+            0.0: "Total digital blackout; completely disconnected from the digital economy."
+        }
+    },
+    {
+        id: "ops_essentials",
+        space: "Outer Physical Space (OPS)",
+        dimension: "Dimension 3: Resources",
+        title: "3.3 Essentials Experience",
+        concept: "Evaluate your logistical lifelines. Do you have reliable transport, working appliances, and basic physical goods to run a smooth daily routine?",
+        anchors: {
+            5.0: "Highly reliable daily logistics; dependable transportation and functioning appliances.",
+            2.5: "Highly inconvenient logistics requiring exhausting coordination and immense effort.",
+            0.0: "Absolute logistical failure; stranded, unusable appliances, no utilities."
+        }
+    },
+    // DIMENSION 4: SELF
+    {
+        id: "irs_emotions",
+        space: "Inner Relational Space (IRS)",
+        dimension: "Dimension 4: Self",
+        title: "4.1 Emotions Experience",
+        concept: "Evaluate your internal \"dashboard.\" How well can you navigate and process intense feelings without crashing or shutting down?",
+        anchors: {
+            5.0: "Calm, clear, and resilient; processing intense feelings easily under pressure.",
+            2.5: "Externally composed, but internally emotionally fragile, anxious, or numb.",
+            0.0: "Complete emotional dysregulation or paralyzing trauma (panic, rage, numbness)."
+        }
+    },
+    {
+        id: "irs_goals",
+        space: "Inner Relational Space (IRS)",
+        dimension: "Dimension 4: Self",
+        title: "4.2 Goals Experience",
+        concept: "Do you have exciting, structured, and achievable goals that you are actively pursuing, or are you drifting?",
+        anchors: {
+            5.0: "Crystal-clear vision; actively working an inspiring, step-by-step plan.",
+            2.5: "Vague ideas of future, but lack clear plan or discipline. Surviving day-by-day.",
+            0.0: "Absolute hopelessness; unable to envision any positive future. Zero aspiration."
+        }
+    },
+    {
+        id: "irs_identity",
+        space: "Inner Relational Space (IRS)",
+        dimension: "Dimension 4: Self",
+        title: "4.3 Identity Experience",
+        concept: "Do you respect, trust, and feel proud of the person you are, or do you struggle with self-doubt or shame?",
+        anchors: {
+            5.0: "Unshakeable self-worth; deep pride in who you are and your unique potential.",
+            2.5: "Volatile self-esteem dependent on external validation. Easily shaken.",
+            0.0: "Profound identity crisis; carrying severe self-rejection or feeling worthless."
+        }
+    },
+    // DIMENSION 5: OTHERS
+    {
+        id: "irs_coreconnections",
+        space: "Inner Relational Space (IRS)",
+        dimension: "Dimension 5: Others",
+        title: "5.1 Core Connections Experience",
+        concept: "Evaluate your closest circle. Do you have people who truly know you, love you, and would catch you if you fell?",
+        anchors: {
+            5.0: "Exceptional close support; multiple trusted relationships to share raw truths.",
+            2.5: "Relationships are superficial or distant. Casual company, no deep vulnerability.",
+            0.0: "Absolute relational void; abandoned or trapped in an abusive domestic dynamic."
+        }
+    },
+    {
+        id: "irs_socialnetwork",
+        space: "Inner Relational Space (IRS)",
+        dimension: "Dimension 5: Others",
+        title: "5.2 Social Network Experience",
+        concept: "Evaluate your broader group. Do you feel a sense of positive belonging and safety within your school, workspace, or community?",
+        anchors: {
+            5.0: "Deep community belonging; feeling respected, celebrated, and integrated.",
+            2.5: "An outside observer. Fit in enough to avoid trouble, but lack shared purpose.",
+            0.0: "Extreme social ostracization; actively targeted, bullied, or completely isolated."
+        }
+    },
+    {
+        id: "irs_community",
+        space: "Inner Relational Space (IRS)",
+        dimension: "Dimension 5: Others",
+        title: "5.3 Community Experience",
+        concept: "Do your daily interactions with the public, merchants, and strangers feel safe and cooperative, or hostile and tense?",
+        anchors: {
+            5.0: "Highly positive and cooperative public interactions; feeling safe and welcome.",
+            2.5: "Cold, transactional, distant public interactions. No warmth or mutual respect.",
+            0.0: "Systemic community warfare; public spaces feel predatory and dangerous."
+        }
+    },
+    // DIMENSION 6: LIFE
+    {
+        id: "irs_hobbies",
+        space: "Inner Relational Space (IRS)",
+        dimension: "Dimension 6: Life",
+        title: "6.1 Hobbies Experience",
+        concept: "Evaluate your \"recharge time.\" Do you make time for activities and passions that bring you pure joy, separate from work?",
+        anchors: {
+            5.0: "Consistent creative play; regularly enjoying highly rewarding hobbies.",
+            2.5: "Occasional participation, but rushed and interrupted by stress or scrolling.",
+            0.0: "Complete lockup or anhedonia; physically blocked from any recreation or joy."
+        }
+    },
+    {
+        id: "irs_habits",
+        space: "Inner Relational Space (IRS)",
+        dimension: "Dimension 6: Life",
+        title: "6.2 Habits Experience",
+        concept: "Evaluate your automatic daily loops. Do you maintain healthy, supportive routines or are you stuck in destructive habits?",
+        anchors: {
+            5.0: "Optimal self-discipline; daily routines are fully aligned with well-being.",
+            2.5: "Mixed bag. Some positive routines, but easily fall back into unsupportive habits under stress.",
+            0.0: "Severe, paralyzing addiction or complete routine collapse; chronic self-destruction."
+        }
+    },
+    {
+        id: "irs_havetos",
+        space: "Inner Relational Space (IRS)",
+        dimension: "Dimension 6: Life",
+        title: "6.3 Have-Tos Experience",
+        concept: "Evaluate your ability to manage your responsibilities. Do you run your schedule, or does your schedule run you?",
+        anchors: {
+            5.0: "Exceptional schedule mastery; meeting commitments with calm efficiency.",
+            2.5: "Constantly reactive last-minute scramble. Rushing with high stress.",
+            0.0: "Complete system failure; entirely buried by responsibilities, facing collapse."
+        }
+    },
+    // FLEX SLOTS
+    {
+        id: "flex_gas",
+        space: "Contextual Layering",
+        dimension: "Flex Slot 1: Gang Affinity Score (GAS)",
+        title: "Flex 1: Gang Affinity Score",
+        concept: "I am able to see a meaningful, proud, and stable future for myself that does entirely without gang participation, street hustle, or illicit group identity.",
+        anchors: {
+            5.0: "Complete freedom from gang involvement. Clear, independent path.",
+            2.5: "Not active, but social circle/safety tied to gang affiliates. Constant navigation.",
+            0.0: "Survival, identity, and social circle are entirely controlled by the gang."
+        }
+    },
+    {
+        id: "flex_psa",
+        space: "Contextual Layering",
+        dimension: "Flex Slot 2: Psychological Safety Assessment (PSA)",
+        title: "Flex 2: Psychological Safety Assessment",
+        concept: "I feel emotionally and physically safe enough in my daily life to make choices based on my long-term dreams rather than immediate physical survival.",
+        anchors: {
+            5.0: "Peace and security. Safe to explore and plan without looking over my shoulder.",
+            2.5: "Generally safe in routine, but high anxiety changing paths or after dark.",
+            0.0: "Survival mode. Constant, acute fear of immediate physical retaliation or death."
+        }
+    }
+];
+
+
+const ResultsScreen = ({ answers, surveyQuestions }) => {
+        const [animatedScores, setAnimatedScores] = useState({});
+        const [isMounted, setIsMounted] = useState(false);
+        const totalScore = Object.values(answers).reduce((a, b) => a + b, 0); // Out of 100 max
+        
+        useEffect(() => {
+            // Trigger entrance animations
+            setTimeout(() => setIsMounted(true), 100);
+            
+            // Animate each slice to its final score
+            const newAnimatedScores = {};
+            surveyQuestions.forEach((q, i) => {
+                setTimeout(() => {
+                    setAnimatedScores(prev => ({...prev, [q.id]: answers[q.id] ?? 0}));
+                }, i * 50); // cascading animation
+            });
+        }, [answers]);
+
+        // Define polar-to-cartesian and arc generator for React SVG
+        const polarToCartesian = (centerX, centerY, radius, angleInDegrees) => {
+            const angleInRadians = (angleInDegrees - 90) * Math.PI / 180.0;
+            return {
+                x: centerX + (radius * Math.cos(angleInRadians)),
+                y: centerY + (radius * Math.sin(angleInRadians))
+            };
+        };
+
+        const describeArc = (x, y, innerRadius, outerRadius, startAngle, endAngle) => {
+            const startOut = polarToCartesian(x, y, outerRadius, endAngle);
+            const endOut = polarToCartesian(x, y, outerRadius, startAngle);
+            const startIn = polarToCartesian(x, y, innerRadius, endAngle);
+            const endIn = polarToCartesian(x, y, innerRadius, startAngle);
+            const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
+            return [
+                "M", startOut.x, startOut.y,
+                "A", outerRadius, outerRadius, 0, largeArcFlag, 0, endOut.x, endOut.y,
+                "L", endIn.x, endIn.y,
+                "A", innerRadius, innerRadius, 0, largeArcFlag, 1, startIn.x, startIn.y,
+                "Z"
+            ].join(" ");
+        };
+
+        // Base constants for the visual
+        const cx = 500;
+        const cy = 420; // Center of the arc
+        const innerR = 180;
+        const maxOutR = 360; // max radius for a score of 5.0
+        
+        const dimensionColors = [
+            '#ff3b30', // Places - Vibrant Red
+            '#ff9500', // Body - Orange
+            '#ffcc00', // Resources - Yellow
+            '#34c759', // Self - Green
+            '#00c7ff', // Others - Cyan/Blue
+            '#af52de'  // Life - Purple
+        ];
+        const dimensionNames = ["PLACES", "BODY", "RESOURCES", "SELF", "OTHERS", "LIFE"];
+
+        // We have 18 core questions. Angles from -90 to 90.
+        const coreQuestions = surveyQuestions.slice(0, 18);
+        const flex1Score = answers[surveyQuestions[18]?.id] ?? 0;
+        const flex2Score = answers[surveyQuestions[19]?.id] ?? 0;
+
+        return (
+            <main className={`flex-grow flex items-center justify-center bg-[#02050a] p-4 md:p-8 relative w-full overflow-hidden min-h-screen transition-opacity duration-1000 ${isMounted ? 'opacity-100' : 'opacity-0'}`}>
+                {/* Advanced Cyber Background */}
+                <div className="absolute inset-0 pointer-events-none" style={{
+                    backgroundImage: 'radial-gradient(circle at 50% 50%, rgba(0, 229, 255, 0.08) 0%, transparent 60%), linear-gradient(rgba(0, 229, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 229, 255, 0.03) 1px, transparent 1px)',
+                    backgroundSize: '100% 100%, 30px 30px, 30px 30px',
+                    backgroundPosition: 'center center'
+                }}></div>
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[1200px] h-[300px] bg-cyan-500 rounded-[100%] blur-[150px] opacity-[0.05] pointer-events-none"></div>
+                
+                <div className="relative z-10 w-full max-w-[1100px] rounded-3xl border border-cyan-500/20 bg-[#050a14]/80 backdrop-blur-3xl shadow-[0_20px_80px_rgba(0,229,255,0.07)] p-8 md:p-14 overflow-hidden">
+                    {/* Top corner accents */}
+                    <div className="absolute top-0 left-0 w-32 h-32 border-t border-l border-cyan-500/50 rounded-tl-3xl opacity-50"></div>
+                    <div className="absolute top-0 right-0 w-32 h-32 border-t border-r border-cyan-500/50 rounded-tr-3xl opacity-50"></div>
+
+                    {/* Header */}
+                    <div className="text-center mb-12 relative">
+                        <div className="inline-block">
+                            <h1 className="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-cyan-100 tracking-widest mb-2" style={{ textShadow: '0 0 40px rgba(0,229,255,0.3)' }}>
+                                THE HOPE INDEX
+                            </h1>
+                            <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-50 mt-2 mb-3"></div>
+                            <p className="text-cyan-400 font-medium text-sm md:text-base tracking-[0.2em] uppercase">
+                                (Human Optimized Personal Experience)
+                            </p>
+                            <p className="text-slate-400 text-xs tracking-widest uppercase mt-2">Baseline & Post-Intervention Resilience Assessment</p>
+                        </div>
+                    </div>
+
+                    {/* SVG Visualization Area */}
+                    <div className="relative w-full aspect-[2/1.3] max-h-[600px] mx-auto">
+                        <svg viewBox="0 0 1000 650" className="w-full h-full drop-shadow-2xl overflow-visible">
+                            <defs>
+                                <filter id="glow-soft" x="-20%" y="-20%" width="140%" height="140%">
+                                    <feGaussianBlur stdDeviation="3" result="blur" />
+                                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                                </filter>
+                                <filter id="glow-intense" x="-50%" y="-50%" width="200%" height="200%">
+                                    <feGaussianBlur stdDeviation="10" result="blur" />
+                                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                                </filter>
+                                <linearGradient id="score-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" stopColor="rgba(0, 229, 255, 0.2)" />
+                                    <stop offset="100%" stopColor="rgba(0, 229, 255, 0.05)" />
+                                </linearGradient>
+                            </defs>
+
+                            {/* Dimension Labels & Outer Arcs */}
+                            {dimensionNames.map((name, i) => {
+                                const startA = -90 + (i * 30);
+                                const endA = startA + 30;
+                                const midA = startA + 15;
+                                const labelPos = polarToCartesian(cx, cy, maxOutR + 55, midA);
+                                const color = dimensionColors[i];
+                                return (
+                                    <g key={`dim-${i}`} style={{ opacity: isMounted ? 1 : 0, transition: `opacity 1s ease ${(i * 0.1) + 0.5}s` }}>
+                                        {/* Outer framing line */}
+                                        <path d={describeArc(cx, cy, maxOutR + 25, maxOutR + 27, startA + 1, endA - 1)} fill={color} opacity="0.4" filter="url(#glow-soft)" />
+                                        <text x={labelPos.x} y={labelPos.y} fill={color} fontSize="14" fontWeight="800" textAnchor="middle" alignmentBaseline="middle" style={{ transform: `rotate(${midA}deg)`, transformOrigin: `${labelPos.x}px ${labelPos.y}px`, letterSpacing: '3px', textShadow: `0 0 10px ${color}` }}>{name}</text>
+                                    </g>
+                                );
+                            })}
+
+                            {/* Circuit traces (background lines to center) */}
+                            {coreQuestions.map((_, i) => {
+                                const angle = -90 + (i * 10) + 5; 
+                                const start = polarToCartesian(cx, cy, innerR - 10, angle);
+                                const destX = cx + (i - 8.5) * 16; 
+                                const destY = cy + 20;
+                                return (
+                                    <path key={`trace-${i}`} d={`M ${start.x} ${start.y} Q ${cx} ${cy} ${destX} ${destY}`} fill="none" stroke="#00e5ff" strokeWidth="1.5" opacity={isMounted ? "0.2" : "0"} style={{ transition: `opacity 1s ease ${(i * 0.05) + 0.5}s` }} />
+                                );
+                            })}
+
+                            {/* 18 Data Slices */}
+                            {coreQuestions.map((q, i) => {
+                                const score = animatedScores[q.id] ?? 0;
+                                const dimIndex = Math.floor(i / 3);
+                                const color = dimensionColors[dimIndex];
+                                const startA = -90 + (i * 10);
+                                const endA = startA + 8.5; // leaving 1.5 degree gap for clean separation
+                                
+                                const scoreR = innerR + (score / 5) * (maxOutR - innerR);
+                                
+                                const basePath = describeArc(cx, cy, innerR, maxOutR, startA, endA);
+                                const scorePath = describeArc(cx, cy, innerR, scoreR, startA, endA);
+
+                                return (
+                                    <g key={`slice-${i}`}>
+                                        {/* Empty track */}
+                                        <path d={basePath} fill={color} opacity="0.05" />
+                                        
+                                        {/* Filled animated track */}
+                                        <path d={scorePath} fill={color} filter="url(#glow-soft)" opacity="0.9" style={{ transition: 'all 1.5s cubic-bezier(0.16, 1, 0.3, 1)' }} />
+                                        
+                                        {/* Highlight tip for the filled track */}
+                                        {score > 0 && (
+                                            <path d={describeArc(cx, cy, scoreR - 4, scoreR, startA, endA)} fill="#ffffff" opacity="0.5" />
+                                        )}
+                                        
+                                        {/* Number Label */}
+                                        <text 
+                                            {...polarToCartesian(cx, cy, innerR - 25, startA + 4.25)} 
+                                            fill="#ffffff" fontSize="11" fontWeight="bold" textAnchor="middle" opacity="0.5"
+                                        >{i + 1}</text>
+                                    </g>
+                                );
+                            })}
+
+                            {/* Central Box for Total Score */}
+                            <g transform={`translate(${cx - 160}, ${cy + 20})`} style={{ opacity: isMounted ? 1 : 0, transition: 'opacity 1s ease 1.5s' }}>
+                                {/* Futuristic glowing central container */}
+                                <rect x="0" y="0" width="320" height="140" rx="15" fill="url(#score-gradient)" stroke="#00e5ff" strokeWidth="2" filter="url(#glow-soft)" />
+                                <rect x="-10" y="20" width="2" height="100" fill="#00e5ff" filter="url(#glow-soft)" />
+                                <rect x="328" y="20" width="2" height="100" fill="#00e5ff" filter="url(#glow-soft)" />
+                                
+                                <text x="160" y="30" fill="#ffffff" fontSize="16" fontWeight="bold" textAnchor="middle" letterSpacing="2px">TOTAL HOPE INDEX SCORE</text>
+                                <text x="160" y="50" fill="#00e5ff" fontSize="12" fontWeight="bold" textAnchor="middle" opacity="0.7" letterSpacing="1px">(0-100%)</text>
+                                
+                                <text x="140" y="115" fill="#ffffff" fontSize="64" fontWeight="900" textAnchor="middle" filter="url(#glow-intense)" style={{ fontFamily: 'sans-serif' }}>
+                                    {Math.round(totalScore)}
+                                </text>
+                                <text x="200" y="115" fill="#00e5ff" fontSize="24" fontWeight="bold" textAnchor="start" opacity="0.8">/100</text>
+                            </g>
+                            
+                            {/* Circuit lines from central box down to bottom module */}
+                            <path d={`M ${cx - 80} ${cy + 160} L ${cx - 80} ${cy + 190} L ${cx - 240} ${cy + 190} L ${cx - 240} ${cy + 230}`} fill="none" stroke="#00e5ff" strokeWidth="2" opacity={isMounted ? "0.4" : "0"} filter="url(#glow-soft)" style={{ transition: 'opacity 1s ease 2s' }} />
+                            <path d={`M ${cx + 80} ${cy + 160} L ${cx + 80} ${cy + 190} L ${cx + 240} ${cy + 190} L ${cx + 240} ${cy + 230}`} fill="none" stroke="#00e5ff" strokeWidth="2" opacity={isMounted ? "0.4" : "0"} filter="url(#glow-soft)" style={{ transition: 'opacity 1s ease 2s' }} />
+                        </svg>
+                    </div>
+
+                    {/* Population-Specific Context (Flexible Module) */}
+                    <div className={`mt-4 border border-cyan-500/30 rounded-2xl bg-[#03060d]/80 p-6 md:p-8 relative shadow-[inset_0_0_30px_rgba(0,229,255,0.02)] transition-opacity duration-1000 ${isMounted ? 'opacity-100 delay-[2000ms]' : 'opacity-0'}`}>
+                        {/* High-tech Corner Accents */}
+                        <div className="absolute top-0 left-0 w-10 h-10 border-t-2 border-l-2 border-cyan-400 rounded-tl-2xl"></div>
+                        <div className="absolute top-0 right-0 w-10 h-10 border-t-2 border-r-2 border-cyan-400 rounded-tr-2xl"></div>
+                        <div className="absolute bottom-0 left-0 w-10 h-10 border-b-2 border-l-2 border-cyan-400 rounded-bl-2xl"></div>
+                        <div className="absolute bottom-0 right-0 w-10 h-10 border-b-2 border-r-2 border-cyan-400 rounded-br-2xl"></div>
+                        
+                        <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#050a14] px-6 py-1 text-cyan-300 text-sm font-bold tracking-[0.15em] uppercase border border-cyan-500/50 rounded-full shadow-[0_0_15px_rgba(0,229,255,0.4)] whitespace-nowrap">
+                            Population-Specific Context
+                        </div>
+                        <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 text-cyan-500/50 text-[10px] font-bold uppercase tracking-widest bg-[#03060d] px-4 whitespace-nowrap">
+                            (Flexible Module)
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-4 pt-6 pb-4">
+                            {/* Gauge 1 */}
+                            <div className="flex items-center gap-6 justify-center">
+                                <div className="relative w-28 h-28 shrink-0">
+                                    <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_0_12px_rgba(0,229,255,0.3)]">
+                                        {/* Ticks */}
+                                        {[0,1,2,3,4,5].map(tick => {
+                                            const a = -120 + (tick / 5) * 240;
+                                            const p1 = polarToCartesian(50, 50, 42, a);
+                                            const p2 = polarToCartesian(50, 50, 46, a);
+                                            return <line key={tick} x1={p1.x} y1={p1.y} x2={p2.x} y2={p2.y} stroke="#00e5ff" strokeWidth="2" opacity="0.6"/>;
+                                        })}
+                                        <path d={describeArc(50, 50, 36, 40, -120, 120)} fill="#0a1526" stroke="#00e5ff" strokeWidth="0.5" opacity="0.5" />
+                                        <path d={describeArc(50, 50, 36, 40, -120, -120 + (flex1Score / 5) * 240)} fill="#00e5ff" filter="url(#glow-soft)" />
+                                        {/* Needle */}
+                                        <g style={{ transform: `rotate(${-120 + (flex1Score / 5) * 240}deg)`, transformOrigin: '50px 50px', transition: 'transform 1.5s cubic-bezier(0.34, 1.56, 0.64, 1) 2.5s' }}>
+                                            <polygon points="48.5,50 51.5,50 50,12" fill="#ffffff" filter="url(#glow-soft)" />
+                                            <circle cx="50" cy="50" r="5" fill="#00e5ff" stroke="#ffffff" strokeWidth="1.5" />
+                                        </g>
+                                    </svg>
+                                    <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 text-cyan-400 font-bold text-sm bg-[#03060d] px-2 rounded-full border border-cyan-500/20">{flex1Score.toFixed(1)}</div>
+                                </div>
+                                <div className="max-w-[200px]">
+                                    <div className="text-cyan-500 text-[10px] font-bold tracking-[0.2em] mb-1 uppercase">Question A:</div>
+                                    <h3 className="text-white font-bold text-base md:text-lg leading-tight mb-1">GANG DE-IDENTIFICATION <span className="text-cyan-200 text-xs">(ICA)</span></h3>
+                                    <p className="text-slate-400 text-[11px] leading-snug italic">(measures disengagement / identity shift)</p>
+                                </div>
+                            </div>
+
+                            {/* Gauge 2 */}
+                            <div className="flex items-center gap-6 justify-center border-t md:border-t-0 md:border-l border-cyan-500/20 pt-6 md:pt-0 md:pl-6">
+                                <div className="relative w-28 h-28 shrink-0">
+                                    <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_0_12px_rgba(0,229,255,0.3)]">
+                                        {/* Ticks */}
+                                        {[0,1,2,3,4,5].map(tick => {
+                                            const a = -120 + (tick / 5) * 240;
+                                            const p1 = polarToCartesian(50, 50, 42, a);
+                                            const p2 = polarToCartesian(50, 50, 46, a);
+                                            return <line key={tick} x1={p1.x} y1={p1.y} x2={p2.x} y2={p2.y} stroke="#00e5ff" strokeWidth="2" opacity="0.6"/>;
+                                        })}
+                                        <path d={describeArc(50, 50, 36, 40, -120, 120)} fill="#0a1526" stroke="#00e5ff" strokeWidth="0.5" opacity="0.5" />
+                                        <path d={describeArc(50, 50, 36, 40, -120, -120 + (flex2Score / 5) * 240)} fill="#00e5ff" filter="url(#glow-soft)" />
+                                        {/* Needle */}
+                                        <g style={{ transform: `rotate(${-120 + (flex2Score / 5) * 240}deg)`, transformOrigin: '50px 50px', transition: 'transform 1.5s cubic-bezier(0.34, 1.56, 0.64, 1) 2.7s' }}>
+                                            <polygon points="48.5,50 51.5,50 50,12" fill="#ffffff" filter="url(#glow-soft)" />
+                                            <circle cx="50" cy="50" r="5" fill="#00e5ff" stroke="#ffffff" strokeWidth="1.5" />
+                                        </g>
+                                    </svg>
+                                    <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 text-cyan-400 font-bold text-sm bg-[#03060d] px-2 rounded-full border border-cyan-500/20">{flex2Score.toFixed(1)}</div>
+                                </div>
+                                <div className="max-w-[200px]">
+                                    <div className="text-cyan-500 text-[10px] font-bold tracking-[0.2em] mb-1 uppercase">Question B:</div>
+                                    <h3 className="text-white font-bold text-base md:text-lg leading-tight mb-1">PSYCHOLOGICAL SAFETY</h3>
+                                    <p className="text-slate-400 text-[11px] leading-snug italic">(measures reduced fear)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className={`flex flex-col sm:flex-row gap-4 mt-12 justify-center transition-opacity duration-1000 ${isMounted ? 'opacity-100 delay-[3000ms]' : 'opacity-0'}`}>
+                        <button onClick={() => window.print()} className="px-8 py-4 bg-transparent border-2 border-cyan-500/50 text-cyan-400 font-bold rounded-full hover:bg-cyan-500/10 hover:border-cyan-400 hover:text-cyan-300 transition-all shadow-[0_0_20px_rgba(0,229,255,0.1)] hover:shadow-[0_0_30px_rgba(0,229,255,0.3)] tracking-wide uppercase text-sm">
+                            Export PDF Report
+                        </button>
+                        <button onClick={() => window.location.reload()} className="px-8 py-4 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-black rounded-full hover:from-cyan-500 hover:to-blue-500 transition-all shadow-[0_0_30px_rgba(0,229,255,0.3)] hover:shadow-[0_0_40px_rgba(0,229,255,0.5)] hover:-translate-y-1 tracking-wide uppercase text-sm border border-cyan-400/50">
+                            Retake Assessment
+                        </button>
+                    </div>
+
+                </div>
+            </main>
+        );
+    
+};
+
+const App = () => {
+    const [step, setStep] = useState('intro'); // 'intro', 'survey', 'results'
+    const [currentQIndex, setCurrentQIndex] = useState(0);
+    const [answers, setAnswers] = useState({}); // { id: score }
+    const [currentSelection, setCurrentSelection] = useState(null);
+
+    const handleNextQ = () => {
+        const qId = surveyQuestions[currentQIndex].id;
+        const newAnswers = { ...answers, [qId]: currentSelection !== null ? currentSelection : 2.5 };
+        setAnswers(newAnswers);
+        
+        if (currentQIndex < surveyQuestions.length - 1) {
+            setCurrentQIndex(currentQIndex + 1);
+            setCurrentSelection(newAnswers[surveyQuestions[currentQIndex + 1].id] ?? 2.5);
+            window.scrollTo(0,0);
+        } else {
+            setStep('results');
+            window.scrollTo(0,0);
+        }
+    };
+
+    const handlePrevQ = () => {
+        if (currentQIndex > 0) {
+            setCurrentQIndex(currentQIndex - 1);
+            setCurrentSelection(answers[surveyQuestions[currentQIndex - 1].id] ?? 2.5);
+            window.scrollTo(0,0);
+        } else {
+            setStep('intro');
+        }
+    };
+
+    // --- RATING COMPONENT ---
+    const renderRater = () => {
+        const values = [0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0];
+        
+        return (
+            <div className="mt-8">
+                <div className="flex justify-between px-2 mb-2 text-xs font-bold text-slate-400">
+                    <span>0.0 (Suboptimal)</span>
+                    <span>2.5 (Neutral)</span>
+                    <span>5.0 (Optimal)</span>
+                </div>
+                
+                {/* Visual Anchor Descriptions */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div className="bg-red-50 border border-red-100 p-4 rounded-xl text-[13px] text-red-800 shadow-sm leading-relaxed">
+                        <span className="font-bold block mb-1">⭐ 0.0 Stars</span>
+                        {surveyQuestions[currentQIndex].anchors[0.0]}
+                    </div>
+                    <div className="bg-amber-50 border border-amber-100 p-4 rounded-xl text-[13px] text-amber-800 shadow-sm leading-relaxed">
+                        <span className="font-bold block mb-1">⭐⭐✨ 2.5 Stars</span>
+                        {surveyQuestions[currentQIndex].anchors[2.5]}
+                    </div>
+                    <div className="bg-emerald-50 border border-emerald-100 p-4 rounded-xl text-[13px] text-emerald-800 shadow-sm leading-relaxed">
+                        <span className="font-bold block mb-1">⭐⭐⭐⭐⭐ 5.0 Stars</span>
+                        {surveyQuestions[currentQIndex].anchors[5.0]}
+                    </div>
+                </div>
+
+                <div className="relative pt-6 pb-8 px-4 md:px-8 bg-slate-50 border border-slate-200 rounded-3xl mt-8">
+                    <input 
+                        type="range" 
+                        min="0" max="5" step="0.5"
+                        value={currentSelection !== null ? currentSelection : 2.5}
+                        onChange={(e) => setCurrentSelection(parseFloat(e.target.value))}
+                        className="w-full h-3 bg-slate-300 rounded-lg appearance-none cursor-pointer outline-none shadow-inner"
+                        style={{
+                            background: `linear-gradient(to right, #ef4444 0%, #f59e0b 50%, #10b981 100%)`
+                        }}
+                    />
+                    <div className="flex justify-between mt-5">
+                        {values.map(val => (
+                            <div 
+                                key={val} 
+                                onClick={() => setCurrentSelection(val)}
+                                className={`flex flex-col items-center cursor-pointer group`}
+                            >
+                                <div className={`w-1.5 rounded-full mb-1 ${val % 1 === 0 ? 'bg-slate-400 h-4' : 'bg-slate-300 h-2'} group-hover:bg-blue-600 transition-colors`}></div>
+                                <span className={`text-[11px] md:text-sm font-bold ${currentSelection === val ? 'text-blue-600 scale-125' : 'text-slate-500'} transition-all`}>
+                                    {val.toFixed(1)}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+                    
+                    <div className="mt-8 text-center bg-white p-6 rounded-2xl border-2 border-blue-100 shadow-md transform transition-all duration-300 scale-100 max-w-sm mx-auto">
+                        <span className="text-slate-500 text-sm font-bold uppercase tracking-widest block mb-1">Your Rating</span>
+                        <span className="text-5xl font-black text-blue-600 flex items-center justify-center gap-3">
+                            {(currentSelection !== null ? currentSelection : 2.5).toFixed(1)} 
+                            <span className="text-3xl text-yellow-400" style={{ filter: 'drop-shadow(0 2px 4px rgba(250, 204, 21, 0.4))' }}>★</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
+    // --- INTRO SCREEN ---
+    if (step === 'intro') {
+        return (
+            <main className="flex-grow flex flex-col items-center justify-center p-6 mt-8">
+                <div className="bg-white max-w-3xl w-full p-8 md:p-12 rounded-[2rem] shadow-2xl border border-slate-100 text-center relative overflow-hidden">
+                    <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-emerald-500 via-blue-500 to-purple-500"></div>
+                    <h1 className="text-5xl font-black text-slate-800 mb-6 tracking-tight">The HoPE Index</h1>
+                    <h2 className="text-xl font-bold text-slate-500 mb-8 uppercase tracking-widest">Human Optimal Personal Experience</h2>
+                    
+                    <div className="text-left space-y-6 text-slate-600 text-lg leading-relaxed mb-10">
+                        <p>Welcome to the HoPE Index Survey. This is not a test, an academic exam, or a clinical trial designed to diagnose your flaws. It is an innovative, highly visual platform designed to map where you are today and provide a clear, actionable guide toward a life of true optimization and stability.</p>
+                        
+                        <div className="bg-blue-50 border border-blue-100 p-6 rounded-2xl shadow-sm">
+                            <h3 className="font-bold text-blue-900 mb-2 flex items-center gap-2">
+                                <span className="text-xl">💡</span> How to Complete this Survey
+                            </h3>
+                            <p className="text-base text-blue-800">Imagine you are a professional critic writing a review for a hotel or an app. You are not rating your worth as a human being. Instead, you are rating the quality of the experience currently provided by the different "facilities" and "services" in your life.</p>
+                        </div>
+                    </div>
+
+                    <button 
+                        onClick={() => { setStep('survey'); setCurrentSelection(answers[surveyQuestions[0].id] ?? 2.5); }}
+                        className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-10 py-5 rounded-full font-bold text-xl hover:-translate-y-1 transition-all shadow-xl hover:shadow-[0_10px_25px_rgba(79,70,229,0.4)] inline-flex items-center justify-center gap-3 w-full md:w-auto"
+                    >
+                        Begin Assessment →
+                    </button>
+                </div>
+            </main>
+        );
+    }
+
+    // --- RESULTS SCREEN ---
+    if (step === 'results') {
+        return <ResultsScreen answers={answers} surveyQuestions={surveyQuestions} />;
+    }
+
+    // --- SURVEY SCREEN ---
+    const q = surveyQuestions[currentQIndex];
+    const progress = ((currentQIndex) / surveyQuestions.length) * 100; // Progress starts at 0
+
+    return (
+        <main className="flex-grow p-4 md:p-8 flex flex-col items-center">
+            
+            <div className="w-full max-w-4xl mb-10">
+                <div className="flex justify-between items-end text-sm font-bold text-slate-500 mb-3">
+                    <span className="uppercase tracking-widest text-xs">Survey Progress</span>
+                    <span className="bg-white px-3 py-1 rounded-full shadow-sm border border-slate-100 text-blue-600">{currentQIndex + 1} / {surveyQuestions.length}</span>
+                </div>
+                <div className="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden shadow-inner">
+                    <div className="bg-gradient-to-r from-emerald-400 via-blue-500 to-purple-500 h-full transition-all duration-700 ease-in-out" style={{ width: `${progress}%` }}></div>
+                </div>
+            </div>
+
+            <div className="bg-white max-w-4xl w-full p-8 md:p-12 rounded-[2rem] shadow-2xl border border-slate-100 relative">
+                
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 pb-6 border-b border-slate-100 gap-4">
+                    <div>
+                        <div className="inline-block bg-blue-50 text-blue-700 px-3 py-1 rounded-lg font-bold uppercase tracking-widest text-[10px] mb-3 border border-blue-100">{q.space}</div>
+                        <div className="text-slate-400 font-bold text-sm tracking-wide">{q.dimension}</div>
+                    </div>
+                </div>
+
+                <h2 className="text-4xl font-black text-slate-800 mb-6 tracking-tight leading-tight">{q.title}</h2>
+                <div className="bg-slate-50 border-l-4 border-blue-500 p-6 rounded-r-2xl mb-10">
+                    <p className="text-xl text-slate-700 leading-relaxed font-medium">{q.concept}</p>
+                </div>
+                
+                {renderRater()}
+
+                <div className="flex justify-between items-center mt-12 pt-8 border-t border-slate-100">
+                    <button 
+                        onClick={handlePrevQ}
+                        className={`text-slate-500 font-bold hover:text-slate-800 px-6 py-3 transition-colors flex items-center gap-2 ${currentQIndex === 0 ? 'invisible' : ''}`}
+                    >
+                        <span>←</span> Back
+                    </button>
+                    <button 
+                        onClick={handleNextQ}
+                        className={`px-10 py-4 rounded-full font-bold text-lg transition-all flex items-center gap-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:-translate-y-1 hover:shadow-[0_10px_25px_rgba(79,70,229,0.4)] cursor-pointer shadow-lg`}
+                    >
+                        {currentQIndex === surveyQuestions.length - 1 ? 'Generate Index Map 🚀' : 'Next Question →'}
+                    </button>
+                </div>
+            </div>
+            
+        </main>
+    );
+};
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+    </script>
+</body>
+</html>
