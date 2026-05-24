@@ -106,6 +106,100 @@
             box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
             transition: all 0.3s ease;
         }
+        .hope-slider {
+            position: relative;
+            width: 100%;
+            margin: 40px auto 60px auto;
+        }
+        .scale-track {
+            height: 12px;
+            background: linear-gradient(90deg, #E85D44 0%, #F1A340 50%, #29B674 100%);
+            border-radius: 10px;
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .scale-ticks {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 5px;
+        }
+        .tick {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            width: 30px;
+        }
+        .tick-dot {
+            height: 10px;
+            width: 4px;
+            background-color: #B0BEC5;
+            border-radius: 4px;
+            margin-bottom: 5px;
+            transition: all 0.2s ease;
+        }
+        .tick-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #546E7A;
+        }
+        .tick:hover .tick-dot {
+            background-color: #333;
+            transform: scale(1.3);
+        }
+        .tick.active .tick-dot {
+            background-color: #2962FF;
+            transform: scale(1.6);
+        }
+        .tick.active .tick-label {
+            color: #2962FF;
+        }
+        .hover-tooltip {
+            position: absolute;
+            bottom: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #fff;
+            border: 1px solid #E0E0E0;
+            border-radius: 12px;
+            box-shadow: 0px 15px 30px rgba(0,0,0,0.15);
+            padding: 15px;
+            width: 280px;
+            text-align: center;
+            pointer-events: none;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s ease, visibility 0.2s ease;
+            z-index: 100;
+        }
+        .hover-tooltip.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        .hover-tooltip img {
+            width: 100%;
+            height: auto;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            background: #f4f4f4;
+        }
+        .hover-tooltip p {
+            margin: 0;
+            font-size: 13px;
+            line-height: 1.4;
+            color: #333;
+            font-weight: 500;
+        }
+        .hover-tooltip::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 10px 10px 0;
+            border-style: solid;
+            border-color: #fff transparent transparent transparent;
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 font-sans min-h-screen flex flex-col relative overflow-x-hidden">
@@ -393,6 +487,63 @@ const surveyQuestions = [
     }
 ];
 
+const HopeSlider = ({ currentSelection, setCurrentSelection, currentQ }) => {
+    const scaleValues = [0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0];
+    const [hoveredVal, setHoveredVal] = useState(null);
+    const [tooltipLeft, setTooltipLeft] = useState(0);
+
+    const handleMouseEnter = (e, val) => {
+        setHoveredVal(val);
+        const rect = e.currentTarget.getBoundingClientRect();
+        const parentRect = e.currentTarget.parentElement.getBoundingClientRect();
+        setTooltipLeft(rect.left - parentRect.left + (rect.width / 2));
+    };
+
+    let tooltipContent = null;
+    if (hoveredVal !== null) {
+        let category = "optimal";
+        let anchorText = currentQ.anchors[5.0];
+        let imgUrl = "https://via.placeholder.com/250x150?text=5.0+Optimal";
+
+        if (hoveredVal < 2.0) {
+            category = "suboptimal";
+            anchorText = currentQ.anchors[0.0];
+            imgUrl = "https://via.placeholder.com/250x150?text=0.0+Suboptimal";
+        } else if (hoveredVal < 4.0) {
+            category = "neutral";
+            anchorText = currentQ.anchors[2.5];
+            imgUrl = "https://via.placeholder.com/250x150?text=2.5+Neutral";
+        }
+
+        tooltipContent = (
+            <div className="hover-tooltip visible" style={{ left: `${tooltipLeft}px` }}>
+                <img className="tooltip-img" src={imgUrl} alt="Guide" />
+                <p className="tooltip-text">{anchorText}</p>
+            </div>
+        );
+    }
+
+    return (
+        <div className="hope-slider">
+            {tooltipContent}
+            <div className="scale-track"></div>
+            <div className="scale-ticks">
+                {scaleValues.map(val => (
+                    <div 
+                        key={val}
+                        className={`tick ${currentSelection === val ? 'active' : ''}`}
+                        onMouseEnter={(e) => handleMouseEnter(e, val)}
+                        onMouseLeave={() => setHoveredVal(null)}
+                        onClick={() => setCurrentSelection(val)}
+                    >
+                        <div className="tick-dot"></div>
+                        <div className="tick-label">{val.toFixed(1)}</div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+};
 
 const ResultsScreen = ({ answers, surveyQuestions }) => {
         const [animatedScores, setAnimatedScores] = useState({});
@@ -715,57 +866,14 @@ const App = () => {
 
     // --- RATING COMPONENT ---
     const renderRater = () => {
-        const values = [0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0];
-        
         return (
             <div className="mt-8">
-                <div className="flex justify-between px-2 mb-2 text-xs font-bold text-slate-400">
-                    <span>0.0 (Suboptimal)</span>
-                    <span>2.5 (Neutral)</span>
-                    <span>5.0 (Optimal)</span>
-                </div>
-                
-                {/* Visual Anchor Descriptions */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                    <div className="bg-red-50 border border-red-100 p-4 rounded-xl text-[13px] text-red-800 shadow-sm leading-relaxed">
-                        <span className="font-bold block mb-1">⭐ 0.0 Stars</span>
-                        {surveyQuestions[currentQIndex].anchors[0.0]}
-                    </div>
-                    <div className="bg-amber-50 border border-amber-100 p-4 rounded-xl text-[13px] text-amber-800 shadow-sm leading-relaxed">
-                        <span className="font-bold block mb-1">⭐⭐✨ 2.5 Stars</span>
-                        {surveyQuestions[currentQIndex].anchors[2.5]}
-                    </div>
-                    <div className="bg-emerald-50 border border-emerald-100 p-4 rounded-xl text-[13px] text-emerald-800 shadow-sm leading-relaxed">
-                        <span className="font-bold block mb-1">⭐⭐⭐⭐⭐ 5.0 Stars</span>
-                        {surveyQuestions[currentQIndex].anchors[5.0]}
-                    </div>
-                </div>
-
                 <div className="relative pt-6 pb-8 px-4 md:px-8 bg-slate-50 border border-slate-200 rounded-3xl mt-8">
-                    <input 
-                        type="range" 
-                        min="0" max="5" step="0.5"
-                        value={currentSelection !== null ? currentSelection : 2.5}
-                        onChange={(e) => setCurrentSelection(parseFloat(e.target.value))}
-                        className="w-full h-3 bg-slate-300 rounded-lg appearance-none cursor-pointer outline-none shadow-inner"
-                        style={{
-                            background: `linear-gradient(to right, #ef4444 0%, #f59e0b 50%, #10b981 100%)`
-                        }}
+                    <HopeSlider 
+                        currentSelection={currentSelection !== null ? currentSelection : 2.5} 
+                        setCurrentSelection={setCurrentSelection} 
+                        currentQ={surveyQuestions[currentQIndex]} 
                     />
-                    <div className="flex justify-between mt-5">
-                        {values.map(val => (
-                            <div 
-                                key={val} 
-                                onClick={() => setCurrentSelection(val)}
-                                className={`flex flex-col items-center cursor-pointer group`}
-                            >
-                                <div className={`w-1.5 rounded-full mb-1 ${val % 1 === 0 ? 'bg-slate-400 h-4' : 'bg-slate-300 h-2'} group-hover:bg-blue-600 transition-colors`}></div>
-                                <span className={`text-[11px] md:text-sm font-bold ${currentSelection === val ? 'text-blue-600 scale-125' : 'text-slate-500'} transition-all`}>
-                                    {val.toFixed(1)}
-                                </span>
-                            </div>
-                        ))}
-                    </div>
                     
                     <div className="mt-8 text-center bg-white p-6 rounded-2xl border-2 border-blue-100 shadow-md transform transition-all duration-300 scale-100 max-w-sm mx-auto">
                         <span className="text-slate-500 text-sm font-bold uppercase tracking-widest block mb-1">Your Rating</span>
