@@ -10,7 +10,7 @@
     <!-- ========================================== -->
     <script>
         // HARDCODE YOUR ELEVENLABS CREDENTIALS HERE:
-        const ELEVENLABS_API_KEY = "%VITE_ELEVENLABS_API_KEY%"; // e.g. "sk_..."
+        const elevenLabsApiKey = "sk_d2fc2ac281afdb8a56178f44c8ebca76f21da62f7a256bf8"; // e.g. "sk_..."
         const elevenLabsVoiceId = "4EfJOraSN0d4Lt6iDXwh"; 
 
         // API Configuration (Gemini API runtime injection)
@@ -382,8 +382,8 @@
         let currentAudio = null;
 
         async function playAudio(text, btnElement) {
-            if (!ELEVENLABS_API_KEY) {
-                alert("Developer Note: Please add your ElevenLabs API key to the 'ELEVENLABS_API_KEY' variable in the code.");
+            if (!elevenLabsApiKey) {
+                alert("Developer Note: Please add your ElevenLabs API key to the 'elevenLabsApiKey' variable in the code.");
                 return;
             }
 
@@ -398,7 +398,7 @@
                     method: 'POST',
                     headers: {
                         'Accept': 'audio/mpeg',
-                        'xi-api-key': ELEVENLABS_API_KEY,
+                        'xi-api-key': elevenLabsApiKey,
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
