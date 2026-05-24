@@ -487,6 +487,35 @@ const surveyQuestions = [
     }
 ];
 
+const hopeData = {
+    "1.1": {
+      images: {
+        suboptimal: "https://via.placeholder.com/250x150?text=0.0+Trash+Street",
+        neutral: "https://via.placeholder.com/250x150?text=2.5+Basic+Room",
+        optimal: "https://via.placeholder.com/250x150?text=5.0+Luxury+Suite"
+      }
+    },
+    "1.2": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
+    "1.3": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
+    "2.1": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
+    "2.2": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
+    "2.3": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
+    "3.1": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
+    "3.2": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
+    "3.3": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
+    "4.1": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
+    "4.2": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
+    "4.3": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
+    "5.1": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
+    "5.2": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
+    "5.3": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
+    "6.1": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
+    "6.2": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
+    "6.3": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
+    "Flex1": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
+    "Flex2": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } }
+};
+
 const HopeSlider = ({ currentSelection, setCurrentSelection, currentQ }) => {
     const scaleValues = [0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0];
     const [hoveredVal, setHoveredVal] = useState(null);
@@ -503,16 +532,22 @@ const HopeSlider = ({ currentSelection, setCurrentSelection, currentQ }) => {
     if (hoveredVal !== null) {
         let category = "optimal";
         let anchorText = currentQ.anchors[5.0];
-        let imgUrl = "https://via.placeholder.com/250x150?text=5.0+Optimal";
-
+        
         if (hoveredVal < 2.0) {
             category = "suboptimal";
             anchorText = currentQ.anchors[0.0];
-            imgUrl = "https://via.placeholder.com/250x150?text=0.0+Suboptimal";
         } else if (hoveredVal < 4.0) {
             category = "neutral";
             anchorText = currentQ.anchors[2.5];
-            imgUrl = "https://via.placeholder.com/250x150?text=2.5+Neutral";
+        }
+
+        // Get image from hopeData if it exists, otherwise fallback to placeholder
+        let imgUrl = "https://via.placeholder.com/250x150?text=" + category;
+        if (hopeData[currentQ.id] && hopeData[currentQ.id].images && hopeData[currentQ.id].images[category]) {
+            const dataImg = hopeData[currentQ.id].images[category];
+            if (dataImg !== "LINK_HERE") {
+                imgUrl = dataImg;
+            }
         }
 
         tooltipContent = (
