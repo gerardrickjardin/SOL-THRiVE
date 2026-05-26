@@ -106,99 +106,163 @@
             box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
             transition: all 0.3s ease;
         }
-        .hope-slider {
+        .hope-drag-container {
             position: relative;
             width: 100%;
-            margin: 40px auto 60px auto;
+            margin: 60px auto 40px auto;
         }
-        .scale-track {
-            height: 12px;
-            background: linear-gradient(90deg, #E85D44 0%, #F1A340 50%, #29B674 100%);
-            border-radius: 10px;
-            position: relative;
-            margin-bottom: 20px;
-        }
-        .scale-ticks {
-            display: flex;
-            justify-content: space-between;
-            padding: 0 5px;
-        }
-        .tick {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            cursor: pointer;
-            width: 30px;
-        }
-        .tick-dot {
-            height: 10px;
-            width: 4px;
-            background-color: #B0BEC5;
-            border-radius: 4px;
-            margin-bottom: 5px;
-            transition: all 0.2s ease;
-        }
-        .tick-label {
-            font-size: 14px;
-            font-weight: 600;
-            color: #546E7A;
-        }
-        .tick:hover .tick-dot {
-            background-color: #333;
-            transform: scale(1.3);
-        }
-        .tick.active .tick-dot {
-            background-color: #2962FF;
-            transform: scale(1.6);
-        }
-        .tick.active .tick-label {
-            color: #2962FF;
-        }
-        .hover-tooltip {
+
+        /* The Tooltip */
+        .drag-tooltip {
             position: absolute;
-            bottom: 70px;
+            bottom: calc(100% + 25px); /* Positions above the slider */
             left: 50%;
             transform: translateX(-50%);
             background: #fff;
             border: 1px solid #E0E0E0;
             border-radius: 12px;
-            box-shadow: 0px 15px 30px rgba(0,0,0,0.15);
-            padding: 15px;
-            width: 280px;
+            box-shadow: 0px 10px 25px rgba(0,0,0,0.15);
+            padding: 8px;
+            width: 180px;
             text-align: center;
-            pointer-events: none;
             opacity: 0;
             visibility: hidden;
-            transition: opacity 0.2s ease, visibility 0.2s ease;
+            transition: opacity 0.15s ease, visibility 0.15s ease;
             z-index: 100;
+            pointer-events: none;
         }
-        .hover-tooltip.visible {
+        .drag-tooltip.active {
             opacity: 1;
             visibility: visible;
         }
-        .hover-tooltip img {
+        
+        /* The Photo inside the Tooltip */
+        .tooltip-img {
             width: 100%;
             height: auto;
+            aspect-ratio: 4/3;
+            object-fit: cover; /* Ensures the photo isn't stretched */
             border-radius: 6px;
-            margin-bottom: 12px;
-            background: #f4f4f4;
-        }
-        .hover-tooltip p {
+            display: block;
             margin: 0;
-            font-size: 13px;
-            line-height: 1.4;
-            color: #333;
-            font-weight: 500;
+            background-color: #f0f0f0; /* Soft background while loading */
         }
-        .hover-tooltip::after {
+        
+        .drag-tooltip::after {
             content: '';
             position: absolute;
-            bottom: -10px;
+            bottom: -8px;
             left: 50%;
             transform: translateX(-50%);
-            border-width: 10px 10px 0;
+            border-width: 8px 8px 0;
             border-style: solid;
             border-color: #fff transparent transparent transparent;
+        }
+
+        /* The Draggable Slider Input */
+        .slider-track-wrapper {
+            position: relative;
+            margin-bottom: 40px;
+            margin-top: 150px;
+        }
+        
+        .hope-range-slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 12px;
+            background: linear-gradient(90deg, #E85D44 0%, #F1A340 50%, #29B674 100%);
+            border-radius: 10px;
+            outline: none;
+            margin: 0;
+            position: relative;
+            z-index: 10;
+            cursor: pointer;
+        }
+
+        /* The Drag Handle (Thumb) */
+        .hope-range-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: #2962FF; 
+            cursor: grab;
+            border: 4px solid #fff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            transition: transform 0.1s;
+        }
+        .hope-range-slider::-webkit-slider-thumb:active {
+            cursor: grabbing;
+            transform: scale(1.2);
+        }
+        .hope-range-slider::-moz-range-thumb {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: #2962FF;
+            cursor: grab;
+            border: 4px solid #fff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        }
+
+        /* The Ticks underneath the slider */
+        .ticks-container {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 10px;
+            margin-top: 15px;
+        }
+        .tick-mark {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 20px;
+        }
+        .tick-mark::before {
+            content: '';
+            height: 8px;
+            width: 3px;
+            background-color: #B0BEC5;
+            border-radius: 2px;
+            margin-bottom: 5px;
+            margin-top: -15px; /* Pulls tick close to track */
+        }
+        .tick-mark span {
+            font-size: 12px;
+            font-weight: 600;
+            color: #546E7A;
+        }
+
+        /* The Rating Display Box */
+        .rating-display-box {
+            border: 1px solid #E4E8EC;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            max-width: 200px;
+            margin: 0 auto;
+            background: #FAFAFA;
+        }
+        .rating-label {
+            font-size: 11px;
+            letter-spacing: 1px;
+            font-weight: 700;
+            color: #6B7A90;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+        .rating-value {
+            font-size: 36px;
+            font-weight: 800;
+            color: #2962FF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        .star-icon {
+            font-size: 24px;
         }
     </style>
 </head>
@@ -487,94 +551,136 @@ const surveyQuestions = [
     }
 ];
 
-const hopeData = {
+// ==========================================
+// ADD YOUR REAL WORDPRESS IMAGE LINKS HERE!
+// ==========================================
+const myRealImages = {
     "1.1": {
-      images: {
-        suboptimal: "https://via.placeholder.com/250x150?text=0.0+Trash+Street",
-        neutral: "https://via.placeholder.com/250x150?text=2.5+Basic+Room",
-        optimal: "https://via.placeholder.com/250x150?text=5.0+Luxury+Suite"
-      }
+        "0.0": "./assets/images/home_0_0_1779652657480.png",
+        "0.5": "./assets/images/home_0_5_1779652673045.png",
+        "1.0": "./assets/images/home_1_0_1779652687103.png",
+        "1.5": "./assets/images/home_1_5_1779652702332.png",
+        "2.0": "./assets/images/home_2_0_1779652715350.png",
+        "2.5": "./assets/images/home_2_5_1779652736903.png",
+        "3.0": "./assets/images/home_3_0_1779652750186.png",
+        "3.5": "./assets/images/home_3_5_1779652763816.png",
+        "4.0": "./assets/images/home_4_0_1779652778339.png",
+        "4.5": "./assets/images/home_4_5_1779652792894.png",
+        "5.0": "./assets/images/home_5_0_1779652806339.png"
     },
-    "1.2": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
-    "1.3": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
-    "2.1": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
-    "2.2": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
-    "2.3": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
-    "3.1": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
-    "3.2": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
-    "3.3": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
-    "4.1": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
-    "4.2": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
-    "4.3": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
-    "5.1": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
-    "5.2": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
-    "5.3": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
-    "6.1": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
-    "6.2": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
-    "6.3": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
-    "Flex1": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
-    "Flex2": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } }
+    "1.2": {
+        "0.0": "./assets/images/neighborhood_0_0_1779653402809.png",
+        "0.5": "./assets/images/neighborhood_0_5_1779653416482.png",
+        "1.0": "./assets/images/neighborhood_1_0_1779653433795.png",
+        "1.5": "./assets/images/neighborhood_1_5_1779653446184.png",
+        "2.0": "./assets/images/neighborhood_2_0_1779653458844.png",
+        "2.5": "./assets/images/neighborhood_2_5_1779653473197.png",
+        "3.0": "./assets/images/neighborhood_3_0_1779653488608.png",
+        "3.5": "./assets/images/neighborhood_3_5_1779653506531.png",
+        "4.0": "./assets/images/neighborhood_4_0_1779653521257.png",
+        "4.5": "./assets/images/neighborhood_4_5_1779653537521.png",
+        "5.0": "./assets/images/neighborhood_5_0_1779653552259.png"
+    },
+    "1.3": {
+        "0.0": "./assets/images/thirdspaces_0_0_1779653568880.png",
+        "0.5": "./assets/images/thirdspaces_0_5_1779653583335.png",
+        "1.0": "./assets/images/thirdspaces_1_0_1779653597713.png",
+        "1.5": "./assets/images/thirdspaces_1_5_1779653612106.png",
+        "2.0": "./assets/images/thirdspaces_2_0_1779653626658.png",
+        "2.5": "./assets/images/thirdspaces_2_5_1779653638687.png",
+        "3.0": "./assets/images/thirdspaces_3_0_1779653651405.png",
+        "3.5": "./assets/images/thirdspaces_3_5_1779653664311.png",
+        "4.0": "./assets/images/thirdspaces_4_0_1779653677382.png"
+    }
 };
+
+// --- AUTO-GENERATOR ---
+const allQs = ["1.1", "1.2", "1.3", "2.1", "2.2", "2.3", "3.1", "3.2", "3.3", "4.1", "4.2", "4.3", "5.1", "5.2", "5.3", "6.1", "6.2", "6.3", "Flex1", "Flex2"];
+const vals = ["0.0", "0.5", "1.0", "1.5", "2.0", "2.5", "3.0", "3.5", "4.0", "4.5", "5.0"];
+const generatedData = {};
+
+allQs.forEach(q => {
+    generatedData[q] = {};
+    vals.forEach(v => {
+        let color = "e85d44"; let bg = "ffdddd"; // Red for 0.0 to 1.5
+        if(parseFloat(v) >= 2.0) { color = "f1a340"; bg = "ffeecc"; } // Yellow for 2.0 to 3.5
+        if(parseFloat(v) >= 4.0) { color = "29b674"; bg = "ccffcc"; } // Green for 4.0 to 5.0
+        
+        // If you provided a real image, use it. Otherwise, use a placeholder.
+        if (myRealImages[q] && myRealImages[q][v]) {
+            generatedData[q][v] = myRealImages[q][v];
+        } else {
+            generatedData[q][v] = `https://placehold.co/300x200/${bg}/${color}?text=Q+${q}+%5Cn+Score+${v}`;
+        }
+    });
+});
 
 const HopeSlider = ({ currentSelection, setCurrentSelection, currentQ }) => {
     const scaleValues = [0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0];
-    const [hoveredVal, setHoveredVal] = useState(null);
-    const [tooltipLeft, setTooltipLeft] = useState(0);
+    const [isHovered, setIsHovered] = useState(false);
+    
+    const val = currentSelection !== null ? currentSelection : 2.5;
 
-    const handleMouseEnter = (e, val) => {
-        setHoveredVal(val);
-        const rect = e.currentTarget.getBoundingClientRect();
-        const parentRect = e.currentTarget.parentElement.getBoundingClientRect();
-        setTooltipLeft(rect.left - parentRect.left + (rect.width / 2));
-    };
+    // Calculate tooltip position
+    const min = 0;
+    const max = 5;
+    const percent = ((val - min) / (max - min)) * 100;
+    const thumbWidthAdjustment = 13 - (percent * 0.26); 
+    const tooltipLeft = `calc(${percent}% + ${thumbWidthAdjustment}px)`;
 
-    let tooltipContent = null;
-    if (hoveredVal !== null) {
-        let category = "optimal";
-        let anchorText = currentQ.anchors[5.0];
-        
-        if (hoveredVal < 2.0) {
-            category = "suboptimal";
-            anchorText = currentQ.anchors[0.0];
-        } else if (hoveredVal < 4.0) {
-            category = "neutral";
-            anchorText = currentQ.anchors[2.5];
+    let dataKey = currentQ.title.startsWith("Flex 1") ? "Flex1" : (currentQ.title.startsWith("Flex 2") ? "Flex2" : currentQ.title.split(' ')[0]);
+    let valStr = val.toFixed(1);
+
+    // PRELOADER: Smoothly fetch all 11 images for this specific question into browser cache
+    useEffect(() => {
+        if (generatedData[dataKey]) {
+            Object.values(generatedData[dataKey]).forEach(url => {
+                const img = new Image();
+                img.src = url;
+            });
         }
+    }, [dataKey]);
 
-        // Get image from hopeData if it exists, otherwise fallback to placeholder
-        let imgUrl = "https://via.placeholder.com/250x150?text=" + category;
-        if (hopeData[currentQ.id] && hopeData[currentQ.id].images && hopeData[currentQ.id].images[category]) {
-            const dataImg = hopeData[currentQ.id].images[category];
-            if (dataImg !== "LINK_HERE") {
-                imgUrl = dataImg;
-            }
-        }
-
-        tooltipContent = (
-            <div className="hover-tooltip visible" style={{ left: `${tooltipLeft}px` }}>
-                <img className="tooltip-img" src={imgUrl} alt="Guide" />
-                <p className="tooltip-text">{anchorText}</p>
-            </div>
-        );
-    }
+    let imgUrl = generatedData[dataKey] && generatedData[dataKey][valStr] 
+        ? generatedData[dataKey][valStr] 
+        : `https://placehold.co/300x200/cccccc/333333?text=Error`;
 
     return (
-        <div className="hope-slider">
-            {tooltipContent}
-            <div className="scale-track"></div>
-            <div className="scale-ticks">
-                {scaleValues.map(val => (
-                    <div 
-                        key={val}
-                        className={`tick ${currentSelection === val ? 'active' : ''}`}
-                        onMouseEnter={(e) => handleMouseEnter(e, val)}
-                        onMouseLeave={() => setHoveredVal(null)}
-                        onClick={() => setCurrentSelection(val)}
-                    >
-                        <div className="tick-dot"></div>
-                        <div className="tick-label">{val.toFixed(1)}</div>
+        <div className="hope-drag-container">
+            <div className="slider-track-wrapper">
+                <div 
+                    className={`drag-tooltip ${isHovered ? 'active' : ''}`} 
+                    style={{ left: tooltipLeft }}
+                >
+                    <img className="tooltip-img" src={imgUrl} alt="Guide" />
+                </div>
+                <input 
+                    type="range" 
+                    className="hope-range-slider" 
+                    min="0" max="5" step="0.5" 
+                    value={val} 
+                    onChange={(e) => setCurrentSelection(parseFloat(e.target.value))}
+                    onMouseEnter={() => setIsHovered(true)}
+                    onMouseLeave={() => setIsHovered(false)}
+                    onTouchStart={() => setIsHovered(true)}
+                    onTouchEnd={() => setIsHovered(false)}
+                />
+            </div>
+            <div className="ticks-container">
+                {scaleValues.map(tickVal => (
+                    <div key={tickVal} className="tick-mark">
+                        <span>{tickVal.toFixed(1)}</span>
                     </div>
                 ))}
+            </div>
+
+            {/* Rating Display */}
+            <div className="rating-display-box">
+                <div className="rating-label">YOUR RATING</div>
+                <div className="rating-value">
+                    <span className="number-val">{val.toFixed(1)}</span> 
+                    <span className="star-icon">⭐</span>
+                </div>
             </div>
         </div>
     );
@@ -909,14 +1015,6 @@ const App = () => {
                         setCurrentSelection={setCurrentSelection} 
                         currentQ={surveyQuestions[currentQIndex]} 
                     />
-                    
-                    <div className="mt-8 text-center bg-white p-6 rounded-2xl border-2 border-blue-100 shadow-md transform transition-all duration-300 scale-100 max-w-sm mx-auto">
-                        <span className="text-slate-500 text-sm font-bold uppercase tracking-widest block mb-1">Your Rating</span>
-                        <span className="text-5xl font-black text-blue-600 flex items-center justify-center gap-3">
-                            {(currentSelection !== null ? currentSelection : 2.5).toFixed(1)} 
-                            <span className="text-3xl text-yellow-400" style={{ filter: 'drop-shadow(0 2px 4px rgba(250, 204, 21, 0.4))' }}>★</span>
-                        </span>
-                    </div>
                 </div>
             </div>
         );
