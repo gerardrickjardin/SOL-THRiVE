@@ -8,7 +8,7 @@ const path = require('path');
     fs.mkdirSync(outDir);
   }
 
-  const files = ['index.html', 'profile.html', 'survey.html', 'approach.html', 'how-to-use.html', 'rebuilding-life-challenges.html', 'employment-challenges.html', 'style.css', 'script.js', 'hope-survey.html'];
+  const files = ['index.html', 'profile.html', 'survey.html', 'approach.html', 'how-to-use.html', 'rebuilding-life-challenges.html', 'employment-challenges.html', 'style.css', 'script.js', 'hope-survey.html', 'minds-eye-white-bg.mp4', 'minds-eye.png', 'minds-eye-animated.mp4', 'minds-eye-animated.webm'];
 
   files.forEach(file => {
     if (fs.existsSync(file)) {
