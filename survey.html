@@ -37,6 +37,15 @@
             70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
             100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
         }
+        @keyframes progress-stripe {
+            0% { background-position: 20px 0; }
+            100% { background-position: 0 0; }
+        }
+        .progress-striped {
+            background-image: linear-gradient(45deg, rgba(255,255,255,0.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.15) 75%, transparent 75%, transparent);
+            background-size: 20px 20px;
+            animation: progress-stripe 1s linear infinite;
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 font-sans min-h-screen flex flex-col relative">
@@ -197,8 +206,9 @@
                         <button onclick="goBackQuestion()" class="hover:text-slate-700 transition-all w-12 text-left">&larr; Back</button>
                         <div class="flex flex-col items-center flex-grow px-8">
                             <!-- Progress Bar -->
-                            <div class="w-full bg-slate-200 rounded-full h-2.5 mb-2 shadow-inner">
-                                <div id="survey-progress-bar" class="bg-blue-600 h-2.5 rounded-full transition-all duration-300" style="width: 5%"></div>
+                            <div class="w-full bg-slate-100 rounded-full h-3 mb-3 shadow-[inset_0_1px_3px_rgba(0,0,0,0.1)] border border-slate-200/60 overflow-hidden">
+                                <div id="survey-progress-bar" class="bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-400 h-full rounded-full transition-all duration-500 ease-out shadow-sm relative progress-striped" style="width: 5%">
+                                </div>
                             </div>
                             <span>Question <span id="current-q-num">1</span> of 20</span>
                         </div>
