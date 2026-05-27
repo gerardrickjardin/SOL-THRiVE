@@ -193,14 +193,15 @@
                         <div class="text-center">Always</div>
                     </div>
 
-                    <!-- Progress Bar -->
-                    <div class="w-full bg-slate-100 rounded-full h-1.5 mt-8 mb-4">
-                        <div id="survey-progress-bar" class="bg-blue-600 h-1.5 rounded-full transition-all duration-300" style="width: 5%"></div>
-                    </div>
-
-                    <div class="flex justify-between items-center text-sm text-slate-400 font-medium border-t border-slate-50 pt-4">
-                        <button onclick="goBackQuestion()" class="hover:text-slate-700 transition-all">&larr; Back</button>
-                        <span>Question <span id="current-q-num">1</span> of 20</span>
+                    <div class="flex justify-between items-center text-sm text-slate-400 font-medium border-t border-slate-50 pt-6 mt-8">
+                        <button onclick="goBackQuestion()" class="hover:text-slate-700 transition-all w-12 text-left">&larr; Back</button>
+                        <div class="flex flex-col items-center flex-grow px-8">
+                            <!-- Progress Bar -->
+                            <div class="w-full bg-slate-200 rounded-full h-2.5 mb-2 shadow-inner">
+                                <div id="survey-progress-bar" class="bg-blue-600 h-2.5 rounded-full transition-all duration-300" style="width: 5%"></div>
+                            </div>
+                            <span>Question <span id="current-q-num">1</span> of 20</span>
+                        </div>
                         <div class="w-12"></div> 
                     </div>
                 </div>
