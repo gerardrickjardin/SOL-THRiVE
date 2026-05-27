@@ -41,8 +41,8 @@
             100% { background-position: -200% 0; }
         }
         .smooth-gradient-bar {
-            background: linear-gradient(90deg, #2563eb, #3b82f6, #06b6d4, #3b82f6, #2563eb);
-            background-size: 200% 100%;
+            background: linear-gradient(90deg, #2563eb, #3b82f6, #06b6d4, #3b82f6, #2563eb) !important;
+            background-size: 200% 100% !important;
             animation: shimmer-gradient 4s linear infinite;
         }
     </style>
@@ -206,7 +206,7 @@
                         <div class="flex flex-col items-center flex-grow px-8">
                             <!-- Progress Bar -->
                             <div class="w-full bg-slate-100 rounded-full h-3 mb-3 shadow-[inset_0_1px_3px_rgba(0,0,0,0.1)] border border-slate-200/60 overflow-hidden">
-                                <div id="survey-progress-bar" class="h-full rounded-full transition-all duration-500 ease-out shadow-sm smooth-gradient-bar" style="width: 5%">
+                                <div id="survey-progress-bar" class="bg-blue-600 h-full rounded-full transition-all duration-500 ease-out shadow-sm smooth-gradient-bar" style="width: 5%">
                                 </div>
                             </div>
                             <span>Question <span id="current-q-num">1</span> of 20</span>
