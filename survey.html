@@ -619,7 +619,7 @@
                 updateSegmentPath(path, i, 0);
                 segmentsGroup.appendChild(path);
             }
-            visualInitialized = true;
+            visualInitialized = true;\n            renderQuestion();
             document.getElementById('survey-progress-bar').style.width = ((currentQ + 1) / 20 * 100) + '%';
         }
 
