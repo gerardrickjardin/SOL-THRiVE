@@ -475,11 +475,16 @@ const HopeSlider = ({ currentSelection, setCurrentSelection, currentQ, onNext })
                     <span className="number-val">{displayValue > 0 ? displayValue.toFixed(1) : "-.-"}</span> 
                     <span className="star-icon">⭐</span>
                 </div>
-                {currentQ.anchors && currentQ.anchors[displayValue.toFixed(1)] && (
-                    <div className="mt-4 p-4 bg-blue-50/80 rounded-xl border border-blue-200 text-sm md:text-base text-slate-700 font-medium italic shadow-sm max-w-xl mx-auto transition-all animate-fade-in">
-                        "{currentQ.anchors[displayValue.toFixed(1)]}"
-                    </div>
-                )}
+                {currentQ.anchors && currentQ.anchors[displayValue.toFixed(1)] && (() => {
+                    const fullText = currentQ.anchors[displayValue.toFixed(1)];
+                    const match = fullText.match(/\(([^)]+)\)/);
+                    const mainWord = match ? match[1] : fullText.split(':')[0].replace(/\d\s*Stars?/, '').trim();
+                    return (
+                        <div className="mt-4 px-6 py-2 bg-blue-50/80 rounded-full border border-blue-200 text-lg md:text-xl text-blue-800 font-bold tracking-wide shadow-sm mx-auto transition-all animate-fade-in uppercase">
+                            {mainWord}
+                        </div>
+                    );
+                })()}
             </div>
         </div>
     );
