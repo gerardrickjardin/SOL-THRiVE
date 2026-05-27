@@ -418,7 +418,7 @@ const surveyQuestions = [
     }
 ];
 
-const HopeSlider = ({ currentSelection, setCurrentSelection, currentQ }) => {
+const HopeSlider = ({ currentSelection, setCurrentSelection, currentQ, onNext }) => {
     const scaleValues = [0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0];
     
     const val = currentSelection !== null ? currentSelection : 2.5;
@@ -432,6 +432,8 @@ const HopeSlider = ({ currentSelection, setCurrentSelection, currentQ }) => {
                     min="0" max="5" step="0.5" 
                     value={val} 
                     onChange={(e) => setCurrentSelection(parseFloat(e.target.value))}
+                    onMouseUp={(e) => onNext(parseFloat(e.target.value))}
+                    onTouchEnd={(e) => onNext(parseFloat(e.target.value))}
  />
             </div>
             <div className="ticks-container">
@@ -700,9 +702,10 @@ const App = () => {
     const [answers, setAnswers] = useState({}); // { id: score }
     const [currentSelection, setCurrentSelection] = useState(null);
 
-    const handleNextQ = () => {
+    const handleNextQ = (val) => {
+        const finalVal = val !== undefined ? val : (currentSelection !== null ? currentSelection : 2.5);
         const qId = surveyQuestions[currentQIndex].id;
-        const newAnswers = { ...answers, [qId]: currentSelection !== null ? currentSelection : 2.5 };
+        const newAnswers = { ...answers, [qId]: finalVal };
         setAnswers(newAnswers);
         
         if (currentQIndex < surveyQuestions.length - 1) {
@@ -733,7 +736,8 @@ const App = () => {
                     <HopeSlider 
                         currentSelection={currentSelection !== null ? currentSelection : 2.5} 
                         setCurrentSelection={setCurrentSelection} 
-                        currentQ={surveyQuestions[currentQIndex]} 
+                        currentQ={surveyQuestions[currentQIndex]}
+                        onNext={handleNextQ}
  />
                 </div>
             </div>
@@ -829,12 +833,7 @@ const App = () => {
 >
                         <span>←</span> Back
                     </button>
-                    <button 
-                        onClick={handleNextQ}
-                        className={`px-10 py-4 rounded-full font-bold text-lg transition-all flex items-center gap-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:-translate-y-1 hover:shadow-[0_10px_25px_rgba(79,70,229,0.4)] cursor-pointer shadow-lg`}
->
-                        {currentQIndex === surveyQuestions.length - 1 ? 'Generate Index Map 🚀' : 'Next Question →'}
-                    </button>
+                    {/* Next Question button removed as per user request */}
                 </div>
             </div>
             
