@@ -169,7 +169,6 @@ const { useState, useEffect, useRef } = window.React;
 
 // --- DATA STRUCTURE ---
 const surveyQuestions = [
-    // DIMENSION 1: PLACES
     {
         id: "ops_home",
         space: "Outer Physical Space (OPS)",
@@ -178,8 +177,8 @@ const surveyQuestions = [
         concept: "Think of this as the physical \"hotel room\" you sleep in every night. Is it warm, dry, quiet, and secure? Does it provide a peaceful sanctuary where you can truly rest?",
         anchors: {
             5.0: "Secure, quiet, comfortable, and fully supportive of your peace of mind.",
-            2.5: "Physically intact but crowded, noisy, or lacking privacy. Feels temporary.",
-            0.0: "Unsafe, structurally compromised, unlivable, or lacking stable shelter."
+            2.5: "Your housing is physically intact and keeps you dry, but it is crowded, noisy, or lacks privacy. It feels temporary, and you cannot truly relax or find sanctuary.",
+            0.0: "Unsafe, structurally compromised, unlivable, or currently lacking stable shelter entirely."
         }
     },
     {
@@ -187,11 +186,11 @@ const surveyQuestions = [
         space: "Outer Physical Space (OPS)",
         dimension: "Dimension 1: Places",
         title: "1.2 Neighborhood Experience",
-        concept: "Evaluate the surrounding blocks, parks, and streets outside your home. Is it clean, well-lit, and physically safe to walk through?",
+        concept: "Evaluate the surrounding blocks, parks, and streets outside your home. Is it clean, well-lit, and physically safe to walk through, or does it feel like a high-risk zone?",
         anchors: {
             5.0: "Calm, clean, well-lit, and physically safe to navigate at any hour.",
-            2.5: "Calm during day, but sporadic crime or unease at night. Must remain cautious.",
-            0.0: "Active danger zone; constant immediate threats of physical harm."
+            2.5: "The neighborhood is generally calm during the day, but experiences sporadic crime, active policing, or a general sense of unease and tension at night. You must remain cautious and alert.",
+            0.0: "Active danger zone; constant immediate threats of physical harm or violence, making it unsafe to step outside."
         }
     },
     {
@@ -199,24 +198,23 @@ const surveyQuestions = [
         space: "Outer Physical Space (OPS)",
         dimension: "Dimension 1: Places",
         title: "1.3 Third Spaces Experience",
-        concept: "Evaluate the other public physical environments you frequent (school, office, gym). Do these facilities feel welcoming, clean, and built to support you?",
+        concept: "Evaluate the other public physical environments you frequent, such as your school building, office, community center, coffee shop, or gym. Do these physical facilities feel welcoming, clean, and built to support you?",
         anchors: {
             5.0: "Premium public physical spaces that feel welcoming, clean, and highly supportive.",
-            2.5: "Accessible but sterile, institutional, or poorly maintained. No inspiration.",
-            0.0: "Completely blocked; zero access to safe, welcoming spaces outside home."
+            2.5: "You have access to shared public environments (like school or a local library), but they are sterile, highly institutional, or poorly maintained. They serve their basic purpose but offer no inspiration or comfort.",
+            0.0: "Completely blocked; you have zero access to safe, welcoming spaces outside of your home."
         }
     },
-    // DIMENSION 2: BODY
     {
         id: "ops_functionality",
         space: "Outer Physical Space (OPS)",
         dimension: "Dimension 2: Body",
         title: "2.1 Functionality Experience",
-        concept: "Think of your body as a car. Can you physically move, play, work, and perform daily tasks without pain or severe limitations?",
+        concept: "Think of your body as a car. How well do the \"engine\" and \"transmission\" work? Can you physically move, play, work, and perform daily tasks without pain or severe limitations?",
         anchors: {
-            5.0: "Peak physical performance; fully capable and free of chronic pain or limitations.",
-            2.5: "Functions for basic tasks, but frequent fatigue, minor aches, or limitations.",
-            0.0: "Complete physical breakdown; debilitating physical crisis or acute illness."
+            5.0: "Peak physical performance; fully capable, strong, and completely free of chronic pain or physical limitations.",
+            2.5: "Your body functions for basic day-to-day tasks, but you experience frequent fatigue, minor aches, or physical limitations that stop you from fully engaging in sports, physical labor, or recreational play.",
+            0.0: "Complete physical breakdown; severe, debilitating physical crisis or acute illness that leaves you unable to care for yourself."
         }
     },
     {
@@ -224,11 +222,11 @@ const surveyQuestions = [
         space: "Outer Physical Space (OPS)",
         dimension: "Dimension 2: Body",
         title: "2.2 Energy & Vitality Experience",
-        concept: "Evaluate your daily \"fuel tank.\" Do you wake up feeling recharged and have sustained vitality required to power through your day?",
+        concept: "Evaluate your daily \"fuel tank.\" Do you wake up feeling recharged? Do you have the sustained vitality required to power through your day, or are you running on empty?",
         anchors: {
-            5.0: "Abundant, clean energy; waking up completely refreshed and ready.",
-            2.5: "Highly inconsistent energy. Rely heavily on caffeine/sugar/willpower.",
-            0.0: "Complete battery depletion; profound, paralyzing physical fatigue."
+            5.0: "Abundant, clean energy; waking up completely refreshed, energized, and ready to take on the day.",
+            2.5: "You can get through your daily obligations, but your energy levels are highly inconsistent. You rely heavily on caffeine, sugar, or pure willpower to stay awake, and your fuel tank is constantly running on low.",
+            0.0: "Complete battery depletion; profound, paralyzing physical fatigue and exhaustion that prevents you from getting out of bed."
         }
     },
     {
@@ -236,24 +234,23 @@ const surveyQuestions = [
         space: "Outer Physical Space (OPS)",
         dimension: "Dimension 2: Body",
         title: "2.3 Body Image Experience",
-        concept: "How comfortable, confident, and accepting do you feel in your own physical skin?",
+        concept: "Imagine looking in the mirror to evaluate a garment. How comfortable, confident, and accepting do you feel in your own physical skin? Do you view your body with respect and pride, or do you criticize the \"packaging\"?",
         anchors: {
-            5.0: "High physical confidence; exceptionally comfortable, proud, and accepting.",
-            2.5: "Neutral or indifferent. You tolerate your reflection but lack confidence.",
-            0.0: "Severe self-loathing or physical shame; experiencing deep anxiety."
+            5.0: "High physical confidence; you feel exceptionally comfortable, proud, and accepting of your own body.",
+            2.5: "You feel neutral or indifferent about your appearance. You do not experience active self-hatred, but you do not feel particularly confident, strong, or proud of your physical form either. You tolerate your reflection.",
+            0.0: "Severe self-loathing or physical shame; avoiding mirrors entirely and experiencing deep anxiety about how you look."
         }
     },
-    // DIMENSION 3: RESOURCES
     {
         id: "ops_finances",
         space: "Outer Physical Space (OPS)",
         dimension: "Dimension 3: Resources",
         title: "3.1 Finances Experience",
-        concept: "Evaluate your financial liquidity. Does your current money experience feel stable and abundant, or is it a survival struggle?",
+        concept: "Evaluate your financial liquidity and capital comfort. Does your current money experience feel stable and abundant, or does it feel like a constant, stressful survival struggle?",
         anchors: {
-            5.0: "Financial abundance and security; easily covering bills and saving.",
-            2.5: "Paycheck to paycheck. Basic needs met but zero margin for error.",
-            0.0: "Absolute financial destitution; zero income, savings, or assets."
+            5.0: "Financial abundance and security; easily covering all bills, saving for the future, and having disposable capital.",
+            2.5: "You live paycheck to paycheck. Your basic survival needs are met, but there is zero margin for error. A single unexpected bill, emergency, or loss of income would instantly push you into a financial crisis.",
+            0.0: "Absolute financial destitution; zero income, savings, or assets; unable to purchase food or basic survival items."
         }
     },
     {
@@ -261,11 +258,11 @@ const surveyQuestions = [
         space: "Outer Physical Space (OPS)",
         dimension: "Dimension 3: Resources",
         title: "3.2 Technology Experience",
-        concept: "Evaluate your digital toolkit. Do you have reliable access to the hardware and networks required to study, work, and build your goals?",
+        concept: "Evaluate your digital toolkit. Do you have reliable, high-speed access to the hardware (laptops, smartphones) and software networks required to study, work, and build your goals?",
         anchors: {
-            5.0: "High-speed connectivity; up-to-date devices that fully empower work.",
-            2.5: "Connection is slow/unreliable, hardware is outdated. Limits productivity.",
-            0.0: "Total digital blackout; completely disconnected from the digital economy."
+            5.0: "High-speed, seamless connectivity; owning up-to-date devices and networks that fully empower your work and learning.",
+            2.5: "You have internet access and a device, but the connection is slow, shared, or unreliable, and your hardware is outdated or damaged. You can get basic tasks done, but it is a slow, frustrating process that limits your productivity.",
+            0.0: "Total digital blackout; offline, without devices or internet, completely disconnected from the digital economy."
         }
     },
     {
@@ -273,24 +270,23 @@ const surveyQuestions = [
         space: "Outer Physical Space (OPS)",
         dimension: "Dimension 3: Resources",
         title: "3.3 Essentials Experience",
-        concept: "Evaluate your logistical lifelines. Do you have reliable transport, working appliances, and basic physical goods to run a smooth daily routine?",
+        concept: "Evaluate your logistical lifelines. Do you have reliable transport, working appliances (fridge, stove, laundry), and the basic physical goods required to run a smooth daily routine?",
         anchors: {
-            5.0: "Highly reliable daily logistics; dependable transportation and functioning appliances.",
-            2.5: "Highly inconvenient logistics requiring exhausting coordination and immense effort.",
-            0.0: "Absolute logistical failure; stranded, unusable appliances, no utilities."
+            5.0: "Highly reliable daily logistics; dependable transportation and perfectly functioning home appliances.",
+            2.5: "Your daily logistics are highly inconvenient and require exhausting coordination. Your appliances work intermittently, or you must rely on public transit routes with long wait times and delays. You get where you need to go, but it takes immense daily effort.",
+            0.0: "Absolute logistical failure; stranded, isolated, with unusable major home appliances or no utility access.\nPART II: INNER RELATIONAL SPACE (IRS)\nThis section evaluates your mental, emotional, spiritual, and relational connections to yourself and the world around you."
         }
     },
-    // DIMENSION 4: SELF
     {
         id: "irs_emotions",
         space: "Inner Relational Space (IRS)",
         dimension: "Dimension 4: Self",
         title: "4.1 Emotions Experience",
-        concept: "Evaluate your internal \"dashboard.\" How well can you navigate and process intense feelings without crashing or shutting down?",
+        concept: "Evaluate your internal \"dashboard.\" How well can you navigate and process intense feelings (anger, grief, anxiety, excitement) without crashing, reacting impulsively, or shutting down?",
         anchors: {
-            5.0: "Calm, clear, and resilient; processing intense feelings easily under pressure.",
-            2.5: "Externally composed, but internally emotionally fragile, anxious, or numb.",
-            0.0: "Complete emotional dysregulation or paralyzing trauma (panic, rage, numbness)."
+            5.0: "Calm, clear, and highly resilient; processing and regulating intense feelings easily under pressure.",
+            2.5: "You can maintain your composure externally, but internally you feel emotionally fragile, anxious, or slightly numb. You are \"holding it together,\" but any added emotional stress feels like it could overwhelm you.",
+            0.0: "Complete emotional dysregulation or paralyzing trauma; experiencing chronic panic attacks, explosive rage, or profound numbness."
         }
     },
     {
@@ -298,11 +294,11 @@ const surveyQuestions = [
         space: "Inner Relational Space (IRS)",
         dimension: "Dimension 4: Self",
         title: "4.2 Goals Experience",
-        concept: "Do you have exciting, structured, and achievable goals that you are actively pursuing, or are you drifting?",
+        concept: "Evaluate your forward-looking guidance system. Do you have exciting, structured, and achievable goals that you are actively pursuing, or are you drifting day-to-day without a map?",
         anchors: {
-            5.0: "Crystal-clear vision; actively working an inspiring, step-by-step plan.",
-            2.5: "Vague ideas of future, but lack clear plan or discipline. Surviving day-by-day.",
-            0.0: "Absolute hopelessness; unable to envision any positive future. Zero aspiration."
+            5.0: "Crystal-clear vision; actively working an inspiring, step-by-step plan toward major milestones.",
+            2.5: "You have vague ideas of what you want your future to look like, but you lack a clear plan or the discipline to pursue them. You are going through the motions day-by-day, surviving but not actively building toward anything.",
+            0.0: "Absolute hopelessness; unable to envision any positive future, feeling completely defeated with zero aspiration."
         }
     },
     {
@@ -310,24 +306,23 @@ const surveyQuestions = [
         space: "Inner Relational Space (IRS)",
         dimension: "Dimension 4: Self",
         title: "4.3 Identity Experience",
-        concept: "Do you respect, trust, and feel proud of the person you are, or do you struggle with self-doubt or shame?",
+        concept: "Evaluate your relationship with your own character. Do you respect, trust, and feel proud of the person you are, or do you struggle with self-doubt, identity confusion, or shame?",
         anchors: {
-            5.0: "Unshakeable self-worth; deep pride in who you are and your unique potential.",
-            2.5: "Volatile self-esteem dependent on external validation. Easily shaken.",
-            0.0: "Profound identity crisis; carrying severe self-rejection or feeling worthless."
+            5.0: "Unshakeable self-worth; you take deep pride in who you are, your values, and your unique potential.",
+            2.5: "Your self-esteem is highly volatile and dependent on external validation. You have a basic sense of who you are, but you are easily shaken by criticism, self-doubt, or the desire to conform to others' expectations.",
+            0.0: "Profound identity crisis; carrying severe self-rejection, shame, or feeling entirely worthless."
         }
     },
-    // DIMENSION 5: OTHERS
     {
         id: "irs_coreconnections",
         space: "Inner Relational Space (IRS)",
         dimension: "Dimension 5: Others",
         title: "5.1 Core Connections Experience",
-        concept: "Evaluate your closest circle. Do you have people who truly know you, love you, and would catch you if you fell?",
+        concept: "Evaluate your closest circle\u2014your \"trusted partners.\" Do you have people in your life (family, friends, mentors) who truly know you, love you, and would catch you if you fell?",
         anchors: {
-            5.0: "Exceptional close support; multiple trusted relationships to share raw truths.",
-            2.5: "Relationships are superficial or distant. Casual company, no deep vulnerability.",
-            0.0: "Absolute relational void; abandoned or trapped in an abusive domestic dynamic."
+            5.0: "Exceptional close support; having multiple trusted, loving relationships where you can share your rawest truths.",
+            2.5: "You have family or friends around you, but these relationships are superficial or emotionally distant. They are there for casual company, but you do not feel comfortable sharing your deepest struggles, fears, or vulnerabilities with them.",
+            0.0: "Absolute relational void; completely abandoned or trapped in an actively abusive, dangerous domestic dynamic."
         }
     },
     {
@@ -335,11 +330,11 @@ const surveyQuestions = [
         space: "Inner Relational Space (IRS)",
         dimension: "Dimension 5: Others",
         title: "5.2 Social Network Experience",
-        concept: "Evaluate your broader group. Do you feel a sense of positive belonging and safety within your school, workspace, or community?",
+        concept: "Evaluate your broader group. Do you feel a sense of positive belonging, connection, and safety within your school, workspace, peer groups, or local community organizations?",
         anchors: {
-            5.0: "Deep community belonging; feeling respected, celebrated, and integrated.",
-            2.5: "An outside observer. Fit in enough to avoid trouble, but lack shared purpose.",
-            0.0: "Extreme social ostracization; actively targeted, bullied, or completely isolated."
+            5.0: "Deep community belonging; feeling respected, celebrated, and integrated into positive peer groups.",
+            2.5: "You are physically present in social circles (school, work, clubs), but you feel like an outside observer rather than a valued member. You fit in well enough to avoid trouble, but you don't feel a deep sense of shared purpose or connection.",
+            0.0: "Extreme social ostracization; being actively targeted, bullied, or completely isolated from any peer group."
         }
     },
     {
@@ -347,24 +342,23 @@ const surveyQuestions = [
         space: "Inner Relational Space (IRS)",
         dimension: "Dimension 5: Others",
         title: "5.3 Community Experience",
-        concept: "Do your daily interactions with the public, merchants, and strangers feel safe and cooperative, or hostile and tense?",
+        concept: "Evaluate your daily interactions with the public, local merchants, city officials, and strangers on the street. Do these interactions feel safe, respectful, and cooperative, or do they feel hostile and tense?",
         anchors: {
-            5.0: "Highly positive and cooperative public interactions; feeling safe and welcome.",
-            2.5: "Cold, transactional, distant public interactions. No warmth or mutual respect.",
-            0.0: "Systemic community warfare; public spaces feel predatory and dangerous."
+            5.0: "Highly positive and cooperative public interactions; feeling safe, welcome, and respected in public spaces.",
+            2.5: "Public interactions are cold, transactional, and distant. You do not face active hostility, but there is no warmth, mutual respect, or sense of neighborly cooperation in your daily environment.",
+            0.0: "Systemic community warfare; public spaces feel actively hostile, predatory, and highly dangerous to navigate."
         }
     },
-    // DIMENSION 6: LIFE
     {
         id: "irs_hobbies",
         space: "Inner Relational Space (IRS)",
         dimension: "Dimension 6: Life",
         title: "6.1 Hobbies Experience",
-        concept: "Evaluate your \"recharge time.\" Do you make time for activities and passions that bring you pure joy, separate from work?",
+        concept: "Evaluate your \"recharge time.\" Do you make time for and deeply enjoy activities, arts, sports, or passions that bring you pure joy and relaxation, completely separate from work or school?",
         anchors: {
-            5.0: "Consistent creative play; regularly enjoying highly rewarding hobbies.",
-            2.5: "Occasional participation, but rushed and interrupted by stress or scrolling.",
-            0.0: "Complete lockup or anhedonia; physically blocked from any recreation or joy."
+            5.0: "Consistent creative play; regularly enjoying highly rewarding hobbies that completely recharge you.",
+            2.5: "You occasionally participate in activities you enjoy, but they are rushed, irregular, and constantly interrupted by stress, screen-scrolling, or other obligations. Creative play is a rare luxury rather than a habit.",
+            0.0: "Complete lockup or anhedonia; feeling entirely unable to experience joy or physically blocked from any recreation."
         }
     },
     {
@@ -372,11 +366,11 @@ const surveyQuestions = [
         space: "Inner Relational Space (IRS)",
         dimension: "Dimension 6: Life",
         title: "6.2 Habits Experience",
-        concept: "Evaluate your automatic daily loops. Do you maintain healthy, supportive routines or are you stuck in destructive habits?",
+        concept: "Evaluate your automatic daily loops. Do you maintain healthy, supportive routines (nutrition, exercise, mental breaks, sleep hygiene) that keep you strong, or are you stuck in destructive, toxic habits?",
         anchors: {
-            5.0: "Optimal self-discipline; daily routines are fully aligned with well-being.",
-            2.5: "Mixed bag. Some positive routines, but easily fall back into unsupportive habits under stress.",
-            0.0: "Severe, paralyzing addiction or complete routine collapse; chronic self-destruction."
+            5.0: "Optimal self-discipline; daily routines are fully aligned with your physical and mental well-being.",
+            2.5: "Your daily habits are a mixed bag. You have some positive routines (like sleeping well or eating decent meals), but you easily fall back into unsupportive habits (such as screen addiction, poor sleep, or substance use) whenever stress levels rise.",
+            0.0: "Severe, paralyzing addiction or complete routine collapse; trapped in chronic self-destructive behaviors."
         }
     },
     {
@@ -384,36 +378,35 @@ const surveyQuestions = [
         space: "Inner Relational Space (IRS)",
         dimension: "Dimension 6: Life",
         title: "6.3 Have-Tos Experience",
-        concept: "Evaluate your ability to manage your responsibilities. Do you run your schedule, or does your schedule run you?",
+        concept: "Evaluate your ability to manage your responsibilities (schoolwork, chores, paying bills, navigating administrative tasks, court dates, childcare). Do you run your schedule, or does your schedule run you?",
         anchors: {
-            5.0: "Exceptional schedule mastery; meeting commitments with calm efficiency.",
-            2.5: "Constantly reactive last-minute scramble. Rushing with high stress.",
-            0.0: "Complete system failure; entirely buried by responsibilities, facing collapse."
+            5.0: "Exceptional schedule mastery; meeting all commitments with calm efficiency and zero administrative stress.",
+            2.5: "You manage to complete your critical duties, but it always feels like a last-minute scramble. You are constantly reactive, rushing from one task to the next with high stress and zero strategic planning.",
+            0.0: "Complete system failure; entirely buried by responsibilities, facing immediate legal, academic, or logistical collapse."
         }
     },
-    // FLEX SLOTS
     {
         id: "flex_gas",
         space: "Contextual Layering",
-        dimension: "Flex Slot 1: Gang Affinity Score (GAS)",
-        title: "Flex 1: Gang Affinity Score",
+        dimension: "Flex Slot 1: Gang Affinity Score - GAS (GAS)",
+        title: "Flex 1: Gang Affinity Score - GAS",
         concept: "I am able to see a meaningful, proud, and stable future for myself that does entirely without gang participation, street hustle, or illicit group identity.",
         anchors: {
-            5.0: "Complete freedom from gang involvement. Clear, independent path.",
-            2.5: "Not active, but social circle/safety tied to gang affiliates. Constant navigation.",
-            0.0: "Survival, identity, and social circle are entirely controlled by the gang."
+            5.0: "I have complete mental and physical freedom from gang involvement. I view gangs with zero interest or fear, and have a clear, independent path.",
+            2.5: "I am not an active gang member, but my social circle, safety, or family ties are closely linked to gang-affiliated individuals. I must constantly navigate their influence and balance on the edge to keep my distance.",
+            0.0: "My survival, identity, and social circle are entirely controlled by the gang."
         }
     },
     {
         id: "flex_psa",
         space: "Contextual Layering",
-        dimension: "Flex Slot 2: Psychological Safety Assessment (PSA)",
-        title: "Flex 2: Psychological Safety Assessment",
+        dimension: "Flex Slot 2: Psychological Safety Assessment - PSA (PSA)",
+        title: "Flex 2: Psychological Safety Assessment - PSA",
         concept: "I feel emotionally and physically safe enough in my daily life to make choices based on my long-term dreams rather than immediate physical survival.",
         anchors: {
-            5.0: "Peace and security. Safe to explore and plan without looking over my shoulder.",
-            2.5: "Generally safe in routine, but high anxiety changing paths or after dark.",
-            0.0: "Survival mode. Constant, acute fear of immediate physical retaliation or death."
+            5.0: "I have peace and security. I feel safe to explore, travel, study, and plan without looking over my shoulder.",
+            2.5: "I feel generally safe during my normal daily routine (going to school or work), but I have high anxiety if I change my path, enter new neighborhoods, or go out after dark. My choices are guarded.",
+            0.0: "I\u2019m in survival mode. I live in constant, acute fear of immediate physical retaliation, assault, or death."
         }
     }
 ];
