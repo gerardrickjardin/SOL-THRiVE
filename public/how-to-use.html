@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How To Use This Page - THRiVE Coaching</title>
+    <meta name="description" content="Learn how to use Personos with common scenarios.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Add background-pan animation for the gradient text */
+        @keyframes background-pan {
+            from { background-position: 0% center; }
+            to { background-position: -200% center; }
+        }
+        .animate-background-pan {
+            animation: background-pan 3s linear infinite;
+        }
+        .bg-300\% {
+            background-size: 300%;
+        }
+        /* Ensure footer stays at bottom */
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        main {
+            flex-grow: 1;
+        }
+        /* Override tailwind conflicting with style.css header */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+        .footer {
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-600 flex flex-col min-h-screen font-sans">
+    <header class="header">
+        <nav class="nav-left">
+            <button class="hamburger" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </nav>
+        <div class="logo"><a href="index.html" style="text-decoration: none; color: inherit;">THRiVE Coaching</a></div>
+        <div class="nav-right desktop-menu">
+            <ul>
+                <li><a href="survey.html">Flow Survey</a></li>
+                <li><a href="profile.html">THRiVE Report</a></li>
+                <li><a href="hope-survey.html">HoPE Index</a></li>
+                <li><a href="approach.html">Our Approach</a></li>
+                <li class="dropdown">
+                    <a href="how-to-use.html">How To Use This Page</a>
+                    <div class="dropdown-content">
+                        <a href="rebuilding-life-challenges.html">Rebuilding Life Challenges</a>
+                        <a href="employment-challenges.html">Employment Challenges</a>
+                    </div>
+                </li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#video-section">Video</a></li>
+            </ul>
+        </div>
+
+        <div class="nav-menu">
+            <div class="menu-title">FIND YOUR FLOW</div>
+            <ul>
+                <li><a href="survey.html">Flow Survey</a></li>
+                <li><a href="profile.html">THRiVE Report</a></li>
+                <li><a href="hope-survey.html">HoPE Index</a></li>
+                <li><a href="approach.html">Our Approach</a></li>
+                <li class="dropdown">
+                    <a href="how-to-use.html">How To Use This Page</a>
+                    <div class="dropdown-content">
+                        <a href="rebuilding-life-challenges.html">Rebuilding Life Challenges</a>
+                        <a href="employment-challenges.html">Employment Challenges</a>
+                    </div>
+                </li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#video-section">Video</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <main class="flex-grow container mx-auto py-16 sm:py-24 px-4 sm:px-6 lg:px-8 mt-20">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-4xl font-extrabold tracking-tight sm:text-6xl text-center bg-gradient-to-r from-purple-600 via-pink-500 to-red-400 bg-300% animate-background-pan bg-clip-text text-transparent py-2" style="font-family: 'Nunito', sans-serif;">
+                How To Use This Page
+            </h1>
+            <div class="mt-8 text-lg leading-8 text-gray-700 space-y-6" style="font-family: 'Poppins', sans-serif;">
+                <p>
+                    The categories below represent Common GAPS - Goals to Achieve and Problems to Solve - designed to help you test drive Personos.
+                </p>
+                <p>
+                    Each entry is pre-formatted to be copied and pasted directly into the Personos chat window.
+                </p>
+                <p>
+                    Simply choose a scenario that interests you, copy the entire text block (all three sections), and paste it into the chat window in Personos.
+                </p>
+                <p>
+                    This is a great way to experience the system's creativity and get comfortable with the platform before inputting your own personal challenges.
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer mt-auto">
+        <div class="footer-content">
+            <div class="footer-contact">
+                <a href="mailto:team@thrivecoaching.ai">team@thrivecoaching.ai</a>
+                <span class="separator">|</span>
+                <a href="tel:7205882002">(720) 588-2002</a>
+            </div>
+            <div class="footer-copyright">
+                &copy; 2026 Thrive Coaching AI. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>
