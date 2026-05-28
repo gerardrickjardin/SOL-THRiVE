@@ -22,7 +22,7 @@
         .hope-drag-container {
             position: relative;
             width: 100%;
-            margin: 60px auto 40px auto;
+            margin: 10px auto 10px auto;
         }
 
 
@@ -430,30 +430,21 @@ const HopeSlider = ({ currentSelection, setCurrentSelection, currentQ, onNext })
                 onMouseLeave={() => setHoverValue(null)}
             >
                 {[1, 2, 3, 4, 5].map(starIndex => {
-                    const fillValue = displayValue - starIndex + 1; // 1 if full, 0.5 if half, <=0 if empty
+                    const isFilled = hoverValue !== null ? hoverValue >= starIndex : val >= starIndex;
+                    const fillValue = (hoverValue !== null ? hoverValue : val) >= starIndex ? 1 : 
+                                     ((hoverValue !== null ? hoverValue : val) >= starIndex - 0.5 ? 0.5 : 0);
+                    
                     return (
-                        <div key={starIndex} className="relative w-12 h-12 md:w-16 md:h-16 cursor-pointer touch-manipulation">
-                            {/* Left Half Hitbox (0.5) */}
-                            <div 
-                                className="absolute left-0 top-0 w-1/2 h-full z-10"
-                                onClick={() => handleStarClick(starIndex - 0.5)}
-                                onMouseEnter={() => setHoverValue(starIndex - 0.5)}
-                                onTouchStart={() => setHoverValue(starIndex - 0.5)}
-                            />
-                            {/* Right Half Hitbox (1.0) */}
-                            <div 
-                                className="absolute right-0 top-0 w-1/2 h-full z-10"
-                                onClick={() => handleStarClick(starIndex)}
-                                onMouseEnter={() => setHoverValue(starIndex)}
-                                onTouchStart={() => setHoverValue(starIndex)}
-                            />
-                            
-                            {/* Empty Star Base */}
+                        <div 
+                            key={starIndex}
+                            className="relative w-12 h-12 md:w-16 md:h-16 cursor-pointer transform transition-transform hover:scale-110 active:scale-95"
+                            onClick={() => handleStarClick(starIndex)}
+                            onMouseEnter={() => setHoverValue(starIndex)}
+                        >
                             <svg viewBox="0 0 24 24" className="w-full h-full text-slate-200 transition-colors">
                                 <path fill="currentColor" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
                             </svg>
                             
-                            {/* Filled Star Overlay */}
                             {fillValue > 0 && (
                                 <svg 
                                     viewBox="0 0 24 24" 
@@ -468,16 +459,19 @@ const HopeSlider = ({ currentSelection, setCurrentSelection, currentQ, onNext })
                 })}
             </div>
 
-            {/* Rating Display */}
-            <div className="rating-display-box mt-4">
-                <div className="rating-label">YOUR RATING</div>
-                <div className="rating-value">
-                    <span className="number-val">{displayValue > 0 ? displayValue.toFixed(1) : "-.-"}</span> 
-                    <span className="star-icon">⭐</span>
+            {/* MIDDLE: Rating Display */}
+            <div className="flex-grow flex items-center justify-center my-4">
+                <div className="rating-display-box shadow-sm border border-slate-100 bg-white scale-110">
+                    <div className="rating-label text-slate-400">YOUR RATING</div>
+                    <div className="rating-value">
+                        <span className="number-val">{displayValue > 0 ? displayValue.toFixed(1) : "-.-"}</span> 
+                        <span className="star-icon text-2xl">⭐</span>
+                    </div>
                 </div>
             </div>
 
-            <div className="min-h-[120px] mt-4 flex flex-col items-center justify-start pointer-events-none">
+            {/* BOTTOM: Text and Pill */}
+            <div className="min-h-[140px] mt-2 flex flex-col items-center justify-end pointer-events-none">
                 {currentQ.anchors && currentQ.anchors[displayValue.toFixed(1)] && (() => {
                     const fullText = currentQ.anchors[displayValue.toFixed(1)];
                     const match = fullText.match(/\(([^)]+)\)/);
@@ -485,7 +479,7 @@ const HopeSlider = ({ currentSelection, setCurrentSelection, currentQ, onNext })
                     const descriptionText = fullText.includes(':') ? fullText.split(':')[1].trim() : fullText;
                     return (
                         <div className="flex flex-col items-center w-full animate-fade-in">
-                            <div className="px-8 py-2.5 mb-4 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full text-lg md:text-xl text-white font-black tracking-[0.2em] shadow-[0_5px_15px_rgba(0,229,255,0.4)] uppercase whitespace-nowrap">
+                            <div className="px-8 py-2.5 mb-6 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full text-lg md:text-xl text-white font-black tracking-[0.2em] shadow-[0_5px_15px_rgba(0,229,255,0.4)] uppercase whitespace-nowrap">
                                 {mainWord}
                             </div>
                             <div className="text-sm md:text-base text-slate-500 font-medium italic max-w-2xl leading-relaxed text-center px-4">
