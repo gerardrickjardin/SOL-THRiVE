@@ -621,19 +621,22 @@ const HopeChart = ({ answers, surveyQuestions, isFinal }) => {
                                 const startA = -90 + (i * 10);
                                 const endA = startA + 8.5; 
                                 
-                                const scoreR = innerR + (score / 5) * (maxOutR - innerR);
+                                // Grow from center outwards
+                                const displayScore = isMounted ? score : 0.01;
+                                const scoreR = innerR + (displayScore / 5) * (maxOutR - innerR);
                                 
                                 const basePath = describeArc(cx, cy, innerR, maxOutR, startA, endA);
                                 const scorePath = describeArc(cx, cy, innerR, scoreR, startA, endA);
+                                const delay = 0.3 + (i * 0.04); // Cascading delay
 
                                 return (
                                     <g key={`slice-${i}`}>
-                                        <path d={basePath} fill={color} opacity="0.05" />
-                                        <path d={scorePath} fill={color} filter="url(#glow-soft)" opacity="0.9" style={{ transition: 'all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)' }} />
-                                        {score> 0 && (
-                                            <path d={describeArc(cx, cy, scoreR - 4, scoreR, startA, endA)} fill="#ffffff" opacity="0.5" style={{ transition: 'all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)' }} />
+                                        <path d={basePath} fill={color} opacity={isMounted ? "0.05" : "0"} style={{ transition: `opacity 1s ease ${delay}s` }} />
+                                        <path d={scorePath} fill={color} filter="url(#glow-soft)" opacity={isMounted ? "0.9" : "0"} style={{ transition: `all 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) ${delay}s` }} />
+                                        {score > 0 && (
+                                            <path d={describeArc(cx, cy, scoreR - 4, scoreR, startA, endA)} fill="#ffffff" opacity={isMounted ? "0.5" : "0"} style={{ transition: `all 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) ${delay}s` }} />
                                         )}
-                                        <text {...polarToCartesian(cx, cy, innerR - 25, startA + 4.25)} fill="#ffffff" fontSize="13" fontWeight="bold" textAnchor="middle"  opacity="0.5">{i + 1}</text>
+                                        <text {...polarToCartesian(cx, cy, innerR - 25, startA + 4.25)} fill="#ffffff" fontSize="13" fontWeight="bold" textAnchor="middle" opacity={isMounted ? "0.5" : "0"} style={{ transition: `opacity 1s ease ${delay}s` }}>{i + 1}</text>
                                     </g>
                                 );
                             })}
