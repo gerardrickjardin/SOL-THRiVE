@@ -468,6 +468,19 @@ const HopeSlider = ({ currentSelection, setCurrentSelection, currentQ, onNext })
                 })}
             </div>
 
+            {/* Description Text directly under stars */}
+            <div className="min-h-[80px] flex items-center justify-center px-4 md:px-8 mb-2 text-center pointer-events-none transition-all duration-300">
+                {currentQ.anchors && currentQ.anchors[displayValue.toFixed(1)] && (() => {
+                    const fullText = currentQ.anchors[displayValue.toFixed(1)];
+                    const descriptionText = fullText.includes(':') ? fullText.split(':')[1].trim() : fullText;
+                    return (
+                        <div className="text-sm md:text-base text-slate-500 font-medium italic animate-fade-in max-w-2xl leading-relaxed">
+                            "{descriptionText}"
+                        </div>
+                    );
+                })()}
+            </div>
+
             {/* Rating Display */}
             <div className="rating-display-box mt-4">
                 <div className="rating-label">YOUR RATING</div>
@@ -477,20 +490,14 @@ const HopeSlider = ({ currentSelection, setCurrentSelection, currentQ, onNext })
                 </div>
             </div>
 
-            <div className="min-h-[140px] mt-4 flex flex-col items-center justify-start pointer-events-none">
+            <div className="h-16 mt-4 flex items-center justify-center pointer-events-none">
                 {currentQ.anchors && currentQ.anchors[displayValue.toFixed(1)] && (() => {
                     const fullText = currentQ.anchors[displayValue.toFixed(1)];
                     const match = fullText.match(/\(([^)]+)\)/);
                     const mainWord = match ? match[1] : fullText.split(':')[0].replace(/\d\s*Stars?/, '').trim();
-                    const descriptionText = fullText.includes(':') ? fullText.split(':')[1].trim() : fullText;
                     return (
-                        <div className="flex flex-col items-center w-full animate-fade-in">
-                            <div className="px-8 py-2.5 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full text-lg md:text-xl text-white font-black tracking-[0.2em] shadow-[0_5px_15px_rgba(0,229,255,0.4)] uppercase whitespace-nowrap">
-                                {mainWord}
-                            </div>
-                            <div className="mt-4 p-4 bg-slate-100 rounded-xl border border-slate-200 text-sm md:text-base text-slate-700 font-medium italic shadow-sm max-w-xl mx-auto text-center">
-                                "{descriptionText}"
-                            </div>
+                        <div className="px-8 py-2.5 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full text-lg md:text-xl text-white font-black tracking-[0.2em] shadow-[0_5px_15px_rgba(0,229,255,0.4)] transition-all animate-fade-in uppercase whitespace-nowrap">
+                            {mainWord}
                         </div>
                     );
                 })()}
