@@ -430,32 +430,30 @@ const HopeSlider = ({ currentSelection, setCurrentSelection, currentQ, onNext })
                 onMouseLeave={() => setHoverValue(null)}
             >
                 {[1, 2, 3, 4, 5].map(starIndex => {
-                    const isFilled = hoverValue !== null ? hoverValue >= starIndex : val >= starIndex;
-                    const fillValue = (hoverValue !== null ? hoverValue : val) >= starIndex ? 1 : 
-                                     ((hoverValue !== null ? hoverValue : val) >= starIndex - 0.5 ? 0.5 : 0);
-                    
+                    const fillValue = displayValue - starIndex + 1; // 1 if full, 0.5 if half, <=0 if empty
                     return (
-                        <div 
-                            key={starIndex}
-                            className="relative w-12 h-12 md:w-16 md:h-16 cursor-pointer transform transition-transform hover:scale-110 active:scale-95"
-                        >
-                            {/* Left Half (0.5 Star) */}
+                        <div key={starIndex} className="relative w-12 h-12 md:w-16 md:h-16 cursor-pointer touch-manipulation transform transition-transform hover:scale-110 active:scale-95">
+                            {/* Left Half Hitbox (0.5) */}
                             <div 
-                                className="absolute top-0 left-0 w-1/2 h-full z-10" 
+                                className="absolute left-0 top-0 w-1/2 h-full z-10"
                                 onClick={() => handleStarClick(starIndex - 0.5)}
                                 onMouseEnter={() => setHoverValue(starIndex - 0.5)}
+                                onTouchStart={() => setHoverValue(starIndex - 0.5)}
                             />
-                            {/* Right Half (Full Star) */}
+                            {/* Right Half Hitbox (1.0) */}
                             <div 
-                                className="absolute top-0 right-0 w-1/2 h-full z-10" 
+                                className="absolute right-0 top-0 w-1/2 h-full z-10"
                                 onClick={() => handleStarClick(starIndex)}
                                 onMouseEnter={() => setHoverValue(starIndex)}
+                                onTouchStart={() => setHoverValue(starIndex)}
                             />
-
+                            
+                            {/* Empty Star Base */}
                             <svg viewBox="0 0 24 24" className="w-full h-full text-slate-200 transition-colors pointer-events-none">
                                 <path fill="currentColor" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
                             </svg>
                             
+                            {/* Filled Star Overlay */}
                             {fillValue > 0 && (
                                 <svg 
                                     viewBox="0 0 24 24" 
