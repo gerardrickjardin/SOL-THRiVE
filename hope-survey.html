@@ -560,8 +560,8 @@ const HopeChart = ({ answers, surveyQuestions, isFinal }) => {
                         </div>
                     </div>
 
-                    <div className="relative w-full shrink-1 mx-auto flex items-center justify-center overflow-hidden" style={{ minHeight: 0, flex: '1 1 auto' }}>
-                        <svg viewBox="0 0 1000 650" className="max-w-full max-h-full drop-shadow-2xl overflow-visible" style={{ padding: "0 10px" }}>
+                    <div className="relative w-full shrink-0 mx-auto flex items-center justify-center" style={{ aspectRatio: '2/1.3', maxHeight: isFinal ? '400px' : '30vh', maxWidth: '100%', height: 'auto' }}>
+                        <svg viewBox="0 0 1000 650" className="w-full h-auto drop-shadow-2xl overflow-visible" style={{ padding: "0 10px", maxHeight: '100%' }}>
                             <defs>
                                 <filter id="glow-soft" x="-20%" y="-20%" width="140%" height="140%">
                                     <feGaussianBlur stdDeviation="3" result="blur" />
