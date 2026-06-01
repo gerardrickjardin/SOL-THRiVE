@@ -22,7 +22,7 @@
         .hope-drag-container {
             position: relative;
             width: 100%;
-            margin: 10px auto 10px auto;
+            margin: 60px auto 40px auto;
         }
 
 
@@ -176,9 +176,9 @@ const surveyQuestions = [
         title: "🏠 1.1 Home Experience",
         concept: "How would you rate the physical safety, comfort, and peace of the place where you live?",
         anchors: {
-            "5.0": "5 Stars (Sanctuary): My living space is a wonderfully quiet, clean, and safe sanctuary where I can fully rest and be happy.",
-            "3.0": "3 Stars (Stable): My housing meets my basic needs and is structurally safe, but it can be noisy or crowded.",
-            "1.0": "1 Star (Shithole): My living space is unsafe, dirty, or broken, leaving me with zero privacy or peace."
+            "5.0": "5 Stars (Sanctuary): My living space is quiet, clean, comfortable, and completely safe. It is a wonderful, peaceful place where I can fully rest, relax, and be happy.",
+            "3.0": "3 Stars (Stable): My housing is safe, dry, and physically intact. It meets my basic needs, but it can be crowded, noisy, or hard for me to find true quiet peace.",
+            "1.0": "1 Star (Shithole): My living space is unsafe, noisy, dirty, or structurally broken. I have zero privacy and do not feel safe sleeping or resting here."
         }
     },
     {
@@ -188,9 +188,9 @@ const surveyQuestions = [
         title: "🏘️ 1.2 Neighborhood Experience",
         concept: "How would you rate the safety, cleanliness, and overall peace of the blocks, streets, and parks near your home?",
         anchors: {
-            "5.0": "5 Stars (Sanctuary): My neighborhood is completely safe, beautiful, and calm, making me feel comfortable outside at any hour.",
-            "3.0": "3 Stars (Stable): My neighborhood is generally safe during the day, but I must keep my guard up after dark.",
-            "1.0": "1 Star (Shithole): My neighborhood is an active danger zone filled with threats that make it unsafe to step outside."
+            "5.0": "5 Stars (Sanctuary): My neighborhood is calm, clean, beautiful, and completely safe. I feel totally comfortable walking, playing, or hanging out outside at any hour.",
+            "3.0": "3 Stars (Stable): My neighborhood is generally safe during the day, but it can feel tense or unsafe for me after dark. I have to keep my guard up when walking outside.",
+            "1.0": "1 Star (Shithole): My neighborhood is an active danger zone. Constant trash, noise, or threats of violence make it unsafe for me to step outside or hang out."
         }
     },
     {
@@ -200,9 +200,9 @@ const surveyQuestions = [
         title: "🏢 1.3 Third Spaces Experience",
         concept: "How would you rate the buildings and public places you go to every day\u2014like your school, workspace, or community center?",
         anchors: {
-            "5.0": "5 Stars (Sanctuary): The public spaces I frequent are bright, welcoming, and perfectly designed to help me succeed.",
-            "3.0": "3 Stars (Stable): My daily public spaces are functional and safe, but they feel sterile and offer no real comfort.",
-            "1.0": "1 Star (Shithole): The public spaces I encounter are broken, dirty, or actively hostile toward me."
+            "5.0": "5 Stars (Sanctuary): The public places I go to are clean, bright, beautiful, and exceptionally welcoming. These spaces inspire me and are designed perfectly to help me relax and succeed.",
+            "3.0": "3 Stars (Stable): The public places I visit are functional and safe to use, but they feel sterile, highly institutional, or poorly maintained. They get the job done but offer me no real comfort.",
+            "1.0": "1 Star (Shithole): The public spaces I go to are broken, dirty, or actively hostile. I feel unwelcome, unsafe, or physically blocked from entering them."
         }
     },
     {
@@ -212,9 +212,9 @@ const surveyQuestions = [
         title: "💪 2.1 Functionality Experience",
         concept: "How would you rate your body's physical strength, health, and capability to do the things you want?",
         anchors: {
-            "5.0": "5 Stars (Fit): I am in peak physical health with total freedom to move, play, and work without any pain or limits.",
-            "3.0": "3 Stars (Functional): My body handles daily tasks fine, but minor aches or limits prevent me from doing hard physical work.",
-            "1.0": "1 Star (Frail): Chronic pain or debilitating illness makes it incredibly hard for me to complete basic daily tasks."
+            "5.0": "5 Stars (Fit): I am in peak physical health. I feel incredibly strong, healthy, and agile, with total freedom to move, run, and play without any limits or pain.",
+            "3.0": "3 Stars (Functional): My body functions fine for my daily tasks, but I face minor aches, injuries, or limitations that stop me from fully playing sports or doing hard physical work.",
+            "1.0": "1 Star (Frail): I am experiencing severe physical breakdown. Chronic pain, debilitating illness, or injury makes it hard for me to complete basic daily tasks or care for myself."
         }
     },
     {
@@ -224,9 +224,9 @@ const surveyQuestions = [
         title: "⚡ 2.2 Energy & Vitality Experience",
         concept: "How would you rate your daily energy levels and how rested you feel when you wake up?",
         anchors: {
-            "5.0": "5 Stars (Fire): I wake up fully refreshed and maintain sharp, clean energy throughout my entire day without crashing.",
-            "3.0": "3 Stars (Fueling): I have enough energy to get through my duties, but I frequently rely on caffeine or sheer willpower.",
-            "1.0": "1 Star (Flat): Paralyzing exhaustion has completely depleted my battery, making it nearly impossible to get out of bed."
+            "5.0": "5 Stars (Fire): I wake up 100% refreshed and bursting with clean energy. I stay active, sharp, and alert throughout my entire day without crashing.",
+            "3.0": "3 Stars (Fueling): I have enough energy to get through my school or work duties, but I feel tired often and have to rely on caffeine, sugar, or pure willpower to stay active.",
+            "1.0": "1 Star (Flat): My body's battery is completely depleted. Paralyzing fatigue and exhaustion make it feel almost impossible for me to get out of bed in the morning."
         }
     },
     {
@@ -236,9 +236,9 @@ const surveyQuestions = [
         title: "🪞 2.3 Body Image Experience",
         concept: "How would you rate your relationship with your physical appearance and body image?",
         anchors: {
-            "5.0": "5 Stars (Flawless): I feel deeply proud, comfortable, and flawlessly confident in my own skin.",
-            "3.0": "3 Stars (Fine): I have neutral feelings about my appearance, neither hating it nor feeling particularly proud.",
-            "1.0": "1 Star (Flawed): I feel deep physical shame and avoid mirrors due to high anxiety about how I look."
+            "5.0": "5 Stars (Flawless): I have exceptional body confidence. I feel deeply proud, comfortable, and happy in my own skin, fully accepting and loving my physical form.",
+            "3.0": "3 Stars (Fine): I have neutral feelings about my body. I don't actively hate how I look, but I don't feel particularly proud, strong, or confident in my appearance either.",
+            "1.0": "1 Star (Flawed): I feel deep physical shame, embarrassment, or self-loathing. I actively avoid looking in mirrors and feel high levels of anxiety about how I look."
         }
     },
     {
@@ -248,9 +248,9 @@ const surveyQuestions = [
         title: "💰 3.1 Finances Experience",
         concept: "How would you rate your financial security and the extra money you have left over for fun or savings?",
         anchors: {
-            "5.0": "5 Stars (Prosperous): My bills are paid effortlessly, leaving me with complete financial abundance for savings and fun.",
-            "3.0": "3 Stars (Paying): My basic needs are met, but I live paycheck-to-paycheck with no extra buffer for emergencies.",
-            "1.0": "1 Star (Penniless): I am in absolute financial destitution and cannot afford basic survival needs like food or medicine."
+            "5.0": "5 Stars (Prosperous): I have complete financial abundance. All of my bills are paid effortlessly, leaving me with plenty of extra money for my savings, trips, and fun.",
+            "3.0": "3 Stars (Paying): I live paycheck-to-paycheck. My basic survival needs are met, but I have no extra buffer. One unexpected bill or emergency would completely wipe me out.",
+            "1.0": "1 Star (Penniless): I am in absolute financial destitution. I have zero money or income, leaving me unable to purchase basic survival needs like food or medicine."
         }
     },
     {
@@ -260,9 +260,9 @@ const surveyQuestions = [
         title: "💻 3.2 Technology Experience",
         concept: "How would you rate the speed, reliability, and quality of your phone, computer, and internet access?",
         anchors: {
-            "5.0": "5 Stars (Brilliant): I have seamless internet and perfect, fully updated devices that let me work or create with zero delays.",
-            "3.0": "3 Stars (Basic): My connection or devices are slow and outdated, getting the job done but in an annoying way.",
-            "1.0": "1 Star (Blocked): I am completely cut off from the digital world with no working phone, computer, or internet access."
+            "5.0": "5 Stars (Brilliant): I have seamless, lightning-fast internet and fully updated, perfect devices (laptops/smartphones) that let me work, study, or create with zero delays.",
+            "3.0": "3 Stars (Basic): I have internet and a working device, but my connection is slow or spotty, or my screen is cracked and outdated. It works, but using it is a slow, annoying process.",
+            "1.0": "1 Star (Blocked): I am in a total digital blackout. I have no working phone or computer, and zero access to the internet. I am completely cut off from the digital world."
         }
     },
     {
@@ -272,9 +272,9 @@ const surveyQuestions = [
         title: "🚗 3.3 Essentials Experience",
         concept: "How would you rate the reliability of your daily logistics, like transportation, utilities, and working home appliances?",
         anchors: {
-            "5.0": "5 Stars (Breeze): My daily logistics run effortlessly with outstanding transportation and perfect home utilities.",
-            "3.0": "3 Stars (Basic): I get by on basic, often unreliable transportation and utilities that require exhausting daily effort.",
-            "1.0": "1 Star (Broken): I face complete logistical failure with no reliable transportation or working home utilities."
+            "5.0": "5 Stars (Breeze): My daily routine runs like a breeze. I have outstanding, worry-free transportation, perfect home utilities (heat/water), and fully working appliances that make life effortless.",
+            "3.0": "3 Stars (Basic): I get by, but it takes exhausting daily effort. My ride is slow or unreliable, my utilities are expensive, or my home appliances only work some of the time.",
+            "1.0": "1 Star (Broken): I am experiencing absolute logistical failure. I have no reliable way to travel, broken home utilities (no water or electricity), or completely unusable major appliances."
         }
     },
     {
@@ -284,9 +284,9 @@ const surveyQuestions = [
         title: "🧠 4.1 Mindset",
         concept: "How would you rate your mental resilience and ability to stay positive when things go wrong?",
         anchors: {
-            "5.0": "5 Stars (Peace): I have an unshakeable positive mindset that allows me to view any problem as an exciting chance to grow.",
-            "3.0": "3 Stars (Balance): I manage to keep going during tough times, but I often struggle with worry and negative thoughts.",
-            "1.0": "1 Star (Battle): My mind is a constant warzone where minor issues spiral into paralyzing anxiety or hopelessness."
+            "5.0": "5 Stars (Peace): I have an unshakeable positive mindset. I stay exceptionally calm under pressure, instantly viewing any hard problem as an exciting chance for me to learn and grow.",
+            "3.0": "3 Stars (Balance): I manage to keep going when things get tough, but I struggle with worry, negative thoughts, or taking my mistakes too personally.",
+            "1.0": "1 Star (Battle): My mind feels like a constant warzone. Minor issues spiral into paralyzing anxiety, hopelessness, or rage, leaving me unable to find a positive way forward."
         }
     },
     {
@@ -296,9 +296,9 @@ const surveyQuestions = [
         title: "👤 4.2 Identity",
         concept: "How would you rate your self-worth, self-respect, and the pride you have in your character?",
         anchors: {
-            "5.0": "5 Stars (Shining): I feel a deep, solid pride in who I am and have unshakeable trust in my ultimate potential.",
-            "3.0": "3 Stars (Shadow): I have a basic sense of who I am, but my confidence is fragile and easily shaken by criticism.",
-            "1.0": "1 Star (Shame): I feel completely worthless and am trapped in severe embarrassment and self-rejection."
+            "5.0": "5 Stars (Shining): My self-worth is unshakeable. I feel a deep, solid pride and trust in who I am, my unique values, and my ultimate potential as a human being.",
+            "3.0": "3 Stars (Shadow): I have decent but fragile self-esteem. I have a basic sense of who I am, but my confidence is easily shaken by others' opinions, judgments, or criticism.",
+            "1.0": "1 Star (Shame): I feel trapped in shame and self-rejection. I carry severe embarrassment, deep regret, or feel entirely worthless and unimportant to the world."
         }
     },
     {
@@ -308,9 +308,9 @@ const surveyQuestions = [
         title: "🎯 4.3 Goals",
         concept: "How would you rate your clarity, drive, and progress toward achieving your dreams and plans?",
         anchors: {
-            "5.0": "5 Stars (Driven): I am actively executing a crystal-clear, inspiring roadmap toward major goals that fill me with excitement.",
-            "3.0": "3 Stars (Doing): I have vague plans for my future but lack a clear roadmap or the daily discipline to build them.",
-            "1.0": "1 Star (Drifting): I feel completely lost with zero direction, plans, or dreams for my future."
+            "5.0": "5 Stars (Driven): I am a master builder. I am actively working on a crystal-clear, inspiring roadmap toward major goals that fill me with excitement and a deep sense of achievement.",
+            "3.0": "3 Stars (Doing): I am doing just enough to get by. I have vague ideas or plans for my future, but I lack a clear step-by-step roadmap or the daily discipline to actively build them.",
+            "1.0": "1 Star (Drifting): I feel completely lost or drifting. I have no plans, no dreams, and zero sense of direction. I feel completely defeated by the future."
         }
     },
     {
@@ -320,9 +320,9 @@ const surveyQuestions = [
         title: "🫂 5.1 Inner Circle",
         concept: "How would you rate the safety, support, and love in your closest family and friend relationships?",
         anchors: {
-            "5.0": "5 Stars (Dream Team): I experience unconditional love and have a trusted circle of partners who always have my back.",
-            "3.0": "3 Stars (Backing): I have people who care about me, but our relationships remain surface-level or emotionally distant.",
-            "1.0": "1 Star (Bums): I have no support circle, and the people closest to me are either non-existent or actively harmful."
+            "5.0": "5 Stars (Dream Team): I have a true relationship sanctuary. I experience unconditional love and trust, and I have a \"ride-or-die\" circle of trusted partners who celebrate me and always have my back.",
+            "3.0": "3 Stars (Backing): I have people around who care about me, but my relationships are surface-level or emotionally distant. I don't feel comfortable sharing my deepest raw truths with them.",
+            "1.0": "1 Star (Bums): I have no support circle or my relationships are actively harmful. The people closest to me are completely unreliable, non-existent, or treat me poorly."
         }
     },
     {
@@ -332,9 +332,9 @@ const surveyQuestions = [
         title: "👥 5.2 Social Network",
         concept: "How would you rate your connection, safety, and sense of belonging within your school, workspace, or peer groups?",
         anchors: {
-            "5.0": "5 Stars (Loved): I feel highly respected, celebrated, and deeply accepted as a valued member of my peer group.",
-            "3.0": "3 Stars (Liked): I fit in well enough to avoid trouble, but I don't feel any deep or meaningful connection to my peers.",
-            "1.0": "1 Star (Lonely): I feel completely isolated, bullied, or cast out from any social group at my school or work."
+            "5.0": "5 Stars (Loved): I experience elite belonging. I feel highly respected, valued, celebrated, and deeply accepted as an important member of my school, team, or peer group.",
+            "3.0": "3 Stars (Liked): I fit in well enough to avoid trouble. I have people to sit with or talk to, but I don't feel a deep or meaningful connection to them.",
+            "1.0": "1 Star (Lonely): I feel completely isolated, rejected, or bullied. I feel targeted, hated, or completely cast out of any social group at my school or work."
         }
     },
     {
@@ -344,9 +344,9 @@ const surveyQuestions = [
         title: "🤝 5.3 Community Experience",
         concept: "How would you rate your everyday public interactions with neighbors, strangers on the street, or online communities?",
         anchors: {
-            "5.0": "5 Stars (Wonderful): Public spaces and online forums feel incredibly safe, kind, and collaborative to me.",
-            "3.0": "3 Stars (Welcoming): My public interactions are generally polite but remain cold, distant, and purely transactional.",
-            "1.0": "1 Star (Warzone): Public spaces and online platforms feel actively hostile, leaving me feeling targeted or in danger."
+            "5.0": "5 Stars (Wonderful): I experience exceptional public warmth. Public spaces and online forums feel incredibly safe, kind, welcoming, and collaborative, with strangers showing mutual respect to me.",
+            "3.0": "3 Stars (Welcoming): My interactions with the public are generally quiet, polite, and safe, but they are cold, distant, and transactional. There is no real sense of warmth or neighborly spirit.",
+            "1.0": "1 Star (Warzone): Public spaces and online platforms feel actively hostile and predatory. Peaceful interactions are rare, and I feel targeted or in danger whenever I walk outside."
         }
     },
     {
@@ -356,9 +356,9 @@ const surveyQuestions = [
         title: "🎨 6.1 Hobbies",
         concept: "How would you rate your playtime and access to activities, art, sports, or hobbies that bring you pure joy?",
         anchors: {
-            "5.0": "5 Stars (Blissful): I consistently spend deeply satisfying time losing myself in hobbies that fully recharge my spirit.",
-            "3.0": "3 Stars (Busy): I occasionally do things I enjoy, but my free time is rushed, irregular, and easily distracted.",
-            "1.0": "1 Star (Bored): I have zero free time for fun and feel completely unable to find joy or interest in anything."
+            "5.0": "5 Stars (Blissful): I experience pure creative flow. I consistently spend deeply satisfying, uninterrupted time losing myself in hobbies, arts, or sports that fully recharge my spirit.",
+            "3.0": "3 Stars (Busy): I occasionally do things I enjoy, but I am too busy or distracted to truly enjoy them. My personal playtime is rushed, irregular, and easily interrupted.",
+            "1.0": "1 Star (Bored): I feel completely blocked from recreation or suffer from anhedonia. I have zero free time to do anything fun, or I feel completely unable to find joy or interest in anything."
         }
     },
     {
@@ -368,9 +368,9 @@ const surveyQuestions = [
         title: "🔄 6.2 Habits",
         concept: "How would you rate your daily habits (like nutrition, exercise, and sleep) and how well they support you?",
         anchors: {
-            "5.0": "5 Stars (Champion): I maintain perfectly aligned daily routines that keep my body and mind incredibly strong and clear.",
-            "3.0": "3 Stars (Consistent): My habits are mostly consistent, but I easily slide into unsupportive behaviors when stressed.",
-            "1.0": "1 Star (Chaos): My daily routines are in complete chaos, trapped by chronic, self-destructive patterns."
+            "5.0": "5 Stars (Champion): I have flawless self-discipline. I maintain perfectly aligned daily routines of sleep, food, and movement that make my body and mind feel incredibly strong and clear.",
+            "3.0": "3 Stars (Consistent): My habits are mostly consistent and okay, but they are a mixed bag. I easily slide back into unsupportive behaviors whenever my daily stress levels go up.",
+            "1.0": "1 Star (Chaos): My daily routines are in complete chaos. I am trapped in chronic, self-destructive patterns, terrible sleep hygiene, or crippling addictions that ruin my day."
         }
     },
     {
@@ -380,9 +380,9 @@ const surveyQuestions = [
         title: "📋 6.3 Have-Tos",
         concept: "How would you rate your ability to manage daily duties (homework, chores, bills, childcare) with confidence and ease?",
         anchors: {
-            "5.0": "5 Stars (Conquering): I run my schedule effortlessly and finish all my duties with total confidence and zero friction.",
-            "3.0": "3 Stars (Coping): I manage to cope and turn things in on time, but it is always a highly stressful, last-minute scramble.",
-            "1.0": "1 Star (Crushed): I am completely crushed under my daily duties and face immediate logistical or academic collapse."
+            "5.0": "5 Stars (Conquering): I have absolute schedule mastery. I run my schedule effortlessly, finishing all of my chores, homework, and duties with total confidence and zero friction.",
+            "3.0": "3 Stars (Coping): I manage to cope with my daily duties and turn things in on time, but it is always a last-minute, highly stressful scramble. I feel rushed.",
+            "1.0": "1 Star (Crushed): I feel completely crushed and buried under daily duties. I am falling behind on everything, facing immediate legal, academic, or logistical collapse."
         }
     },
     {
@@ -392,9 +392,9 @@ const surveyQuestions = [
         title: "Flex 1: Gang Affinity Score (GAS)",
         concept: "How would you rate your relationship to gangs and street hustle?",
         anchors: {
-            "5.0": "5 Stars (Triumphant): I have complete mental and physical freedom from gang involvement and follow an independent path.",
-            "3.0": "3 Stars (Torn): I am not active in a gang, but I must constantly navigate their influence within my social circle or family.",
-            "1.0": "1 Star (Trapped): My survival and identity are entirely controlled by the gang, and I see no way out."
+            "5.0": "5 Stars (Triumphant): I have complete mental and physical freedom from gang involvement. I view gangs with zero interest or fear, and I have a clear, independent path.",
+            "3.0": "3 Stars (Torn): I am not an active gang member, but my social circle, safety, or family ties are closely linked to gang-affiliated individuals. I must constantly navigate their influence to keep my distance.",
+            "1.0": "1 Star (Trapped): My survival, identity, and social circle are entirely controlled by the gang. I see no way out."
         }
     },
     {
@@ -404,15 +404,16 @@ const surveyQuestions = [
         title: "Flex 2: Psychological Safety Score (PSS)",
         concept: "How would you rate your emotional and physical safety?",
         anchors: {
-            "5.0": "5 Stars (Fearless): I have absolute peace and feel completely safe to explore, travel, and plan without looking over my shoulder.",
-            "3.0": "3 Stars (Free-ish): I feel safe during my normal routine, but experience high anxiety if I change my path or go out after dark.",
-            "1.0": "1 Star (Fear): I am trapped in a constant state of fear and live in acute danger of physical retaliation or assault."
+            "5.0": "5 Stars (Fearless): I have absolute peace and security. I feel safe to explore, travel, study, and plan without looking over my shoulder.",
+            "3.0": "3 Stars (Free-ish): I feel generally safe during my normal daily routine (going to school or work), but I have high anxiety if I change my path, enter new neighborhoods, or go out after dark.",
+            "1.0": "1 Star (Fear): I am trapped in a state of constant fear. I live in immediate, acute danger of physical retaliation, assault, or death."
         }
     }
 ];
 
-const HopeSlider = ({ currentSelection, setCurrentSelection, currentQ, onNext, hoverValue, setHoverValue }) => {
+const HopeSlider = ({ currentSelection, setCurrentSelection, currentQ, onNext }) => {
     const val = currentSelection !== null ? currentSelection : 0.0;
+    const [hoverValue, setHoverValue] = useState(null);
 
     const handleStarClick = (rating) => {
         setCurrentSelection(rating);
@@ -431,7 +432,7 @@ const HopeSlider = ({ currentSelection, setCurrentSelection, currentQ, onNext, h
                 {[1, 2, 3, 4, 5].map(starIndex => {
                     const fillValue = displayValue - starIndex + 1; // 1 if full, 0.5 if half, <=0 if empty
                     return (
-                        <div key={starIndex} className="relative w-12 h-12 md:w-16 md:h-16 cursor-pointer touch-manipulation transform transition-transform hover:scale-110 active:scale-95">
+                        <div key={starIndex} className="relative w-12 h-12 md:w-16 md:h-16 cursor-pointer touch-manipulation">
                             {/* Left Half Hitbox (0.5) */}
                             <div 
                                 className="absolute left-0 top-0 w-1/2 h-full z-10"
@@ -448,7 +449,7 @@ const HopeSlider = ({ currentSelection, setCurrentSelection, currentQ, onNext, h
                             />
                             
                             {/* Empty Star Base */}
-                            <svg viewBox="0 0 24 24" className="w-full h-full text-slate-200 transition-colors pointer-events-none">
+                            <svg viewBox="0 0 24 24" className="w-full h-full text-slate-200 transition-colors">
                                 <path fill="currentColor" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
                             </svg>
                             
@@ -467,29 +468,26 @@ const HopeSlider = ({ currentSelection, setCurrentSelection, currentQ, onNext, h
                 })}
             </div>
 
+            {/* Rating Display */}
+            <div className="rating-display-box mt-4">
+                <div className="rating-label">YOUR RATING</div>
+                <div className="rating-value">
+                    <span className="number-val">{displayValue > 0 ? displayValue.toFixed(1) : "-.-"}</span> 
+                    <span className="star-icon">⭐</span>
+                </div>
+            </div>
 
-
-            {/* BOTTOM: Static Anchors */}
-            <div className="grid grid-cols-3 gap-2 md:gap-4 mt-8 w-full items-start px-2 pointer-events-none">
-                {["1.0", "3.0", "5.0"].map((key) => {
-                    const fullText = currentQ.anchors && currentQ.anchors[key];
-                    if (!fullText) return <div key={key}></div>;
-                    
+            <div className="h-16 mt-4 flex items-center justify-center pointer-events-none">
+                {currentQ.anchors && currentQ.anchors[displayValue.toFixed(1)] && (() => {
+                    const fullText = currentQ.anchors[displayValue.toFixed(1)];
                     const match = fullText.match(/\(([^)]+)\)/);
                     const mainWord = match ? match[1] : fullText.split(':')[0].replace(/\d\s*Stars?/, '').trim();
-                    const descriptionText = fullText.includes(':') ? fullText.split(':')[1].trim() : fullText;
-                    
                     return (
-                        <div key={key} className="flex flex-col items-center w-full">
-                            <div className="px-3 py-1.5 md:px-5 md:py-2 mb-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full text-[10px] md:text-xs font-black tracking-widest uppercase text-center shadow-sm">
-                                {mainWord}
-                            </div>
-                            <div className="text-[10px] md:text-xs text-slate-500 font-medium italic leading-relaxed text-center">
-                                "{descriptionText}"
-                            </div>
+                        <div className="px-8 py-2.5 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full text-lg md:text-xl text-white font-black tracking-[0.2em] shadow-[0_5px_15px_rgba(0,229,255,0.4)] transition-all animate-fade-in uppercase whitespace-nowrap">
+                            {mainWord}
                         </div>
                     );
-                })}
+                })()}
             </div>
         </div>
     );
@@ -542,26 +540,26 @@ const HopeChart = ({ answers, surveyQuestions, isFinal }) => {
         const flex2Score = answers[surveyQuestions[19]?.id] ?? 0;
 
         return (
-                <div className={`relative z-10 w-full h-full rounded-3xl border border-cyan-500/20 bg-[#050a14]/90 backdrop-blur-3xl shadow-[0_20px_80px_rgba(0,229,255,0.07)] overflow-y-auto custom-scrollbar flex flex-col justify-center transition-opacity duration-1000 ${isMounted ? 'opacity-100' : 'opacity-0'}`} style={{ padding: 'clamp(1rem, 2vw, 2.5rem)' }}>
+                <div className={`relative z-10 w-full rounded-3xl border border-cyan-500/20 bg-[#050a14]/90 backdrop-blur-3xl shadow-[0_20px_80px_rgba(0,229,255,0.07)] p-4 md:p-10 overflow-y-auto custom-scrollbar flex flex-col transition-opacity duration-1000 ${isMounted ? 'opacity-100' : 'opacity-0'}`} style={{ maxHeight: '100%' }}>
                     <div className="absolute top-0 left-0 w-32 h-32 border-t border-l border-cyan-500/50 rounded-tl-3xl opacity-50"></div>
                     <div className="absolute top-0 right-0 w-32 h-32 border-t border-r border-cyan-500/50 rounded-tr-3xl opacity-50"></div>
                     
 
 
-                    <div className="text-center mb-4 relative shrink-0">
+                    <div className="text-center mb-8 relative shrink-0">
                         <div className="inline-block">
-                            <h1 className="font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-cyan-100 tracking-widest mb-1" style={{ textShadow: '0 0 40px rgba(0,229,255,0.3)', fontSize: 'clamp(1.5rem, 3vw, 2.25rem)' }}>
+                            <h1 className="text-2xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-cyan-100 tracking-widest mb-1" style={{ textShadow: '0 0 40px rgba(0,229,255,0.3)' }}>
                                 THE HoPE INDEX
                             </h1>
                             <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-50 mt-1 mb-2"></div>
-                            <p className="text-cyan-400 font-medium tracking-[0.2em] uppercase" style={{ fontSize: 'clamp(0.6rem, 1vw, 0.875rem)' }}>
+                            <p className="text-cyan-400 font-medium text-xs md:text-sm tracking-[0.2em] uppercase">
                                 (Human Optimized Personal Experience)
                             </p>
                         </div>
                     </div>
 
-                    <div className="relative w-full shrink-0 mx-auto flex items-center justify-center" style={{ aspectRatio: '2/1.3', maxHeight: isFinal ? '500px' : '45vh', maxWidth: '100%', height: 'auto' }}>
-                        <svg viewBox="0 0 1000 650" className="w-full h-auto drop-shadow-2xl overflow-visible" style={{ padding: "0 10px", maxHeight: '100%' }}>
+                    <div className="relative w-full shrink-0 mx-auto" style={{ aspectRatio: '2/1.3', maxHeight: isFinal ? '500px' : '450px' }}>
+                        <svg viewBox="0 0 1000 650" className="w-full h-full drop-shadow-2xl overflow-visible" style={{ padding: "0 10px" }}>
                             <defs>
                                 <filter id="glow-soft" x="-20%" y="-20%" width="140%" height="140%">
                                     <feGaussianBlur stdDeviation="3" result="blur" />
@@ -575,21 +573,6 @@ const HopeChart = ({ answers, surveyQuestions, isFinal }) => {
                                     <stop offset="0%" stopColor="rgba(0, 229, 255, 0.2)" />
                                     <stop offset="100%" stopColor="rgba(0, 229, 255, 0.05)" />
                                 </linearGradient>
-                                <filter id="glow-yellow" x="-20%" y="-20%" width="140%" height="140%">
-                                    <feGaussianBlur stdDeviation="2" result="blur" />
-                                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                                </filter>
-                                {[1, 2, 3, 4, 5].map(starIndex => {
-                                    const score = totalScore / 20;
-                                    let fillPct = 0;
-                                    if (score >= starIndex) fillPct = 100;
-                                    else if (score > starIndex - 1) fillPct = (score - (starIndex - 1)) * 100;
-                                    return (
-                                        <clipPath id={`clip-star-${starIndex}`} key={`clip-${starIndex}`}>
-                                            <rect x="0" y="0" width={24 * (fillPct / 100)} height="24" />
-                                        </clipPath>
-                                    );
-                                })}
                             </defs>
 
                             {dimensionNames.map((name, i) => {
@@ -623,62 +606,33 @@ const HopeChart = ({ answers, surveyQuestions, isFinal }) => {
                                 const startA = -90 + (i * 10);
                                 const endA = startA + 8.5; 
                                 
-                                // Grow from center outwards
-                                const displayScore = isMounted ? score : 0.01;
-                                const scoreR = innerR + (displayScore / 5) * (maxOutR - innerR);
+                                const scoreR = innerR + (score / 5) * (maxOutR - innerR);
                                 
                                 const basePath = describeArc(cx, cy, innerR, maxOutR, startA, endA);
                                 const scorePath = describeArc(cx, cy, innerR, scoreR, startA, endA);
-                                const delay = 0.3 + (i * 0.04); // Cascading delay
 
                                 return (
                                     <g key={`slice-${i}`}>
-                                        <path d={basePath} fill={color} opacity={isMounted ? "0.05" : "0"} style={{ transition: `opacity 1s ease ${delay}s` }} />
-                                        <path d={scorePath} fill={color} filter="url(#glow-soft)" opacity={isMounted ? "0.9" : "0"} style={{ transition: `all 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) ${delay}s` }} />
-                                        {score > 0 && (
-                                            <path d={describeArc(cx, cy, scoreR - 4, scoreR, startA, endA)} fill="#ffffff" opacity={isMounted ? "0.5" : "0"} style={{ transition: `all 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) ${delay}s` }} />
+                                        <path d={basePath} fill={color} opacity="0.05" />
+                                        <path d={scorePath} fill={color} filter="url(#glow-soft)" opacity="0.9" style={{ transition: 'all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)' }} />
+                                        {score> 0 && (
+                                            <path d={describeArc(cx, cy, scoreR - 4, scoreR, startA, endA)} fill="#ffffff" opacity="0.5" style={{ transition: 'all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)' }} />
                                         )}
-                                        <text {...polarToCartesian(cx, cy, innerR - 25, startA + 4.25)} fill="#ffffff" fontSize="13" fontWeight="bold" textAnchor="middle" opacity={isMounted ? "0.5" : "0"} style={{ transition: `opacity 1s ease ${delay}s` }}>{i + 1}</text>
+                                        <text {...polarToCartesian(cx, cy, innerR - 25, startA + 4.25)} fill="#ffffff" fontSize="13" fontWeight="bold" textAnchor="middle"  opacity="0.5">{i + 1}</text>
                                     </g>
                                 );
                             })}
 
                             <g transform={`translate(${cx - 160}, ${cy + 20})`} style={{ opacity: isMounted ? 1 : 0, transition: 'opacity 1s ease 0.5s' }}>
-                                <rect x="0" y="0" width="320" height="170" rx="15" fill="url(#score-gradient)" stroke="#00e5ff" strokeWidth="2" filter="url(#glow-soft)" />
-                                <rect x="-10" y="20" width="2" height="130" fill="#00e5ff" filter="url(#glow-soft)" />
-                                <rect x="328" y="20" width="2" height="130" fill="#00e5ff" filter="url(#glow-soft)" />
+                                <rect x="0" y="0" width="320" height="140" rx="15" fill="url(#score-gradient)" stroke="#00e5ff" strokeWidth="2" filter="url(#glow-soft)" />
+                                <rect x="-10" y="20" width="2" height="100" fill="#00e5ff" filter="url(#glow-soft)" />
+                                <rect x="328" y="20" width="2" height="100" fill="#00e5ff" filter="url(#glow-soft)" />
                                 
-                                <text x="160" y="45" fill="#ffffff" fontSize="22" fontWeight="bold" textAnchor="middle" letterSpacing="3px">
+                                <text x="160" y="50" fill="#ffffff" fontSize="22" fontWeight="bold" textAnchor="middle" letterSpacing="3px">
                                     {totalScore / 20 >= 4.0 ? "THRIVING" : totalScore / 20 >= 3.0 ? "STABILIZING" : totalScore / 20 >= 2.0 ? "SURVIVING" : "CRITICAL"}
                                 </text>
-
-                                {/* Numerical Rating */}
-                                <text x="160" y="75" fill="#00e5ff" fontSize="18" fontWeight="bold" textAnchor="middle" opacity="0.9" letterSpacing="2px">{(totalScore / 20).toFixed(1)} / 5.0 STARS</text>
-
-                                {/* 5-Star Rating Visualization */}
-                                {[1, 2, 3, 4, 5].map(starIndex => {
-                                    const score = totalScore / 20;
-                                    let fillPct = 0;
-                                    if (score >= starIndex) fillPct = 100;
-                                    else if (score > starIndex - 1) fillPct = (score - (starIndex - 1)) * 100;
-                                    // Total width of 5 stars + gaps = (5 * 24) + (4 * 6) = 120 + 24 = 144
-                                    // Start X = 160 - (144 / 2) = 88
-                                    const starX = 88 + ((starIndex - 1) * 30);
-                                    return (
-                                        <g key={starIndex} transform={`translate(${starX}, 90)`}>
-                                            <svg viewBox="0 0 24 24" width="24" height="24">
-                                                <path fill="#1e293b" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                                            </svg>
-                                            {fillPct > 0 && (
-                                                <svg viewBox="0 0 24 24" width="24" height="24">
-                                                    <path fill="#facc15" clipPath={`url(#clip-star-${starIndex})`} d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" filter="url(#glow-yellow)" />
-                                                </svg>
-                                            )}
-                                        </g>
-                                    );
-                                })}
-                                
-                                <text x="160" y="145" fill="#00e5ff" fontSize="12" fontWeight="bold" textAnchor="middle" opacity="0.7" letterSpacing="1px">{Math.round(totalScore)}% HoPE CAPACITY</text>
+                                <text x="160" y="80" fill="#00e5ff" fontSize="18" fontWeight="bold" textAnchor="middle" opacity="0.9" letterSpacing="2px">{(totalScore / 20).toFixed(1)} / 5.0 STARS</text>
+                                <text x="160" y="110" fill="#00e5ff" fontSize="12" fontWeight="bold" textAnchor="middle" opacity="0.7" letterSpacing="1px">{Math.round(totalScore)}% HoPE CAPACITY</text>
                             </g>
                             
                             <path d={`M ${cx - 80} ${cy + 160} L ${cx - 80} ${cy + 190} L ${cx - 240} ${cy + 190} L ${cx - 240} ${cy + 230}`} fill="none" stroke="#00e5ff" strokeWidth="2" opacity={isMounted ? "0.4" : "0"} filter="url(#glow-soft)" style={{ transition: 'opacity 1s ease 0.5s' }} />
@@ -782,7 +736,6 @@ const App = () => {
     const [currentQIndex, setCurrentQIndex] = useState(0);
     const [answers, setAnswers] = useState({}); // { id: score }
     const [currentSelection, setCurrentSelection] = useState(null);
-    const [hoverValue, setHoverValue] = useState(null);
 
     const handleNextQ = (val) => {
         const finalVal = val !== undefined ? val : (currentSelection !== null ? currentSelection : 0.0);
@@ -820,8 +773,6 @@ const App = () => {
                         setCurrentSelection={setCurrentSelection} 
                         currentQ={surveyQuestions[currentQIndex]}
                         onNext={handleNextQ}
-                        hoverValue={hoverValue}
-                        setHoverValue={setHoverValue}
  />
                 </div>
             </div>
@@ -860,7 +811,7 @@ const App = () => {
                         }}
                         className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-10 py-5 rounded-full font-bold text-xl hover:-translate-y-1 transition-all shadow-xl hover:shadow-[0_10px_25px_rgba(79,70,229,0.4)] inline-flex items-center justify-center gap-3 w-full md:w-auto"
 >
-                        Let's Begin →
+                        Begin Assessment →
                     </button>
                 </div>
             </main>
@@ -877,42 +828,40 @@ const App = () => {
     const progress = ((currentQIndex) / surveyQuestions.length) * 100; // Progress starts at 0
 
     return (
-        <main className="flex-grow w-[95vw] max-w-[1600px] mx-auto pt-4 md:pt-8" style={{ height: 'calc(100vh - 80px)', minHeight: '600px' }}>
-            <div className="grid h-full" style={{ gridTemplateColumns: '1fr 1fr', gap: 'clamp(1rem, 2vw, 3rem)' }}>
+        <main className="flex-grow p-4 md:p-8 w-full max-w-[1600px] mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 h-full">
                 {/* Left Column - Survey Form */}
-                <div className="flex flex-col w-full h-full">
+                <div className="flex flex-col max-w-2xl mx-auto w-full">
 
             
-            <div className="w-full mb-4 shrink-0">
-                <div className="flex justify-end items-end text-sm font-bold text-slate-500">
+            <div className="w-full max-w-4xl mb-10">
+                <div className="flex justify-between items-end text-sm font-bold text-slate-500 mb-3">
+                    <span className="uppercase tracking-widest text-xs">Survey Progress</span>
                     <span className="bg-white px-3 py-1 rounded-full shadow-sm border border-slate-100 text-blue-600">{currentQIndex + 1} / {surveyQuestions.length}</span>
+                </div>
+                <div className="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden shadow-inner">
+                    <div className="bg-gradient-to-r from-emerald-400 via-blue-500 to-purple-500 h-full transition-all duration-700 ease-in-out" style={{ width: `${progress}%` }}></div>
                 </div>
             </div>
 
-            <div className="bg-white w-full h-full rounded-[2rem] shadow-2xl border border-slate-100 relative flex flex-col justify-center" style={{ padding: 'clamp(1.5rem, 3vw, 3rem)' }}>
+            <div className="bg-white max-w-4xl w-full p-8 md:p-12 rounded-[2rem] shadow-2xl border border-slate-100 relative">
                 
-                <div className="flex flex-col xl:flex-row justify-between items-start xl:items-end mb-8 pb-6 border-b border-slate-100 gap-4 shrink-0">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 pb-6 border-b border-slate-100 gap-4">
                     <div>
                         <div className="inline-block bg-blue-50 text-blue-700 px-3 py-1 rounded-lg font-bold uppercase tracking-widest text-[10px] mb-3 border border-blue-100">{q.space}</div>
                         <div className="text-slate-400 font-bold text-sm tracking-wide">{q.dimension}</div>
                     </div>
-                    <div className="flex flex-col items-center justify-center p-4 md:p-5 rounded-xl shadow-sm border border-slate-200 bg-white min-w-[120px] md:min-w-[140px]">
-                        <div className="text-[10px] md:text-xs font-bold text-slate-400 tracking-widest uppercase mb-1 md:mb-2 text-center">YOUR RATING</div>
-                        <div className="flex items-baseline justify-center gap-1.5 text-blue-600">
-                            <span className="text-3xl md:text-4xl font-black tracking-tighter leading-none">{hoverValue !== null ? hoverValue.toFixed(1) : (currentSelection !== null ? currentSelection.toFixed(1) : "_._")}</span> 
-                            <span className="text-lg md:text-xl leading-none">⭐</span>
-                        </div>
-                    </div>
+                    {/* Removed avatar and audio from survey screen */}
                 </div>
 
-                <h2 className="font-black text-slate-800 mb-6 tracking-tight leading-tight shrink-0" style={{ fontSize: 'clamp(1.75rem, 3vw, 2.5rem)' }}>{q.title}</h2>
-                <div className="bg-slate-50 border-l-4 border-blue-500 rounded-r-2xl mb-8 shrink-0" style={{ padding: 'clamp(1rem, 2vw, 1.5rem)' }}>
-                    <p className="text-slate-700 leading-relaxed font-medium" style={{ fontSize: 'clamp(1.1rem, 2vw, 1.25rem)' }}>{q.concept}</p>
+                <h2 className="text-4xl font-black text-slate-800 mb-6 tracking-tight leading-tight">{q.title}</h2>
+                <div className="bg-slate-50 border-l-4 border-blue-500 p-6 rounded-r-2xl mb-10">
+                    <p className="text-xl text-slate-700 leading-relaxed font-medium">{q.concept}</p>
                 </div>
                 
                 {renderRater()}
 
-                <div className="flex justify-between items-center mt-auto pt-6 border-t border-slate-100 shrink-0">
+                <div className="flex justify-between items-center mt-12 pt-8 border-t border-slate-100">
                     <button 
                         onClick={handlePrevQ}
                         className={`text-slate-500 font-bold hover:text-slate-800 px-6 py-3 transition-colors flex items-center gap-2 ${currentQIndex === 0 ? 'invisible' : ''}`}
@@ -926,8 +875,8 @@ const App = () => {
         
                 </div>
                 {/* Right Column - Results Display */}
-                <div className="flex flex-col w-full h-full relative rounded-3xl overflow-hidden shadow-2xl">
-                    <div className="absolute inset-0 pointer-events-none bg-[#02050a] -z-10" style={{
+                <div className="flex flex-col w-full lg:sticky lg:top-8 mt-12 lg:mt-0 lg:max-h-[calc(100vh-4rem)]">
+                    <div className="absolute inset-0 pointer-events-none bg-[#02050a] rounded-3xl -z-10" style={{
                         backgroundImage: 'radial-gradient(circle at 50% 50%, rgba(0, 229, 255, 0.08) 0%, transparent 60%), linear-gradient(rgba(0, 229, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 229, 255, 0.03) 1px, transparent 1px)',
                         backgroundSize: '100% 100%, 30px 30px, 30px 30px',
                         backgroundPosition: 'center center'
