@@ -870,6 +870,10 @@ const App = () => {
         return <ResultsScreen answers={answers} surveyQuestions={surveyQuestions} />;
     }
 
+    // --- SURVEY SCREEN ---
+    const q = surveyQuestions[currentQIndex];
+    const progress = ((currentQIndex) / surveyQuestions.length) * 100; // Progress starts at 0
+
     return (
         <main className="flex-grow w-[95vw] max-w-[1600px] mx-auto py-2 flex flex-col justify-center overflow-hidden" style={{ height: 'calc(100vh - 80px)' }}>
             <div className="grid grid-cols-1 lg:grid-cols-2 flex-grow items-stretch overflow-hidden" style={{ gap: 'clamp(1rem, 2vw, 2rem)', maxHeight: '100%' }}>
