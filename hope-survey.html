@@ -133,7 +133,7 @@
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900 font-sans h-screen flex flex-col relative overflow-hidden">
+<body class="bg-slate-50 text-slate-900 font-sans min-h-screen flex flex-col relative overflow-x-hidden">
     
     <!-- THRiVE Global Header -->
     <header class="header print:hidden z-50 relative">
@@ -425,7 +425,7 @@ const HopeSlider = ({ currentSelection, setCurrentSelection, currentQ, onNext, h
     return (
         <div className="hope-drag-container">
             <div 
-                className="flex justify-center items-center gap-2 md:gap-4 my-1 md:my-2"
+                className="flex justify-center items-center gap-2 md:gap-4 my-6"
                 onMouseLeave={() => setHoverValue(null)}
             >
                 {[1, 2, 3, 4, 5].map(starIndex => {
@@ -470,7 +470,7 @@ const HopeSlider = ({ currentSelection, setCurrentSelection, currentQ, onNext, h
 
 
             {/* BOTTOM: Static Anchors */}
-            <div className="grid grid-cols-3 gap-2 md:gap-4 mt-2 w-full items-start px-2 pointer-events-none">
+            <div className="grid grid-cols-3 gap-2 md:gap-4 mt-8 w-full items-start px-2 pointer-events-none">
                 {["1.0", "3.0", "5.0"].map((key) => {
                     const fullText = currentQ.anchors && currentQ.anchors[key];
                     if (!fullText) return <div key={key}></div>;
@@ -542,15 +542,15 @@ const HopeChart = ({ answers, surveyQuestions, isFinal }) => {
         const flex2Score = answers[surveyQuestions[19]?.id] ?? 0;
 
         return (
-                <div className={`relative z-10 w-full h-full rounded-3xl border border-cyan-500/20 bg-[#050a14]/90 backdrop-blur-3xl shadow-[0_20px_80px_rgba(0,229,255,0.07)] overflow-hidden flex flex-col justify-center transition-opacity duration-1000 ${isMounted ? 'opacity-100' : 'opacity-0'}`} style={{ padding: 'clamp(0.75rem, 1.5vh, 1.5rem)' }}>
+                <div className={`relative z-10 w-full h-full rounded-3xl border border-cyan-500/20 bg-[#050a14]/90 backdrop-blur-3xl shadow-[0_20px_80px_rgba(0,229,255,0.07)] overflow-y-auto custom-scrollbar flex flex-col justify-center transition-opacity duration-1000 ${isMounted ? 'opacity-100' : 'opacity-0'}`} style={{ padding: 'clamp(1rem, 2vw, 2.5rem)' }}>
                     <div className="absolute top-0 left-0 w-32 h-32 border-t border-l border-cyan-500/50 rounded-tl-3xl opacity-50"></div>
                     <div className="absolute top-0 right-0 w-32 h-32 border-t border-r border-cyan-500/50 rounded-tr-3xl opacity-50"></div>
                     
 
 
-                    <div className="text-center mb-1 md:mb-2 relative shrink-0">
+                    <div className="text-center mb-4 relative shrink-0">
                         <div className="inline-block">
-                            <h1 className="font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-cyan-100 tracking-widest mb-0" style={{ textShadow: '0 0 40px rgba(0,229,255,0.3)', fontSize: 'clamp(1.2rem, 2.5vw, 1.8rem)' }}>
+                            <h1 className="font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-cyan-100 tracking-widest mb-1" style={{ textShadow: '0 0 40px rgba(0,229,255,0.3)', fontSize: 'clamp(1.5rem, 3vw, 2.25rem)' }}>
                                 THE HoPE INDEX
                             </h1>
                             <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-50 mt-1 mb-2"></div>
@@ -560,7 +560,7 @@ const HopeChart = ({ answers, surveyQuestions, isFinal }) => {
                         </div>
                     </div>
 
-                    <div className="relative w-full shrink-0 mx-auto flex items-center justify-center" style={{ aspectRatio: '2/1.3', maxHeight: isFinal ? '400px' : '30vh', maxWidth: '100%', height: 'auto' }}>
+                    <div className="relative w-full shrink-0 mx-auto flex items-center justify-center" style={{ aspectRatio: '2/1.3', maxHeight: isFinal ? '500px' : '45vh', maxWidth: '100%', height: 'auto' }}>
                         <svg viewBox="0 0 1000 650" className="w-full h-auto drop-shadow-2xl overflow-visible" style={{ padding: "0 10px", maxHeight: '100%' }}>
                             <defs>
                                 <filter id="glow-soft" x="-20%" y="-20%" width="140%" height="140%">
@@ -686,19 +686,19 @@ const HopeChart = ({ answers, surveyQuestions, isFinal }) => {
                         </svg>
                     </div>
 
-                    <div className={`mt-1 md:mt-2 shrink-0 border border-cyan-500/30 rounded-2xl bg-[#03060d]/80 p-2 md:p-3 relative shadow-[inset_0_0_30px_rgba(0,229,255,0.02)] transition-opacity duration-1000 ${isMounted ? 'opacity-100 delay-[500ms]' : 'opacity-0'}`}>
-                        <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-cyan-400 rounded-tl-2xl"></div>
-                        <div className="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-cyan-400 rounded-tr-2xl"></div>
-                        <div className="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-cyan-400 rounded-bl-2xl"></div>
-                        <div className="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-cyan-400 rounded-br-2xl"></div>
+                    <div className={`mt-4 shrink-0 border border-cyan-500/30 rounded-2xl bg-[#03060d]/80 p-6 md:p-8 relative shadow-[inset_0_0_30px_rgba(0,229,255,0.02)] transition-opacity duration-1000 ${isMounted ? 'opacity-100 delay-[500ms]' : 'opacity-0'}`}>
+                        <div className="absolute top-0 left-0 w-10 h-10 border-t-2 border-l-2 border-cyan-400 rounded-tl-2xl"></div>
+                        <div className="absolute top-0 right-0 w-10 h-10 border-t-2 border-r-2 border-cyan-400 rounded-tr-2xl"></div>
+                        <div className="absolute bottom-0 left-0 w-10 h-10 border-b-2 border-l-2 border-cyan-400 rounded-bl-2xl"></div>
+                        <div className="absolute bottom-0 right-0 w-10 h-10 border-b-2 border-r-2 border-cyan-400 rounded-br-2xl"></div>
                         
-                        <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#050a14] px-3 py-0.5 text-cyan-300 text-[9px] md:text-xs font-bold tracking-[0.15em] uppercase border border-cyan-500/50 rounded-full shadow-[0_0_15px_rgba(0,229,255,0.4)] whitespace-nowrap">
+                        <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#050a14] px-6 py-1 text-cyan-300 text-sm font-bold tracking-[0.15em] uppercase border border-cyan-500/50 rounded-full shadow-[0_0_15px_rgba(0,229,255,0.4)] whitespace-nowrap">
                             Population-Specific Context
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 pt-2 pb-1">
-                            <div className="flex items-center gap-3 justify-center">
-                                <div className="relative w-16 h-16 shrink-0">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-4 pt-4 pb-2">
+                            <div className="flex items-center gap-6 justify-center">
+                                <div className="relative w-24 h-24 shrink-0">
                                     <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_0_12px_rgba(0,229,255,0.3)]">
                                         {[0,1,2,3,4,5].map(tick => {
                                             const a = -120 + (tick / 5) * 240;
@@ -713,14 +713,14 @@ const HopeChart = ({ answers, surveyQuestions, isFinal }) => {
                                             <circle cx="50" cy="50" r="5" fill="#00e5ff" stroke="#ffffff" strokeWidth="1.5" />
                                         </g>
                                     </svg>
-                                    <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 text-cyan-400 font-bold text-xs bg-[#03060d] px-2 rounded-full border border-cyan-500/20">{flex1Score.toFixed(1)}</div>
+                                    <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 text-cyan-400 font-bold text-sm bg-[#03060d] px-2 rounded-full border border-cyan-500/20">{flex1Score.toFixed(1)}</div>
                                 </div>
-                                <div className="max-w-[160px]">
-                                    <h3 className="text-white font-bold text-[10px] md:text-sm leading-tight mb-1">GANG DE-IDENTIFICATION</h3>
+                                <div className="max-w-[200px]">
+                                    <h3 className="text-white font-bold text-sm md:text-base leading-tight mb-1">GANG DE-IDENTIFICATION</h3>
                                 </div>
                             </div>
-                            <div className="flex items-center gap-3 justify-center border-t md:border-t-0 md:border-l border-cyan-500/20 pt-3 md:pt-0 md:pl-3">
-                                <div className="relative w-16 h-16 shrink-0">
+                            <div className="flex items-center gap-6 justify-center border-t md:border-t-0 md:border-l border-cyan-500/20 pt-6 md:pt-0 md:pl-6">
+                                <div className="relative w-24 h-24 shrink-0">
                                     <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_0_12px_rgba(0,229,255,0.3)]">
                                         {[0,1,2,3,4,5].map(tick => {
                                             const a = -120 + (tick / 5) * 240;
@@ -735,10 +735,10 @@ const HopeChart = ({ answers, surveyQuestions, isFinal }) => {
                                             <circle cx="50" cy="50" r="5" fill="#00e5ff" stroke="#ffffff" strokeWidth="1.5" />
                                         </g>
                                     </svg>
-                                    <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 text-cyan-400 font-bold text-xs bg-[#03060d] px-2 rounded-full border border-cyan-500/20">{flex2Score.toFixed(1)}</div>
+                                    <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 text-cyan-400 font-bold text-sm bg-[#03060d] px-2 rounded-full border border-cyan-500/20">{flex2Score.toFixed(1)}</div>
                                 </div>
-                                <div className="max-w-[160px]">
-                                    <h3 className="text-white font-bold text-[10px] md:text-sm leading-tight mb-1">PSYCHOLOGICAL SAFETY</h3>
+                                <div className="max-w-[200px]">
+                                    <h3 className="text-white font-bold text-sm md:text-base leading-tight mb-1">PSYCHOLOGICAL SAFETY</h3>
                                 </div>
                             </div>
                         </div>
@@ -813,15 +813,17 @@ const App = () => {
     // --- RATING COMPONENT ---
     const renderRater = () => {
         return (
-            <div className="w-full bg-slate-50 border border-slate-200 rounded-3xl pt-2 pb-2 px-2 md:px-4 mt-1 mb-1 flex-grow flex flex-col justify-center">
-                <HopeSlider 
-                    currentSelection={currentSelection !== null ? currentSelection : 0.0} 
-                    setCurrentSelection={setCurrentSelection} 
-                    currentQ={surveyQuestions[currentQIndex]}
-                    onNext={handleNextQ}
-                    hoverValue={hoverValue}
-                    setHoverValue={setHoverValue}
-                />
+            <div className="mt-8">
+                <div className="relative pt-6 pb-8 px-4 md:px-8 bg-slate-50 border border-slate-200 rounded-3xl mt-8">
+                    <HopeSlider 
+                        currentSelection={currentSelection !== null ? currentSelection : 0.0} 
+                        setCurrentSelection={setCurrentSelection} 
+                        currentQ={surveyQuestions[currentQIndex]}
+                        onNext={handleNextQ}
+                        hoverValue={hoverValue}
+                        setHoverValue={setHoverValue}
+ />
+                </div>
             </div>
         );
     };
@@ -875,20 +877,21 @@ const App = () => {
     const progress = ((currentQIndex) / surveyQuestions.length) * 100; // Progress starts at 0
 
     return (
-        <main className="flex-grow w-[95vw] max-w-[1600px] mx-auto py-2 flex flex-col justify-center overflow-hidden" style={{ height: 'calc(100vh - 80px)' }}>
-            <div className="grid grid-cols-1 lg:grid-cols-2 flex-grow items-stretch overflow-hidden" style={{ gap: 'clamp(1rem, 2vw, 2rem)', maxHeight: '100%' }}>
+        <main className="flex-grow w-[95vw] max-w-[1600px] mx-auto pt-4 md:pt-8" style={{ height: 'calc(100vh - 80px)', minHeight: '600px' }}>
+            <div className="grid h-full" style={{ gridTemplateColumns: '1fr 1fr', gap: 'clamp(1rem, 2vw, 3rem)' }}>
                 {/* Left Column - Survey Form */}
                 <div className="flex flex-col w-full h-full">
 
-            <div className="bg-white w-full h-full rounded-[2rem] shadow-2xl border border-slate-100 relative flex flex-col justify-start overflow-hidden" style={{ padding: 'clamp(1rem, 1.5vh, 1.5rem)' }}>
+            
+            <div className="bg-white w-full h-full rounded-[2rem] shadow-2xl border border-slate-100 relative flex flex-col justify-center" style={{ padding: 'clamp(1.5rem, 3vw, 3rem)' }}>
                 
-                <div className="flex flex-col xl:flex-row justify-between items-start xl:items-end mb-2 pb-2 border-b border-slate-100 gap-2 shrink-0 mt-0">
+                <div className="flex flex-col xl:flex-row justify-between items-start xl:items-end mb-8 pb-6 border-b border-slate-100 gap-4 shrink-0">
                     <div>
                         <div className="inline-block bg-blue-50 text-blue-700 px-3 py-1 rounded-lg font-bold uppercase tracking-widest text-[10px] mb-3 border border-blue-100">{q.space}</div>
                         <div className="text-slate-400 font-bold text-sm tracking-wide">{q.dimension}</div>
                     </div>
-                    <div className="flex flex-col items-center justify-center p-2 md:p-3 rounded-xl shadow-sm border border-slate-200 bg-white min-w-[120px] md:min-w-[140px]">
-                        <div className="text-[9px] md:text-[10px] font-bold text-slate-400 tracking-widest uppercase mb-1 text-center">YOUR RATING</div>
+                    <div className="flex flex-col items-center justify-center p-4 md:p-5 rounded-xl shadow-sm border border-slate-200 bg-white min-w-[120px] md:min-w-[140px]">
+                        <div className="text-[10px] md:text-xs font-bold text-slate-400 tracking-widest uppercase mb-1 md:mb-2 text-center">YOUR RATING</div>
                         <div className="flex items-baseline justify-center gap-1.5 text-blue-600">
                             <span className="text-3xl md:text-4xl font-black tracking-tighter leading-none">{hoverValue !== null ? hoverValue.toFixed(1) : (currentSelection !== null ? currentSelection.toFixed(1) : "_._")}</span> 
                             <span className="text-lg md:text-xl leading-none">⭐</span>
@@ -896,16 +899,14 @@ const App = () => {
                     </div>
                 </div>
 
-                <h2 className="font-black text-slate-800 mb-1 md:mb-2 tracking-tight leading-tight shrink-0" style={{ fontSize: 'clamp(1.1rem, 2.2vh, 1.75rem)' }}>{q.title}</h2>
-                <div className="bg-slate-50 border-l-4 border-blue-500 rounded-r-2xl shrink-0" style={{ padding: 'clamp(0.5rem, 0.75vh, 0.75rem)' }}>
-                    <p className="text-slate-700 leading-relaxed font-medium" style={{ fontSize: 'clamp(0.85rem, 1.4vh, 1rem)' }}>{q.concept}</p>
+                <h2 className="font-black text-slate-800 mb-6 tracking-tight leading-tight shrink-0" style={{ fontSize: 'clamp(1.75rem, 3vw, 2.5rem)' }}>{q.title}</h2>
+                <div className="bg-slate-50 border-l-4 border-blue-500 rounded-r-2xl mb-8 shrink-0" style={{ padding: 'clamp(1rem, 2vw, 1.5rem)' }}>
+                    <p className="text-slate-700 leading-relaxed font-medium" style={{ fontSize: 'clamp(1.1rem, 2vw, 1.25rem)' }}>{q.concept}</p>
                 </div>
                 
-                <div className="flex-grow flex flex-col justify-center w-full">
-                    {renderRater()}
-                </div>
+                {renderRater()}
 
-                <div className="flex justify-between items-center mt-auto pt-2 border-t border-slate-100 shrink-0 bg-white">
+                <div className="flex justify-between items-center mt-auto pt-6 border-t border-slate-100 shrink-0">
                     <button 
                         onClick={handlePrevQ}
                         className={`text-slate-500 font-bold hover:text-slate-800 px-6 py-3 transition-colors flex items-center gap-2 ${currentQIndex === 0 ? 'invisible' : ''}`}
@@ -924,8 +925,8 @@ const App = () => {
         
                 </div>
                 {/* Right Column - Results Display */}
-                <div className="flex flex-col w-full h-full relative rounded-3xl shadow-2xl">
-                    <div className="absolute inset-0 pointer-events-none bg-[#02050a] rounded-3xl -z-10" style={{
+                <div className="flex flex-col w-full h-full relative rounded-3xl overflow-hidden shadow-2xl">
+                    <div className="absolute inset-0 pointer-events-none bg-[#02050a] -z-10" style={{
                         backgroundImage: 'radial-gradient(circle at 50% 50%, rgba(0, 229, 255, 0.08) 0%, transparent 60%), linear-gradient(rgba(0, 229, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 229, 255, 0.03) 1px, transparent 1px)',
                         backgroundSize: '100% 100%, 30px 30px, 30px 30px',
                         backgroundPosition: 'center center'
