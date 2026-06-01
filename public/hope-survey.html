@@ -542,7 +542,7 @@ const HopeChart = ({ answers, surveyQuestions, isFinal }) => {
         const flex2Score = answers[surveyQuestions[19]?.id] ?? 0;
 
         return (
-                <div className={`relative z-10 w-full h-full rounded-3xl border border-cyan-500/20 bg-[#050a14]/90 backdrop-blur-3xl shadow-[0_20px_80px_rgba(0,229,255,0.07)] overflow-y-hidden flex flex-col justify-center min-h-0 transition-opacity duration-1000 ${isMounted ? 'opacity-100' : 'opacity-0'}`} style={{ padding: 'clamp(1rem, 2vh, 2.5rem)' }}>
+                <div className={`relative z-10 w-full h-full rounded-3xl border border-cyan-500/20 bg-[#050a14]/90 backdrop-blur-3xl shadow-[0_20px_80px_rgba(0,229,255,0.07)] overflow-y-hidden flex flex-col justify-center min-h-0 transition-opacity duration-1000 ${isMounted ? 'opacity-100' : 'opacity-0'}`} style={{ padding: 'clamp(2.5rem, 6vh, 4rem) clamp(1.5rem, 3vw, 3rem)' }}>
                     <div className="absolute top-0 left-0 w-32 h-32 border-t border-l border-cyan-500/50 rounded-tl-3xl opacity-50"></div>
                     <div className="absolute top-0 right-0 w-32 h-32 border-t border-r border-cyan-500/50 rounded-tr-3xl opacity-50"></div>
                     
@@ -877,7 +877,7 @@ const App = () => {
     const progress = ((currentQIndex) / surveyQuestions.length) * 100; // Progress starts at 0
 
     return (
-        <main className="flex-grow w-[95vw] max-w-[1600px] mx-auto overflow-hidden" style={{ height: 'calc(100vh - 80px)' }}>
+        <main className="flex-grow w-[85vw] max-w-[1500px] mx-auto overflow-hidden py-[4vh]" style={{ height: 'calc(100vh - 80px)' }}>
             <div className="grid h-full min-h-0" style={{ gridTemplateColumns: '1fr 1fr', gap: 'clamp(1rem, 2vw, 3rem)' }}>
                 {/* Left Column - Survey Form */}
                 <div className="flex flex-col w-full h-full min-h-0">
