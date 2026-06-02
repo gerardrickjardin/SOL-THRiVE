@@ -948,24 +948,30 @@ const HopeChart = ({ answers, surveyQuestions, isFinal }) => {
 
             {isFinal && (
                 <div className={`absolute inset-0 bg-[#02050a]/60 backdrop-blur-sm z-30 flex items-center justify-center transition-opacity duration-1000 ${isMounted ? 'opacity-100 delay-[1000ms]' : 'opacity-0'}`}>
-                    <div className="flex gap-4">
+                    <div className="flex flex-col sm:flex-row gap-4">
                         <button onClick={() => window.print()} className="px-6 py-3 bg-[#0a1526] border-2 border-cyan-500/50 text-cyan-400 font-bold rounded-full hover:bg-cyan-500/10 hover:border-cyan-400 transition-all shadow-lg tracking-wide uppercase text-xs">
                             Export PDF Report
                         </button>
-                        <button onClick={() => window.location.reload()} className="px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-black rounded-full hover:from-cyan-500 hover:to-blue-500 transition-all shadow-lg tracking-wide uppercase text-xs border border-cyan-400/50">
-                            Retake Assessment
-                        </button>
+                        {onViewDashboard ? (
+                            <button onClick={onViewDashboard} className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-black rounded-full hover:from-purple-500 hover:to-pink-500 transition-all shadow-lg tracking-wide uppercase text-xs border border-purple-400/50">
+                                View Dashboard
+                            </button>
+                        ) : (
+                            <button onClick={() => window.location.reload()} className="px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-black rounded-full hover:from-cyan-500 hover:to-blue-500 transition-all shadow-lg tracking-wide uppercase text-xs border border-cyan-400/50">
+                                Retake Assessment
+                            </button>
+                        )}
                     </div>
                 </div>
             )}
         </div>
     );
 };
-const ResultsScreen = ({ answers, surveyQuestions }) => {
+const ResultsScreen = ({ answers, surveyQuestions, onViewDashboard }) => {
     return (
         <main className="flex-grow flex items-center justify-center bg-[#02050a] p-4 relative w-full overflow-hidden" style={{ height: 'calc(100vh - 80px)' }}>
             <div className="w-full h-full max-w-[1200px] flex justify-center items-center">
-                <HopeChart answers={answers} surveyQuestions={surveyQuestions} isFinal={true} />
+                <HopeChart answers={answers} surveyQuestions={surveyQuestions} isFinal={true} onViewDashboard={onViewDashboard} />
             </div>
         </main>
     );
@@ -1371,7 +1377,16 @@ const App = () => {
     }
 
     if (step === 'results') {
-        return <ResultsScreen answers={answers} surveyQuestions={surveyQuestions} />;
+        return (
+            <div className="relative">
+                {renderAuthWidget("absolute top-4 right-4 md:top-6 md:right-6 z-50")}
+                <ResultsScreen 
+                    answers={answers} 
+                    surveyQuestions={surveyQuestions} 
+                    onViewDashboard={(user && surveyHistory && surveyHistory.length > 0) ? () => setStep('dashboard') : null} 
+                />
+            </div>
+        );
     }
 
     const q = surveyQuestions[currentQIndex];
