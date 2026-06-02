@@ -971,6 +971,143 @@ const ResultsScreen = ({ answers, surveyQuestions }) => {
     );
 };
 
+    // --- DASHBOARD COMPONENT ---
+    const Dashboard = ({ user, history, onRetake }) => {
+        if (!history || history.length === 0) return null;
+        
+        const sortedHistory = [...history].sort((a, b) => new Date(a.date) - new Date(b.date));
+        const latest = sortedHistory[sortedHistory.length - 1];
+        
+        // Find lowest dimension from latest survey
+        const dimensionScores = {};
+        surveyQuestions.forEach(q => {
+            if (!dimensionScores[q.dimension]) dimensionScores[q.dimension] = { sum: 0, count: 0, space: q.space };
+            if (latest.answers[q.id]) {
+                dimensionScores[q.dimension].sum += parseFloat(latest.answers[q.id].value);
+                dimensionScores[q.dimension].count++;
+            }
+        });
+        
+        let lowestDimension = null;
+        let lowestScore = 6;
+        for (const dim in dimensionScores) {
+            const avg = dimensionScores[dim].sum / dimensionScores[dim].count;
+            if (avg < lowestScore) {
+                lowestScore = avg;
+                lowestDimension = { name: dim, score: avg, space: dimensionScores[dim].space };
+            }
+        }
+        
+        // Simple SVG Chart Config
+        const chartWidth = 600;
+        const chartHeight = 250;
+        const padding = 40;
+        
+        const minCapacity = Math.max(0, Math.min(...sortedHistory.map(h => h.capacity)) - 10);
+        const maxCapacity = Math.min(100, Math.max(...sortedHistory.map(h => h.capacity)) + 10);
+        
+        const getX = (index) => padding + (index * ((chartWidth - padding * 2) / Math.max(1, sortedHistory.length - 1)));
+        const getY = (val) => chartHeight - padding - ((val - minCapacity) / Math.max(1, maxCapacity - minCapacity)) * (chartHeight - padding * 2);
+
+        const points = sortedHistory.map((h, i) => `${getX(i)},${getY(h.capacity)}`).join(" ");
+
+        return (
+            <main className="flex-grow flex flex-col items-center justify-center p-4 md:p-6 relative" style={{ minHeight: 'calc(100vh - 80px)' }}>
+                <div className="bg-white max-w-4xl w-full p-8 md:p-12 rounded-[2rem] shadow-2xl border border-slate-100 relative overflow-hidden">
+                    <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-500 to-purple-500"></div>
+                    
+                    <div className="flex justify-between items-center mb-8 border-b border-slate-100 pb-6">
+                        <div>
+                            <h1 className="text-4xl font-black text-slate-800 tracking-tight">Your Progress Dashboard</h1>
+                            <p className="text-slate-500 mt-2">Welcome back, {user?.email}!</p>
+                        </div>
+                        <div className="text-center bg-blue-50 px-6 py-3 rounded-2xl border border-blue-100">
+                            <p className="text-xs font-bold text-blue-800 uppercase tracking-widest mb-1">Latest Capacity</p>
+                            <p className="text-3xl font-black text-blue-600">{latest.capacity.toFixed(1)}%</p>
+                        </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                        <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200">
+                            <h3 className="font-bold text-slate-700 mb-6 uppercase tracking-widest text-sm flex items-center gap-2">
+                                <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                                Growth Timeline
+                            </h3>
+                            <div className="w-full overflow-x-auto">
+                                <svg width="100%" height={chartHeight} viewBox={`0 0 ${chartWidth} ${chartHeight}`} className="overflow-visible">
+                                    {/* Grid lines */}
+                                    {[0, 0.25, 0.5, 0.75, 1].map(pct => {
+                                        const y = chartHeight - padding - (pct * (chartHeight - padding * 2));
+                                        return (
+                                            <g key={pct}>
+                                                <line x1={padding} y1={y} x2={chartWidth - padding} y2={y} stroke="#e2e8f0" strokeDasharray="4 4" />
+                                                <text x={padding - 10} y={y + 4} textAnchor="end" fontSize="12" fill="#64748b" fontWeight="bold">
+                                                    {(minCapacity + pct * (maxCapacity - minCapacity)).toFixed(0)}%
+                                                </text>
+                                            </g>
+                                        );
+                                    })}
+                                    {/* Line */}
+                                    <polyline points={points} fill="none" stroke="#3b82f6" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+                                    {/* Points */}
+                                    {sortedHistory.map((h, i) => (
+                                        <g key={i} className="group cursor-pointer">
+                                            <circle cx={getX(i)} cy={getY(h.capacity)} r="6" fill="#fff" stroke="#3b82f6" strokeWidth="3" className="transition-all duration-300 group-hover:r-8 group-hover:fill-blue-50" />
+                                            <text x={getX(i)} y={getY(h.capacity) - 15} textAnchor="middle" fontSize="12" fill="#334155" fontWeight="bold" opacity="0" className="group-hover:opacity-100 transition-opacity">
+                                                {h.capacity.toFixed(1)}%
+                                            </text>
+                                            <text x={getX(i)} y={chartHeight - 15} textAnchor="middle" fontSize="11" fill="#94a3b8" fontWeight="bold">
+                                                {new Date(h.date).toLocaleDateString(undefined, {month:'short', day:'numeric'})}
+                                            </text>
+                                        </g>
+                                    ))}
+                                </svg>
+                            </div>
+                        </div>
+
+                        <div className="flex flex-col gap-6">
+                            <div className="bg-emerald-50 rounded-2xl p-6 border border-emerald-100 flex-grow">
+                                <h3 className="font-bold text-emerald-800 mb-3 uppercase tracking-widest text-sm flex items-center gap-2">
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    Interpretation
+                                </h3>
+                                <p className="text-emerald-950 leading-relaxed">
+                                    You have completed <strong>{history.length}</strong> assessment(s). Your current HoPE Capacity indicates your overall stability. 
+                                    Monitoring this trend helps ensure you are continuously moving toward an optimized personal experience.
+                                </p>
+                            </div>
+
+                            {lowestDimension && (
+                                <div className="bg-rose-50 rounded-2xl p-6 border border-rose-100 flex-grow">
+                                    <h3 className="font-bold text-rose-800 mb-3 uppercase tracking-widest text-sm flex items-center gap-2">
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                                        Recommended Action
+                                    </h3>
+                                    <p className="text-rose-950 leading-relaxed mb-4">
+                                        Your lowest score was in <strong>{lowestDimension.name}</strong> ({lowestDimension.score.toFixed(1)}/5) within your {lowestDimension.space}. 
+                                    </p>
+                                    <a href="rebuilding-life-challenges.html" className="inline-block bg-white text-rose-700 font-bold px-5 py-2.5 rounded-full border border-rose-200 hover:bg-rose-100 transition-colors shadow-sm text-sm">
+                                        Explore Rebuilding Modules →
+                                    </a>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    <div className="flex justify-center mt-6">
+                        <button 
+                            onClick={onRetake}
+                            className="bg-slate-900 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-slate-800 hover:-translate-y-1 transition-all shadow-xl hover:shadow-[0_10px_25px_rgba(15,23,42,0.3)] inline-flex items-center gap-3"
+                        >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                            Retake Assessment
+                        </button>
+                    </div>
+                </div>
+            </main>
+        );
+    };
+
     // --- AUTHENTICATION MODAL COMPONENT ---
     const AuthModal = ({ onClose, onLogin }) => {
         const [isSignUp, setIsSignUp] = React.useState(false);
@@ -1045,10 +1182,11 @@ const ResultsScreen = ({ answers, surveyQuestions }) => {
     };
 
 const App = () => {
-    const [step, setStep] = useState('intro'); // 'intro', 'survey', 'results'
+    const [step, setStep] = useState('intro'); // 'intro', 'survey', 'results', 'dashboard'
     const [currentQIndex, setCurrentQIndex] = useState(0);
     const [answers, setAnswers] = useState({}); 
     const [currentSelection, setCurrentSelection] = useState(null);
+    const [surveyHistory, setSurveyHistory] = useState([]);
 
     // --- AUTHENTICATION & PROGRESS STATE ---
     const [user, setUser] = useState(null);
@@ -1069,7 +1207,12 @@ const App = () => {
                     const docSnap = await window.getDoc(docRef);
                     if (docSnap.exists()) {
                         const data = docSnap.data();
-                        if (data.answers) {
+                        
+                        if (data.history) {
+                            setSurveyHistory(data.history);
+                        }
+
+                        if (data.answers && Object.keys(data.answers).length > 0) {
                             setAnswers(data.answers);
                             const answeredCount = Object.keys(data.answers).length;
                             if (answeredCount > 0 && answeredCount < surveyQuestions.length) {
@@ -1078,6 +1221,9 @@ const App = () => {
                             } else if (answeredCount >= surveyQuestions.length) {
                                 setStep('results');
                             }
+                        } else if (data.history && data.history.length > 0) {
+                            // If they have history but no active survey, go to Dashboard
+                            setStep('dashboard');
                         }
                     }
                 } catch (error) {
@@ -1100,6 +1246,32 @@ const App = () => {
         }
     };
 
+    const finishSurvey = async (finalAnswers) => {
+        if (!user || !window.firebaseDb) return;
+        
+        const totalScore = surveyQuestions.reduce((sum, q) => sum + parseFloat(finalAnswers[q.id].value), 0);
+        const capacity = ((totalScore / (surveyQuestions.length * 5)) * 100);
+        
+        const newHistoryItem = {
+            date: new Date().toISOString(),
+            answers: finalAnswers,
+            capacity: capacity
+        };
+        
+        const updatedHistory = [...surveyHistory, newHistoryItem];
+        setSurveyHistory(updatedHistory);
+        
+        try {
+            await window.setDoc(window.doc(window.firebaseDb, "hope_surveys", user.uid), {
+                answers: {}, // Clear in-progress survey
+                history: updatedHistory,
+                updatedAt: new Date().toISOString()
+            }, { merge: true });
+        } catch (error) {
+            console.error("Error saving final survey:", error);
+        }
+    };
+
     const handleNextQ = () => {
         if (currentSelection === null) return;
         
@@ -1107,13 +1279,12 @@ const App = () => {
         const newAnswers = { ...answers, [qId]: currentSelection };
         setAnswers(newAnswers);
         
-        // Save progress to cloud
-        saveProgress(newAnswers);
-        
         if (currentQIndex < surveyQuestions.length - 1) {
+            saveProgress(newAnswers);
             setCurrentQIndex(currentQIndex + 1);
             setCurrentSelection(newAnswers[surveyQuestions[currentQIndex + 1].id] ?? null);
         } else {
+            finishSurvey(newAnswers);
             setStep('results');
         }
     };
@@ -1147,6 +1318,23 @@ const App = () => {
             {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} onLogin={() => {}} />}
         </div>
     );
+
+    if (step === 'dashboard') {
+        return (
+            <div className="relative">
+                {renderAuthWidget("absolute top-4 right-4 md:top-6 md:right-6")}
+                <Dashboard 
+                    user={user} 
+                    history={surveyHistory} 
+                    onRetake={() => {
+                        setAnswers({});
+                        setCurrentQIndex(0);
+                        setStep('intro');
+                    }} 
+                />
+            </div>
+        );
+    }
 
     if (step === 'intro') {
         return (
