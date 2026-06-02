@@ -970,11 +970,134 @@ const ResultsScreen = ({ answers, surveyQuestions }) => {
     );
 };
 
+    // --- AUTHENTICATION MODAL COMPONENT ---
+    const AuthModal = ({ onClose, onLogin }) => {
+        const [isSignUp, setIsSignUp] = React.useState(false);
+        const [email, setEmail] = React.useState("");
+        const [password, setPassword] = React.useState("");
+        const [error, setError] = React.useState("");
+        const [loading, setLoading] = React.useState(false);
+
+        const handleSubmit = async (e) => {
+            e.preventDefault();
+            if (!window.firebaseAuth) {
+                setError("Firebase is not configured yet. Please contact support.");
+                return;
+            }
+            setLoading(true);
+            setError("");
+            try {
+                if (isSignUp) {
+                    await window.createUserWithEmailAndPassword(window.firebaseAuth, email, password);
+                } else {
+                    await window.signInWithEmailAndPassword(window.firebaseAuth, email, password);
+                }
+                onLogin();
+                onClose();
+            } catch (err) {
+                console.error(err);
+                setError(err.message.replace("Firebase:", "").trim());
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        return (
+            <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+                <div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl relative">
+                    <button onClick={onClose} className="absolute top-5 right-5 text-slate-400 hover:text-slate-600 transition-colors">
+                        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
+                    
+                    <h2 className="text-3xl font-black text-slate-900 mb-2">{isSignUp ? "Create Account" : "Welcome Back"}</h2>
+                    <p className="text-slate-500 mb-6">{isSignUp ? "Sign up to save your HoPE Index progress." : "Log in to resume your HoPE Index."}</p>
+
+                    {error && <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm mb-4 border border-red-100">{error}</div>}
+
+                    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                        <div>
+                            <label className="block text-sm font-bold text-slate-700 mb-1">Email Address</label>
+                            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="w-full border-2 border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500 transition-colors" placeholder="you@example.com" />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-bold text-slate-700 mb-1">Password</label>
+                            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength="6" className="w-full border-2 border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500 transition-colors" placeholder="••••••••" />
+                        </div>
+                        <button type="submit" disabled={loading} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl mt-2 transition-all transform active:scale-95 flex justify-center items-center">
+                            {loading ? (
+                                <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                            ) : (
+                                isSignUp ? "Sign Up & Save Progress" : "Log In & Resume"
+                            )}
+                        </button>
+                    </form>
+
+                    <div className="mt-6 text-center text-sm text-slate-500 font-medium">
+                        {isSignUp ? "Already have an account? " : "Don't have an account? "}
+                        <button onClick={() => setIsSignUp(!isSignUp)} className="text-blue-600 font-bold hover:underline">
+                            {isSignUp ? "Log In" : "Sign Up"}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
 const App = () => {
     const [step, setStep] = useState('intro'); // 'intro', 'survey', 'results'
     const [currentQIndex, setCurrentQIndex] = useState(0);
     const [answers, setAnswers] = useState({}); 
     const [currentSelection, setCurrentSelection] = useState(null);
+
+    // --- AUTHENTICATION & PROGRESS STATE ---
+    const [user, setUser] = useState(null);
+    const [authLoading, setAuthLoading] = useState(true);
+    const [showAuthModal, setShowAuthModal] = useState(false);
+
+    useEffect(() => {
+        if (!window.firebaseAuth) {
+            setAuthLoading(false);
+            return;
+        }
+        const unsubscribe = window.onAuthStateChanged(window.firebaseAuth, async (currentUser) => {
+            setUser(currentUser);
+            setAuthLoading(false);
+            if (currentUser) {
+                try {
+                    const docRef = window.doc(window.firebaseDb, "hope_surveys", currentUser.uid);
+                    const docSnap = await window.getDoc(docRef);
+                    if (docSnap.exists()) {
+                        const data = docSnap.data();
+                        if (data.answers) {
+                            setAnswers(data.answers);
+                            const answeredCount = Object.keys(data.answers).length;
+                            if (answeredCount > 0 && answeredCount < surveyQuestions.length) {
+                                setCurrentQIndex(answeredCount);
+                                setStep('survey');
+                            } else if (answeredCount >= surveyQuestions.length) {
+                                setStep('results');
+                            }
+                        }
+                    }
+                } catch (error) {
+                    console.error("Error loading progress:", error);
+                }
+            }
+        });
+        return () => unsubscribe && unsubscribe();
+    }, []);
+
+    const saveProgress = async (newAnswers) => {
+        if (!user || !window.firebaseDb) return;
+        try {
+            await window.setDoc(window.doc(window.firebaseDb, "hope_surveys", user.uid), {
+                answers: newAnswers,
+                updatedAt: new Date().toISOString()
+            }, { merge: true });
+        } catch (error) {
+            console.error("Error saving progress:", error);
+        }
+    };
 
     const handleNextQ = () => {
         if (currentSelection === null) return;
@@ -982,6 +1105,9 @@ const App = () => {
         const qId = surveyQuestions[currentQIndex].id;
         const newAnswers = { ...answers, [qId]: currentSelection };
         setAnswers(newAnswers);
+        
+        // Save progress to cloud
+        saveProgress(newAnswers);
         
         if (currentQIndex < surveyQuestions.length - 1) {
             setCurrentQIndex(currentQIndex + 1);
@@ -1000,9 +1126,32 @@ const App = () => {
         }
     };
 
+    };
+
+    // --- FLOATING AUTH WIDGET ---
+    const renderAuthWidget = () => (
+        <div className="absolute top-4 right-4 md:top-8 md:right-8 z-50">
+            {authLoading ? (
+                <div className="w-8 h-8 rounded-full border-2 border-blue-500 border-t-transparent animate-spin shadow-lg"></div>
+            ) : user ? (
+                <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-full border border-slate-200 shadow-md">
+                    <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                    <span className="text-slate-600 font-bold text-sm hidden md:block">{user.email}</span>
+                    <button onClick={() => window.signOut(window.firebaseAuth).then(() => { setAnswers({}); setStep('intro'); setCurrentQIndex(0); })} className="text-slate-400 hover:text-slate-700 font-bold text-sm transition-colors ml-2">Log Out</button>
+                </div>
+            ) : (
+                <button onClick={() => setShowAuthModal(true)} className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold px-6 py-2.5 rounded-full transition-all transform hover:scale-105 shadow-lg text-sm">
+                    Log in to track progress
+                </button>
+            )}
+            {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} onLogin={() => {}} />}
+        </div>
+    );
+
     if (step === 'intro') {
         return (
-            <main className="flex-grow flex flex-col items-center justify-center p-6" style={{ height: 'calc(100vh - 80px)' }}>
+            <main className="flex-grow flex flex-col items-center justify-center p-6 relative" style={{ height: 'calc(100vh - 80px)' }}>
+                {renderAuthWidget()}
                 <div className="bg-white max-w-3xl w-full p-8 md:p-12 rounded-[2rem] shadow-2xl border border-slate-100 text-center relative overflow-hidden">
                     <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-emerald-500 via-blue-500 to-purple-500"></div>
                     <h1 className="text-5xl font-black text-slate-800 mb-6 tracking-tight">The HoPE Index</h1>
@@ -1038,7 +1187,8 @@ const App = () => {
     const progress = ((currentQIndex + 1) / surveyQuestions.length) * 100;
 
     return (
-        <main className="flex-grow w-full max-w-[1800px] mx-auto p-4 md:p-6 flex flex-col overflow-hidden" style={{ height: 'calc(100vh - 80px)' }}>
+        <main className="flex-grow w-full max-w-[1800px] mx-auto p-4 md:p-6 flex flex-col overflow-hidden relative" style={{ height: 'calc(100vh - 80px)' }}>
+            {renderAuthWidget()}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 flex-grow items-stretch overflow-hidden h-full">
                 
                 {/* Left Panel - Survey Form (50%) */}
