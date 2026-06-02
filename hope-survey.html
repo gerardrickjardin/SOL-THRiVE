@@ -133,7 +133,7 @@
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900 font-sans min-h-screen flex flex-col relative overflow-x-hidden">
+<body class="bg-slate-50 text-slate-900 font-sans h-screen flex flex-col relative overflow-hidden">
     
     <!-- THRiVE Global Header -->
     <header class="header print:hidden z-50 relative">
@@ -173,7 +173,8 @@ const surveyQuestions = [
         id: "ops_home",
         space: "Outer Physical Space (OPS)",
         dimension: "Dimension 1: Places",
-        title: "🏠 1.1 Home Experience",
+        title: "🏠 1.1 Home",
+        subtitle: "the physical structure where you sleep, eat, and spend most of your time",
         concept: "How would you rate the physical safety, comfort, and peace of the place where you live?",
         anchors: {
             "5.0": "5 Stars (Sanctuary): My living space is a wonderfully quiet, clean, and safe sanctuary where I can fully rest and be happy.",
@@ -185,8 +186,8 @@ const surveyQuestions = [
         id: "ops_neighborhood",
         space: "Outer Physical Space (OPS)",
         dimension: "Dimension 1: Places",
-        title: "🏘️ 1.2 Neighborhood Experience",
-        concept: "How would you rate the safety, cleanliness, and overall peace of the blocks, streets, and parks near your home?",
+        title: "🏘️ 1.2 Neighborhood",
+        subtitle: "the safety, cleanliness, and overall peace of the blocks, streets, and parks near your home",
         anchors: {
             "5.0": "5 Stars (Sanctuary): My neighborhood is completely safe, beautiful, and calm, making me feel comfortable outside at any hour.",
             "3.0": "3 Stars (Stable): My neighborhood is generally safe during the day, but I must keep my guard up after dark.",
@@ -197,8 +198,8 @@ const surveyQuestions = [
         id: "ops_thirdspaces",
         space: "Outer Physical Space (OPS)",
         dimension: "Dimension 1: Places",
-        title: "🏢 1.3 Third Spaces Experience",
-        concept: "How would you rate the buildings and public places you go to every day\u2014like your school, workspace, or community center?",
+        title: "🏢 1.3 Third Spaces",
+        subtitle: "the buildings and public places you go to every day, like your school, workspace, or community center",
         anchors: {
             "5.0": "5 Stars (Sanctuary): The public spaces I frequent are bright, welcoming, and perfectly designed to help me succeed.",
             "3.0": "3 Stars (Stable): My daily public spaces are functional and safe, but they feel sterile and offer no real comfort.",
@@ -209,8 +210,8 @@ const surveyQuestions = [
         id: "ops_functionality",
         space: "Outer Physical Space (OPS)",
         dimension: "Dimension 2: Body",
-        title: "💪 2.1 Functionality Experience",
-        concept: "How would you rate your body's physical strength, health, and capability to do the things you want?",
+        title: "💪 2.1 Functionality",
+        subtitle: "your body's physical strength, health, and capability to do the things you want",
         anchors: {
             "5.0": "5 Stars (Fit): I am in peak physical health with total freedom to move, play, and work without any pain or limits.",
             "3.0": "3 Stars (Functional): My body handles daily tasks fine, but minor aches or limits prevent me from doing hard physical work.",
@@ -221,8 +222,8 @@ const surveyQuestions = [
         id: "ops_energy",
         space: "Outer Physical Space (OPS)",
         dimension: "Dimension 2: Body",
-        title: "⚡ 2.2 Energy & Vitality Experience",
-        concept: "How would you rate your daily energy levels and how rested you feel when you wake up?",
+        title: "⚡ 2.2 Energy & Vitality",
+        subtitle: "your daily energy levels and how rested you feel when you wake up",
         anchors: {
             "5.0": "5 Stars (Fire): I wake up fully refreshed and maintain sharp, clean energy throughout my entire day without crashing.",
             "3.0": "3 Stars (Fueling): I have enough energy to get through my duties, but I frequently rely on caffeine or sheer willpower.",
@@ -233,8 +234,8 @@ const surveyQuestions = [
         id: "ops_bodyimage",
         space: "Outer Physical Space (OPS)",
         dimension: "Dimension 2: Body",
-        title: "🪞 2.3 Body Image Experience",
-        concept: "How would you rate your relationship with your physical appearance and body image?",
+        title: "🪞 2.3 Body Image",
+        subtitle: "your relationship with your physical appearance and body image",
         anchors: {
             "5.0": "5 Stars (Flawless): I feel deeply proud, comfortable, and flawlessly confident in my own skin.",
             "3.0": "3 Stars (Fine): I have neutral feelings about my appearance, neither hating it nor feeling particularly proud.",
@@ -245,8 +246,8 @@ const surveyQuestions = [
         id: "ops_finances",
         space: "Outer Physical Space (OPS)",
         dimension: "Dimension 3: Resources",
-        title: "💰 3.1 Finances Experience",
-        concept: "How would you rate your financial security and the extra money you have left over for fun or savings?",
+        title: "💰 3.1 Finances",
+        subtitle: "your financial security and the extra money you have left over for fun or savings",
         anchors: {
             "5.0": "5 Stars (Prosperous): My bills are paid effortlessly, leaving me with complete financial abundance for savings and fun.",
             "3.0": "3 Stars (Paying): My basic needs are met, but I live paycheck-to-paycheck with no extra buffer for emergencies.",
@@ -257,8 +258,8 @@ const surveyQuestions = [
         id: "ops_technology",
         space: "Outer Physical Space (OPS)",
         dimension: "Dimension 3: Resources",
-        title: "💻 3.2 Technology Experience",
-        concept: "How would you rate the speed, reliability, and quality of your phone, computer, and internet access?",
+        title: "💻 3.2 Technology",
+        subtitle: "the speed, reliability, and quality of your phone, computer, and internet access",
         anchors: {
             "5.0": "5 Stars (Brilliant): I have seamless internet and perfect, fully updated devices that let me work or create with zero delays.",
             "3.0": "3 Stars (Basic): My connection or devices are slow and outdated, getting the job done but in an annoying way.",
@@ -269,8 +270,8 @@ const surveyQuestions = [
         id: "ops_essentials",
         space: "Outer Physical Space (OPS)",
         dimension: "Dimension 3: Resources",
-        title: "🚗 3.3 Essentials Experience",
-        concept: "How would you rate the reliability of your daily logistics, like transportation, utilities, and working home appliances?",
+        title: "🚗 3.3 Essentials",
+        subtitle: "the reliability of your daily logistics, like transportation, utilities, and working home appliances",
         anchors: {
             "5.0": "5 Stars (Breeze): My daily logistics run effortlessly with outstanding transportation and perfect home utilities.",
             "3.0": "3 Stars (Basic): I get by on basic, often unreliable transportation and utilities that require exhausting daily effort.",
@@ -282,7 +283,7 @@ const surveyQuestions = [
         space: "Inner Relational Space (IRS)",
         dimension: "Dimension 4: Self",
         title: "🧠 4.1 Mindset",
-        concept: "How would you rate your mental resilience and ability to stay positive when things go wrong?",
+        subtitle: "your mental resilience and ability to stay positive when things go wrong",
         anchors: {
             "5.0": "5 Stars (Peace): I have an unshakeable positive mindset that allows me to view any problem as an exciting chance to grow.",
             "3.0": "3 Stars (Balance): I manage to keep going during tough times, but I often struggle with worry and negative thoughts.",
@@ -294,7 +295,7 @@ const surveyQuestions = [
         space: "Inner Relational Space (IRS)",
         dimension: "Dimension 4: Self",
         title: "👤 4.2 Identity",
-        concept: "How would you rate your self-worth, self-respect, and the pride you have in your character?",
+        subtitle: "your self-worth, self-respect, and the pride you have in your character",
         anchors: {
             "5.0": "5 Stars (Shining): I feel a deep, solid pride in who I am and have unshakeable trust in my ultimate potential.",
             "3.0": "3 Stars (Shadow): I have a basic sense of who I am, but my confidence is fragile and easily shaken by criticism.",
@@ -306,7 +307,7 @@ const surveyQuestions = [
         space: "Inner Relational Space (IRS)",
         dimension: "Dimension 4: Self",
         title: "🎯 4.3 Goals",
-        concept: "How would you rate your clarity, drive, and progress toward achieving your dreams and plans?",
+        subtitle: "your clarity, drive, and progress toward achieving your dreams and plans",
         anchors: {
             "5.0": "5 Stars (Driven): I am actively executing a crystal-clear, inspiring roadmap toward major goals that fill me with excitement.",
             "3.0": "3 Stars (Doing): I have vague plans for my future but lack a clear roadmap or the daily discipline to build them.",
@@ -318,7 +319,7 @@ const surveyQuestions = [
         space: "Inner Relational Space (IRS)",
         dimension: "Dimension 5: Others",
         title: "🫂 5.1 Inner Circle",
-        concept: "How would you rate the safety, support, and love in your closest family and friend relationships?",
+        subtitle: "the safety, support, and love in your closest family and friend relationships",
         anchors: {
             "5.0": "5 Stars (Dream Team): I experience unconditional love and have a trusted circle of partners who always have my back.",
             "3.0": "3 Stars (Backing): I have people who care about me, but our relationships remain surface-level or emotionally distant.",
@@ -330,7 +331,7 @@ const surveyQuestions = [
         space: "Inner Relational Space (IRS)",
         dimension: "Dimension 5: Others",
         title: "👥 5.2 Social Network",
-        concept: "How would you rate your connection, safety, and sense of belonging within your school, workspace, or peer groups?",
+        subtitle: "your connection, safety, and sense of belonging within your school, workspace, or peer groups",
         anchors: {
             "5.0": "5 Stars (Loved): I feel highly respected, celebrated, and deeply accepted as a valued member of my peer group.",
             "3.0": "3 Stars (Liked): I fit in well enough to avoid trouble, but I don't feel any deep or meaningful connection to my peers.",
@@ -341,8 +342,8 @@ const surveyQuestions = [
         id: "irs_community",
         space: "Inner Relational Space (IRS)",
         dimension: "Dimension 5: Others",
-        title: "🤝 5.3 Community Experience",
-        concept: "How would you rate your everyday public interactions with neighbors, strangers on the street, or online communities?",
+        title: "🤝 5.3 Community",
+        subtitle: "your everyday public interactions with neighbors, strangers on the street, or online communities",
         anchors: {
             "5.0": "5 Stars (Wonderful): Public spaces and online forums feel incredibly safe, kind, and collaborative to me.",
             "3.0": "3 Stars (Welcoming): My public interactions are generally polite but remain cold, distant, and purely transactional.",
@@ -354,7 +355,7 @@ const surveyQuestions = [
         space: "Inner Relational Space (IRS)",
         dimension: "Dimension 6: Life",
         title: "🎨 6.1 Hobbies",
-        concept: "How would you rate your playtime and access to activities, art, sports, or hobbies that bring you pure joy?",
+        subtitle: "your playtime and access to activities, art, sports, or hobbies that bring you pure joy",
         anchors: {
             "5.0": "5 Stars (Blissful): I consistently spend deeply satisfying time losing myself in hobbies that fully recharge my spirit.",
             "3.0": "3 Stars (Busy): I occasionally do things I enjoy, but my free time is rushed, irregular, and easily distracted.",
@@ -366,7 +367,7 @@ const surveyQuestions = [
         space: "Inner Relational Space (IRS)",
         dimension: "Dimension 6: Life",
         title: "🔄 6.2 Habits",
-        concept: "How would you rate your daily habits (like nutrition, exercise, and sleep) and how well they support you?",
+        subtitle: "your daily habits, like nutrition, exercise, and sleep, and how well they support you",
         anchors: {
             "5.0": "5 Stars (Champion): I maintain perfectly aligned daily routines that keep my body and mind incredibly strong and clear.",
             "3.0": "3 Stars (Consistent): My habits are mostly consistent, but I easily slide into unsupportive behaviors when stressed.",
@@ -378,7 +379,7 @@ const surveyQuestions = [
         space: "Inner Relational Space (IRS)",
         dimension: "Dimension 6: Life",
         title: "📋 6.3 Have-Tos",
-        concept: "How would you rate your ability to manage daily duties (homework, chores, bills, childcare) with confidence and ease?",
+        subtitle: "your ability to manage daily duties, like homework, chores, bills, and childcare, with confidence and ease",
         anchors: {
             "5.0": "5 Stars (Conquering): I run my schedule effortlessly and finish all my duties with total confidence and zero friction.",
             "3.0": "3 Stars (Coping): I manage to cope and turn things in on time, but it is always a highly stressful, last-minute scramble.",
@@ -389,8 +390,8 @@ const surveyQuestions = [
         id: "flex_gas",
         space: "Contextual Layering",
         dimension: "Flex Slot 1: Gang Affinity Score (GAS)",
-        title: "Flex 1: Gang Affinity Score (GAS)",
-        concept: "How would you rate your relationship to gangs and street hustle?",
+        title: "Flex 1: Gang Affinity",
+        subtitle: "your relationship to gangs and street hustle",
         anchors: {
             "5.0": "5 Stars (Triumphant): I have complete mental and physical freedom from gang involvement and follow an independent path.",
             "3.0": "3 Stars (Torn): I am not active in a gang, but I must constantly navigate their influence within my social circle or family.",
@@ -401,8 +402,8 @@ const surveyQuestions = [
         id: "flex_pss",
         space: "Contextual Layering",
         dimension: "Flex Slot 2: Psychological Safety Score (PSS)",
-        title: "Flex 2: Psychological Safety Score (PSS)",
-        concept: "How would you rate your emotional and physical safety?",
+        title: "Flex 2: Psychological Safety",
+        subtitle: "your emotional and physical safety in your daily life",
         anchors: {
             "5.0": "5 Stars (Fearless): I have absolute peace and feel completely safe to explore, travel, and plan without looking over my shoulder.",
             "3.0": "3 Stars (Free-ish): I feel safe during my normal routine, but experience high anxiety if I change my path or go out after dark.",
@@ -411,85 +412,255 @@ const surveyQuestions = [
     }
 ];
 
-const HopeSlider = ({ currentSelection, setCurrentSelection, currentQ, onNext, hoverValue, setHoverValue }) => {
-    const val = currentSelection !== null ? currentSelection : 0.0;
 
-    const handleStarClick = (rating) => {
-        setCurrentSelection(rating);
-        // Add a tiny delay before advancing so they can see the star fill up
-        setTimeout(() => onNext(rating), 300);
+const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ }) => {
+    const [hoverEmoji, setHoverEmoji] = window.React.useState(null);
+    const [burstKey, setBurstKey] = window.React.useState(0);
+    const [burstValue, setBurstValue] = window.React.useState(null);
+    
+    // Pro Slider State
+    const [isDragging, setIsDragging] = window.React.useState(false);
+    
+    // Clamp the initial value to 1.0 minimum so the slider thumb never flies off-screen
+    const safeSelection = currentSelection !== null && currentSelection >= 1.0 ? currentSelection : 1.0;
+    const [rawValue, setRawValue] = window.React.useState(safeSelection);
+
+    // Sync rawValue with safeSelection when not dragging
+    window.React.useEffect(() => {
+        if (!isDragging) {
+            setRawValue(currentSelection !== null && currentSelection >= 1.0 ? currentSelection : 1.0);
+        }
+    }, [currentSelection, isDragging]);
+
+    const displayValue = rawValue;
+    const snappedValue = Math.round(displayValue * 2) / 2;
+
+    const triggerBurst = (rating) => {
+        setBurstValue(rating);
+        setBurstKey(prev => prev + 1); // Force React to remount the animation spans
+        setTimeout(() => setBurstValue(null), 800);
     };
 
-    const displayValue = hoverValue !== null ? hoverValue : val;
+    const handleEmojiClick = (rating) => {
+        setIsDragging(false);
+        onSelect(rating);
+        setRawValue(rating);
+        triggerBurst(rating);
+    };
+
+    const handleSliderChange = (e) => {
+        const v = parseFloat(e.target.value);
+        setRawValue(v);
+        const snapped = Math.round(v * 2) / 2;
+        if (snapped !== currentSelection) {
+            onSelect(snapped);
+        }
+    };
+
+    const handleDragStart = () => setIsDragging(true);
+    
+    const handleDragEnd = () => {
+        setIsDragging(false);
+        const snapped = Math.round(rawValue * 2) / 2;
+        setRawValue(snapped);
+        onSelect(snapped);
+        triggerBurst(snapped);
+    };
+
+    const getAnchorData = (key) => {
+        const fullText = anchors && anchors[key];
+        if (!fullText) return { title: '', desc: '' };
+        const match = fullText.match(/\(([^)]+)\)/);
+        const title = match ? match[1] : fullText.split(':')[0].replace(/\d\s*Stars?/, '').trim();
+        const desc = fullText.includes(':') ? fullText.split(':')[1].trim() : fullText;
+        return { title: title.toLowerCase(), desc };
+    };
+
+    const shitholeData = getAnchorData("1.0");
+    const stableData = getAnchorData("3.0");
+    const sanctuaryData = getAnchorData("5.0");
+
+    const emojis = {
+        "1.0": ["😢", "👎", "😟"],
+        "3.0": ["😐", "👍", "🙂"],
+        "5.0": ["👏", "💖", "🎉"]
+    };
+
+    const getGlowStyles = (zone) => {
+        if (zone === 1) {
+            return snappedValue >= 1.0 && snappedValue <= 2.0 ? "opacity-100 border-transparent" : "opacity-50 grayscale border-transparent";
+        }
+        if (zone === 3) {
+            return snappedValue >= 2.5 && snappedValue <= 3.5 ? "opacity-100 border-transparent" : "opacity-50 grayscale border-transparent";
+        }
+        if (zone === 5) {
+            return snappedValue >= 4.0 && snappedValue <= 5.0 ? "opacity-100 border-transparent" : "opacity-50 grayscale border-transparent";
+        }
+        return "";
+    };
+    
+    const getZoneColor = (zone) => {
+        if (zone === 1) return "text-blue-600";
+        if (zone === 3) return "text-slate-500";
+        if (zone === 5) return "text-purple-600";
+        return "text-slate-500";
+    }
+
+    const renderEmoji = (zone, index, emojiStr, valueToSelect) => {
+        const isHovered = hoverEmoji === `${zone}-${index}`;
+        const isSelected = snappedValue === valueToSelect;
+        const isBursting = burstValue === valueToSelect;
+        
+        let scaleClass = "scale-100 translate-y-0";
+        let ringClass = "";
+        
+        if (isHovered) {
+            scaleClass = "scale-150 -translate-y-2 z-30 brightness-125";
+        } else if (hoverEmoji) {
+            const [hZone, hIdx] = hoverEmoji.split('-');
+            if (parseInt(hZone) === zone && Math.abs(parseInt(hIdx) - index) === 1) {
+                scaleClass = "scale-125 -translate-y-1 z-20 brightness-110";
+            }
+        } else if (isSelected) {
+             scaleClass = "scale-125 z-20";
+        }
+        
+        if (isSelected) {
+             ringClass = zone === 1 ? "ring-2 ring-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.8)]" : 
+                         zone === 3 ? "ring-2 ring-slate-400 shadow-[0_0_15px_rgba(148,163,184,0.8)]" : 
+                         "ring-2 ring-purple-500 shadow-[0_0_15px_rgba(168,85,247,0.8)]";
+        }
+
+        return (
+            <div 
+                className={`relative rounded-full p-2 md:p-3 transition-all duration-300 ease-out cursor-pointer ${scaleClass} ${ringClass}`}
+                onMouseEnter={() => setHoverEmoji(`${zone}-${index}`)}
+                onMouseLeave={() => setHoverEmoji(null)}
+                onClick={() => handleEmojiClick(valueToSelect)}
+            >
+                <span className="text-2xl md:text-4xl drop-shadow-lg filter relative z-10">{emojiStr}</span>
+                {isBursting && (
+                    <div key={burstKey} className="absolute top-1/2 left-1/2 w-0 h-0 z-40 pointer-events-none">
+                        {[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15].map(i => (
+                            <span key={i} className={`absolute drop-shadow-md ${i % 3 === 0 ? 'text-3xl' : i % 2 === 0 ? 'text-2xl' : 'text-xl'}`} style={{ animation: `burst${i} ${0.6 + (i*0.02)}s cubic-bezier(0.25, 1, 0.5, 1) forwards` }}>{emojiStr}</span>
+                        ))}
+                    </div>
+                )}
+            </div>
+        );
+    };
+
+    const thumbBgColor = snappedValue > 3 ? '#a855f7' : snappedValue < 3 ? '#3b82f6' : '#64748b';
 
     return (
-        <div className="hope-drag-container">
-            <div 
-                className="flex justify-center items-center gap-2 md:gap-4 my-6"
-                onMouseLeave={() => setHoverValue(null)}
-            >
-                {[1, 2, 3, 4, 5].map(starIndex => {
-                    const fillValue = displayValue - starIndex + 1; // 1 if full, 0.5 if half, <=0 if empty
-                    return (
-                        <div key={starIndex} className="relative w-12 h-12 md:w-16 md:h-16 cursor-pointer touch-manipulation transform transition-transform hover:scale-110 active:scale-95">
-                            {/* Left Half Hitbox (0.5) */}
-                            <div 
-                                className="absolute left-0 top-0 w-1/2 h-full z-10"
-                                onClick={() => handleStarClick(starIndex - 0.5)}
-                                onMouseEnter={() => setHoverValue(starIndex - 0.5)}
-                                onTouchStart={() => setHoverValue(starIndex - 0.5)}
-                            />
-                            {/* Right Half Hitbox (1.0) */}
-                            <div 
-                                className="absolute right-0 top-0 w-1/2 h-full z-10"
-                                onClick={() => handleStarClick(starIndex)}
-                                onMouseEnter={() => setHoverValue(starIndex)}
-                                onTouchStart={() => setHoverValue(starIndex)}
-                            />
-                            
-                            {/* Empty Star Base */}
-                            <svg viewBox="0 0 24 24" className="w-full h-full text-slate-200 transition-colors pointer-events-none">
-                                <path fill="currentColor" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                            </svg>
-                            
-                            {/* Filled Star Overlay */}
-                            {fillValue > 0 && (
-                                <svg 
-                                    viewBox="0 0 24 24" 
-                                    className="absolute top-0 left-0 w-full h-full text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.6)] pointer-events-none"
-                                    style={{ clipPath: fillValue === 0.5 ? 'inset(0 50% 0 0)' : 'none' }}
-                                >
-                                    <path fill="currentColor" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                                </svg>
-                            )}
-                        </div>
-                    );
-                })}
+        <div className="w-full flex flex-col gap-6 bg-white p-8 md:p-10 rounded-3xl mb-6 shadow-xl border border-slate-200 relative">
+            <style dangerouslySetInnerHTML={{__html: `
+                @keyframes burst1 { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; } 100% { transform: translate(-70px, -140px) scale(1.5) rotate(-45deg); opacity: 0; } }
+                @keyframes burst2 { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; } 100% { transform: translate(-30px, -160px) scale(1.8) rotate(-20deg); opacity: 0; } }
+                @keyframes burst3 { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; } 100% { transform: translate(0px, -180px) scale(2.0) rotate(0deg); opacity: 0; } }
+                @keyframes burst4 { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; } 100% { transform: translate(30px, -160px) scale(1.8) rotate(20deg); opacity: 0; } }
+                @keyframes burst5 { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; } 100% { transform: translate(70px, -140px) scale(1.5) rotate(45deg); opacity: 0; } }
+                @keyframes burst6 { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; } 100% { transform: translate(-100px, -90px) scale(1.2) rotate(-60deg); opacity: 0; } }
+                @keyframes burst7 { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; } 100% { transform: translate(-50px, -110px) scale(1.4) rotate(-30deg); opacity: 0; } }
+                @keyframes burst8 { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; } 100% { transform: translate(50px, -110px) scale(1.4) rotate(30deg); opacity: 0; } }
+                @keyframes burst9 { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; } 100% { transform: translate(100px, -90px) scale(1.2) rotate(60deg); opacity: 0; } }
+                @keyframes burst10 { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; } 100% { transform: translate(-120px, -40px) scale(1.0) rotate(-90deg); opacity: 0; } }
+                @keyframes burst11 { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; } 100% { transform: translate(120px, -40px) scale(1.0) rotate(90deg); opacity: 0; } }
+                @keyframes burst12 { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; } 100% { transform: translate(-30px, -60px) scale(1.1) rotate(-10deg); opacity: 0; } }
+                @keyframes burst13 { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; } 100% { transform: translate(30px, -60px) scale(1.1) rotate(10deg); opacity: 0; } }
+                @keyframes burst14 { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; } 100% { transform: translate(-80px, -10px) scale(0.9) rotate(-120deg); opacity: 0; } }
+                @keyframes burst15 { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; } 100% { transform: translate(80px, -10px) scale(0.9) rotate(120deg); opacity: 0; } }
+            `}} />
+
+            <h3 className="text-emerald-700 text-2xl font-bold text-center mb-4 relative z-10">
+                "My {currentQ.title.replace(/[\u{1F300}-\u{1F9FF}]|\d\.\d/gu, '').trim().toLowerCase()} experience..."
+            </h3>
+            
+            <div className="grid grid-cols-3 gap-6 md:gap-8 relative z-10">
+                {/* 1.0 Zone */}
+                <div className="flex flex-col items-center text-center gap-4 relative h-full">
+                    <div className="flex-1 flex items-start justify-center min-h-[110px] mt-2">
+                        <p className={`text-[12px] md:text-sm leading-relaxed max-w-[200px] transition-colors duration-300 ${snappedValue >= 1.0 && snappedValue <= 2.0 ? "text-blue-700 font-bold" : "text-slate-500 font-medium"}`}>
+                            "...{shitholeData.desc.replace(/My .*? is /, '')}"
+                        </p>
+                    </div>
+                    <div className={`flex items-center justify-center gap-1 md:gap-2 bg-blue-50 border border-blue-100 rounded-full px-2 md:px-4 py-2 transition-all duration-500 w-full shrink-0 ${getGlowStyles(1)}`}>
+                        {renderEmoji(1, 0, emojis["1.0"][0], 1.0)}
+                        {renderEmoji(1, 1, emojis["1.0"][1], 1.5)}
+                        {renderEmoji(1, 2, emojis["1.0"][2], 2.0)}
+                    </div>
+                    <span className={`text-sm tracking-widest ${getZoneColor(1)}`} style={{ fontFamily: '"Sofia Pro Soft", "Sofia Pro", sans-serif', fontWeight: 600 }}>[{shitholeData.title}]</span>
+                </div>
+
+                {/* 3.0 Zone */}
+                <div className="flex flex-col items-center text-center gap-4 relative h-full">
+                    <div className="flex-1 flex items-start justify-center min-h-[110px] mt-2">
+                        <p className={`text-[12px] md:text-sm leading-relaxed max-w-[200px] transition-colors duration-300 ${snappedValue >= 2.5 && snappedValue <= 3.5 ? "text-slate-800 font-bold" : "text-slate-500 font-medium"}`}>
+                            "...{stableData.desc.replace(/My .*? is /, '')}"
+                        </p>
+                    </div>
+                    <div className={`flex items-center justify-center gap-1 md:gap-2 bg-slate-100 border border-slate-200 rounded-full px-2 md:px-4 py-2 transition-all duration-500 w-full shrink-0 ${getGlowStyles(3)}`}>
+                        {renderEmoji(3, 0, emojis["3.0"][0], 2.5)}
+                        {renderEmoji(3, 1, emojis["3.0"][1], 3.0)}
+                        {renderEmoji(3, 2, emojis["3.0"][2], 3.5)}
+                    </div>
+                    <span className={`text-sm tracking-widest ${getZoneColor(3)}`} style={{ fontFamily: '"Sofia Pro Soft", "Sofia Pro", sans-serif', fontWeight: 600 }}>[{stableData.title}]</span>
+                </div>
+
+                {/* 5.0 Zone */}
+                <div className="flex flex-col items-center text-center gap-4 relative h-full">
+                    <div className="flex-1 flex items-start justify-center min-h-[110px] mt-2">
+                        <p className={`text-[12px] md:text-sm leading-relaxed max-w-[200px] transition-colors duration-300 ${snappedValue >= 4.0 && snappedValue <= 5.0 ? "text-purple-700 font-bold" : "text-slate-500 font-medium"}`}>
+                            "...{sanctuaryData.desc.replace(/My .*? is /, '')}"
+                        </p>
+                    </div>
+                    <div className={`flex items-center justify-center gap-1 md:gap-2 bg-purple-50 border border-purple-100 rounded-full px-2 md:px-4 py-2 transition-all duration-500 w-full shrink-0 ${getGlowStyles(5)}`}>
+                        {renderEmoji(5, 0, emojis["5.0"][0], 4.0)}
+                        {renderEmoji(5, 1, emojis["5.0"][1], 4.5)}
+                        {renderEmoji(5, 2, emojis["5.0"][2], 5.0)}
+                    </div>
+                    <span className={`text-sm tracking-widest ${getZoneColor(5)}`} style={{ fontFamily: '"Sofia Pro Soft", "Sofia Pro", sans-serif', fontWeight: 600 }}>[{sanctuaryData.title}]</span>
+                </div>
             </div>
 
-
-
-            {/* BOTTOM: Static Anchors */}
-            <div className="grid grid-cols-3 gap-2 md:gap-4 mt-8 w-full items-start px-2 pointer-events-none">
-                {["1.0", "3.0", "5.0"].map((key) => {
-                    const fullText = currentQ.anchors && currentQ.anchors[key];
-                    if (!fullText) return <div key={key}></div>;
+            {/* Range Slider */}
+            <div className="mt-10 mb-2 px-2 w-full relative z-10">
+                <div className="relative w-full h-12">
                     
-                    const match = fullText.match(/\(([^)]+)\)/);
-                    const mainWord = match ? match[1] : fullText.split(':')[0].replace(/\d\s*Stars?/, '').trim();
-                    const descriptionText = fullText.includes(':') ? fullText.split(':')[1].trim() : fullText;
+                    {/* The Track */}
+                    <div className="absolute w-full h-1.5 bg-gradient-to-r from-blue-600 via-slate-500 to-purple-600 rounded-lg pointer-events-none z-10" style={{ top: '50%', marginTop: '-3px' }}></div>
                     
-                    return (
-                        <div key={key} className="flex flex-col items-center w-full">
-                            <div className="px-3 py-1.5 md:px-5 md:py-2 mb-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full text-[10px] md:text-xs font-black tracking-widest uppercase text-center shadow-sm">
-                                {mainWord}
-                            </div>
-                            <div className="text-[10px] md:text-xs text-slate-500 font-medium italic leading-relaxed text-center">
-                                "{descriptionText}"
-                            </div>
-                        </div>
-                    );
-                })}
+                    {/* The Native Invisible Slider */}
+                    <input 
+                        type="range" 
+                        min="1" 
+                        max="5" 
+                        step="0.01" 
+                        value={displayValue}
+                        onChange={handleSliderChange}
+                        onMouseDown={handleDragStart}
+                        onMouseUp={handleDragEnd}
+                        onTouchStart={handleDragStart}
+                        onTouchEnd={handleDragEnd}
+                        className="absolute w-full h-full opacity-0 cursor-pointer z-30"
+                        style={{ top: 0, left: 0 }}
+                    />
+                    
+                    {/* The Gliding Thumb Overlay */}
+                    <div 
+                        className={`absolute w-9 h-9 rounded-full border-[3px] border-white flex items-center justify-center text-white text-[12px] font-bold pointer-events-none z-20 ${isDragging ? '' : 'transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)]'}`}
+                        style={{ 
+                            top: '50%',
+                            marginTop: '-18px',
+                            left: `calc(${((displayValue - 1) / 4) * 100}% - ${((displayValue - 1) / 4) * 36}px)`,
+                            backgroundColor: thumbBgColor,
+                            boxShadow: `0 0 20px ${thumbBgColor}`,
+                            transform: isDragging ? 'scale(1.15)' : 'scale(1)'
+                        }}
+                    >
+                        {snappedValue.toFixed(1)}
+                    </div>
+                </div>
             </div>
         </div>
     );
@@ -497,369 +668,324 @@ const HopeSlider = ({ currentSelection, setCurrentSelection, currentQ, onNext, h
 
 
 const HopeChart = ({ answers, surveyQuestions, isFinal }) => {
-        const [isMounted, setIsMounted] = useState(false);
-        const totalScore = Object.values(answers).reduce((a, b) => a + b, 0); // Out of 100 max
-        
-        useEffect(() => {
-            setTimeout(() => setIsMounted(true), 100);
-        }, []);
+    const [isMounted, setIsMounted] = useState(false);
+    const totalScore = Object.values(answers).reduce((a, b) => a + b, 0); 
+    
+    useEffect(() => {
+        setTimeout(() => setIsMounted(true), 100);
+    }, []);
 
-        const polarToCartesian = (centerX, centerY, radius, angleInDegrees) => {
-            const angleInRadians = (angleInDegrees - 90) * Math.PI / 180.0;
-            return {
-                x: centerX + (radius * Math.cos(angleInRadians)),
-                y: centerY + (radius * Math.sin(angleInRadians))
-            };
+    const polarToCartesian = (centerX, centerY, radius, angleInDegrees) => {
+        const angleInRadians = (angleInDegrees - 90) * Math.PI / 180.0;
+        return {
+            x: centerX + (radius * Math.cos(angleInRadians)),
+            y: centerY + (radius * Math.sin(angleInRadians))
         };
+    };
 
-        const describeArc = (x, y, innerRadius, outerRadius, startAngle, endAngle) => {
-            const startOut = polarToCartesian(x, y, outerRadius, endAngle);
-            const endOut = polarToCartesian(x, y, outerRadius, startAngle);
-            const startIn = polarToCartesian(x, y, innerRadius, endAngle);
-            const endIn = polarToCartesian(x, y, innerRadius, startAngle);
-            const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
-            return [
-                "M", startOut.x, startOut.y,
-                "A", outerRadius, outerRadius, 0, largeArcFlag, 0, endOut.x, endOut.y,
-                "L", endIn.x, endIn.y,
-                "A", innerRadius, innerRadius, 0, largeArcFlag, 1, startIn.x, startIn.y,
-                "Z"
-            ].join(" ");
-        };
+    const describeArc = (x, y, innerRadius, outerRadius, startAngle, endAngle) => {
+        const startOut = polarToCartesian(x, y, outerRadius, endAngle);
+        const endOut = polarToCartesian(x, y, outerRadius, startAngle);
+        const startIn = polarToCartesian(x, y, innerRadius, endAngle);
+        const endIn = polarToCartesian(x, y, innerRadius, startAngle);
+        const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
+        return [
+            "M", startOut.x, startOut.y,
+            "A", outerRadius, outerRadius, 0, largeArcFlag, 0, endOut.x, endOut.y,
+            "L", endIn.x, endIn.y,
+            "A", innerRadius, innerRadius, 0, largeArcFlag, 1, startIn.x, startIn.y,
+            "Z"
+        ].join(" ");
+    };
 
-        const cx = 500;
-        const cy = 420; 
-        const innerR = 180;
-        const maxOutR = 360; 
-        
-        const dimensionColors = [
-            '#ff3b30', '#ff9500', '#ffcc00', '#34c759', '#00c7ff', '#af52de'
-        ];
-        const dimensionNames = ["PLACES", "BODY", "RESOURCES", "SELF", "OTHERS", "LIFE"];
+    const cx = 500;
+    const cy = 340; // Moved up
+    const innerR = 145; // Scaled down 15%
+    const maxOutR = 290; // Scaled down 15%
+    
+    const dimensionColors = ['#ff3b30', '#ff9500', '#ffcc00', '#34c759', '#00c7ff', '#af52de'];
+    const dimensionNames = ["PLACES", "BODY", "RESOURCES", "SELF", "OTHERS", "LIFE"];
 
-        const coreQuestions = surveyQuestions.slice(0, 18);
-        const flex1Score = answers[surveyQuestions[18]?.id] ?? 0;
-        const flex2Score = answers[surveyQuestions[19]?.id] ?? 0;
+    const coreQuestions = surveyQuestions.slice(0, 18);
+    const flex1Score = answers[surveyQuestions[18]?.id] ?? 0;
+    const flex2Score = answers[surveyQuestions[19]?.id] ?? 0;
 
-        return (
-                <div className={`relative z-10 w-full h-full rounded-3xl border border-cyan-500/20 bg-[#050a14]/90 backdrop-blur-3xl shadow-[0_20px_80px_rgba(0,229,255,0.07)] overflow-y-auto custom-scrollbar flex flex-col justify-center transition-opacity duration-1000 ${isMounted ? 'opacity-100' : 'opacity-0'}`} style={{ padding: 'clamp(1rem, 2vw, 2.5rem)' }}>
-                    <div className="absolute top-0 left-0 w-32 h-32 border-t border-l border-cyan-500/50 rounded-tl-3xl opacity-50"></div>
-                    <div className="absolute top-0 right-0 w-32 h-32 border-t border-r border-cyan-500/50 rounded-tr-3xl opacity-50"></div>
-                    
+    const avgScore = totalScore / 20;
+    const tierText = avgScore >= 4.0 ? "THRIVING" : avgScore >= 3.0 ? "STABILIZING" : avgScore >= 2.0 ? "SURVIVING" : "CRITICAL";
 
+    return (
+        <div className={`relative z-10 w-full h-full rounded-[2rem] border border-cyan-500/20 bg-[#02050a] backdrop-blur-3xl shadow-[0_20px_80px_rgba(0,229,255,0.07)] overflow-hidden flex flex-col transition-opacity duration-1000 ${isMounted ? 'opacity-100' : 'opacity-0'}`}>
+            <div className="absolute top-0 left-0 w-32 h-32 border-t border-l border-cyan-500/50 rounded-tl-3xl opacity-50 pointer-events-none"></div>
+            <div className="absolute top-0 right-0 w-32 h-32 border-t border-r border-cyan-500/50 rounded-tr-3xl opacity-50 pointer-events-none"></div>
+            
+            <div className="text-center mt-6 relative shrink-0 z-20">
+                <h1 className="font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-cyan-100 tracking-widest mb-0" style={{ textShadow: '0 0 40px rgba(0,229,255,0.3)', fontSize: 'clamp(1.2rem, 2.5vw, 1.8rem)' }}>
+                    THE HoPE INDEX
+                </h1>
+                <p className="text-cyan-400 font-medium tracking-[0.2em] uppercase mt-2" style={{ fontSize: 'clamp(0.6rem, 1vw, 0.75rem)' }}>
+                    (HUMAN OPTIMIZED PERSONAL EXPERIENCE)
+                </p>
+            </div>
 
-                    <div className="text-center mb-4 relative shrink-0">
-                        <div className="inline-block">
-                            <h1 className="font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-cyan-100 tracking-widest mb-1" style={{ textShadow: '0 0 40px rgba(0,229,255,0.3)', fontSize: 'clamp(1.5rem, 3vw, 2.25rem)' }}>
-                                THE HoPE INDEX
-                            </h1>
-                            <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-50 mt-1 mb-2"></div>
-                            <p className="text-cyan-400 font-medium tracking-[0.2em] uppercase" style={{ fontSize: 'clamp(0.6rem, 1vw, 0.875rem)' }}>
-                                (Human Optimized Personal Experience)
-                            </p>
-                        </div>
-                    </div>
+            <div className="relative w-full flex flex-col items-center justify-start overflow-hidden z-10 pt-8" style={{ minHeight: 0 }}>
+                {/* SVG Gauge */}
+                <div className="w-full relative" style={{ height: '330px' }}>
+                    <svg viewBox="0 0 1000 480" className="w-full h-full drop-shadow-2xl overflow-visible absolute top-0 left-0">
+                        <defs>
+                            <filter id="glow-soft" x="-20%" y="-20%" width="140%" height="140%">
+                                <feGaussianBlur stdDeviation="3" result="blur" />
+                                <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                            </filter>
+                        </defs>
 
-                    <div className="relative w-full shrink-0 mx-auto flex items-center justify-center" style={{ aspectRatio: '2/1.3', maxHeight: isFinal ? '500px' : '45vh', maxWidth: '100%', height: 'auto' }}>
-                        <svg viewBox="0 0 1000 650" className="w-full h-auto drop-shadow-2xl overflow-visible" style={{ padding: "0 10px", maxHeight: '100%' }}>
-                            <defs>
-                                <filter id="glow-soft" x="-20%" y="-20%" width="140%" height="140%">
-                                    <feGaussianBlur stdDeviation="3" result="blur" />
-                                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                                </filter>
-                                <filter id="glow-intense" x="-50%" y="-50%" width="200%" height="200%">
-                                    <feGaussianBlur stdDeviation="10" result="blur" />
-                                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                                </filter>
-                                <linearGradient id="score-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                                    <stop offset="0%" stopColor="rgba(0, 229, 255, 0.2)" />
-                                    <stop offset="100%" stopColor="rgba(0, 229, 255, 0.05)" />
-                                </linearGradient>
-                                <filter id="glow-yellow" x="-20%" y="-20%" width="140%" height="140%">
-                                    <feGaussianBlur stdDeviation="2" result="blur" />
-                                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                                </filter>
-                                {[1, 2, 3, 4, 5].map(starIndex => {
-                                    const score = totalScore / 20;
-                                    let fillPct = 0;
-                                    if (score >= starIndex) fillPct = 100;
-                                    else if (score > starIndex - 1) fillPct = (score - (starIndex - 1)) * 100;
-                                    return (
-                                        <clipPath id={`clip-star-${starIndex}`} key={`clip-${starIndex}`}>
-                                            <rect x="0" y="0" width={24 * (fillPct / 100)} height="24" />
-                                        </clipPath>
-                                    );
-                                })}
-                            </defs>
+                        {dimensionNames.map((name, i) => {
+                            const startA = -90 + (i * 30);
+                            const endA = startA + 30;
+                            const midA = startA + 15;
+                            const labelPos = polarToCartesian(cx, cy, maxOutR + 45, midA);
+                            const color = dimensionColors[i];
+                            return (
+                                <g key={`dim-${i}`} style={{ opacity: isMounted ? 1 : 0, transition: `opacity 1s ease 0.5s` }}>
+                                    <path d={describeArc(cx, cy, maxOutR + 20, maxOutR + 22, startA + 1, endA - 1)} fill={color} opacity="0.4" filter="url(#glow-soft)" />
+                                    <text x={labelPos.x} y={labelPos.y} fill={color} fontSize="16" fontWeight="800" textAnchor="middle"  alignmentBaseline="middle" style={{ transform: `rotate(${midA}deg)`, transformOrigin: `${labelPos.x}px ${labelPos.y}px`, letterSpacing: '2px', textShadow: `0 0 10px ${color}` }}>{name}</text>
+                                </g>
+                            );
+                        })}
 
-                            {dimensionNames.map((name, i) => {
-                                const startA = -90 + (i * 30);
-                                const endA = startA + 30;
-                                const midA = startA + 15;
-                                const labelPos = polarToCartesian(cx, cy, maxOutR + 55, midA);
-                                const color = dimensionColors[i];
-                                return (
-                                    <g key={`dim-${i}`} style={{ opacity: isMounted ? 1 : 0, transition: `opacity 1s ease 0.5s` }}>
-                                        <path d={describeArc(cx, cy, maxOutR + 25, maxOutR + 27, startA + 1, endA - 1)} fill={color} opacity="0.4" filter="url(#glow-soft)" />
-                                        <text x={labelPos.x} y={labelPos.y} fill={color} fontSize="18" fontWeight="800" textAnchor="middle"  alignmentBaseline="middle" style={{ transform: `rotate(${midA}deg)`, transformOrigin: `${labelPos.x}px ${labelPos.y}px`, letterSpacing: '3px', textShadow: `0 0 10px ${color}` }}>{name}</text>
-                                    </g>
-                                );
-                            })}
+                        {coreQuestions.map((_, i) => {
+                            const angle = -90 + (i * 10) + 5; 
+                            const start = polarToCartesian(cx, cy, innerR - 8, angle);
+                            const destX = cx + (i - 8.5) * 14; 
+                            const destY = cy + 20;
+                            return (
+                                <path key={`trace-${i}`} d={`M ${start.x} ${start.y} Q ${cx} ${cy} ${destX} ${destY}`} fill="none" stroke="#00e5ff" strokeWidth="1" opacity={isMounted ? "0.2" : "0"} style={{ transition: `opacity 1s ease 0.5s` }} />
+                            );
+                        })}
 
-                            {coreQuestions.map((_, i) => {
-                                const angle = -90 + (i * 10) + 5; 
-                                const start = polarToCartesian(cx, cy, innerR - 10, angle);
-                                const destX = cx + (i - 8.5) * 16; 
-                                const destY = cy + 20;
-                                return (
-                                    <path key={`trace-${i}`} d={`M ${start.x} ${start.y} Q ${cx} ${cy} ${destX} ${destY}`} fill="none" stroke="#00e5ff" strokeWidth="1.5" opacity={isMounted ? "0.2" : "0"} style={{ transition: `opacity 1s ease 0.5s` }} />
-                                );
-                            })}
-
-                            {coreQuestions.map((q, i) => {
-                                const score = answers[q.id] ?? 0;
-                                const dimIndex = Math.floor(i / 3);
-                                const color = dimensionColors[dimIndex];
-                                const startA = -90 + (i * 10);
-                                const endA = startA + 8.5; 
-                                
-                                // Grow from center outwards
-                                const displayScore = isMounted ? score : 0.01;
-                                const scoreR = innerR + (displayScore / 5) * (maxOutR - innerR);
-                                
-                                const basePath = describeArc(cx, cy, innerR, maxOutR, startA, endA);
-                                const scorePath = describeArc(cx, cy, innerR, scoreR, startA, endA);
-                                const delay = 0.3 + (i * 0.04); // Cascading delay
-
-                                return (
-                                    <g key={`slice-${i}`}>
-                                        <path d={basePath} fill={color} opacity={isMounted ? "0.05" : "0"} style={{ transition: `opacity 1s ease ${delay}s` }} />
-                                        <path d={scorePath} fill={color} filter="url(#glow-soft)" opacity={isMounted ? "0.9" : "0"} style={{ transition: `all 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) ${delay}s` }} />
-                                        {score > 0 && (
-                                            <path d={describeArc(cx, cy, scoreR - 4, scoreR, startA, endA)} fill="#ffffff" opacity={isMounted ? "0.5" : "0"} style={{ transition: `all 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) ${delay}s` }} />
-                                        )}
-                                        <text {...polarToCartesian(cx, cy, innerR - 25, startA + 4.25)} fill="#ffffff" fontSize="13" fontWeight="bold" textAnchor="middle" opacity={isMounted ? "0.5" : "0"} style={{ transition: `opacity 1s ease ${delay}s` }}>{i + 1}</text>
-                                    </g>
-                                );
-                            })}
-
-                            <g transform={`translate(${cx - 160}, ${cy + 20})`} style={{ opacity: isMounted ? 1 : 0, transition: 'opacity 1s ease 0.5s' }}>
-                                <rect x="0" y="0" width="320" height="170" rx="15" fill="url(#score-gradient)" stroke="#00e5ff" strokeWidth="2" filter="url(#glow-soft)" />
-                                <rect x="-10" y="20" width="2" height="130" fill="#00e5ff" filter="url(#glow-soft)" />
-                                <rect x="328" y="20" width="2" height="130" fill="#00e5ff" filter="url(#glow-soft)" />
-                                
-                                <text x="160" y="45" fill="#ffffff" fontSize="22" fontWeight="bold" textAnchor="middle" letterSpacing="3px">
-                                    {totalScore / 20 >= 4.0 ? "THRIVING" : totalScore / 20 >= 3.0 ? "STABILIZING" : totalScore / 20 >= 2.0 ? "SURVIVING" : "CRITICAL"}
-                                </text>
-
-                                {/* Numerical Rating */}
-                                <text x="160" y="75" fill="#00e5ff" fontSize="18" fontWeight="bold" textAnchor="middle" opacity="0.9" letterSpacing="2px">{(totalScore / 20).toFixed(1)} / 5.0 STARS</text>
-
-                                {/* 5-Star Rating Visualization */}
-                                {[1, 2, 3, 4, 5].map(starIndex => {
-                                    const score = totalScore / 20;
-                                    let fillPct = 0;
-                                    if (score >= starIndex) fillPct = 100;
-                                    else if (score > starIndex - 1) fillPct = (score - (starIndex - 1)) * 100;
-                                    // Total width of 5 stars + gaps = (5 * 24) + (4 * 6) = 120 + 24 = 144
-                                    // Start X = 160 - (144 / 2) = 88
-                                    const starX = 88 + ((starIndex - 1) * 30);
-                                    return (
-                                        <g key={starIndex} transform={`translate(${starX}, 90)`}>
-                                            <svg viewBox="0 0 24 24" width="24" height="24">
-                                                <path fill="#1e293b" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                                            </svg>
-                                            {fillPct > 0 && (
-                                                <svg viewBox="0 0 24 24" width="24" height="24">
-                                                    <path fill="#facc15" clipPath={`url(#clip-star-${starIndex})`} d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" filter="url(#glow-yellow)" />
-                                                </svg>
-                                            )}
-                                        </g>
-                                    );
-                                })}
-                                
-                                <text x="160" y="145" fill="#00e5ff" fontSize="12" fontWeight="bold" textAnchor="middle" opacity="0.7" letterSpacing="1px">{Math.round(totalScore)}% HoPE CAPACITY</text>
-                            </g>
+                        {coreQuestions.map((q, i) => {
+                            const score = answers[q.id] ?? 0;
+                            const dimIndex = Math.floor(i / 3);
+                            const color = dimensionColors[dimIndex];
+                            const startA = -90 + (i * 10);
+                            const endA = startA + 8.5; 
                             
-                            <path d={`M ${cx - 80} ${cy + 160} L ${cx - 80} ${cy + 190} L ${cx - 240} ${cy + 190} L ${cx - 240} ${cy + 230}`} fill="none" stroke="#00e5ff" strokeWidth="2" opacity={isMounted ? "0.4" : "0"} filter="url(#glow-soft)" style={{ transition: 'opacity 1s ease 0.5s' }} />
-                            <path d={`M ${cx + 80} ${cy + 160} L ${cx + 80} ${cy + 190} L ${cx + 240} ${cy + 190} L ${cx + 240} ${cy + 230}`} fill="none" stroke="#00e5ff" strokeWidth="2" opacity={isMounted ? "0.4" : "0"} filter="url(#glow-soft)" style={{ transition: 'opacity 1s ease 0.5s' }} />
-                        </svg>
-                    </div>
+                            const displayScore = isMounted ? score : 0.01;
+                            const scoreR = innerR + (displayScore / 5) * (maxOutR - innerR);
+                            
+                            const basePath = describeArc(cx, cy, innerR, maxOutR, startA, endA);
+                            const scorePath = describeArc(cx, cy, innerR, scoreR, startA, endA);
+                            const delay = 0.3 + (i * 0.04);
 
-                    <div className={`mt-4 shrink-0 border border-cyan-500/30 rounded-2xl bg-[#03060d]/80 p-6 md:p-8 relative shadow-[inset_0_0_30px_rgba(0,229,255,0.02)] transition-opacity duration-1000 ${isMounted ? 'opacity-100 delay-[500ms]' : 'opacity-0'}`}>
-                        <div className="absolute top-0 left-0 w-10 h-10 border-t-2 border-l-2 border-cyan-400 rounded-tl-2xl"></div>
-                        <div className="absolute top-0 right-0 w-10 h-10 border-t-2 border-r-2 border-cyan-400 rounded-tr-2xl"></div>
-                        <div className="absolute bottom-0 left-0 w-10 h-10 border-b-2 border-l-2 border-cyan-400 rounded-bl-2xl"></div>
-                        <div className="absolute bottom-0 right-0 w-10 h-10 border-b-2 border-r-2 border-cyan-400 rounded-br-2xl"></div>
-                        
-                        <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#050a14] px-6 py-1 text-cyan-300 text-sm font-bold tracking-[0.15em] uppercase border border-cyan-500/50 rounded-full shadow-[0_0_15px_rgba(0,229,255,0.4)] whitespace-nowrap">
-                            Population-Specific Context
-                        </div>
+                            return (
+                                <g key={`slice-${i}`}>
+                                    <path d={basePath} fill={color} opacity={isMounted ? "0.05" : "0"} style={{ transition: `opacity 1s ease ${delay}s` }} />
+                                    <path d={scorePath} fill={color} filter="url(#glow-soft)" opacity={isMounted ? "0.9" : "0"} style={{ transition: `all 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) ${delay}s` }} />
+                                    {score > 0 && (
+                                        <path d={describeArc(cx, cy, scoreR - 3, scoreR, startA, endA)} fill="#ffffff" opacity={isMounted ? "0.5" : "0"} style={{ transition: `all 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) ${delay}s` }} />
+                                    )}
+                                    <text {...polarToCartesian(cx, cy, innerR - 20, startA + 4.25)} fill="#ffffff" fontSize="11" fontWeight="bold" textAnchor="middle" opacity={isMounted ? "0.5" : "0"} style={{ transition: `opacity 1s ease ${delay}s` }}>{i + 1}</text>
+                                </g>
+                            );
+                        })}
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-4 pt-4 pb-2">
-                            <div className="flex items-center gap-6 justify-center">
-                                <div className="relative w-24 h-24 shrink-0">
-                                    <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_0_12px_rgba(0,229,255,0.3)]">
-                                        {[0,1,2,3,4,5].map(tick => {
-                                            const a = -120 + (tick / 5) * 240;
-                                            const p1 = polarToCartesian(50, 50, 42, a);
-                                            const p2 = polarToCartesian(50, 50, 46, a);
-                                            return <line key={tick} x1={p1.x} y1={p1.y} x2={p2.x} y2={p2.y} stroke="#00e5ff" strokeWidth="2" opacity="0.6"/>;
-                                        })}
-                                        <path d={describeArc(50, 50, 36, 40, -120, 120)} fill="#0a1526" stroke="#00e5ff" strokeWidth="0.5" opacity="0.5" />
-                                        <path d={describeArc(50, 50, 36, 40, -120, -120 + (flex1Score / 5) * 240)} fill="#00e5ff" filter="url(#glow-soft)" style={{ transition: 'all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)' }} />
-                                        <g style={{ transform: `rotate(${-120 + (flex1Score / 5) * 240}deg)`, transformOrigin: '50px 50px', transition: 'transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)' }}>
-                                            <polygon points="48.5,50 51.5,50 50,12" fill="#ffffff" filter="url(#glow-soft)" />
-                                            <circle cx="50" cy="50" r="5" fill="#00e5ff" stroke="#ffffff" strokeWidth="1.5" />
-                                        </g>
-                                    </svg>
-                                    <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 text-cyan-400 font-bold text-sm bg-[#03060d] px-2 rounded-full border border-cyan-500/20">{flex1Score.toFixed(1)}</div>
-                                </div>
-                                <div className="max-w-[200px]">
-                                    <h3 className="text-white font-bold text-sm md:text-base leading-tight mb-1">GANG DE-IDENTIFICATION</h3>
-                                </div>
-                            </div>
-                            <div className="flex items-center gap-6 justify-center border-t md:border-t-0 md:border-l border-cyan-500/20 pt-6 md:pt-0 md:pl-6">
-                                <div className="relative w-24 h-24 shrink-0">
-                                    <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_0_12px_rgba(0,229,255,0.3)]">
-                                        {[0,1,2,3,4,5].map(tick => {
-                                            const a = -120 + (tick / 5) * 240;
-                                            const p1 = polarToCartesian(50, 50, 42, a);
-                                            const p2 = polarToCartesian(50, 50, 46, a);
-                                            return <line key={tick} x1={p1.x} y1={p1.y} x2={p2.x} y2={p2.y} stroke="#00e5ff" strokeWidth="2" opacity="0.6"/>;
-                                        })}
-                                        <path d={describeArc(50, 50, 36, 40, -120, 120)} fill="#0a1526" stroke="#00e5ff" strokeWidth="0.5" opacity="0.5" />
-                                        <path d={describeArc(50, 50, 36, 40, -120, -120 + (flex2Score / 5) * 240)} fill="#00e5ff" filter="url(#glow-soft)" style={{ transition: 'all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)' }} />
-                                        <g style={{ transform: `rotate(${-120 + (flex2Score / 5) * 240}deg)`, transformOrigin: '50px 50px', transition: 'transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)' }}>
-                                            <polygon points="48.5,50 51.5,50 50,12" fill="#ffffff" filter="url(#glow-soft)" />
-                                            <circle cx="50" cy="50" r="5" fill="#00e5ff" stroke="#ffffff" strokeWidth="1.5" />
-                                        </g>
-                                    </svg>
-                                    <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 text-cyan-400 font-bold text-sm bg-[#03060d] px-2 rounded-full border border-cyan-500/20">{flex2Score.toFixed(1)}</div>
-                                </div>
-                                <div className="max-w-[200px]">
-                                    <h3 className="text-white font-bold text-sm md:text-base leading-tight mb-1">PSYCHOLOGICAL SAFETY</h3>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                        <g transform={`translate(${cx}, ${cy - 10})`} style={{ opacity: isMounted ? 1 : 0, transition: 'opacity 1s ease 0.5s' }}>
+                            {/* Numerical Rating Inside Gauge */}
+                            <text x="0" y="-30" fill="#00e5ff" fontSize="48" fontWeight="900" textAnchor="middle" opacity="0.9" letterSpacing="1px" style={{ textShadow: '0 0 20px rgba(0,229,255,0.4)' }}>
+                                {(totalScore / 20).toFixed(1)}
+                                <tspan fontSize="20" fontWeight="600" fill="#00e5ff" opacity="0.6"> / 5.0</tspan>
+                            </text>
+                            
+                            {/* Tier Classification Inside Gauge */}
+                            <text x="0" y="15" fill="#ffffff" fontSize="24" fontWeight="800" textAnchor="middle" letterSpacing="5px" filter="url(#glow-soft)">
+                                {tierText}
+                            </text>
 
-                    {isFinal && (
-                        <div className={`shrink-0 flex flex-col sm:flex-row gap-4 mt-8 justify-center transition-opacity duration-1000 ${isMounted ? 'opacity-100 delay-[1000ms]' : 'opacity-0'}`}>
-                            <button onClick={() => window.print()} className="px-8 py-4 bg-transparent border-2 border-cyan-500/50 text-cyan-400 font-bold rounded-full hover:bg-cyan-500/10 hover:border-cyan-400 hover:text-cyan-300 transition-all shadow-[0_0_20px_rgba(0,229,255,0.1)] hover:shadow-[0_0_30px_rgba(0,229,255,0.3)] tracking-wide uppercase text-sm">
-                                Export PDF Report
-                            </button>
-                            <button onClick={() => window.location.reload()} className="px-8 py-4 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-black rounded-full hover:from-cyan-500 hover:to-blue-500 transition-all shadow-[0_0_30px_rgba(0,229,255,0.3)] hover:shadow-[0_0_40px_rgba(0,229,255,0.5)] hover:-translate-y-1 tracking-wide uppercase text-sm border border-cyan-400/50">
-                                Retake Assessment
-                            </button>
-                        </div>
-                    )}
+                            {/* Completion Percentage Inside Gauge */}
+                            <text x="0" y="45" fill="#00e5ff" fontSize="12" fontWeight="bold" textAnchor="middle" opacity="0.7" letterSpacing="2px">
+                                {Math.round(totalScore)}% HoPE CAPACITY
+                            </text>
+                        </g>
+                    </svg>
                 </div>
-        );
-};
 
+                {/* Score Card Beneath Gauge */}
+                <div className={`relative z-20 flex justify-center w-full transition-opacity duration-1000 delay-[800ms] ${isMounted ? 'opacity-100' : 'opacity-0'}`}>
+                    <div className="bg-[#020d1c]/80 border-2 border-cyan-400/80 rounded-2xl p-5 flex flex-col items-center justify-center w-[300px] shadow-[0_0_30px_rgba(0,229,255,0.2)]">
+                        <div className="absolute top-0 bottom-0 left-[-2px] w-1 bg-cyan-400 rounded-l-full shadow-[0_0_10px_#00e5ff]"></div>
+                        <div className="absolute top-0 bottom-0 right-[-2px] w-1 bg-cyan-400 rounded-r-full shadow-[0_0_10px_#00e5ff]"></div>
+                        
+                        <div className="text-white font-bold text-xl tracking-widest mb-1">{tierText}</div>
+                        <div className="text-cyan-400 font-semibold text-sm mb-3">{(totalScore/20).toFixed(1)} / 5.0 STARS</div>
+                        <div className="flex gap-1.5 mb-3">
+                            {[1, 2, 3, 4, 5].map(starIndex => {
+                                const fillPct = avgScore >= starIndex ? 100 : avgScore > starIndex - 1 ? (avgScore - (starIndex - 1)) * 100 : 0;
+                                return (
+                                    <div key={starIndex} className="relative w-5 h-5">
+                                        <svg viewBox="0 0 24 24" className="w-full h-full text-slate-700">
+                                            <path fill="currentColor" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                        </svg>
+                                        {fillPct > 0 && (
+                                            <svg viewBox="0 0 24 24" className="w-full h-full absolute top-0 left-0 text-cyan-400" style={{ clipPath: `inset(0 ${100-fillPct}% 0 0)` }}>
+                                                <path fill="currentColor" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                            </svg>
+                                        )}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                        <div className="text-cyan-400 font-bold text-[11px] tracking-wider">{Math.round(totalScore)}% HoPE CAPACITY</div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Streamlined Population-Specific Context Footer */}
+            <div className={`shrink-0 border-t border-cyan-500/20 bg-transparent mt-4 mb-4 transition-opacity duration-1000 z-20 ${isMounted ? 'opacity-100 delay-[500ms]' : 'opacity-0'}`}>
+                
+                <div className="flex justify-center mb-4">
+                    <div className="bg-[#051020] border border-cyan-500/50 rounded-full px-6 py-1">
+                        <span className="text-[10px] text-cyan-400 font-bold uppercase tracking-widest">POPULATION-SPECIFIC CONTEXT</span>
+                    </div>
+                </div>
+
+                <div className="max-w-[700px] mx-auto w-full relative">
+                    {/* Corner decorative borders */}
+                    <div className="absolute top-0 left-0 w-4 h-4 border-t border-l border-cyan-500/50 rounded-tl-xl"></div>
+                    <div className="absolute bottom-0 left-0 w-4 h-4 border-b border-l border-cyan-500/50 rounded-bl-xl"></div>
+                    <div className="absolute top-0 right-0 w-4 h-4 border-t border-r border-cyan-500/50 rounded-tr-xl"></div>
+                    <div className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-cyan-500/50 rounded-br-xl"></div>
+
+                    <div className="grid grid-cols-2 divide-x divide-cyan-500/20 py-2">
+                        <div className="flex items-center justify-center gap-6">
+                            <div className="w-14 h-14 shrink-0">
+                                <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_0_10px_rgba(0,229,255,0.3)]">
+                                    {[0,1,2,3,4,5].map(tick => {
+                                        const a = -120 + (tick / 5) * 240;
+                                        const p1 = polarToCartesian(50, 50, 42, a);
+                                        const p2 = polarToCartesian(50, 50, 46, a);
+                                        return <line key={tick} x1={p1.x} y1={p1.y} x2={p2.x} y2={p2.y} stroke="#00e5ff" strokeWidth="2" opacity="0.6"/>;
+                                    })}
+                                    <path d={describeArc(50, 50, 36, 40, -120, 120)} fill="#0a1526" stroke="#00e5ff" strokeWidth="0.5" opacity="0.5" />
+                                    <path d={describeArc(50, 50, 36, 40, -120, -120 + (flex1Score / 5) * 240)} fill="#00e5ff" filter="url(#glow-soft)" style={{ transition: 'all 0.5s ease' }} />
+                                    <g style={{ transform: `rotate(${-120 + (flex1Score / 5) * 240}deg)`, transformOrigin: '50px 50px', transition: 'transform 0.5s ease' }}>
+                                        <polygon points="48.5,50 51.5,50 50,12" fill="#ffffff" filter="url(#glow-soft)" />
+                                        <circle cx="50" cy="50" r="4" fill="#00e5ff" stroke="#ffffff" strokeWidth="1.5" />
+                                    </g>
+                                </svg>
+                            </div>
+                            <div className="flex flex-col justify-center text-left">
+                                <div className="text-[11px] text-white font-bold uppercase tracking-widest leading-tight mb-1">
+                                    GANG DE-<br/>IDENTIFICATION
+                                </div>
+                                <div className="text-cyan-400 font-bold text-sm">{flex1Score.toFixed(1)} / 5.0</div>
+                            </div>
+                        </div>
+
+                        <div className="flex items-center justify-center gap-6">
+                            <div className="w-14 h-14 shrink-0">
+                                <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_0_10px_rgba(0,229,255,0.3)]">
+                                    {[0,1,2,3,4,5].map(tick => {
+                                        const a = -120 + (tick / 5) * 240;
+                                        const p1 = polarToCartesian(50, 50, 42, a);
+                                        const p2 = polarToCartesian(50, 50, 46, a);
+                                        return <line key={tick} x1={p1.x} y1={p1.y} x2={p2.x} y2={p2.y} stroke="#00e5ff" strokeWidth="2" opacity="0.6"/>;
+                                    })}
+                                    <path d={describeArc(50, 50, 36, 40, -120, 120)} fill="#0a1526" stroke="#00e5ff" strokeWidth="0.5" opacity="0.5" />
+                                    <path d={describeArc(50, 50, 36, 40, -120, -120 + (flex2Score / 5) * 240)} fill="#00e5ff" filter="url(#glow-soft)" style={{ transition: 'all 0.5s ease' }} />
+                                    <g style={{ transform: `rotate(${-120 + (flex2Score / 5) * 240}deg)`, transformOrigin: '50px 50px', transition: 'transform 0.5s ease' }}>
+                                        <polygon points="48.5,50 51.5,50 50,12" fill="#ffffff" filter="url(#glow-soft)" />
+                                        <circle cx="50" cy="50" r="4" fill="#00e5ff" stroke="#ffffff" strokeWidth="1.5" />
+                                    </g>
+                                </svg>
+                            </div>
+                            <div className="flex flex-col justify-center text-left">
+                                <div className="text-[11px] text-white font-bold uppercase tracking-widest leading-tight mb-1">
+                                    PSYCHOLOGICAL<br/>SAFETY
+                                </div>
+                                <div className="text-cyan-400 font-bold text-sm">{flex2Score.toFixed(1)} / 5.0</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {isFinal && (
+                <div className={`absolute inset-0 bg-[#02050a]/60 backdrop-blur-sm z-30 flex items-center justify-center transition-opacity duration-1000 ${isMounted ? 'opacity-100 delay-[1000ms]' : 'opacity-0'}`}>
+                    <div className="flex gap-4">
+                        <button onClick={() => window.print()} className="px-6 py-3 bg-[#0a1526] border-2 border-cyan-500/50 text-cyan-400 font-bold rounded-full hover:bg-cyan-500/10 hover:border-cyan-400 transition-all shadow-lg tracking-wide uppercase text-xs">
+                            Export PDF Report
+                        </button>
+                        <button onClick={() => window.location.reload()} className="px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-black rounded-full hover:from-cyan-500 hover:to-blue-500 transition-all shadow-lg tracking-wide uppercase text-xs border border-cyan-400/50">
+                            Retake Assessment
+                        </button>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+};
 const ResultsScreen = ({ answers, surveyQuestions }) => {
     return (
-        <main className="flex-grow flex items-center justify-center bg-[#02050a] p-4 md:p-8 relative w-full overflow-hidden min-h-screen">
-            <div className="absolute inset-0 pointer-events-none" style={{
-                backgroundImage: 'radial-gradient(circle at 50% 50%, rgba(0, 229, 255, 0.08) 0%, transparent 60%), linear-gradient(rgba(0, 229, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 229, 255, 0.03) 1px, transparent 1px)',
-                backgroundSize: '100% 100%, 30px 30px, 30px 30px',
-                backgroundPosition: 'center center'
-            }}></div>
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[1200px] h-[300px] bg-cyan-500 rounded-[100%] blur-[150px] opacity-[0.05] pointer-events-none"></div>
-            
-            <div className="w-full max-w-[1100px] flex justify-center items-center">
+        <main className="flex-grow flex items-center justify-center bg-[#02050a] p-4 relative w-full overflow-hidden" style={{ height: 'calc(100vh - 80px)' }}>
+            <div className="w-full h-full max-w-[1200px] flex justify-center items-center">
                 <HopeChart answers={answers} surveyQuestions={surveyQuestions} isFinal={true} />
             </div>
         </main>
     );
 };
 
- 
-
 const App = () => {
     const [step, setStep] = useState('intro'); // 'intro', 'survey', 'results'
     const [currentQIndex, setCurrentQIndex] = useState(0);
-    const [answers, setAnswers] = useState({}); // { id: score }
+    const [answers, setAnswers] = useState({}); 
     const [currentSelection, setCurrentSelection] = useState(null);
-    const [hoverValue, setHoverValue] = useState(null);
 
-    const handleNextQ = (val) => {
-        const finalVal = val !== undefined ? val : (currentSelection !== null ? currentSelection : 0.0);
+    const handleNextQ = () => {
+        if (currentSelection === null) return;
+        
         const qId = surveyQuestions[currentQIndex].id;
-        const newAnswers = { ...answers, [qId]: finalVal };
+        const newAnswers = { ...answers, [qId]: currentSelection };
         setAnswers(newAnswers);
         
         if (currentQIndex < surveyQuestions.length - 1) {
             setCurrentQIndex(currentQIndex + 1);
             setCurrentSelection(newAnswers[surveyQuestions[currentQIndex + 1].id] ?? null);
-            window.scrollTo(0,0);
         } else {
             setStep('results');
-            window.scrollTo(0,0);
         }
     };
 
     const handlePrevQ = () => {
-        if (currentQIndex> 0) {
+        if (currentQIndex > 0) {
             setCurrentQIndex(currentQIndex - 1);
             setCurrentSelection(answers[surveyQuestions[currentQIndex - 1].id] ?? null);
-            window.scrollTo(0,0);
         } else {
             setStep('intro');
         }
     };
 
-    // --- RATING COMPONENT ---
-    const renderRater = () => {
-        return (
-            <div className="mt-8">
-                <div className="relative pt-6 pb-8 px-4 md:px-8 bg-slate-50 border border-slate-200 rounded-3xl mt-8">
-                    <HopeSlider 
-                        currentSelection={currentSelection !== null ? currentSelection : 0.0} 
-                        setCurrentSelection={setCurrentSelection} 
-                        currentQ={surveyQuestions[currentQIndex]}
-                        onNext={handleNextQ}
-                        hoverValue={hoverValue}
-                        setHoverValue={setHoverValue}
- />
-                </div>
-            </div>
-        );
-    };
-
-    // --- INTRO SCREEN ---
     if (step === 'intro') {
         return (
-            <main className="flex-grow flex flex-col items-center justify-center p-6 mt-8">
+            <main className="flex-grow flex flex-col items-center justify-center p-6" style={{ height: 'calc(100vh - 80px)' }}>
                 <div className="bg-white max-w-3xl w-full p-8 md:p-12 rounded-[2rem] shadow-2xl border border-slate-100 text-center relative overflow-hidden">
                     <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-emerald-500 via-blue-500 to-purple-500"></div>
-                    
-                    <div className="mb-8 flex flex-col items-center justify-center gap-4">
-                        {/* Removed audio and avatar container */}
-                    </div>
-
                     <h1 className="text-5xl font-black text-slate-800 mb-6 tracking-tight">The HoPE Index</h1>
                     <h2 className="text-xl font-bold text-slate-500 mb-8 uppercase tracking-widest">Human Optimal Personal Experience</h2>
-                    
                     <div className="text-left space-y-6 text-slate-600 text-lg leading-relaxed mb-10">
-                        <p>Welcome to the HoPE Index. This is not a test, an academic exam, or a clinical trial designed to diagnose your flaws. It is an innovative, highly visual platform designed to map where you are today and provide a clear, actionable guide toward a life of true optimization and stability.</p>
-                        
+                        <p>Welcome to the HoPE Index. This is not a test or an academic exam. It is a highly visual platform designed to map where you are today and provide a clear, actionable guide toward true stability.</p>
                         <div className="bg-blue-50 border border-blue-100 p-6 rounded-2xl shadow-sm">
                             <h3 className="font-bold text-blue-900 mb-2 flex items-center gap-2">
                                 <span className="text-xl">💡</span> How to Complete this Survey
                             </h3>
-                            <p className="text-base text-blue-800">Imagine you are a professional critic writing a review for a hotel or an app. You are not rating your worth as a human being. Instead, you are rating the quality of the experience currently provided by the different "facilities" and "services" in your life.</p>
+                            <p className="text-base text-blue-800">Imagine you are a professional critic writing a review for a hotel or an app. You are not rating your worth. You are rating the quality of the experience provided by different areas of your life.</p>
                         </div>
                     </div>
-
                     <button 
                         onClick={() => { 
                             setStep('survey'); 
                             setCurrentSelection(answers[surveyQuestions[0].id] ?? null); 
                         }}
                         className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-10 py-5 rounded-full font-bold text-xl hover:-translate-y-1 transition-all shadow-xl hover:shadow-[0_10px_25px_rgba(79,70,229,0.4)] inline-flex items-center justify-center gap-3 w-full md:w-auto"
->
+                    >
                         Let's Begin →
                     </button>
                 </div>
@@ -867,66 +993,70 @@ const App = () => {
         );
     }
 
-    // --- RESULTS SCREEN ---
     if (step === 'results') {
         return <ResultsScreen answers={answers} surveyQuestions={surveyQuestions} />;
     }
 
-    // --- SURVEY SCREEN ---
     const q = surveyQuestions[currentQIndex];
-    const progress = ((currentQIndex) / surveyQuestions.length) * 100; // Progress starts at 0
+    const progress = ((currentQIndex + 1) / surveyQuestions.length) * 100;
 
     return (
-        <main className="flex-grow w-[95vw] max-w-[1600px] mx-auto pt-4 md:pt-8" style={{ height: 'calc(100vh - 80px)', minHeight: '600px' }}>
-            <div className="grid h-full" style={{ gridTemplateColumns: '1fr 1fr', gap: 'clamp(1rem, 2vw, 3rem)' }}>
-                {/* Left Column - Survey Form */}
-                <div className="flex flex-col w-full h-full">
-
-            
-            <div className="bg-white w-full h-full rounded-[2rem] shadow-2xl border border-slate-100 relative flex flex-col justify-center" style={{ padding: 'clamp(1.5rem, 3vw, 3rem)' }}>
+        <main className="flex-grow w-full max-w-[1800px] mx-auto p-4 md:p-6 flex flex-col overflow-hidden" style={{ height: 'calc(100vh - 80px)' }}>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 flex-grow items-stretch overflow-hidden h-full">
                 
-                <div className="flex flex-col xl:flex-row justify-between items-start xl:items-end mb-8 pb-6 border-b border-slate-100 gap-4 shrink-0">
-                    <div>
-                        <div className="inline-block bg-blue-50 text-blue-700 px-3 py-1 rounded-lg font-bold uppercase tracking-widest text-[10px] mb-3 border border-blue-100">{q.space}</div>
-                        <div className="text-slate-400 font-bold text-sm tracking-wide">{q.dimension}</div>
-                    </div>
-                    <div className="flex flex-col items-center justify-center p-4 md:p-5 rounded-xl shadow-sm border border-slate-200 bg-white min-w-[120px] md:min-w-[140px]">
-                        <div className="text-[10px] md:text-xs font-bold text-slate-400 tracking-widest uppercase mb-1 md:mb-2 text-center">YOUR RATING</div>
-                        <div className="flex items-baseline justify-center gap-1.5 text-blue-600">
-                            <span className="text-3xl md:text-4xl font-black tracking-tighter leading-none">{hoverValue !== null ? hoverValue.toFixed(1) : (currentSelection !== null ? currentSelection.toFixed(1) : "_._")}</span> 
-                            <span className="text-lg md:text-xl leading-none">⭐</span>
+                {/* Left Panel - Survey Form (50%) */}
+                <div className="flex flex-col bg-white rounded-[2rem] shadow-2xl border border-slate-100 relative overflow-hidden h-full min-h-0" style={{ transform: 'translateZ(0)' }}>
+
+                    
+                    <div className="p-6 md:p-8 pt-10 flex-grow flex flex-col h-full overflow-hidden">
+                        
+                        {/* Header & Meta */}
+                        <div className="flex justify-between items-center mb-6 shrink-0">
+                            <div className="inline-block bg-blue-50 text-blue-700 px-3 py-1 rounded-lg font-bold uppercase tracking-widest text-[10px] border border-blue-100">
+                                {q.space}
+                            </div>
+                        </div>
+
+                        {/* Title & Concept */}
+                        <div className="mb-4 shrink-0 w-full">
+                            <div className="text-slate-400 font-bold text-sm tracking-wide mb-3">{q.dimension}</div>
+                            <h2 className="font-black text-slate-900 text-3xl md:text-4xl tracking-tight leading-tight mb-1">{q.title}</h2>
+                            {q.subtitle && <p className="text-slate-500 font-medium text-[15px] mb-5">{q.subtitle}</p>}
+
+                        </div>
+
+                        {/* Interactive Card Selector */}
+                        <HopeEmojiSlider 
+                            currentSelection={currentSelection} 
+                            onSelect={(val) => {
+                                setCurrentSelection(val);
+                            }} 
+                            anchors={q.anchors} 
+                            currentQ={q}
+                        />
+
+                        {/* Navigation Footer */}
+                        <div className="flex justify-between items-center mt-4 pt-4 border-t border-slate-100 shrink-0">
+                            <button 
+                                onClick={handlePrevQ}
+                                className={`text-slate-500 font-bold hover:text-slate-800 px-6 py-2 transition-colors flex items-center gap-2 ${currentQIndex === 0 ? 'invisible' : ''}`}
+                            >
+                                <span>←</span> Back
+                            </button>
+                            <button 
+                                onClick={handleNextQ}
+                                disabled={currentSelection === null}
+                                className={`px-6 py-2 rounded-full font-bold text-sm transition-all flex items-center gap-2 ${currentSelection === null ? 'bg-slate-100 text-slate-400 cursor-not-allowed' : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:-translate-y-1 shadow-md hover:shadow-lg'}`}
+                            >
+                                {currentQIndex === surveyQuestions.length - 1 ? 'Submit' : 'Next'} <span>→</span>
+                            </button>
                         </div>
                     </div>
                 </div>
 
-                <h2 className="font-black text-slate-800 mb-6 tracking-tight leading-tight shrink-0" style={{ fontSize: 'clamp(1.75rem, 3vw, 2.5rem)' }}>{q.title}</h2>
-                <div className="bg-slate-50 border-l-4 border-blue-500 rounded-r-2xl mb-8 shrink-0" style={{ padding: 'clamp(1rem, 2vw, 1.5rem)' }}>
-                    <p className="text-slate-700 leading-relaxed font-medium" style={{ fontSize: 'clamp(1.1rem, 2vw, 1.25rem)' }}>{q.concept}</p>
-                </div>
-                
-                {renderRater()}
-
-                <div className="flex justify-between items-center mt-auto pt-6 border-t border-slate-100 shrink-0">
-                    <button 
-                        onClick={handlePrevQ}
-                        className={`text-slate-500 font-bold hover:text-slate-800 px-6 py-3 transition-colors flex items-center gap-2 ${currentQIndex === 0 ? 'invisible' : ''}`}
->
-                        <span>←</span> Back
-                    </button>
-                    <button 
-                        onClick={() => handleNextQ()}
-                        className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-full font-bold text-lg hover:-translate-y-1 transition-all shadow-md hover:shadow-[0_5px_15px_rgba(79,70,229,0.4)] flex items-center gap-2"
-                    >
-                        {currentQIndex === surveyQuestions.length - 1 ? 'Submit' : 'Next'} <span>→</span>
-                    </button>
-                </div>
-            </div>
-            
-        
-                </div>
-                {/* Right Column - Results Display */}
-                <div className="flex flex-col w-full h-full relative rounded-3xl overflow-hidden shadow-2xl">
-                    <div className="absolute inset-0 pointer-events-none bg-[#02050a] -z-10" style={{
+                {/* Right Panel - Live Visualization (50%) */}
+                <div className="flex flex-col w-full h-full relative rounded-[2rem] shadow-2xl overflow-hidden bg-[#02050a] border border-cyan-500/20 hidden lg:flex min-h-0">
+                    <div className="absolute inset-0 pointer-events-none" style={{
                         backgroundImage: 'radial-gradient(circle at 50% 50%, rgba(0, 229, 255, 0.08) 0%, transparent 60%), linear-gradient(rgba(0, 229, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 229, 255, 0.03) 1px, transparent 1px)',
                         backgroundSize: '100% 100%, 30px 30px, 30px 30px',
                         backgroundPosition: 'center center'
@@ -937,7 +1067,6 @@ const App = () => {
         </main>
     );
 };
-
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(<App />);
     </script>
