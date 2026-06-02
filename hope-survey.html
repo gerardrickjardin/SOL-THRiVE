@@ -705,7 +705,7 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ }) => {
 };
 
 
-const HopeChart = ({ answers, surveyQuestions, isFinal }) => {
+const HopeChart = ({ answers, surveyQuestions, isFinal, onViewDashboard }) => {
     const [isMounted, setIsMounted] = useState(false);
     const totalScore = Object.values(answers).reduce((a, b) => a + b, 0); 
     
