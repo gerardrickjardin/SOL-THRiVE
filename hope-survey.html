@@ -690,7 +690,8 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ }) => {
                             left: `calc(${((displayValue - 1) / 4) * 100}% - ${((displayValue - 1) / 4) * 36}px)`,
                             backgroundColor: thumbBgColor,
                             boxShadow: `0 0 20px ${thumbBgColor}`,
-                            transform: isDragging ? 'scale(1.15)' : 'scale(1)'
+                            transform: isDragging ? 'scale(1.15)' : 'scale(1)',
+                            opacity: (currentSelection === null && !isDragging) ? 0 : 1
                         }}
                     >
                         {snappedValue.toFixed(1)}
