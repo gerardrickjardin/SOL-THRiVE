@@ -525,16 +525,14 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ }) => {
     };
 
     const getGlowStyles = (zone) => {
-        if (zone === 1) {
-            return snappedValue >= 1.0 && snappedValue <= 2.0 ? "opacity-100 border-transparent" : "opacity-50 grayscale border-transparent";
-        }
-        if (zone === 3) {
-            return snappedValue >= 2.5 && snappedValue <= 3.5 ? "opacity-100 border-transparent" : "opacity-50 grayscale border-transparent";
-        }
-        if (zone === 5) {
-            return snappedValue >= 4.0 && snappedValue <= 5.0 ? "opacity-100 border-transparent" : "opacity-50 grayscale border-transparent";
-        }
-        return "";
+        // The container no longer applies grayscale to its children!
+        // It just manages its own subtle background styling.
+        const isZoneSelected = 
+            (zone === 1 && snappedValue >= 1.0 && snappedValue <= 2.0) ||
+            (zone === 3 && snappedValue >= 2.5 && snappedValue <= 3.5) ||
+            (zone === 5 && snappedValue >= 4.0 && snappedValue <= 5.0);
+            
+        return isZoneSelected ? "opacity-100 border-transparent" : "opacity-75 border-transparent";
     };
     
     const getZoneColor = (zone) => {
@@ -551,9 +549,11 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ }) => {
         
         let scaleClass = "scale-100 translate-y-0";
         let ringClass = "";
+        let colorClass = "grayscale opacity-50"; // Default: gray and slightly faded
         
         if (isHovered) {
             scaleClass = "scale-150 -translate-y-2 z-30 brightness-125";
+            colorClass = "grayscale-0 opacity-100"; // Full color on hover!
         } else if (hoverEmoji) {
             const [hZone, hIdx] = hoverEmoji.split('-');
             if (parseInt(hZone) === zone && Math.abs(parseInt(hIdx) - index) === 1) {
@@ -561,6 +561,7 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ }) => {
             }
         } else if (isSelected) {
              scaleClass = "scale-125 z-20";
+             colorClass = "grayscale-0 opacity-100"; // Full color when selected!
         }
         
         if (isSelected) {
@@ -571,14 +572,14 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ }) => {
 
         return (
             <div 
-                className={`relative rounded-full p-2 md:p-3 transition-all duration-300 ease-out cursor-pointer ${scaleClass} ${ringClass}`}
+                className={`relative rounded-full p-2 md:p-3 transition-all duration-300 ease-out cursor-pointer ${scaleClass} ${ringClass} ${colorClass}`}
                 onMouseEnter={() => setHoverEmoji(`${zone}-${index}`)}
                 onMouseLeave={() => setHoverEmoji(null)}
                 onClick={() => handleEmojiClick(valueToSelect)}
             >
                 <span className="text-2xl md:text-4xl drop-shadow-lg filter relative z-10">{emojiStr}</span>
                 {isBursting && (
-                    <div key={burstKey} className="absolute top-1/2 left-1/2 w-0 h-0 z-40 pointer-events-none">
+                    <div key={burstKey} className="absolute top-1/2 left-1/2 w-0 h-0 z-40 pointer-events-none grayscale-0">
                         {[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15].map(i => (
                             <span key={i} className={`absolute drop-shadow-md ${i % 3 === 0 ? 'text-3xl' : i % 2 === 0 ? 'text-2xl' : 'text-xl'}`} style={{ animation: `burst${i} ${0.6 + (i*0.02)}s cubic-bezier(0.25, 1, 0.5, 1) forwards` }}>{emojiStr}</span>
                         ))}
