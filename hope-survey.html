@@ -525,8 +525,9 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ }) => {
     };
 
     const getGlowStyles = (zone) => {
-        // The container no longer applies grayscale to its children!
-        // It just manages its own subtle background styling.
+        // Only light up the zone if an emoji is actually selected (or actively dragging)
+        if (currentSelection === null && !isDragging) return "opacity-75 border-transparent";
+        
         const isZoneSelected = 
             (zone === 1 && snappedValue >= 1.0 && snappedValue <= 2.0) ||
             (zone === 3 && snappedValue >= 2.5 && snappedValue <= 3.5) ||
@@ -544,7 +545,8 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ }) => {
 
     const renderEmoji = (zone, index, emojiStr, valueToSelect) => {
         const isHovered = hoverEmoji === `${zone}-${index}`;
-        const isSelected = snappedValue === valueToSelect;
+        // Only treat as selected if an actual selection was made or the user is dragging
+        const isSelected = (currentSelection !== null || isDragging) && (snappedValue === valueToSelect);
         const isBursting = burstValue === valueToSelect;
         
         let scaleClass = "scale-100 translate-y-0";
