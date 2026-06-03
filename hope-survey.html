@@ -572,16 +572,26 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ }) => {
 
         return (
             <div 
-                className={`relative rounded-full p-2 md:p-3 transition-all duration-300 ease-out cursor-pointer ${scaleClass} ${ringClass} ${colorClass}`}
+                className={`relative rounded-full p-2 md:p-3 transition-all duration-300 ease-out cursor-pointer ${scaleClass} ${ringClass} ${colorClass} flex items-center justify-center`}
                 onMouseEnter={() => setHoverEmoji(`${zone}-${index}`)}
                 onMouseLeave={() => setHoverEmoji(null)}
                 onClick={() => handleEmojiClick(valueToSelect)}
             >
-                <img src={getAppleEmojiUrl(emojiStr)} alt="emoji" className="w-8 h-8 md:w-10 md:h-10 drop-shadow-lg relative z-10 pointer-events-none select-none" />
+                <div 
+                    className="w-8 h-8 md:w-10 md:h-10 drop-shadow-lg relative z-10 pointer-events-none select-none bg-contain bg-center bg-no-repeat"
+                    style={{ backgroundImage: `url(${getAppleEmojiUrl(emojiStr)})` }}
+                />
                 {isBursting && (
                     <div key={burstKey} className="absolute top-1/2 left-1/2 w-0 h-0 z-40 pointer-events-none grayscale-0">
                         {[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15].map(i => (
-                            <img key={i} src={getAppleEmojiUrl(emojiStr)} alt="burst-emoji" className={`absolute drop-shadow-md pointer-events-none select-none ${i % 3 === 0 ? 'w-10 h-10' : i % 2 === 0 ? 'w-8 h-8' : 'w-6 h-6'}`} style={{ animation: `burst${i} ${0.6 + (i*0.02)}s cubic-bezier(0.25, 1, 0.5, 1) forwards` }} />
+                            <div 
+                                key={i} 
+                                className={`absolute drop-shadow-md pointer-events-none select-none bg-contain bg-center bg-no-repeat ${i % 3 === 0 ? 'w-10 h-10' : i % 2 === 0 ? 'w-8 h-8' : 'w-6 h-6'}`} 
+                                style={{ 
+                                    backgroundImage: `url(${getAppleEmojiUrl(emojiStr)})`,
+                                    animation: `burst${i} ${0.6 + (i*0.02)}s cubic-bezier(0.25, 1, 0.5, 1) forwards` 
+                                }} 
+                            />
                         ))}
                     </div>
                 )}
