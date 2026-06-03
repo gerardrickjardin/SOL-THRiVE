@@ -554,17 +554,13 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ }) => {
         if (isHovered) {
             scaleClass = "scale-150 -translate-y-2 z-30 brightness-125";
             colorClass = "grayscale-0 opacity-100"; // Full color on hover!
-        } else if (hoverEmoji) {
-            const [hZone, hIdx] = hoverEmoji.split('-');
-            if (parseInt(hZone) === zone && Math.abs(parseInt(hIdx) - index) === 1) {
-                scaleClass = "scale-125 -translate-y-1 z-20 brightness-110";
-            }
         } else if (isSelected) {
              scaleClass = "scale-125 z-20";
              colorClass = "grayscale-0 opacity-100"; // Full color when selected!
         }
         
-        if (isSelected) {
+        // Apply the glowing circle to the emoji if it is hovered OR selected
+        if (isSelected || isHovered) {
              ringClass = zone === 1 ? "ring-2 ring-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.8)]" : 
                          zone === 3 ? "ring-2 ring-slate-400 shadow-[0_0_15px_rgba(148,163,184,0.8)]" : 
                          "ring-2 ring-purple-500 shadow-[0_0_15px_rgba(168,85,247,0.8)]";
