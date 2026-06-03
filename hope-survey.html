@@ -555,16 +555,20 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ }) => {
         let ringClass = "";
         let colorClass = "grayscale opacity-50"; // Default: gray and slightly faded
         
+        // We only want ONE emoji visually active at a time.
+        // If the user is actively hovering ANY emoji, the selected emoji temporarily fades out.
+        const isActiveSelection = isSelected && !hoverEmoji;
+        
         if (isHovered) {
             scaleClass = "scale-150 -translate-y-2 z-30 brightness-125";
             colorClass = "grayscale-0 opacity-100"; // Full color on hover!
-        } else if (isSelected) {
+        } else if (isActiveSelection) {
              scaleClass = "scale-125 z-20";
              colorClass = "grayscale-0 opacity-100"; // Full color when selected!
         }
         
-        // Apply the glowing circle to the emoji if it is hovered OR selected
-        if (isSelected || isHovered) {
+        // Apply the glowing circle to the emoji if it is hovered OR it is the active selection
+        if (isHovered || isActiveSelection) {
              ringClass = zone === 1 ? "ring-2 ring-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.8)]" : 
                          zone === 3 ? "ring-2 ring-slate-400 shadow-[0_0_15px_rgba(148,163,184,0.8)]" : 
                          "ring-2 ring-purple-500 shadow-[0_0_15px_rgba(168,85,247,0.8)]";
