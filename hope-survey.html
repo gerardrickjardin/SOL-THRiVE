@@ -629,7 +629,7 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ }) => {
                 "My {currentQ.title.replace(/[\u{1F300}-\u{1F9FF}]|\d\.\d/gu, '').trim().toLowerCase()} experience..."
             </h3>
             
-            <div className="grid grid-cols-3 gap-6 md:gap-8 relative z-10">
+            <div className="flex flex-col md:grid md:grid-cols-3 gap-6 md:gap-8 relative z-10">
                 {/* 1.0 Zone */}
                 <div className="flex flex-col items-center text-center gap-4 relative h-full">
                     <div className="flex-1 flex items-start justify-center min-h-[110px] mt-2">
@@ -1463,7 +1463,7 @@ const App = () => {
                 </div>
 
                 {/* Right Panel - Live Visualization (50%) */}
-                <div className="flex flex-col w-full h-full relative rounded-[2rem] shadow-2xl overflow-hidden bg-[#02050a] border border-cyan-500/20 hidden lg:flex min-h-0">
+                <div className="flex flex-col w-full h-full relative rounded-[2rem] shadow-2xl overflow-hidden bg-[#02050a] border border-cyan-500/20 lg:min-h-0 min-h-[500px]">
                     <div className="absolute inset-0 pointer-events-none" style={{
                         backgroundImage: 'radial-gradient(circle at 50% 50%, rgba(0, 229, 255, 0.08) 0%, transparent 60%), linear-gradient(rgba(0, 229, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 229, 255, 0.03) 1px, transparent 1px)',
                         backgroundSize: '100% 100%, 30px 30px, 30px 30px',
