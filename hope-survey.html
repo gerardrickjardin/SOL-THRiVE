@@ -216,7 +216,7 @@ const surveyQuestions = [
         concept: "How would you rate the physical safety, comfort, and peace of the place where you live?",
         anchors: {
             "5.0": "5 Stars (Sanctuary): My living space is a wonderfully quiet, clean, and safe sanctuary where I can fully rest and be happy.",
-            "3.0": "3 Stars (Stable): My housing meets my basic needs and is structurally safe, but it can be noisy or crowded.",
+            "3.0": "3 Stars (Stable): My living space meets my basic needs and is structurally safe, but it can be noisy or crowded.",
             "1.0": "1 Star (Shithole): My living space is unsafe, dirty, or broken, leaving me with zero privacy or peace."
         }
     },
@@ -240,7 +240,7 @@ const surveyQuestions = [
         subtitle: "the buildings and public places you go to every day, like your school, workspace, or community center",
         anchors: {
             "5.0": "5 Stars (Sanctuary): The public spaces I frequent are bright, welcoming, and perfectly designed to help me succeed.",
-            "3.0": "3 Stars (Stable): My daily public spaces are functional and safe, but they feel sterile and offer no real comfort.",
+            "3.0": "3 Stars (Stable): The public spaces I frequent are functional and safe, but they feel sterile and offer no real comfort.",
             "1.0": "1 Star (Shithole): The public spaces I encounter are broken, dirty, or actively hostile toward me."
         }
     },
@@ -252,8 +252,8 @@ const surveyQuestions = [
         subtitle: "your body's physical strength, health, and capability to do the things you want",
         anchors: {
             "5.0": "5 Stars (Fit): I am in peak physical health with total freedom to move, play, and work without any pain or limits.",
-            "3.0": "3 Stars (Functional): My body handles daily tasks fine, but minor aches or limits prevent me from doing hard physical work.",
-            "1.0": "1 Star (Frail): Chronic pain or debilitating illness makes it incredibly hard for me to complete basic daily tasks."
+            "3.0": "3 Stars (Functional): I am functional enough for daily tasks, but minor aches or limits prevent me from doing hard physical work.",
+            "1.0": "1 Star (Frail): I am physically frail, and chronic pain or illness makes it incredibly hard for me to complete basic tasks."
         }
     },
     {
@@ -265,7 +265,7 @@ const surveyQuestions = [
         anchors: {
             "5.0": "5 Stars (Fire): I wake up fully refreshed and maintain sharp, clean energy throughout my entire day without crashing.",
             "3.0": "3 Stars (Fueling): I have enough energy to get through my duties, but I frequently rely on caffeine or sheer willpower.",
-            "1.0": "1 Star (Flat): Paralyzing exhaustion has completely depleted my battery, making it nearly impossible to get out of bed."
+            "1.0": "1 Star (Flat): I am paralyzed by exhaustion and have completely depleted my battery, making it nearly impossible to get out of bed."
         }
     },
     {
@@ -312,8 +312,8 @@ const surveyQuestions = [
         subtitle: "the reliability of your daily logistics, like transportation, utilities, and working home appliances",
         anchors: {
             "5.0": "5 Stars (Breeze): My daily logistics run effortlessly with outstanding transportation and perfect home utilities.",
-            "3.0": "3 Stars (Basic): I get by on basic, often unreliable transportation and utilities that require exhausting daily effort.",
-            "1.0": "1 Star (Broken): I face complete logistical failure with no reliable transportation or working home utilities."
+            "3.0": "3 Stars (Basic): My daily logistics involve basic, often unreliable transportation and utilities that require exhausting effort.",
+            "1.0": "1 Star (Broken): My daily logistics face complete failure with no reliable transportation or working home utilities."
         }
     },
     {
@@ -325,7 +325,7 @@ const surveyQuestions = [
         anchors: {
             "5.0": "5 Stars (Peace): I have an unshakeable positive mindset that allows me to view any problem as an exciting chance to grow.",
             "3.0": "3 Stars (Balance): I manage to keep going during tough times, but I often struggle with worry and negative thoughts.",
-            "1.0": "1 Star (Battle): My mind is a constant warzone where minor issues spiral into paralyzing anxiety or hopelessness."
+            "1.0": "1 Star (Battle): I am trapped in a constant warzone where minor issues spiral into paralyzing anxiety or hopelessness."
         }
     },
     {
@@ -383,9 +383,9 @@ const surveyQuestions = [
         title: "🤝 5.3 Community",
         subtitle: "your everyday public interactions with neighbors, strangers on the street, or online communities",
         anchors: {
-            "5.0": "5 Stars (Wonderful): Public spaces and online forums feel incredibly safe, kind, and collaborative to me.",
-            "3.0": "3 Stars (Welcoming): My public interactions are generally polite but remain cold, distant, and purely transactional.",
-            "1.0": "1 Star (Warzone): Public spaces and online platforms feel actively hostile, leaving me feeling targeted or in danger."
+            "5.0": "5 Stars (Wonderful): I feel that public spaces and online forums are incredibly safe, kind, and collaborative.",
+            "3.0": "3 Stars (Welcoming): I find public interactions to be generally polite but cold, distant, and purely transactional.",
+            "1.0": "1 Star (Warzone): I experience public spaces and online platforms as actively hostile, leaving me feeling targeted or in danger."
         }
     },
     {
@@ -408,8 +408,8 @@ const surveyQuestions = [
         subtitle: "your daily habits, like nutrition, exercise, and sleep, and how well they support you",
         anchors: {
             "5.0": "5 Stars (Champion): I maintain perfectly aligned daily routines that keep my body and mind incredibly strong and clear.",
-            "3.0": "3 Stars (Consistent): My habits are mostly consistent, but I easily slide into unsupportive behaviors when stressed.",
-            "1.0": "1 Star (Chaos): My daily routines are in complete chaos, trapped by chronic, self-destructive patterns."
+            "3.0": "3 Stars (Consistent): I keep my habits mostly consistent, but I easily slide into unsupportive behaviors when stressed.",
+            "1.0": "1 Star (Chaos): I am living with daily routines in complete chaos, trapped by chronic, self-destructive patterns."
         }
     },
     {
@@ -433,7 +433,7 @@ const surveyQuestions = [
         anchors: {
             "5.0": "5 Stars (Triumphant): I have complete mental and physical freedom from gang involvement and follow an independent path.",
             "3.0": "3 Stars (Torn): I am not active in a gang, but I must constantly navigate their influence within my social circle or family.",
-            "1.0": "1 Star (Trapped): My survival and identity are entirely controlled by the gang, and I see no way out."
+            "1.0": "1 Star (Trapped): I feel my survival and identity are entirely controlled by the gang, and I see no way out."
         }
     },
     {
@@ -626,7 +626,7 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ }) => {
             `}} />
 
             <h3 className="text-emerald-700 text-2xl font-bold text-center mb-4 relative z-10">
-                "My {currentQ.title.replace(/[\u{1F300}-\u{1F9FF}]|\d\.\d/gu, '').trim().toLowerCase()} experience..."
+                How would you describe your {currentQ.title.replace(/[\u{1F300}-\u{1F9FF}]|\d\.\d/gu, '').trim().toLowerCase()}?
             </h3>
             
             <div className="flex flex-col md:grid md:grid-cols-3 gap-12 md:gap-8 relative z-10 mb-8 md:mb-0">
@@ -634,7 +634,7 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ }) => {
                 <div className="flex flex-col items-center text-center gap-3 md:gap-4 relative h-full">
                     <div className="order-3 md:order-1 flex-1 flex items-start justify-center min-h-[40px] md:min-h-[110px] mt-1 md:mt-2">
                         <p className={`text-[12px] md:text-sm leading-relaxed max-w-[200px] transition-colors duration-300 ${snappedValue >= 1.0 && snappedValue <= 2.0 ? "text-blue-700 font-bold" : "text-slate-500 font-medium"}`}>
-                            "...{shitholeData.desc.replace(/My .*? is /, '')}"
+                            {shitholeData.desc}
                         </p>
                     </div>
                     <div className={`order-2 md:order-2 flex items-center justify-between bg-blue-50 border border-blue-100 rounded-full px-8 md:px-10 py-2 transition-all duration-500 w-full shrink-0 ${getGlowStyles(1)}`}>
@@ -649,7 +649,7 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ }) => {
                 <div className="flex flex-col items-center text-center gap-3 md:gap-4 relative h-full">
                     <div className="order-3 md:order-1 flex-1 flex items-start justify-center min-h-[40px] md:min-h-[110px] mt-1 md:mt-2">
                         <p className={`text-[12px] md:text-sm leading-relaxed max-w-[200px] transition-colors duration-300 ${snappedValue >= 2.5 && snappedValue <= 3.5 ? "text-slate-800 font-bold" : "text-slate-500 font-medium"}`}>
-                            "...{stableData.desc.replace(/My .*? is /, '')}"
+                            {stableData.desc}
                         </p>
                     </div>
                     <div className={`order-2 md:order-2 flex items-center justify-between bg-slate-100 border border-slate-200 rounded-full px-8 md:px-10 py-2 transition-all duration-500 w-full shrink-0 ${getGlowStyles(3)}`}>
@@ -664,7 +664,7 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ }) => {
                 <div className="flex flex-col items-center text-center gap-3 md:gap-4 relative h-full">
                     <div className="order-3 md:order-1 flex-1 flex items-start justify-center min-h-[40px] md:min-h-[110px] mt-1 md:mt-2">
                         <p className={`text-[12px] md:text-sm leading-relaxed max-w-[200px] transition-colors duration-300 ${snappedValue >= 4.0 && snappedValue <= 5.0 ? "text-purple-700 font-bold" : "text-slate-500 font-medium"}`}>
-                            "...{sanctuaryData.desc.replace(/My .*? is /, '')}"
+                            {sanctuaryData.desc}
                         </p>
                     </div>
                     <div className={`order-2 md:order-2 flex items-center justify-between bg-purple-50 border border-purple-100 rounded-full px-8 md:px-10 py-2 transition-all duration-500 w-full shrink-0 ${getGlowStyles(5)}`}>
