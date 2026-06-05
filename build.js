@@ -30,7 +30,7 @@ const path = require('path');
   const key = process.env.VITE_ELEVENLABS_API_KEY || process.env.ELEVENLABS_API_KEY || "";
   const geminiKey = process.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY || "";
 
-  ['profile.html', 'survey.html'].forEach(file => {
+  ['profile.html', 'survey.html', 'hope-survey.html'].forEach(file => {
     const filePath = path.join(outDir, file);
     if (fs.existsSync(filePath)) {
       let content = fs.readFileSync(filePath, 'utf8');
