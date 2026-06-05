@@ -545,7 +545,7 @@ const ReflectionBox = ({ value, onChange }) => {
     };
 
     return (
-        <div className="mt-6 bg-slate-50 border border-slate-200 rounded-2xl p-4 shadow-sm animate-in fade-in slide-in-from-top-2 duration-500">
+        <div className="mt-4 bg-slate-50 border border-slate-200 rounded-2xl p-3 shadow-sm animate-in fade-in slide-in-from-top-2 duration-500">
             <div className="flex justify-between items-center mb-2">
                 <label className="text-xs uppercase tracking-widest font-bold text-slate-500">(Optional) Reflection</label>
                 <div className="flex gap-2">
@@ -572,13 +572,13 @@ const ReflectionBox = ({ value, onChange }) => {
                 value={value || ""}
                 onChange={(e) => onChange(e.target.value)}
                 placeholder="Describe your experience, environment, or reasoning behind your score..."
-                className="w-full bg-white border border-slate-200 rounded-xl p-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-50 transition-all text-slate-700 custom-scrollbar resize-y min-h-[100px] text-sm md:text-base"
+                className="w-full bg-white border border-slate-200 rounded-xl p-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-50 transition-all text-slate-700 custom-scrollbar resize-y min-h-[60px] text-sm md:text-base"
             />
         </div>
     );
 };
 
-const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ }) => {
+const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, children }) => {
     const [hoverEmoji, setHoverEmoji] = window.React.useState(null);
     const [burstKey, setBurstKey] = window.React.useState(0);
     const [burstValue, setBurstValue] = window.React.useState(null);
@@ -733,7 +733,7 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ }) => {
     const thumbBgColor = snappedValue > 3 ? '#a855f7' : snappedValue < 3 ? '#3b82f6' : '#64748b';
 
     return (
-        <div className="w-full flex flex-col gap-6 bg-white p-8 md:p-10 rounded-3xl mb-6 shadow-xl border border-slate-200 relative">
+        <div className="w-full flex flex-col gap-4 bg-white p-6 md:p-8 rounded-3xl mb-4 shadow-xl border border-slate-200 relative">
             <style dangerouslySetInnerHTML={{__html: `
                 @keyframes burst1 { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; } 100% { transform: translate(-70px, -140px) scale(1.5) rotate(-45deg); opacity: 0; } }
                 @keyframes burst2 { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; } 100% { transform: translate(-30px, -160px) scale(1.8) rotate(-20deg); opacity: 0; } }
@@ -843,6 +843,7 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ }) => {
                     </div>
                 </div>
             </div>
+            {children}
         </div>
     );
 };
@@ -1569,7 +1570,7 @@ const App = () => {
 
                         </div>
 
-                        {/* Interactive Card Selector */}
+                        {/* Interactive Card Selector & Reflection */}
                         <HopeEmojiSlider 
                             currentSelection={currentSelection} 
                             onSelect={(val) => {
@@ -1577,13 +1578,12 @@ const App = () => {
                             }} 
                             anchors={q.anchors} 
                             currentQ={q}
-                        />
-
-                        {/* Optional Reflection */}
-                        <ReflectionBox 
-                            value={reflections[q.id] || ""}
-                            onChange={(val) => setReflections({ ...reflections, [q.id]: val })}
-                        />
+                        >
+                            <ReflectionBox 
+                                value={reflections[q.id] || ""}
+                                onChange={(val) => setReflections({ ...reflections, [q.id]: val })}
+                            />
+                        </HopeEmojiSlider>
 
                         {/* Navigation Footer */}
                         <div className="flex justify-between items-center mt-4 pt-4 border-t border-slate-100 shrink-0">
