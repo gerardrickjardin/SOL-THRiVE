@@ -829,12 +829,13 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
                         step="0.01" 
                         value={displayValue}
                         onChange={handleSliderChange}
+                        onInput={handleSliderChange}
                         onMouseDown={handleDragStart}
                         onMouseUp={handleDragEnd}
                         onTouchStart={handleDragStart}
                         onTouchEnd={handleDragEnd}
                         className="absolute w-full h-full opacity-0 cursor-pointer z-30"
-                        style={{ top: 0, left: 0 }}
+                        style={{ top: 0, left: 0, touchAction: 'none' }}
                     />
                     
                     {/* The Gliding Thumb Overlay */}
