@@ -489,6 +489,11 @@ const ReflectionBox = ({ value, onChange }) => {
     const [isCleaning, setIsCleaning] = window.React.useState(false);
     const recognitionRef = window.React.useRef(null);
     const textAreaRef = window.React.useRef(null);
+    const valueRef = window.React.useRef(value);
+
+    window.React.useEffect(() => {
+        valueRef.current = value;
+    }, [value]);
 
     window.React.useEffect(() => {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -505,11 +510,17 @@ const ReflectionBox = ({ value, onChange }) => {
                     }
                 }
                 if (currentTranscript.trim()) {
-                    onChange((prev) => (prev ? prev + ' ' : '') + currentTranscript.trim());
+                    const prev = valueRef.current || "";
+                    onChange(prev ? prev + ' ' + currentTranscript.trim() : currentTranscript.trim());
                 }
             };
             
             recognition.onend = () => {
+                setIsListening(false);
+            };
+            
+            recognition.onerror = (event) => {
+                console.error("Speech recognition error", event.error);
                 setIsListening(false);
             };
             
