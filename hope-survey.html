@@ -1566,9 +1566,8 @@ const App = () => {
     }
 
     if (step === 'intro') {
-        const mockPattern = [2, 3, 4, 5, 4, 3, 4, 5, 4, 3, 2, 3, 4, 5, 4, 3, 2, 1];
         const mockAnswers = {};
-        surveyQuestions.slice(0, 18).forEach((q, i) => { mockAnswers[q.id] = mockPattern[i]; });
+        surveyQuestions.forEach((q) => { mockAnswers[q.id] = 5; });
 
         return (
             <main className="flex-grow flex flex-col items-center justify-center p-6 relative" style={{ minHeight: 'calc(100vh - 80px)' }}>
@@ -1580,15 +1579,18 @@ const App = () => {
                     
                     <div className="p-8 md:p-12 pt-8">
                         <div className="text-left space-y-6 text-slate-800 text-lg leading-relaxed mb-10">
-                            <p><b>Welcome to the HoPE Index!</b> Think of this as a visual dashboard that shows the fuel levels of your daily experience. It is a creative workspace designed to show you where your daily routine has plenty of energy, and where energy is a little bit low, so you can find ways to get more fuel, together with your coach.</p>
+                            <h2 className="text-2xl text-center font-bold text-slate-900">Welcome to the HoPE Index!</h2>
+                            <p>Think of this as a visual dashboard that shows the fuel levels of your daily experience. It is a creative workspace designed to show you where your daily routine has plenty of energy, and where energy is a little bit low, so you can find ways to get more fuel, together with your coach.</p>
                             
-                            <div className="space-y-4">
-                                <h3 className="font-bold text-slate-900 mb-2">
-                                    How to Complete this Survey
-                                </h3>
-                                <h4 className="font-bold text-slate-800">
-                                    <span className="mr-2">🎮</span>Rate the Level, Not the Player!
-                                </h4>
+                            <div className="space-y-4 pt-6 mt-6 border-t border-slate-100">
+                                <div className="text-center mb-6">
+                                    <h3 className="text-xl font-bold text-slate-900 mb-2">
+                                        How to Complete this Survey
+                                    </h3>
+                                    <h4 className="text-lg font-bold text-slate-800">
+                                        <span className="mr-2">🎮</span>Rate the Level, Not the Player!
+                                    </h4>
+                                </div>
                                 <p className="text-base text-slate-700 opacity-90">Imagine you're playing a video game as a hero like Black Panther or Harry Potter. If your character gets stuck in a difficult level with broken equipment, you wouldn't blame them for struggling. You would simply understand that's the level that they're at.</p>
                                 <p className="text-base text-slate-700 opacity-90">In this survey, we want you to look at your spaces, resources, and relationships as if they were the levels and gear in a game. You are not rating your personal worth as a human. Instead, use the emojis to tell us how well your daily environments and spaces are supporting you today.</p>
                             </div>
