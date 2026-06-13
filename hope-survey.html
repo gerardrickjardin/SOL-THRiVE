@@ -967,6 +967,10 @@ const HopeChart = ({ answers, surveyQuestions, isFinal, onViewDashboard, isBanne
                             );
                         })}
 
+                        {/* Concentric Arc Guide Lines */}
+                        <path d={describeArc(cx, cy, innerR + 45, innerR + 45, -90, 90)} fill="none" stroke="#ffffff" strokeWidth="2.5" opacity={isMounted ? "0.85" : "0"} style={{ transition: 'opacity 1s ease 0.5s' }} />
+                        <path d={describeArc(cx, cy, innerR + 95, innerR + 95, -90, 90)} fill="none" stroke="#ffffff" strokeWidth="2.5" opacity={isMounted ? "0.85" : "0"} style={{ transition: 'opacity 1s ease 0.5s' }} />
+
                         {coreQuestions.map((q, i) => {
                             const score = answers[q.id] ?? 0;
                             const dimIndex = Math.floor(i / 3);
@@ -993,9 +997,7 @@ const HopeChart = ({ answers, surveyQuestions, isFinal, onViewDashboard, isBanne
                             );
                         })}
 
-                        {/* Concentric Arc Guide Lines */}
-                        <path d={describeArc(cx, cy, innerR + 45, innerR + 45, -90, 90)} fill="none" stroke="#ffffff" strokeWidth="2.5" opacity={isMounted ? "0.85" : "0"} style={{ transition: 'opacity 1s ease 0.5s' }} />
-                        <path d={describeArc(cx, cy, innerR + 95, innerR + 95, -90, 90)} fill="none" stroke="#ffffff" strokeWidth="2.5" opacity={isMounted ? "0.85" : "0"} style={{ transition: 'opacity 1s ease 0.5s' }} />
+
 
                     </svg>
                 </div>
