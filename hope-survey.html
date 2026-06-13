@@ -919,7 +919,7 @@ const HopeChart = ({ answers, surveyQuestions, isFinal, onViewDashboard, isBanne
     const tierText = avgScore >= 4.0 ? "THRIVING" : avgScore >= 3.0 ? "STABILIZING" : avgScore >= 2.0 ? "SURVIVING" : "CRITICAL";
 
     return (
-        <div className={`relative z-10 w-full h-full ${isBanner ? 'justify-center' : 'rounded-[2rem] border border-cyan-500/20'} bg-[#02050a] backdrop-blur-3xl shadow-[0_20px_80px_rgba(0,229,255,0.07)] overflow-hidden flex flex-col transition-opacity duration-1000 ${isMounted ? 'opacity-100' : 'opacity-0'}`}>
+        <div className={`relative z-10 w-full h-full flex flex-col justify-center ${isBanner ? '' : 'rounded-[2rem] border border-cyan-500/20'} bg-[#02050a] backdrop-blur-3xl shadow-[0_20px_80px_rgba(0,229,255,0.07)] overflow-hidden transition-opacity duration-1000 ${isMounted ? 'opacity-100' : 'opacity-0'}`}>
             <div className="absolute top-0 left-0 w-32 h-32 border-t border-l border-cyan-500/50 rounded-tl-3xl opacity-50 pointer-events-none"></div>
             <div className="absolute top-0 right-0 w-32 h-32 border-t border-r border-cyan-500/50 rounded-tr-3xl opacity-50 pointer-events-none"></div>
             
