@@ -1570,14 +1570,14 @@ const App = () => {
         surveyQuestions.forEach((q) => { mockAnswers[q.id] = 5; });
 
         return (
-            <main className="flex-grow flex items-center justify-center p-4 md:p-6 relative" style={{ minHeight: 'calc(100vh - 80px)' }}>
-                <div className="bg-white max-w-7xl w-full rounded-[2rem] shadow-2xl border border-slate-100 relative overflow-hidden flex flex-col lg:flex-row">
+            <main className="flex-grow flex items-center justify-center p-4 md:p-6 relative overflow-hidden" style={{ height: 'calc(100vh - 80px)' }}>
+                <div className="bg-white max-w-7xl w-full h-full max-h-[850px] rounded-[2rem] shadow-2xl border border-slate-100 relative overflow-hidden flex flex-col lg:flex-row">
                     
                     {/* Top gradient border */}
                     <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-emerald-500 via-blue-500 to-purple-500 z-50"></div>
                     
                     {/* Left Side: Dark Dashboard */}
-                    <div className="w-full lg:w-[55%] bg-[#02050a] flex items-center justify-center relative min-h-[400px] lg:min-h-[550px] overflow-hidden">
+                    <div className="w-full lg:w-[55%] lg:h-full bg-[#02050a] flex items-center justify-center relative min-h-[400px] lg:min-h-0 overflow-hidden">
                         <div className="hidden lg:block absolute top-0 right-0 w-[1px] h-full bg-cyan-500/20 z-50"></div>
                         <div className="w-full h-full absolute inset-0 flex items-center justify-center p-4">
                             <HopeChart answers={mockAnswers} surveyQuestions={surveyQuestions} isBanner={true} />
@@ -1585,17 +1585,17 @@ const App = () => {
                     </div>
                     
                     {/* Right Side: Welcome Text and Actions */}
-                    <div className="w-full lg:w-[45%] p-8 lg:p-12 flex flex-col justify-center">
-                        <div className="text-left space-y-6 text-slate-800 text-lg leading-relaxed">
-                            <h2 className="text-3xl text-center font-bold text-slate-900 tracking-tight">Welcome to the HoPE Index!</h2>
+                    <div className="w-full lg:w-[45%] lg:h-full p-8 lg:p-12 flex flex-col justify-center overflow-y-auto">
+                        <div className="text-left space-y-4 lg:space-y-6 text-slate-800 text-base lg:text-lg leading-relaxed">
+                            <h2 className="text-2xl lg:text-3xl text-center font-bold text-slate-900 tracking-tight">Welcome to the HoPE Index!</h2>
                             <p>Think of this as a visual dashboard that shows the fuel levels of your daily experience. It is a creative workspace designed to show you where your daily routine has plenty of energy, and where energy is a little bit low, so you can find ways to get more fuel, together with your coach.</p>
                             
-                            <div className="space-y-4 pt-6 mt-6 border-t border-slate-100">
-                                <div className="text-center mb-5">
-                                    <h3 className="text-xl font-bold text-slate-900 mb-2">
+                            <div className="space-y-4 pt-4 lg:pt-6 mt-4 lg:mt-6 border-t border-slate-100">
+                                <div className="text-center mb-4 lg:mb-5">
+                                    <h3 className="text-lg lg:text-xl font-bold text-slate-900 mb-1 lg:mb-2">
                                         How to Complete this Survey
                                     </h3>
-                                    <h4 className="text-lg font-bold text-slate-800 flex items-center justify-center">
+                                    <h4 className="text-base lg:text-lg font-bold text-slate-800 flex items-center justify-center">
                                         <span className="mr-2">🎮</span>Rate the Level, Not the Player!
                                     </h4>
                                 </div>
