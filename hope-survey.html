@@ -1006,6 +1006,7 @@ const HopeChart = ({ answers, surveyQuestions, isFinal, onViewDashboard, isBanne
                 </div>
 
                 {/* Score Card Beneath Gauge */}
+                {!isBanner && (
                 <div className={`relative z-20 flex justify-center w-full transition-opacity duration-1000 delay-[800ms] ${isMounted ? 'opacity-100' : 'opacity-0'}`}>
                     <div className="bg-[#020d1c]/80 border-2 border-cyan-400/80 rounded-2xl p-5 flex flex-col items-center justify-center w-[300px] shadow-[0_0_30px_rgba(0,229,255,0.2)]">
                         <div className="absolute top-0 bottom-0 left-[-2px] w-1 bg-cyan-400 rounded-l-full shadow-[0_0_10px_#00e5ff]"></div>
@@ -1033,9 +1034,11 @@ const HopeChart = ({ answers, surveyQuestions, isFinal, onViewDashboard, isBanne
                         <div className="text-cyan-400 font-bold text-[11px] tracking-wider">{Math.round(totalScore)}% HoPE CAPACITY</div>
                     </div>
                 </div>
+                )}
             </div>
 
             {/* Streamlined Population-Specific Context Footer */}
+            {!isBanner && (
             <div className={`shrink-0 border-t border-cyan-500/20 bg-transparent mt-4 mb-4 transition-opacity duration-1000 z-20 ${isMounted ? 'opacity-100 delay-[500ms]' : 'opacity-0'}`}>
                 
                 <div className="flex justify-center mb-4">
@@ -1104,6 +1107,7 @@ const HopeChart = ({ answers, surveyQuestions, isFinal, onViewDashboard, isBanne
                     </div>
                 </div>
             </div>
+            )}
 
             {isFinal && (
                 <div className={`absolute inset-0 bg-[#02050a]/60 backdrop-blur-sm z-30 flex items-center justify-center transition-opacity duration-1000 ${isMounted ? 'opacity-100 delay-[1000ms]' : 'opacity-0'}`}>
