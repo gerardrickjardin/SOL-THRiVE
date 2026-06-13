@@ -904,6 +904,14 @@ const HopeChart = ({ answers, surveyQuestions, isFinal, onViewDashboard, isBanne
     const dimensionNames = ["PLACES", "BODY", "RESOURCES", "SELF", "OTHERS", "LIFE"];
 
     const coreQuestions = surveyQuestions.slice(0, 18);
+    
+    // Calculate OPS, IRS, and Total Scores
+    const opsSum = coreQuestions.slice(0, 9).reduce((sum, q) => sum + (answers[q.id] || 0), 0);
+    const irsSum = coreQuestions.slice(9, 18).reduce((sum, q) => sum + (answers[q.id] || 0), 0);
+    const opsScore50 = Math.round((opsSum / 45) * 50);
+    const irsScore50 = Math.round((irsSum / 45) * 50);
+    const totalHoPEScore100 = opsScore50 + irsScore50;
+
     const flex1Score = answers[surveyQuestions[18]?.id] ?? 0;
     const flex2Score = answers[surveyQuestions[19]?.id] ?? 0;
 
@@ -985,53 +993,44 @@ const HopeChart = ({ answers, surveyQuestions, isFinal, onViewDashboard, isBanne
                             );
                         })}
 
-                        <g transform={`translate(${cx}, ${cy - 10})`} style={{ opacity: isMounted ? 1 : 0, transition: 'opacity 1s ease 0.5s' }}>
-                            {/* Numerical Rating Inside Gauge */}
-                            <text x="0" y="-30" fill="#00e5ff" fontSize="48" fontWeight="900" textAnchor="middle" opacity="0.9" letterSpacing="1px" style={{ textShadow: '0 0 20px rgba(0,229,255,0.4)' }}>
-                                {(totalScore / 20).toFixed(1)}
-                                <tspan fontSize="20" fontWeight="600" fill="#00e5ff" opacity="0.6"> / 5.0</tspan>
-                            </text>
-                            
-                            {/* Tier Classification Inside Gauge */}
-                            <text x="0" y="15" fill="#ffffff" fontSize="24" fontWeight="800" textAnchor="middle" letterSpacing="5px" filter="url(#glow-soft)">
-                                {tierText}
-                            </text>
+                        {/* Concentric Arc Guide Lines */}
+                        <path d={describeArc(cx, cy, innerR + 45, innerR + 45, -90, 90)} fill="none" stroke="#ffffff" strokeWidth="2.5" opacity={isMounted ? "0.85" : "0"} style={{ transition: 'opacity 1s ease 0.5s' }} />
+                        <path d={describeArc(cx, cy, innerR + 95, innerR + 95, -90, 90)} fill="none" stroke="#ffffff" strokeWidth="2.5" opacity={isMounted ? "0.85" : "0"} style={{ transition: 'opacity 1s ease 0.5s' }} />
 
-                            {/* Completion Percentage Inside Gauge */}
-                            <text x="0" y="45" fill="#00e5ff" fontSize="12" fontWeight="bold" textAnchor="middle" opacity="0.7" letterSpacing="2px">
-                                {Math.round(totalScore)}% HoPE CAPACITY
-                            </text>
-                        </g>
                     </svg>
                 </div>
 
-                {/* Score Card Beneath Gauge */}
+                {/* OPS and IRS Score Cards */}
                 {!isBanner && (
-                <div className={`relative z-20 flex justify-center w-full transition-opacity duration-1000 delay-[800ms] ${isMounted ? 'opacity-100' : 'opacity-0'}`}>
-                    <div className="bg-[#020d1c]/80 border-2 border-cyan-400/80 rounded-2xl p-5 flex flex-col items-center justify-center w-[300px] shadow-[0_0_30px_rgba(0,229,255,0.2)]">
-                        <div className="absolute top-0 bottom-0 left-[-2px] w-1 bg-cyan-400 rounded-l-full shadow-[0_0_10px_#00e5ff]"></div>
-                        <div className="absolute top-0 bottom-0 right-[-2px] w-1 bg-cyan-400 rounded-r-full shadow-[0_0_10px_#00e5ff]"></div>
-                        
-                        <div className="text-white font-bold text-xl tracking-widest mb-1">{tierText}</div>
-                        <div className="text-cyan-400 font-semibold text-sm mb-3">{(totalScore/20).toFixed(1)} / 5.0 STARS</div>
-                        <div className="flex gap-1.5 mb-3">
-                            {[1, 2, 3, 4, 5].map(starIndex => {
-                                const fillPct = avgScore >= starIndex ? 100 : avgScore > starIndex - 1 ? (avgScore - (starIndex - 1)) * 100 : 0;
-                                return (
-                                    <div key={starIndex} className="relative w-5 h-5">
-                                        <svg viewBox="0 0 24 24" className="w-full h-full text-slate-700">
-                                            <path fill="currentColor" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                                        </svg>
-                                        {fillPct > 0 && (
-                                            <svg viewBox="0 0 24 24" className="w-full h-full absolute top-0 left-0 text-cyan-400" style={{ clipPath: `inset(0 ${100-fillPct}% 0 0)` }}>
-                                                <path fill="currentColor" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                                            </svg>
-                                        )}
-                                    </div>
-                                );
-                            })}
+                <div className={`relative z-20 flex flex-col items-center w-full mt-2 pb-8 transition-opacity duration-1000 delay-[800ms] ${isMounted ? 'opacity-100' : 'opacity-0'}`}>
+                    <div className="flex flex-row justify-center w-full max-w-[600px] gap-0 px-4">
+                        {/* OPS Box */}
+                        <div className="flex flex-col items-center w-1/2">
+                            <div className="bg-[#e2e8f0] text-slate-900 border border-slate-300 px-2 py-3 w-full text-center font-medium text-xs md:text-sm tracking-wide">
+                                OPS &ndash; Outer Physical Space
+                            </div>
+                            <div className="bg-[#e2e8f0] text-slate-900 border border-slate-300 border-t-0 px-5 py-2 text-center font-black text-2xl inline-block shadow-lg">
+                                {opsScore50} <span className="text-xs font-semibold text-slate-500">/ 50</span>
+                            </div>
                         </div>
-                        <div className="text-cyan-400 font-bold text-[11px] tracking-wider">{Math.round(totalScore)}% HoPE CAPACITY</div>
+                        {/* IRS Box */}
+                        <div className="flex flex-col items-center w-1/2">
+                            <div className="bg-[#0f172a] text-white border border-slate-600 px-2 py-3 w-full text-center font-medium text-xs md:text-sm tracking-wide">
+                                IRS &ndash; Inner Relational Space
+                            </div>
+                            <div className="bg-[#0f172a] text-white border border-slate-600 border-t-0 px-5 py-2 text-center font-black text-2xl inline-block shadow-lg">
+                                {irsScore50} <span className="text-xs font-semibold text-slate-400">/ 50</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Total HoPE Index Score */}
+                    <div className="mt-6 bg-[#020d1c]/80 border-2 border-cyan-400/80 rounded-xl p-4 flex flex-col items-center justify-center min-w-[240px] shadow-[0_0_30px_rgba(0,229,255,0.2)]">
+                        <div className="text-cyan-400 font-bold text-[10px] md:text-xs tracking-widest uppercase mb-1">TOTAL HoPE INDEX SCORE</div>
+                        <div className="text-cyan-500/80 font-bold text-[9px] tracking-widest uppercase mb-2">(0-100%)</div>
+                        <div className="text-white font-black text-5xl flex items-baseline gap-1" style={{ textShadow: '0 0 20px rgba(0,229,255,0.5)' }}>
+                            {totalHoPEScore100} <span className="text-cyan-400 font-bold text-lg">/ 100</span>
+                        </div>
                     </div>
                 </div>
                 )}
