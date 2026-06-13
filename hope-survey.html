@@ -967,8 +967,9 @@ const HopeChart = ({ answers, surveyQuestions, isFinal, onViewDashboard, isBanne
                             );
                         })}
 
-                        {/* Concentric Arc Guide Lines removed from here, moved into the loop */}
-
+                        {/* Continuous Concentric Arc Guide Lines - drawn BEFORE the slices so they sit underneath the bars */}
+                        <path d={describeArc(cx, cy, innerR + 45, innerR + 45, -90, 90)} fill="none" stroke="#ffffff" strokeWidth="1.5" opacity={isMounted ? "0.15" : "0"} style={{ transition: 'opacity 1s ease 0.5s' }} />
+                        <path d={describeArc(cx, cy, innerR + 95, innerR + 95, -90, 90)} fill="none" stroke="#ffffff" strokeWidth="1.5" opacity={isMounted ? "0.15" : "0"} style={{ transition: 'opacity 1s ease 0.5s' }} />
                         {coreQuestions.map((q, i) => {
                             const score = answers[q.id] ?? 0;
                             const dimIndex = Math.floor(i / 3);
@@ -986,12 +987,7 @@ const HopeChart = ({ answers, surveyQuestions, isFinal, onViewDashboard, isBanne
                             return (
                                 <g key={`slice-${i}`}>
                                     <path d={basePath} fill={color} opacity={isMounted ? "0.05" : "0"} style={{ transition: `opacity 1s ease ${delay}s` }} />
-                                    
-                                    {/* Segmented Guide Lines */}
-                                    <path d={describeArc(cx, cy, innerR + 45, innerR + 45, startA, endA)} fill="none" stroke="#ffffff" strokeWidth="1.5" opacity={isMounted ? "0.2" : "0"} style={{ transition: `opacity 1s ease 0.5s` }} />
-                                    <path d={describeArc(cx, cy, innerR + 95, innerR + 95, startA, endA)} fill="none" stroke="#ffffff" strokeWidth="1.5" opacity={isMounted ? "0.2" : "0"} style={{ transition: `opacity 1s ease 0.5s` }} />
-
-                                    <path d={scorePath} fill={color} filter="url(#glow-soft)" opacity={isMounted ? "1" : "0"} style={{ transition: `all 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) ${delay}s` }} />
+                                    <path d={scorePath} fill={color} filter="url(#glow-soft)" opacity={isMounted ? "0.9" : "0"} style={{ transition: `all 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) ${delay}s` }} />
                                     {score > 0 && (
                                         <path d={describeArc(cx, cy, scoreR - 3, scoreR, startA, endA)} fill="#ffffff" opacity={isMounted ? "0.5" : "0"} style={{ transition: `all 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) ${delay}s` }} />
                                     )}
