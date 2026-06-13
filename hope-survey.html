@@ -917,10 +917,10 @@ const HopeChart = ({ answers, surveyQuestions, isFinal, onViewDashboard, isBanne
             
             <div className="text-center mt-6 relative shrink-0 z-20">
                 <h1 className="font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-cyan-100 tracking-widest mb-0" style={{ textShadow: '0 0 40px rgba(0,229,255,0.3)', fontSize: 'clamp(1.2rem, 2.5vw, 1.8rem)' }}>
-                    THE HoPE INDEX
+                    The HoPE Index
                 </h1>
-                <p className="text-cyan-400 font-medium tracking-[0.2em] uppercase mt-2" style={{ fontSize: 'clamp(0.6rem, 1vw, 0.75rem)' }}>
-                    (HUMAN OPTIMIZED PERSONAL EXPERIENCE)
+                <p className="text-cyan-400 font-medium tracking-[0.2em] uppercase mt-2" style={{ fontSize: 'clamp(1.2rem, 2vw, 1.5rem)' }}>
+                    HUMAN OPTIMIZED PERSONAL EXPERIENCE
                 </p>
             </div>
 
@@ -1037,77 +1037,7 @@ const HopeChart = ({ answers, surveyQuestions, isFinal, onViewDashboard, isBanne
                 )}
             </div>
 
-            {/* Streamlined Population-Specific Context Footer */}
-            {!isBanner && (
-            <div className={`shrink-0 border-t border-cyan-500/20 bg-transparent mt-4 mb-4 transition-opacity duration-1000 z-20 ${isMounted ? 'opacity-100 delay-[500ms]' : 'opacity-0'}`}>
-                
-                <div className="flex justify-center mb-4">
-                    <div className="bg-[#051020] border border-cyan-500/50 rounded-full px-6 py-1">
-                        <span className="text-[10px] text-cyan-400 font-bold uppercase tracking-widest">POPULATION-SPECIFIC CONTEXT</span>
-                    </div>
-                </div>
-
-                <div className="max-w-[700px] mx-auto w-full relative">
-                    {/* Corner decorative borders */}
-                    <div className="absolute top-0 left-0 w-4 h-4 border-t border-l border-cyan-500/50 rounded-tl-xl"></div>
-                    <div className="absolute bottom-0 left-0 w-4 h-4 border-b border-l border-cyan-500/50 rounded-bl-xl"></div>
-                    <div className="absolute top-0 right-0 w-4 h-4 border-t border-r border-cyan-500/50 rounded-tr-xl"></div>
-                    <div className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-cyan-500/50 rounded-br-xl"></div>
-
-                    <div className="grid grid-cols-2 divide-x divide-cyan-500/20 py-2">
-                        <div className="flex items-center justify-center gap-6">
-                            <div className="w-14 h-14 shrink-0">
-                                <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_0_10px_rgba(0,229,255,0.3)]">
-                                    {[0,1,2,3,4,5].map(tick => {
-                                        const a = -120 + (tick / 5) * 240;
-                                        const p1 = polarToCartesian(50, 50, 42, a);
-                                        const p2 = polarToCartesian(50, 50, 46, a);
-                                        return <line key={tick} x1={p1.x} y1={p1.y} x2={p2.x} y2={p2.y} stroke="#00e5ff" strokeWidth="2" opacity="0.6"/>;
-                                    })}
-                                    <path d={describeArc(50, 50, 36, 40, -120, 120)} fill="#0a1526" stroke="#00e5ff" strokeWidth="0.5" opacity="0.5" />
-                                    <path d={describeArc(50, 50, 36, 40, -120, -120 + (flex1Score / 5) * 240)} fill="#00e5ff" filter="url(#glow-soft)" style={{ transition: 'all 0.5s ease' }} />
-                                    <g style={{ transform: `rotate(${-120 + (flex1Score / 5) * 240}deg)`, transformOrigin: '50px 50px', transition: 'transform 0.5s ease' }}>
-                                        <polygon points="48.5,50 51.5,50 50,12" fill="#ffffff" filter="url(#glow-soft)" />
-                                        <circle cx="50" cy="50" r="4" fill="#00e5ff" stroke="#ffffff" strokeWidth="1.5" />
-                                    </g>
-                                </svg>
-                            </div>
-                            <div className="flex flex-col justify-center text-left">
-                                <div className="text-[11px] text-white font-bold uppercase tracking-widest leading-tight mb-1">
-                                    GANG DE-<br/>IDENTIFICATION
-                                </div>
-                                <div className="text-cyan-400 font-bold text-sm">{flex1Score.toFixed(1)} / 5.0</div>
-                            </div>
-                        </div>
-
-                        <div className="flex items-center justify-center gap-6">
-                            <div className="w-14 h-14 shrink-0">
-                                <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_0_10px_rgba(0,229,255,0.3)]">
-                                    {[0,1,2,3,4,5].map(tick => {
-                                        const a = -120 + (tick / 5) * 240;
-                                        const p1 = polarToCartesian(50, 50, 42, a);
-                                        const p2 = polarToCartesian(50, 50, 46, a);
-                                        return <line key={tick} x1={p1.x} y1={p1.y} x2={p2.x} y2={p2.y} stroke="#00e5ff" strokeWidth="2" opacity="0.6"/>;
-                                    })}
-                                    <path d={describeArc(50, 50, 36, 40, -120, 120)} fill="#0a1526" stroke="#00e5ff" strokeWidth="0.5" opacity="0.5" />
-                                    <path d={describeArc(50, 50, 36, 40, -120, -120 + (flex2Score / 5) * 240)} fill="#00e5ff" filter="url(#glow-soft)" style={{ transition: 'all 0.5s ease' }} />
-                                    <g style={{ transform: `rotate(${-120 + (flex2Score / 5) * 240}deg)`, transformOrigin: '50px 50px', transition: 'transform 0.5s ease' }}>
-                                        <polygon points="48.5,50 51.5,50 50,12" fill="#ffffff" filter="url(#glow-soft)" />
-                                        <circle cx="50" cy="50" r="4" fill="#00e5ff" stroke="#ffffff" strokeWidth="1.5" />
-                                    </g>
-                                </svg>
-                            </div>
-                            <div className="flex flex-col justify-center text-left">
-                                <div className="text-[11px] text-white font-bold uppercase tracking-widest leading-tight mb-1">
-                                    PSYCHOLOGICAL<br/>SAFETY
-                                </div>
-                                <div className="text-cyan-400 font-bold text-sm">{flex2Score.toFixed(1)} / 5.0</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            )}
+            {/* Removed Population-Specific Context Footer */}
 
             {isFinal && (
                 <div className={`absolute inset-0 bg-[#02050a]/60 backdrop-blur-sm z-30 flex items-center justify-center transition-opacity duration-1000 ${isMounted ? 'opacity-100 delay-[1000ms]' : 'opacity-0'}`}>
