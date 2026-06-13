@@ -1570,24 +1570,32 @@ const App = () => {
         surveyQuestions.forEach((q) => { mockAnswers[q.id] = 5; });
 
         return (
-            <main className="flex-grow flex flex-col items-center justify-center p-6 relative" style={{ minHeight: 'calc(100vh - 80px)' }}>
-                <div className="bg-white max-w-3xl w-full rounded-[2rem] shadow-2xl border border-slate-100 text-center relative overflow-hidden">
-                    <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-emerald-500 via-blue-500 to-purple-500"></div>
-                    <div className="w-full bg-[#02050a] flex items-center justify-center overflow-hidden" style={{ height: '420px' }}>
-                        <HopeChart answers={mockAnswers} surveyQuestions={surveyQuestions} isBanner={true} />
+            <main className="flex-grow flex items-center justify-center p-4 md:p-6 relative" style={{ minHeight: 'calc(100vh - 80px)' }}>
+                <div className="bg-white max-w-7xl w-full rounded-[2rem] shadow-2xl border border-slate-100 relative overflow-hidden flex flex-col lg:flex-row">
+                    
+                    {/* Top gradient border */}
+                    <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-emerald-500 via-blue-500 to-purple-500 z-50"></div>
+                    
+                    {/* Left Side: Dark Dashboard */}
+                    <div className="w-full lg:w-[55%] bg-[#02050a] flex items-center justify-center relative min-h-[400px] lg:min-h-[550px] overflow-hidden">
+                        <div className="hidden lg:block absolute top-0 right-0 w-[1px] h-full bg-cyan-500/20 z-50"></div>
+                        <div className="w-full h-full absolute inset-0 flex items-center justify-center p-4">
+                            <HopeChart answers={mockAnswers} surveyQuestions={surveyQuestions} isBanner={true} />
+                        </div>
                     </div>
                     
-                    <div className="p-8 md:p-12 pt-8">
-                        <div className="text-left space-y-6 text-slate-800 text-lg leading-relaxed mb-10">
-                            <h2 className="text-2xl text-center font-bold text-slate-900">Welcome to the HoPE Index!</h2>
+                    {/* Right Side: Welcome Text and Actions */}
+                    <div className="w-full lg:w-[45%] p-8 lg:p-12 flex flex-col justify-center">
+                        <div className="text-left space-y-6 text-slate-800 text-lg leading-relaxed">
+                            <h2 className="text-3xl text-center font-bold text-slate-900 tracking-tight">Welcome to the HoPE Index!</h2>
                             <p>Think of this as a visual dashboard that shows the fuel levels of your daily experience. It is a creative workspace designed to show you where your daily routine has plenty of energy, and where energy is a little bit low, so you can find ways to get more fuel, together with your coach.</p>
                             
                             <div className="space-y-4 pt-6 mt-6 border-t border-slate-100">
-                                <div className="text-center mb-6">
+                                <div className="text-center mb-5">
                                     <h3 className="text-xl font-bold text-slate-900 mb-2">
                                         How to Complete this Survey
                                     </h3>
-                                    <h4 className="text-lg font-bold text-slate-800">
+                                    <h4 className="text-lg font-bold text-slate-800 flex items-center justify-center">
                                         <span className="mr-2">🎮</span>Rate the Level, Not the Player!
                                     </h4>
                                 </div>
@@ -1595,20 +1603,19 @@ const App = () => {
                                 <p className="text-base text-slate-700 opacity-90">In this survey, we want you to look at your spaces, resources, and relationships as if they were the levels and gear in a game. You are not rating your personal worth as a human. Instead, use the emojis to tell us how well your daily environments and spaces are supporting you today.</p>
                             </div>
                         </div>
-                    </div>
-                    
-                    <div className="flex flex-col items-center justify-center gap-4 mt-2 p-8 pt-0">
-                        {renderAuthWidget("w-full md:w-auto mb-2")}
-                        <button 
-                            onClick={() => { 
+                        
+                        <div className="flex flex-col items-center justify-center gap-4 mt-10">
+                            {renderAuthWidget("w-full md:w-auto mb-2")}
+                            <button onClick={() => { 
                                 setStep('survey'); 
                                 setCurrentSelection(answers[surveyQuestions[0].id] ?? null); 
-                            }}
-                            className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-10 py-5 rounded-full font-bold text-xl hover:-translate-y-1 transition-all shadow-xl hover:shadow-[0_10px_25px_rgba(79,70,229,0.4)] inline-flex items-center justify-center gap-3 w-full md:w-auto"
-                        >
-                            Let's Begin →
-                        </button>
+                            }} className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white px-10 py-4 rounded-full font-bold text-xl transition-all shadow-lg hover:shadow-[0_10px_25px_rgba(59,130,246,0.4)] flex items-center justify-center gap-3 w-full md:w-auto">
+                                Let's Begin 
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                            </button>
+                        </div>
                     </div>
+
                 </div>
             </main>
         );
