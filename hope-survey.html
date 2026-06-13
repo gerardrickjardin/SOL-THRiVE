@@ -1566,12 +1566,16 @@ const App = () => {
     }
 
     if (step === 'intro') {
+        const mockPattern = [2, 3, 4, 5, 4, 3, 4, 5, 4, 3, 2, 3, 4, 5, 4, 3, 2, 1];
+        const mockAnswers = {};
+        surveyQuestions.slice(0, 18).forEach((q, i) => { mockAnswers[q.id] = mockPattern[i]; });
+
         return (
             <main className="flex-grow flex flex-col items-center justify-center p-6 relative" style={{ minHeight: 'calc(100vh - 80px)' }}>
                 <div className="bg-white max-w-3xl w-full rounded-[2rem] shadow-2xl border border-slate-100 text-center relative overflow-hidden">
                     <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-emerald-500 via-blue-500 to-purple-500"></div>
-                    <div className="w-full bg-[#02050a]" style={{ height: '480px' }}>
-                        <HopeChart answers={{}} surveyQuestions={surveyQuestions} isBanner={true} />
+                    <div className="w-full bg-[#02050a] flex items-center justify-center overflow-hidden" style={{ height: '420px' }}>
+                        <HopeChart answers={mockAnswers} surveyQuestions={surveyQuestions} isBanner={true} />
                     </div>
                     
                     <div className="p-8 md:p-12 pt-8">
