@@ -1415,6 +1415,15 @@ const App = () => {
     const [showAuthModal, setShowAuthModal] = useState(false);
 
     useEffect(() => {
+        if (step === 'intro') {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'auto';
+        }
+        return () => { document.body.style.overflow = 'auto'; };
+    }, [step]);
+
+    useEffect(() => {
         if (!window.firebaseAuth) {
             setAuthLoading(false);
             return;
