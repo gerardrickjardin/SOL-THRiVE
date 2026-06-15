@@ -1505,8 +1505,8 @@ const App = () => {
         surveyQuestions.forEach((q) => { mockAnswers[q.id] = 5; });
 
         return (
-            <main className="flex-grow flex items-center justify-center p-4 md:p-6 relative overflow-hidden" style={{ height: 'calc(100vh - 80px)' }}>
-                <div className="bg-white max-w-7xl w-full h-full max-h-[850px] rounded-[2rem] shadow-2xl border border-slate-100 relative overflow-hidden flex flex-col lg:flex-row">
+            <main className="flex-grow flex items-center justify-center p-4 md:p-6 relative" style={{ minHeight: 'calc(100vh - 80px)' }}>
+                <div className="bg-white max-w-7xl w-full h-auto lg:h-full lg:max-h-[850px] rounded-[2rem] shadow-2xl border border-slate-100 relative overflow-hidden flex flex-col lg:flex-row">
                     
                     {/* Top gradient border */}
                     <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-emerald-500 via-blue-500 to-purple-500 z-50"></div>
@@ -1520,7 +1520,7 @@ const App = () => {
                     </div>
                     
                     {/* Right Side: Welcome Text and Actions */}
-                    <div className="w-full lg:w-[45%] lg:h-full p-8 lg:p-12 flex flex-col justify-center overflow-y-auto">
+                    <div className="w-full lg:w-[45%] lg:h-full p-8 lg:p-12 flex flex-col justify-center lg:overflow-y-auto">
                         <div className="text-left space-y-4 lg:space-y-6 text-slate-800 text-base lg:text-lg leading-relaxed">
                             <h2 className="text-2xl lg:text-3xl text-center font-bold text-slate-900 tracking-tight">Welcome to the HoPE Index!</h2>
                             <p>Think of this as a visual dashboard that shows the fuel levels of your daily experience. It is a creative workspace designed to show you where your daily routine has plenty of energy, and where energy is a little bit low, so you can find ways to get more fuel, together with your coach.</p>
