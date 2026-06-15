@@ -1345,8 +1345,7 @@ const App = () => {
     const [showAuthModal, setShowAuthModal] = useState(false);
 
     useEffect(() => {
-        document.body.style.overflow = 'hidden';
-        return () => { document.body.style.overflow = 'auto'; };
+        // Removed document.body overflow hidden to allow mobile scrolling
     }, []);
 
     useEffect(() => {
