@@ -168,18 +168,18 @@ h1,h2,h3{font-family:'Kalam',cursive;font-weight:700}
     </section>
 
     <section class="panel" id="survey">
-      <div class="label">📋 Community Impact Survey</div>
+      <div class="label">📋 Clinical Practice Audit</div>
       <div id="form">
-        <div class="q"><span class="tag">Q1. Baseline</span><p>How well do you feel current programs are reaching families in your community right now?</p>
-          <div class="scale"><button>1</button><button>2</button><button class="on">3</button><button>4</button><button>5</button></div>
-          <div class="ends"><span>1 = Not at all</span><span>5 = Very well</span></div></div>
-        <div class="q"><span class="tag">Q2. Mentorship</span><p>How valuable would it be to offer trusted mentors for young people in your neighborhood?</p>
-          <div class="scale"><button>1</button><button>2</button><button>3</button><button>4</button><button class="on">5</button></div>
+        <div class="q"><span class="tag">Q1. Between-Session Engagement</span><p>How often do your clients actively practice tools or reflections between sessions without you having to prompt them?</p>
+          <div class="scale"><button>1</button><button>2</button><button>3</button><button>4</button><button>5</button></div>
+          <div class="ends"><span>1 = Rarely / Never</span><span>5 = Consistently</span></div></div>
+        <div class="q"><span class="tag">Q2. Client AI Reality</span><p>How often do your clients mention turning to ChatGPT, social media, or search engines to unpack emotional stress on their own?</p>
+          <div class="scale"><button>1</button><button>2</button><button>3</button><button>4</button><button>5</button></div>
+          <div class="ends"><span>1 = Never</span><span>5 = Constantly</span></div></div>
+        <div class="q"><span class="tag">Q3. The Ethical Co-Pilot</span><p>How valuable would a strictly guardrailed, HIPAA-compliant AI be if it acted purely as your co-pilot—empowering the relationship rather than replacing it?</p>
+          <div class="scale"><button>1</button><button>2</button><button>3</button><button>4</button><button>5</button></div>
           <div class="ends"><span>1 = Not valuable</span><span>5 = Essential</span></div></div>
-        <div class="q"><span class="tag">Q3. Tools</span><p>How valuable would safe, easy-to-use digital tools be for supporting families day to day?</p>
-          <div class="scale"><button>1</button><button>2</button><button>3</button><button class="on">4</button><button>5</button></div>
-          <div class="ends"><span>1 = Not valuable</span><span>5 = Essential</span></div></div>
-        <button class="cta" id="submit">Submit Survey Input →</button>
+        <button class="cta" id="submit">Submit &amp; View Your Practice Readiness Profile →</button>
       </div>
       <form class="lead" id="lead">
         <h3>See how your input compares —<span>enter your info to unlock community results.</span></h3>
@@ -209,7 +209,14 @@ document.querySelectorAll('.scale').forEach(s=>{
     e.target.classList.add('on');
   });
 });
-document.getElementById('submit').onclick=()=>{
+document.getElementById('submit').onclick=function(){
+  const missing=[...document.querySelectorAll('.scale')].filter(s=>!s.querySelector('.on'));
+  if(missing.length){
+    missing.forEach(s=>s.closest('.q').animate([{transform:'translateX(-4px)'},{transform:'translateX(4px)'},{transform:'none'}],{duration:250}));
+    this.textContent='Please answer all 3 questions ↑';
+    setTimeout(()=>this.innerHTML='Submit &amp; View Your Practice Readiness Profile →',1800);
+    return;
+  }
   document.getElementById('form').style.display='none';
   document.getElementById('lead').style.display='flex';
 };
