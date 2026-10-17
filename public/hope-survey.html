@@ -559,7 +559,7 @@ const ReflectionBox = ({ value, onChange }) => {
     };
 
     return (
-        <div className="mt-4 bg-slate-50 border border-slate-200 rounded-2xl p-3 shadow-sm animate-in fade-in slide-in-from-top-2 duration-500">
+        <div className="mt-2 bg-slate-50 border border-slate-200 rounded-2xl p-3 shadow-sm animate-in fade-in slide-in-from-top-2 duration-500">
             <div className="flex justify-between items-center mb-2">
                 <label className="text-xs uppercase tracking-widest font-bold text-slate-500">Others</label>
                 <div className="flex gap-2">
@@ -747,7 +747,7 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
     const thumbBgColor = snappedValue > 3 ? '#a855f7' : snappedValue < 3 ? '#3b82f6' : '#64748b';
 
     return (
-        <div className="w-full flex flex-col gap-4 bg-white p-6 md:p-8 rounded-3xl mb-4 shadow-xl border border-slate-200 relative">
+        <div className="w-full flex flex-col gap-2 bg-white p-4 rounded-3xl mb-2 shadow-xl border border-slate-200 relative">
             <style dangerouslySetInnerHTML={{__html: `
                 @keyframes burst1 { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; } 100% { transform: translate(-70px, -140px) scale(1.5) rotate(-45deg); opacity: 0; } }
                 @keyframes burst2 { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; } 100% { transform: translate(-30px, -160px) scale(1.8) rotate(-20deg); opacity: 0; } }
@@ -766,14 +766,14 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
                 @keyframes burst15 { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; } 100% { transform: translate(80px, -10px) scale(0.9) rotate(120deg); opacity: 0; } }
             `}} />
 
-            <h3 className="text-emerald-700 text-2xl font-bold text-center mb-4 relative z-10">
+            <h3 className="text-emerald-700 text-xl md:text-2xl font-bold text-center mb-2 relative z-10">
                 "My {currentQ.title.replace(/[\u{1F300}-\u{1F9FF}]|\d\.\d/gu, '').trim().toLowerCase()} experience..."
             </h3>
             
-            <div className="flex flex-col md:grid md:grid-cols-3 gap-12 md:gap-8 relative z-10 mb-8 md:mb-0">
+            <div className="flex flex-col md:grid md:grid-cols-3 gap-12 md:gap-4 relative z-10 mb-4 md:mb-0">
                 {/* 1.0 Zone */}
                 <div className="flex flex-col items-center text-center gap-3 md:gap-4 relative h-full">
-                    <div className="order-3 md:order-1 flex-1 flex items-start justify-center min-h-[40px] md:min-h-[110px] mt-1 md:mt-2">
+                    <div className="order-3 md:order-1 flex-1 flex items-start justify-center min-h-[40px] md:min-h-[80px] mt-1 md:mt-2">
                         <p className={`text-[12px] md:text-sm leading-relaxed max-w-[200px] transition-colors duration-300 ${snappedValue >= 1.0 && snappedValue <= 2.0 ? "text-blue-700 font-bold" : "text-slate-500 font-medium"}`}>
                             "...{shitholeData.desc}"
                         </p>
@@ -788,7 +788,7 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
 
                 {/* 3.0 Zone */}
                 <div className="flex flex-col items-center text-center gap-3 md:gap-4 relative h-full">
-                    <div className="order-3 md:order-1 flex-1 flex items-start justify-center min-h-[40px] md:min-h-[110px] mt-1 md:mt-2">
+                    <div className="order-3 md:order-1 flex-1 flex items-start justify-center min-h-[40px] md:min-h-[80px] mt-1 md:mt-2">
                         <p className={`text-[12px] md:text-sm leading-relaxed max-w-[200px] transition-colors duration-300 ${snappedValue >= 2.5 && snappedValue <= 3.5 ? "text-slate-800 font-bold" : "text-slate-500 font-medium"}`}>
                             "...{stableData.desc}"
                         </p>
@@ -803,7 +803,7 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
 
                 {/* 5.0 Zone */}
                 <div className="flex flex-col items-center text-center gap-3 md:gap-4 relative h-full">
-                    <div className="order-3 md:order-1 flex-1 flex items-start justify-center min-h-[40px] md:min-h-[110px] mt-1 md:mt-2">
+                    <div className="order-3 md:order-1 flex-1 flex items-start justify-center min-h-[40px] md:min-h-[80px] mt-1 md:mt-2">
                         <p className={`text-[12px] md:text-sm leading-relaxed max-w-[200px] transition-colors duration-300 ${snappedValue >= 4.0 && snappedValue <= 5.0 ? "text-purple-700 font-bold" : "text-slate-500 font-medium"}`}>
                             "...{sanctuaryData.desc}"
                         </p>
@@ -864,7 +864,7 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
 };
 
 
-const HopeChart = ({ answers, surveyQuestions, isFinal, onViewDashboard }) => {
+const HopeChart = ({ answers, surveyQuestions, isFinal, onViewDashboard, isBanner }) => {
     const [isMounted, setIsMounted] = useState(false);
     const totalScore = Object.values(answers).reduce((a, b) => a + b, 0); 
     
@@ -904,6 +904,14 @@ const HopeChart = ({ answers, surveyQuestions, isFinal, onViewDashboard }) => {
     const dimensionNames = ["PLACES", "BODY", "RESOURCES", "SELF", "OTHERS", "LIFE"];
 
     const coreQuestions = surveyQuestions.slice(0, 18);
+    
+    // Calculate OPS, IRS, and Total Scores
+    const opsSum = coreQuestions.slice(0, 9).reduce((sum, q) => sum + (answers[q.id] || 0), 0);
+    const irsSum = coreQuestions.slice(9, 18).reduce((sum, q) => sum + (answers[q.id] || 0), 0);
+    const opsScore50 = Math.round((opsSum / 45) * 50);
+    const irsScore50 = Math.round((irsSum / 45) * 50);
+    const totalHoPEScore100 = opsScore50 + irsScore50;
+
     const flex1Score = answers[surveyQuestions[18]?.id] ?? 0;
     const flex2Score = answers[surveyQuestions[19]?.id] ?? 0;
 
@@ -911,22 +919,22 @@ const HopeChart = ({ answers, surveyQuestions, isFinal, onViewDashboard }) => {
     const tierText = avgScore >= 4.0 ? "THRIVING" : avgScore >= 3.0 ? "STABILIZING" : avgScore >= 2.0 ? "SURVIVING" : "CRITICAL";
 
     return (
-        <div className={`relative z-10 w-full h-full rounded-[2rem] border border-cyan-500/20 bg-[#02050a] backdrop-blur-3xl shadow-[0_20px_80px_rgba(0,229,255,0.07)] overflow-hidden flex flex-col transition-opacity duration-1000 ${isMounted ? 'opacity-100' : 'opacity-0'}`}>
+        <div className={`relative z-10 w-full h-full flex flex-col justify-center ${isBanner ? '' : 'rounded-[2rem] border border-cyan-500/20'} bg-[#02050a] backdrop-blur-3xl shadow-[0_20px_80px_rgba(0,229,255,0.07)] overflow-hidden transition-opacity duration-1000 ${isMounted ? 'opacity-100' : 'opacity-0'}`}>
             <div className="absolute top-0 left-0 w-32 h-32 border-t border-l border-cyan-500/50 rounded-tl-3xl opacity-50 pointer-events-none"></div>
             <div className="absolute top-0 right-0 w-32 h-32 border-t border-r border-cyan-500/50 rounded-tr-3xl opacity-50 pointer-events-none"></div>
             
-            <div className="text-center mt-6 relative shrink-0 z-20">
-                <h1 className="font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-cyan-100 tracking-widest mb-0" style={{ textShadow: '0 0 40px rgba(0,229,255,0.3)', fontSize: 'clamp(1.2rem, 2.5vw, 1.8rem)' }}>
-                    THE HoPE INDEX
+            <div className="text-center mt-6 relative shrink-0 z-20 px-4">
+                <h1 className="font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-cyan-100 tracking-widest mb-0" style={{ textShadow: '0 0 40px rgba(0,229,255,0.3)', fontSize: 'clamp(1.8rem, 5vw, 2.5rem)' }}>
+                    The HoPE Index
                 </h1>
-                <p className="text-cyan-400 font-medium tracking-[0.2em] uppercase mt-2" style={{ fontSize: 'clamp(0.6rem, 1vw, 0.75rem)' }}>
-                    (HUMAN OPTIMIZED PERSONAL EXPERIENCE)
+                <p className="text-cyan-400 font-medium tracking-[0.2em] uppercase mt-2" style={{ fontSize: 'clamp(0.8rem, 2vw, 1.2rem)' }}>
+                    HUMAN OPTIMIZED PERSONAL EXPERIENCE
                 </p>
             </div>
 
-            <div className="relative w-full flex flex-col items-center justify-start overflow-hidden z-10 pt-8" style={{ minHeight: 0 }}>
+            <div className={`relative w-full flex flex-col items-center justify-start overflow-hidden z-10 pt-4`} style={{ minHeight: 0 }}>
                 {/* SVG Gauge */}
-                <div className="w-full relative" style={{ height: '330px' }}>
+                <div className={`w-full relative ${isBanner ? 'h-[420px]' : 'h-[330px]'}`}>
                     <svg viewBox="0 0 1000 480" className="w-full h-full drop-shadow-2xl overflow-visible absolute top-0 left-0">
                         <defs>
                             <filter id="glow-soft" x="-20%" y="-20%" width="140%" height="140%">
@@ -959,6 +967,9 @@ const HopeChart = ({ answers, surveyQuestions, isFinal, onViewDashboard }) => {
                             );
                         })}
 
+                        {/* Continuous Concentric Arc Guide Lines - drawn BEFORE the slices so they sit underneath the bars */}
+                        <path d={describeArc(cx, cy, innerR + 45, innerR + 45, -90, 90)} fill="none" stroke="#ffffff" strokeWidth="1.5" opacity={isMounted ? "0.15" : "0"} style={{ transition: 'opacity 1s ease 0.5s' }} />
+                        <path d={describeArc(cx, cy, innerR + 95, innerR + 95, -90, 90)} fill="none" stroke="#ffffff" strokeWidth="1.5" opacity={isMounted ? "0.15" : "0"} style={{ transition: 'opacity 1s ease 0.5s' }} />
                         {coreQuestions.map((q, i) => {
                             const score = answers[q.id] ?? 0;
                             const dimIndex = Math.floor(i / 3);
@@ -985,125 +996,48 @@ const HopeChart = ({ answers, surveyQuestions, isFinal, onViewDashboard }) => {
                             );
                         })}
 
-                        <g transform={`translate(${cx}, ${cy - 10})`} style={{ opacity: isMounted ? 1 : 0, transition: 'opacity 1s ease 0.5s' }}>
-                            {/* Numerical Rating Inside Gauge */}
-                            <text x="0" y="-30" fill="#00e5ff" fontSize="48" fontWeight="900" textAnchor="middle" opacity="0.9" letterSpacing="1px" style={{ textShadow: '0 0 20px rgba(0,229,255,0.4)' }}>
-                                {(totalScore / 20).toFixed(1)}
-                                <tspan fontSize="20" fontWeight="600" fill="#00e5ff" opacity="0.6"> / 5.0</tspan>
-                            </text>
-                            
-                            {/* Tier Classification Inside Gauge */}
-                            <text x="0" y="15" fill="#ffffff" fontSize="24" fontWeight="800" textAnchor="middle" letterSpacing="5px" filter="url(#glow-soft)">
-                                {tierText}
-                            </text>
 
-                            {/* Completion Percentage Inside Gauge */}
-                            <text x="0" y="45" fill="#00e5ff" fontSize="12" fontWeight="bold" textAnchor="middle" opacity="0.7" letterSpacing="2px">
-                                {Math.round(totalScore)}% HoPE CAPACITY
-                            </text>
-                        </g>
+
                     </svg>
                 </div>
 
-                {/* Score Card Beneath Gauge */}
-                <div className={`relative z-20 flex justify-center w-full transition-opacity duration-1000 delay-[800ms] ${isMounted ? 'opacity-100' : 'opacity-0'}`}>
-                    <div className="bg-[#020d1c]/80 border-2 border-cyan-400/80 rounded-2xl p-5 flex flex-col items-center justify-center w-[300px] shadow-[0_0_30px_rgba(0,229,255,0.2)]">
-                        <div className="absolute top-0 bottom-0 left-[-2px] w-1 bg-cyan-400 rounded-l-full shadow-[0_0_10px_#00e5ff]"></div>
-                        <div className="absolute top-0 bottom-0 right-[-2px] w-1 bg-cyan-400 rounded-r-full shadow-[0_0_10px_#00e5ff]"></div>
-                        
-                        <div className="text-white font-bold text-xl tracking-widest mb-1">{tierText}</div>
-                        <div className="text-cyan-400 font-semibold text-sm mb-3">{(totalScore/20).toFixed(1)} / 5.0 STARS</div>
-                        <div className="flex gap-1.5 mb-3">
-                            {[1, 2, 3, 4, 5].map(starIndex => {
-                                const fillPct = avgScore >= starIndex ? 100 : avgScore > starIndex - 1 ? (avgScore - (starIndex - 1)) * 100 : 0;
-                                return (
-                                    <div key={starIndex} className="relative w-5 h-5">
-                                        <svg viewBox="0 0 24 24" className="w-full h-full text-slate-700">
-                                            <path fill="currentColor" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                                        </svg>
-                                        {fillPct > 0 && (
-                                            <svg viewBox="0 0 24 24" className="w-full h-full absolute top-0 left-0 text-cyan-400" style={{ clipPath: `inset(0 ${100-fillPct}% 0 0)` }}>
-                                                <path fill="currentColor" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                                            </svg>
-                                        )}
-                                    </div>
-                                );
-                            })}
+                {/* OPS and IRS Score Cards */}
+                {!isBanner && (
+                <div className={`relative z-20 flex flex-col items-center w-full -mt-12 pb-8 transition-opacity duration-1000 delay-[800ms] ${isMounted ? 'opacity-100' : 'opacity-0'}`}>
+                    <div className="flex flex-row justify-center w-full max-w-[500px] gap-4 px-4">
+                        {/* OPS Box */}
+                        <div className="bg-[#020d1c]/80 border-2 border-cyan-400/80 rounded-xl p-3 flex flex-col items-center justify-center w-1/2 shadow-[0_0_30px_rgba(0,229,255,0.2)]">
+                            <div className="text-cyan-400 font-bold text-[8.5px] md:text-[10px] whitespace-nowrap tracking-widest uppercase mb-1 text-center">
+                                OPS &ndash; Outer Physical Space
+                            </div>
+                            <div className="text-white font-black text-3xl flex items-baseline gap-1 mt-1" style={{ textShadow: '0 0 20px rgba(0,229,255,0.5)' }}>
+                                {opsScore50} <span className="text-cyan-400 font-bold text-base">/ 50</span>
+                            </div>
                         </div>
-                        <div className="text-cyan-400 font-bold text-[11px] tracking-wider">{Math.round(totalScore)}% HoPE CAPACITY</div>
+                        {/* IRS Box */}
+                        <div className="bg-[#020d1c]/80 border-2 border-cyan-400/80 rounded-xl p-3 flex flex-col items-center justify-center w-1/2 shadow-[0_0_30px_rgba(0,229,255,0.2)]">
+                            <div className="text-cyan-400 font-bold text-[8.5px] md:text-[10px] whitespace-nowrap tracking-widest uppercase mb-1 text-center">
+                                IRS &ndash; Inner Relational Space
+                            </div>
+                            <div className="text-white font-black text-3xl flex items-baseline gap-1 mt-1" style={{ textShadow: '0 0 20px rgba(0,229,255,0.5)' }}>
+                                {irsScore50} <span className="text-cyan-400 font-bold text-base">/ 50</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Total HoPE Index Score */}
+                    <div className="mt-6 bg-[#020d1c]/80 border-2 border-cyan-400/80 rounded-xl p-4 flex flex-col items-center justify-center min-w-[240px] shadow-[0_0_30px_rgba(0,229,255,0.2)]">
+                        <div className="text-cyan-400 font-bold text-[10px] md:text-xs tracking-widest uppercase mb-1">TOTAL HoPE INDEX SCORE</div>
+                        <div className="text-cyan-500/80 font-bold text-[9px] tracking-widest uppercase mb-2">(0-100%)</div>
+                        <div className="text-white font-black text-5xl flex items-baseline gap-1" style={{ textShadow: '0 0 20px rgba(0,229,255,0.5)' }}>
+                            {totalHoPEScore100} <span className="text-cyan-400 font-bold text-lg">/ 100</span>
+                        </div>
                     </div>
                 </div>
+                )}
             </div>
 
-            {/* Streamlined Population-Specific Context Footer */}
-            <div className={`shrink-0 border-t border-cyan-500/20 bg-transparent mt-4 mb-4 transition-opacity duration-1000 z-20 ${isMounted ? 'opacity-100 delay-[500ms]' : 'opacity-0'}`}>
-                
-                <div className="flex justify-center mb-4">
-                    <div className="bg-[#051020] border border-cyan-500/50 rounded-full px-6 py-1">
-                        <span className="text-[10px] text-cyan-400 font-bold uppercase tracking-widest">POPULATION-SPECIFIC CONTEXT</span>
-                    </div>
-                </div>
-
-                <div className="max-w-[700px] mx-auto w-full relative">
-                    {/* Corner decorative borders */}
-                    <div className="absolute top-0 left-0 w-4 h-4 border-t border-l border-cyan-500/50 rounded-tl-xl"></div>
-                    <div className="absolute bottom-0 left-0 w-4 h-4 border-b border-l border-cyan-500/50 rounded-bl-xl"></div>
-                    <div className="absolute top-0 right-0 w-4 h-4 border-t border-r border-cyan-500/50 rounded-tr-xl"></div>
-                    <div className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-cyan-500/50 rounded-br-xl"></div>
-
-                    <div className="grid grid-cols-2 divide-x divide-cyan-500/20 py-2">
-                        <div className="flex items-center justify-center gap-6">
-                            <div className="w-14 h-14 shrink-0">
-                                <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_0_10px_rgba(0,229,255,0.3)]">
-                                    {[0,1,2,3,4,5].map(tick => {
-                                        const a = -120 + (tick / 5) * 240;
-                                        const p1 = polarToCartesian(50, 50, 42, a);
-                                        const p2 = polarToCartesian(50, 50, 46, a);
-                                        return <line key={tick} x1={p1.x} y1={p1.y} x2={p2.x} y2={p2.y} stroke="#00e5ff" strokeWidth="2" opacity="0.6"/>;
-                                    })}
-                                    <path d={describeArc(50, 50, 36, 40, -120, 120)} fill="#0a1526" stroke="#00e5ff" strokeWidth="0.5" opacity="0.5" />
-                                    <path d={describeArc(50, 50, 36, 40, -120, -120 + (flex1Score / 5) * 240)} fill="#00e5ff" filter="url(#glow-soft)" style={{ transition: 'all 0.5s ease' }} />
-                                    <g style={{ transform: `rotate(${-120 + (flex1Score / 5) * 240}deg)`, transformOrigin: '50px 50px', transition: 'transform 0.5s ease' }}>
-                                        <polygon points="48.5,50 51.5,50 50,12" fill="#ffffff" filter="url(#glow-soft)" />
-                                        <circle cx="50" cy="50" r="4" fill="#00e5ff" stroke="#ffffff" strokeWidth="1.5" />
-                                    </g>
-                                </svg>
-                            </div>
-                            <div className="flex flex-col justify-center text-left">
-                                <div className="text-[11px] text-white font-bold uppercase tracking-widest leading-tight mb-1">
-                                    GANG DE-<br/>IDENTIFICATION
-                                </div>
-                                <div className="text-cyan-400 font-bold text-sm">{flex1Score.toFixed(1)} / 5.0</div>
-                            </div>
-                        </div>
-
-                        <div className="flex items-center justify-center gap-6">
-                            <div className="w-14 h-14 shrink-0">
-                                <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_0_10px_rgba(0,229,255,0.3)]">
-                                    {[0,1,2,3,4,5].map(tick => {
-                                        const a = -120 + (tick / 5) * 240;
-                                        const p1 = polarToCartesian(50, 50, 42, a);
-                                        const p2 = polarToCartesian(50, 50, 46, a);
-                                        return <line key={tick} x1={p1.x} y1={p1.y} x2={p2.x} y2={p2.y} stroke="#00e5ff" strokeWidth="2" opacity="0.6"/>;
-                                    })}
-                                    <path d={describeArc(50, 50, 36, 40, -120, 120)} fill="#0a1526" stroke="#00e5ff" strokeWidth="0.5" opacity="0.5" />
-                                    <path d={describeArc(50, 50, 36, 40, -120, -120 + (flex2Score / 5) * 240)} fill="#00e5ff" filter="url(#glow-soft)" style={{ transition: 'all 0.5s ease' }} />
-                                    <g style={{ transform: `rotate(${-120 + (flex2Score / 5) * 240}deg)`, transformOrigin: '50px 50px', transition: 'transform 0.5s ease' }}>
-                                        <polygon points="48.5,50 51.5,50 50,12" fill="#ffffff" filter="url(#glow-soft)" />
-                                        <circle cx="50" cy="50" r="4" fill="#00e5ff" stroke="#ffffff" strokeWidth="1.5" />
-                                    </g>
-                                </svg>
-                            </div>
-                            <div className="flex flex-col justify-center text-left">
-                                <div className="text-[11px] text-white font-bold uppercase tracking-widest leading-tight mb-1">
-                                    PSYCHOLOGICAL<br/>SAFETY
-                                </div>
-                                <div className="text-cyan-400 font-bold text-sm">{flex2Score.toFixed(1)} / 5.0</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {/* Removed Population-Specific Context Footer */}
 
             {isFinal && (
                 <div className={`absolute inset-0 bg-[#02050a]/60 backdrop-blur-sm z-30 flex items-center justify-center transition-opacity duration-1000 ${isMounted ? 'opacity-100 delay-[1000ms]' : 'opacity-0'}`}>
@@ -1128,8 +1062,8 @@ const HopeChart = ({ answers, surveyQuestions, isFinal, onViewDashboard }) => {
 };
 const ResultsScreen = ({ answers, surveyQuestions, onViewDashboard }) => {
     return (
-        <main className="flex-grow flex items-center justify-center bg-[#02050a] p-4 relative w-full overflow-hidden" style={{ minHeight: 'calc(100vh - 80px)' }}>
-            <div className="w-full h-full max-w-[1200px] flex justify-center items-center">
+        <main className="flex-grow flex items-center justify-center bg-[#02050a] p-4 relative w-full overflow-hidden" style={{ height: 'calc(100vh - 80px)' }}>
+            <div className="w-full h-full max-w-[1200px] flex justify-center items-center overflow-y-auto">
                 <HopeChart answers={answers} surveyQuestions={surveyQuestions} isFinal={true} onViewDashboard={onViewDashboard} />
             </div>
         </main>
@@ -1411,6 +1345,10 @@ const App = () => {
     const [showAuthModal, setShowAuthModal] = useState(false);
 
     useEffect(() => {
+        // Removed document.body overflow hidden to allow mobile scrolling
+    }, []);
+
+    useEffect(() => {
         if (!window.firebaseAuth) {
             setAuthLoading(false);
             return;
@@ -1562,34 +1500,56 @@ const App = () => {
     }
 
     if (step === 'intro') {
+        const mockAnswers = {};
+        surveyQuestions.forEach((q) => { mockAnswers[q.id] = 5; });
+
         return (
-            <main className="flex-grow flex flex-col items-center justify-center p-6 relative" style={{ minHeight: 'calc(100vh - 80px)' }}>
-                <div className="bg-white max-w-3xl w-full p-8 md:p-12 rounded-[2rem] shadow-2xl border border-slate-100 text-center relative overflow-hidden">
-                    <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-emerald-500 via-blue-500 to-purple-500"></div>
-                    <h1 className="text-5xl font-black text-slate-800 mb-6 tracking-tight">The HoPE Index</h1>
-                    <h2 className="text-xl font-bold text-slate-500 mb-8 uppercase tracking-widest">Human Optimal Personal Experience</h2>
-                    <div className="text-left space-y-6 text-slate-600 text-lg leading-relaxed mb-10">
-                        <p>Welcome to the HoPE Index. This is not a test or an academic exam. It is a highly visual platform designed to map where you are today and provide a clear, actionable guide toward true stability.</p>
-                        <div className="bg-blue-50 border border-blue-100 p-6 rounded-2xl shadow-sm">
-                            <h3 className="font-bold text-blue-900 mb-2 flex items-center gap-2">
-                                <span className="text-xl">💡</span> How to Complete this Survey
-                            </h3>
-                            <p className="text-base text-blue-800">Imagine you are a professional critic writing a review for a hotel or an app. You are not rating your worth. You are rating the quality of the experience provided by different areas of your life.</p>
+            <main className="flex-grow flex items-center justify-center p-4 md:p-6 relative" style={{ minHeight: 'calc(100vh - 80px)' }}>
+                <div className="bg-white max-w-7xl w-full h-auto lg:h-full lg:max-h-[850px] rounded-[2rem] shadow-2xl border border-slate-100 relative overflow-hidden flex flex-col lg:flex-row">
+                    
+                    {/* Top gradient border */}
+                    <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-emerald-500 via-blue-500 to-purple-500 z-50"></div>
+                    
+                    {/* Left Side: Dark Dashboard */}
+                    <div className="w-full lg:w-[55%] lg:h-full bg-[#02050a] flex items-center justify-center relative min-h-[400px] lg:min-h-0 overflow-hidden">
+                        <div className="hidden lg:block absolute top-0 right-0 w-[1px] h-full bg-cyan-500/20 z-50"></div>
+                        <div className="w-full h-full absolute inset-0 flex items-center justify-center p-4">
+                            <HopeChart answers={mockAnswers} surveyQuestions={surveyQuestions} isBanner={true} />
                         </div>
                     </div>
                     
-                    <div className="flex flex-col items-center justify-center gap-4 mt-2">
-                        {renderAuthWidget("w-full md:w-auto mb-2")}
-                        <button 
-                            onClick={() => { 
+                    {/* Right Side: Welcome Text and Actions */}
+                    <div className="w-full lg:w-[45%] lg:h-full p-8 lg:p-12 flex flex-col justify-center lg:overflow-y-auto">
+                        <div className="text-left space-y-4 lg:space-y-6 text-slate-800 text-base lg:text-lg leading-relaxed">
+                            <h2 className="text-2xl lg:text-3xl text-center font-bold text-slate-900 tracking-tight">Welcome to the HoPE Index!</h2>
+                            <p>Think of this as a visual dashboard that shows the fuel levels of your daily experience. It is a creative workspace designed to show you where your daily routine has plenty of energy, and where energy is a little bit low, so you can find ways to get more fuel, together with your coach.</p>
+                            
+                            <div className="space-y-4 pt-4 lg:pt-6 mt-4 lg:mt-6 border-t border-slate-100">
+                                <div className="text-center mb-4 lg:mb-5">
+                                    <h3 className="text-lg lg:text-xl font-bold text-slate-900 mb-1 lg:mb-2">
+                                        How to Complete this Survey
+                                    </h3>
+                                    <h4 className="text-base lg:text-lg font-bold text-slate-800 flex items-center justify-center">
+                                        <span className="mr-2">🎮</span>Rate the Level, Not the Player!
+                                    </h4>
+                                </div>
+                                <p className="text-base text-slate-700 opacity-90">Imagine you're playing a video game as a hero like Black Panther or Harry Potter. If your character gets stuck in a difficult level with broken equipment, you wouldn't blame them for struggling. You would simply understand that's the level that they're at.</p>
+                                <p className="text-base text-slate-700 opacity-90">In this survey, we want you to look at your spaces, resources, and relationships as if they were the levels and gear in a game. You are not rating your personal worth as a human. Instead, use the emojis to tell us how well your daily environments and spaces are supporting you today.</p>
+                            </div>
+                        </div>
+                        
+                        <div className="flex flex-col items-center justify-center gap-4 mt-10">
+                            {renderAuthWidget("w-full md:w-auto mb-2")}
+                            <button onClick={() => { 
                                 setStep('survey'); 
                                 setCurrentSelection(answers[surveyQuestions[0].id] ?? null); 
-                            }}
-                            className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-10 py-5 rounded-full font-bold text-xl hover:-translate-y-1 transition-all shadow-xl hover:shadow-[0_10px_25px_rgba(79,70,229,0.4)] inline-flex items-center justify-center gap-3 w-full md:w-auto"
-                        >
-                            Let's Begin →
-                        </button>
+                            }} className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white px-10 py-4 rounded-full font-bold text-xl transition-all shadow-lg hover:shadow-[0_10px_25px_rgba(59,130,246,0.4)] flex items-center justify-center gap-3 w-full md:w-auto">
+                                Let's Begin 
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                            </button>
+                        </div>
                     </div>
+
                 </div>
             </main>
         );
@@ -1612,27 +1572,27 @@ const App = () => {
     const progress = ((currentQIndex + 1) / surveyQuestions.length) * 100;
 
     return (
-        <main className="flex-grow w-full max-w-[1800px] mx-auto p-4 md:p-6 flex flex-col relative" style={{ minHeight: 'calc(100vh - 80px)' }}>
+        <main className="flex-grow w-full max-w-[1800px] mx-auto p-4 md:p-6 flex flex-col relative lg:overflow-hidden" style={{ minHeight: 'calc(100vh - 80px)' }}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 flex-grow items-stretch lg:h-full">
                 
                 {/* Left Panel - Survey Form (50%) */}
-                <div className="flex flex-col bg-white rounded-[2rem] shadow-2xl border border-slate-100 relative overflow-hidden lg:h-full lg:min-h-0" style={{ transform: 'translateZ(0)' }}>
+                <div className="flex flex-col bg-white rounded-[2rem] shadow-2xl border border-slate-100 relative lg:h-full lg:min-h-0" style={{ transform: 'translateZ(0)' }}>
 
                     
-                    <div className="p-6 md:p-8 pt-10 flex-grow flex flex-col lg:h-full lg:overflow-y-auto custom-scrollbar">
+                    <div className="p-4 md:p-6 pt-6 flex-grow flex flex-col lg:h-full">
                         
                         {/* Header & Meta */}
-                        <div className="flex justify-between items-center mb-6 shrink-0">
+                        <div className="flex justify-between items-center mb-3 shrink-0">
                             <div className="inline-block bg-blue-50 text-blue-700 px-3 py-1 rounded-lg font-bold uppercase tracking-widest text-[10px] border border-blue-100">
                                 {q.space}
                             </div>
                         </div>
 
                         {/* Title & Concept */}
-                        <div className="mb-4 shrink-0 w-full">
-                            <div className="text-slate-400 font-bold text-sm tracking-wide mb-3">{q.dimension}</div>
-                            <h2 className="font-black text-slate-900 text-3xl md:text-4xl tracking-tight leading-tight mb-1">{q.title}</h2>
-                            {q.subtitle && <p className="text-slate-500 font-medium text-[15px] mb-5">{q.subtitle}</p>}
+                        <div className="mb-2 shrink-0 w-full">
+                            <div className="text-slate-400 font-bold text-sm tracking-wide mb-2">{q.dimension}</div>
+                            <h2 className="font-black text-slate-900 text-2xl md:text-3xl tracking-tight leading-tight mb-1">{q.title}</h2>
+                            {q.subtitle && <p className="text-slate-500 font-medium text-sm mb-3">{q.subtitle}</p>}
 
                         </div>
 
@@ -1652,7 +1612,7 @@ const App = () => {
                         </HopeEmojiSlider>
 
                         {/* Navigation Footer */}
-                        <div className="flex justify-between items-center mt-4 pt-4 border-t border-slate-100 shrink-0">
+                        <div className="flex justify-between items-center mt-auto pt-3 border-t border-slate-100 shrink-0">
                             <button 
                                 onClick={handlePrevQ}
                                 className={`text-slate-500 font-bold hover:text-slate-800 px-6 py-2 transition-colors flex items-center gap-2 ${currentQIndex === 0 ? 'invisible' : ''}`}
