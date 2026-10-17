@@ -97,6 +97,18 @@ h1,h2,h3{font-family:'Kalam',cursive;font-weight:700}
 .thanks h3{font-size:2rem;color:var(--sage-d)}
 .thanks svg{width:110px;height:110px}
 
+/* post-vote lead form */
+.lead{display:none;flex:1;flex-direction:column;justify-content:center;gap:10px;text-align:center}
+.lead h3{font-size:1.5rem;line-height:1.2}
+.lead h3 span{display:block;color:var(--earth);font-size:1.15rem}
+.lead .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.lead input{width:100%;font:inherit;font-size:1.05rem;padding:9px 12px;border:1.5px solid rgba(43,43,48,.75);border-radius:10px;background:#fffdf7;color:var(--ink);outline:none;transition:.15s}
+.lead input::placeholder{color:#8a8a90}
+.lead input:focus{border-color:var(--slate);box-shadow:0 0 0 3px rgba(91,121,166,.25)}
+.lead .full{grid-column:1/-1}
+.lead .cta{margin-top:4px;padding:10px;background:var(--sage)}
+.lead .privacy{font-size:.85rem;color:var(--gray)}
+
 /* below-the-fold sections (hidden on the one-screen layout) */
 .pillars,.band,footer{display:none}
 .rough{filter:url(#rough)}
@@ -169,6 +181,18 @@ h1,h2,h3{font-family:'Kalam',cursive;font-weight:700}
           <div class="ends"><span>1 = Not valuable</span><span>5 = Essential</span></div></div>
         <button class="cta" id="submit">Submit Survey Input →</button>
       </div>
+      <form class="lead" id="lead">
+        <h3>See how your input compares —<span>enter your info to unlock community results.</span></h3>
+        <div class="grid">
+          <input type="text" placeholder="First Name" aria-label="First Name" required>
+          <input type="text" placeholder="Last Name" aria-label="Last Name" required>
+          <input type="text" placeholder="Organization (Optional)" aria-label="Organization">
+          <input type="email" placeholder="Email Address" aria-label="Email Address" required>
+          <input class="full" type="tel" placeholder="Phone Number (Optional)" aria-label="Phone Number">
+        </div>
+        <button class="cta" type="submit">Show me how my input compares →</button>
+        <p class="privacy">🔒 Community data is protected. Your input directly impacts funding applications.</p>
+      </form>
       <div class="thanks" id="thanks">
         <svg viewBox="0 0 110 110"><g class="rough" fill="#fff" stroke="#2B2B30" stroke-width="4" stroke-linecap="round"><circle cx="55" cy="35" r="20"/><path d="M55 55v32M55 65l-24-18M55 65l24-18M55 87l-14 20M55 87l14 20" fill="none"/><circle cx="48" cy="32" r="2.5" fill="#2B2B30"/><circle cx="62" cy="32" r="2.5" fill="#2B2B30"/><path d="M46 42q9 8 18 0" fill="none"/></g></svg>
         <h3>Thank you!</h3><p>Your voice helps shape what comes next.</p>
@@ -187,8 +211,13 @@ document.querySelectorAll('.scale').forEach(s=>{
 });
 document.getElementById('submit').onclick=()=>{
   document.getElementById('form').style.display='none';
-  document.getElementById('thanks').style.display='block';
+  document.getElementById('lead').style.display='flex';
 };
+document.getElementById('lead').addEventListener('submit',e=>{
+  e.preventDefault();
+  e.currentTarget.style.display='none';
+  document.getElementById('thanks').style.display='block';
+});
 </script>
 </body>
 </html>
