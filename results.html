@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SOL THRiVE – Your Results</title>
+<meta name="description" content="See how your input compares with the community and cast your vote. (Placeholder copy.)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@700&family=Patrick+Hand&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#F8F3E4; --slate:#5B79A6; --slate-d:#4A6590; --sage:#9DB68C; --sage-d:#7E9C6E; --earth:#8A5A3B;
+  --pale:#CFDFF2; --gray:#6F6F75; --ink:#2B2B30; --gold:#F2D675;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:'Patrick Hand',cursive;color:var(--ink);font-size:17px;line-height:1.25;
+  background-color:var(--cream);
+  background-image:linear-gradient(to bottom,#F8F3E4 0,rgba(248,243,228,.96) 120px,rgba(248,243,228,0) 230px),url('assets/sol-meadow-bg.jpg');
+  background-size:100% 100%,cover;background-position:top,center bottom;background-repeat:no-repeat;
+  overflow-x:hidden;
+}
+h1,h2,h3{font-family:'Kalam',cursive;font-weight:700}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px 18px;height:100vh;display:flex;flex-direction:column}
+
+.top{display:grid;grid-template-columns:auto 1fr auto;align-items:center;padding:12px 0 6px;gap:18px}
+.brand{font-family:'Kalam',cursive;font-weight:700;font-size:1.6rem;display:flex;align-items:center;gap:10px;letter-spacing:1px;text-decoration:none;color:var(--ink);white-space:nowrap}
+.brand b{color:var(--slate)}
+.top h1{font-size:clamp(1rem,2.2vh + .3vw,1.5rem);text-align:center;line-height:1.15}
+.hl{background:rgba(242,214,117,.7);border-radius:6px;padding:0 8px}
+.btn-sm{justify-self:end;white-space:nowrap;border:1.5px solid var(--ink);border-radius:10px;padding:5px 18px;background:#fffdf6;font:inherit;cursor:pointer;box-shadow:0 2px 0 rgba(43,43,48,.25);transition:.15s;color:var(--ink);text-decoration:none}
+.btn-sm:hover{transform:translateY(1px);box-shadow:none}
+
+.card{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:8px;
+  border:1.5px solid rgba(43,43,48,.75);border-radius:18px;background:rgba(251,247,236,.85);backdrop-filter:blur(3px);
+  box-shadow:0 8px 24px rgba(74,101,144,.18);padding:16px 20px}
+.col{display:flex;flex-direction:column;gap:12px;min-height:0}
+.col + .col{border-left:1.5px dashed rgba(111,111,117,.55);padding-left:22px;margin-left:-11px}
+.box{border:1.5px solid rgba(43,43,48,.7);border-radius:12px;background:#fffdf7;padding:10px 14px}
+.grow{flex:1;min-height:0;display:flex;flex-direction:column}
+.tagrow{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.tag{display:inline-block;background:var(--pale);border-radius:6px;padding:0 10px;font-size:.78rem;text-transform:uppercase;letter-spacing:1px;color:#3a4a66}
+.tag.green{background:rgba(157,182,140,.6);color:#2f4a24}
+.tag.gold{background:var(--gold);color:#5a4a10}
+.thanks-line{color:var(--slate-d);font-family:'Kalam';font-size:1.15rem}
+.small{font-size:.92rem;color:#4a4a50}
+.small b{color:var(--ink)}
+.sectitle{font-size:.85rem;text-transform:uppercase;letter-spacing:1.2px;color:var(--slate-d);margin:8px 0 4px}
+
+/* consensus bars */
+.bar{margin-top:7px}
+.bar .row{display:flex;align-items:center;gap:8px;font-size:.95rem}
+.bar .name{flex:1}
+.chip{background:var(--ink);color:#fff;border-radius:999px;padding:0 10px;font-size:.78rem;letter-spacing:.5px;white-space:nowrap}
+.chip em{color:var(--gold);font-style:normal}
+.pct{font-family:'Kalam';font-size:1rem;min-width:40px;text-align:right}
+.track{height:9px;border:1.5px solid rgba(43,43,48,.7);border-radius:6px;background:#efe7cf;margin-top:3px;overflow:hidden}
+.fill{height:100%;width:0;background:var(--sage);border-radius:4px;transition:width 1.1s cubic-bezier(.2,.8,.2,1)}
+.fill.b{background:var(--slate)}.fill.c{background:#E3B23C}
+
+/* video */
+.video{position:relative;flex:1;min-height:0;border:1.5px solid var(--ink);border-radius:10px;overflow:hidden;
+  background:#dbe9d0 url('assets/sol-meadow-scene.jpg') center/cover no-repeat;margin-top:2px}
+.play{position:absolute;inset:0;width:100%;height:100%;background:transparent;border:0;cursor:pointer}
+.play:hover{background:rgba(255,255,255,.12)}
+.cta{width:100%;margin-top:8px;padding:6px;border:1.5px solid var(--ink);border-radius:10px;background:var(--sage);font:inherit;font-size:1rem;text-transform:uppercase;letter-spacing:1.5px;cursor:pointer;box-shadow:0 2px 0 rgba(43,43,48,.3);transition:.15s;color:var(--ink);text-align:center;text-decoration:none;display:block}
+.cta:hover{transform:translateY(1px);box-shadow:none}
+.note{margin-top:8px;font-size:.88rem;background:#F8F0D6;border:1.5px solid rgba(43,43,48,.5);border-radius:10px;padding:4px 10px}
+.note b{color:var(--earth)}
+
+/* vote */
+.vote{flex:1;min-height:0;display:flex;flex-direction:column}
+.vote h2{font-size:1.25rem;margin:2px 0 6px}
+.opt{display:flex;align-items:center;gap:10px;border:1.5px solid rgba(43,43,48,.7);border-radius:10px;background:#fffdf7;padding:7px 12px;margin-top:8px;cursor:pointer;transition:.12s;flex:1;min-height:0}
+.opt:hover{background:var(--pale)}
+.opt.on{background:rgba(157,182,140,.45)}
+.opt div{flex:1}
+.opt strong{font-family:'Kalam';font-size:1.02rem;display:block}
+.opt span{font-size:.88rem;color:#4a4a50}
+.opt .dot{width:20px;height:20px;border:1.5px solid var(--ink);border-radius:50%;background:#fff;flex:none;display:grid;place-items:center}
+.opt.on .dot::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--slate-d)}
+.vote .cta.primary{background:var(--slate);color:#fff}
+.vote .cta.primary:hover{background:var(--slate-d)}
+.vote .cta[disabled]{background:var(--sage);color:var(--ink);cursor:default}
+
+.share .link{display:flex;gap:8px;margin-top:6px}
+.share input{flex:1;font:inherit;font-size:.95rem;padding:6px 10px;border:1.5px solid rgba(43,43,48,.7);border-radius:8px;background:#fffdf7;min-width:0}
+.share button{font:inherit;font-size:.9rem;letter-spacing:1px;padding:0 14px;border:1.5px solid var(--ink);border-radius:8px;background:var(--pale);cursor:pointer}
+.socials{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+.socials a{text-align:center;padding:5px 0;border:1.5px solid var(--ink);border-radius:8px;color:#fff;text-decoration:none;font-size:.95rem}
+.s1{background:var(--slate)}.s2{background:var(--earth)}.s3{background:var(--ink)}
+.actions{display:grid;grid-template-columns:1.2fr 1fr;gap:10px;margin-top:auto}
+.actions .cta{margin-top:0}
+.actions .gold{background:var(--gold)}
+.actions .plain{background:#fffdf7}
+
+@media(max-width:860px){
+  body{overflow:auto}.wrap{height:auto;min-height:100vh}
+  .top{grid-template-columns:1fr;justify-items:center;text-align:center}.btn-sm{justify-self:center}
+  .card{grid-template-columns:1fr}.col+.col{border-left:0;margin-left:0;padding-left:0;border-top:1.5px dashed rgba(111,111,117,.55);padding-top:14px}
+  .video{flex:none;aspect-ratio:16/10}
+}
+@media(min-width:861px){html,body{overflow:hidden}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="mockup-landing.html">
+      <svg width="40" height="40" viewBox="0 0 60 60"><g fill="none" stroke="#2B2B30" stroke-width="3" stroke-linecap="round"><circle cx="30" cy="30" r="11" fill="#F2D675"/><path d="M30 6v8M30 46v8M6 30h8M46 30h8M13 13l6 6M41 41l6 6M47 13l-6 6M19 41l-6 6"/></g></svg>
+      <span>SOL <b>THRiVE</b></span>
+    </a>
+    <h1>Here’s How Your Voice Shapes The Movement &amp; The <span class="hl">Community Blueprint</span></h1>
+    <a class="btn-sm" href="index.html">Enter Full Homepage →</a>
+  </header>
+
+  <main class="card">
+    <section class="col">
+      <div class="box">
+        <div class="tagrow"><span class="tag green">✓ Verified evidence</span><span class="thanks-line">✓ Thank you, <span id="nm">Friend</span>!</span></div>
+        <p class="small">Your survey input as part of <b>Community Supporter</b> joins <b>47+ verified voices</b> guiding community funding decisions.</p>
+        <div class="sectitle">Community consensus &amp; priority evidence <span class="tag gold" style="float:right;text-transform:none;letter-spacing:0">47+ Verified Voices</span></div>
+        <div class="bar"><div class="row"><span class="name">⚠️ Current programs fall short for families</span><span class="chip">YOUR RATING: <em id="r1">–</em>/5</span><span class="pct">84%</span></div><div class="track"><div class="fill" data-w="84"></div></div></div>
+        <div class="bar"><div class="row"><span class="name">🤝 Mentorship: trusted peer &amp; adult guides</span><span class="chip">YOUR RATING: <em id="r2">–</em>/5</span><span class="pct">94%</span></div><div class="track"><div class="fill b" data-w="94"></div></div></div>
+        <div class="bar"><div class="row"><span class="name">🛠️ Safe digital tools for families</span><span class="chip">YOUR RATING: <em id="r3">–</em>/5</span><span class="pct">89%</span></div><div class="track"><div class="fill c" data-w="89"></div></div></div>
+      </div>
+
+      <div class="box grow">
+        <div class="tagrow"><span class="tag">🎬 Blueprint documentary</span><span class="tag gold">5:30 briefing</span></div>
+        <h3 style="font-size:1.05rem;margin-bottom:4px">Watch the Blueprint Video &amp; Vote</h3>
+        <div class="video"><button class="play" aria-label="Play video"></button></div>
+        <a class="cta" href="#" onclick="return false">↻ Click to Restart &amp; Unmute</a>
+        <div class="note"><b>Community Initiative:</b> Placeholder text about how verified community input is submitted to guide local funding decisions.</div>
+      </div>
+    </section>
+
+    <section class="col">
+      <div class="box vote">
+        <span class="tag">🗳️ Vote · Shape community blueprint</span>
+        <h2>Cast Your Vote</h2>
+        <div class="sectitle" style="margin:0">Community priorities <span style="float:right;color:#b8860b;text-transform:none;letter-spacing:0">Select 1 or more ↓</span></div>
+        <label class="opt"><div><strong>🏫 Transform Community Spaces</strong><span>Placeholder: turn everyday places into safe, welcoming sanctuaries where families thrive.</span></div><i class="dot"></i></label>
+        <label class="opt"><div><strong>⚡ Empower Mentors</strong><span>Placeholder: equip mentors with simple, modern tools to support young people in real time.</span></div><i class="dot"></i></label>
+        <label class="opt"><div><strong>💛 Heal Our Neighborhoods</strong><span>Placeholder: neighborhood-level support and recovery for youth, parents and families.</span></div><i class="dot"></i></label>
+        <button class="cta primary" id="vote" style="margin-top:10px">Submit Vote →</button>
+      </div>
+
+      <div class="box share">
+        <span class="tag">📣 Share to network</span>
+        <div class="link"><input id="lnk" readonly value="https://solthrive.example/community"><button id="copy">COPY LINK</button></div>
+        <div class="socials"><a class="s1" href="#" onclick="return false">Facebook</a><a class="s2" href="#" onclick="return false">Instagram</a><a class="s3" href="#" onclick="return false">TikTok</a></div>
+      </div>
+
+      <div class="actions">
+        <a class="cta gold" href="#" onclick="return false">⬇ Download Blueprint PDF</a>
+        <a class="cta plain" href="index.html">Explore Homepage →</a>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+// personalise from the survey (falls back to demo values when opened directly)
+let d={};try{d=JSON.parse(sessionStorage.getItem('solThrive')||'{}')}catch(e){}
+document.getElementById('nm').textContent=d.first||'Friend';
+const r=d.ratings||[3,5,4];
+['r1','r2','r3'].forEach((id,i)=>document.getElementById(id).textContent=r[i]||'–');
+requestAnimationFrame(()=>setTimeout(()=>document.querySelectorAll('.fill').forEach(f=>f.style.width=f.dataset.w+'%'),150));
+
+document.querySelectorAll('.opt').forEach(o=>o.addEventListener('click',e=>{e.preventDefault();o.classList.toggle('on')}));
+document.getElementById('vote').onclick=function(){
+  if(!document.querySelector('.opt.on')){this.textContent='Pick at least one priority ↑';return}
+  this.textContent='✓ Vote submitted — thank you!';this.disabled=true;
+};
+document.getElementById('copy').onclick=function(){
+  const i=document.getElementById('lnk');i.select();
+  (navigator.clipboard?navigator.clipboard.writeText(i.value):Promise.resolve()).finally(()=>{this.textContent='COPIED!';setTimeout(()=>this.textContent='COPY LINK',1500)});
+};
+</script>
+</body>
+</html>

@@ -215,8 +215,12 @@ document.getElementById('submit').onclick=()=>{
 };
 document.getElementById('lead').addEventListener('submit',e=>{
   e.preventDefault();
-  e.currentTarget.style.display='none';
-  document.getElementById('thanks').style.display='block';
+  const ratings=[...document.querySelectorAll('.scale')].map(s=>{
+    const b=[...s.querySelectorAll('button')];return b.findIndex(x=>x.classList.contains('on'))+1||null;
+  });
+  const first=e.currentTarget.querySelector('input').value.trim();
+  try{sessionStorage.setItem('solThrive',JSON.stringify({first,ratings}))}catch(err){}
+  location.href='results.html';
 });
 </script>
 </body>
