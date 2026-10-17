@@ -17,7 +17,9 @@
 html,body{height:100%}
 body{
   font-family:'Patrick Hand',cursive; color:var(--ink); font-size:17px; line-height:1.3;
-  background:var(--cream) url('assets/sol-meadow-bg.jpg') center bottom/cover no-repeat;
+  background:var(--cream) linear-gradient(to bottom,#F8F3E4 0,rgba(248,243,228,.96) 150px,rgba(248,243,228,0) 250px) top/100% 100% no-repeat;
+  background-image:linear-gradient(to bottom,#F8F3E4 0,rgba(248,243,228,.96) 150px,rgba(248,243,228,0) 250px),url('assets/sol-meadow-bg.jpg');
+  background-size:100% 100%,cover;background-position:top,center bottom;background-repeat:no-repeat;
   overflow-x:hidden;
 }
 h1,h2,h3{font-family:'Kalam',cursive;font-weight:700}
@@ -80,15 +82,15 @@ h1,h2,h3{font-family:'Kalam',cursive;font-weight:700}
 .dots i:first-child{margin-left:0}
 
 /* survey */
-#form{flex:1;min-height:0;display:flex;flex-direction:column;gap:10px}
-.q{flex:1;min-height:0;border:1.5px solid rgba(43,43,48,.7);border-radius:10px;background:#fffdf7;padding:6px 12px;display:flex;flex-direction:column;justify-content:center}
-.tag{display:block;background:var(--pale);border-radius:6px;padding:0 10px;margin:0 -4px 3px;font-size:.78rem;text-transform:uppercase;letter-spacing:1px;line-height:1.35;color:#3a4a66}
-.q p{margin-bottom:4px;font-size:.92rem;line-height:1.15}
+#form{flex:1;min-height:0;display:flex;flex-direction:column;gap:8px}
+.q{flex:1;min-height:0;border:1.5px solid rgba(43,43,48,.7);border-radius:10px;background:#fffdf7;padding:8px 14px;display:flex;flex-direction:column;justify-content:center}
+.tag{display:block;background:var(--pale);border-radius:6px;padding:1px 10px;margin:0 -4px 6px;font-size:.85rem;text-transform:uppercase;letter-spacing:1px;line-height:1.35;color:#3a4a66}
+.q p{margin-bottom:8px;font-size:1.05rem;line-height:1.2}
 .scale{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
-.scale button{font:inherit;font-size:1rem;padding:1px 0;border:1.5px solid rgba(43,43,48,.7);border-radius:8px;background:#F3EAD0;cursor:pointer;transition:.12s}
+.scale button{font:inherit;font-size:1.1rem;padding:5px 0;border:1.5px solid rgba(43,43,48,.7);border-radius:8px;background:#F3EAD0;cursor:pointer;transition:.12s}
 .scale button:hover{background:var(--pale);transform:translateY(-1px)}
 .scale button.on{background:var(--sage);border-color:var(--ink);box-shadow:0 2px 0 rgba(43,43,48,.3)}
-.ends{display:flex;justify-content:space-between;font-size:.72rem;line-height:1;color:var(--gray);margin-top:3px}
+.ends{display:flex;justify-content:space-between;font-size:.8rem;line-height:1;color:var(--gray);margin-top:5px}
 #submit{margin-top:0;background:var(--slate);color:#fff;border-radius:10px}
 #submit:hover{background:var(--slate-d)}
 .thanks{display:none;flex:1;text-align:center;padding:30px 10px}
