@@ -6,245 +6,177 @@
 <title>SOL THRiVE – Mockup Landing Page</title>
 <meta name="description" content="SOL THRiVE mockup landing page: watch the story, share your voice, help our community thrive. (Placeholder copy.)">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Patrick+Hand&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@700&family=Patrick+Hand&display=swap" rel="stylesheet">
 <style>
 :root{
-  --cream:#F6F0E1; --slate:#5F7BA3; --sage:#8DA67C; --earth:#8A5A3B;
-  --pale:#C9DBF0; --gray:#6F6F75; --ink:#2B2B30;
-  --wob1:255px 18px 225px 18px / 18px 225px 18px 255px;
-  --wob2:18px 255px 18px 225px / 225px 18px 255px 18px;
-  --wob3:30px 12px 28px 14px / 14px 28px 12px 30px;
+  --cream:#F8F3E4; --slate:#5B79A6; --slate-d:#4A6590; --sage:#9DB68C; --sage-d:#7E9C6E; --earth:#8A5A3B;
+  --pale:#CFDFF2; --gray:#6F6F75; --ink:#2B2B30;
+  --r:14px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
 body{
-  font-family:'Patrick Hand',cursive; color:var(--ink); font-size:18px; line-height:1.35;
-  background:var(--cream);
-  background-image:
-    radial-gradient(ellipse at 15% 10%, rgba(201,219,240,.55), transparent 45%),
-    radial-gradient(ellipse at 90% 80%, rgba(141,166,124,.25), transparent 45%);
-  min-height:100vh; overflow-x:hidden;
+  font-family:'Patrick Hand',cursive; color:var(--ink); font-size:17px; line-height:1.3;
+  background:var(--cream) url('assets/sol-meadow-bg.jpg') center bottom/cover no-repeat;
+  overflow-x:hidden;
 }
-h1,h2,h3,.brand{font-family:'Caveat Brush',cursive;font-weight:400;letter-spacing:.5px}
-.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+h1,h2,h3{font-family:'Kalam',cursive;font-weight:700}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px 18px;height:100vh;display:flex;flex-direction:column}
 
 /* top bar */
-.top{display:flex;align-items:center;justify-content:space-between;padding:18px 0;gap:12px;flex-wrap:wrap}
-.brand{font-size:2rem;display:flex;align-items:center;gap:10px;color:var(--ink)}
-.brand b{color:var(--slate);font-weight:400}
-.pill{border:2.5px solid var(--ink);border-radius:var(--wob3);padding:4px 16px;background:var(--pale);font-size:.95rem;text-transform:uppercase;letter-spacing:1px}
-.btn-sm{border:2.5px solid var(--ink);border-radius:var(--wob1);padding:6px 18px;background:#fff;font:inherit;cursor:pointer;box-shadow:3px 3px 0 var(--ink);transition:.15s}
-.btn-sm:hover{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.top{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:12px 0 4px;gap:12px}
+.brand{font-family:'Kalam',cursive;font-weight:700;font-size:1.6rem;display:flex;align-items:center;gap:10px;letter-spacing:1px}
+.brand b{color:var(--slate)}
+.center{text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px}
+.pill{border:1.5px solid var(--ink);border-radius:10px;padding:2px 18px;background:var(--pale);font-size:.9rem;text-transform:uppercase;letter-spacing:1px}
+.pill2{background:#F4E9B8;border-radius:10px;padding:0 14px;font-size:.78rem;text-transform:uppercase;letter-spacing:.8px;color:#5a5130}
+.btn-sm{justify-self:end;border:1.5px solid var(--ink);border-radius:10px;padding:5px 18px;background:#fffdf6;font:inherit;cursor:pointer;box-shadow:0 2px 0 rgba(43,43,48,.25);transition:.15s}
+.btn-sm:hover{transform:translateY(1px);box-shadow:none}
 
 /* hero */
-.hero{text-align:center;padding:18px 0 34px;position:relative}
-.hero h1{font-size:clamp(2rem,4.6vw,3.4rem);line-height:1.12}
-.hl{background:linear-gradient(transparent 55%,rgba(141,166,124,.65) 55%);padding:0 6px}
+.hero{text-align:center;padding:2px 0 12px;position:relative}
+.hero h1{font-size:clamp(1.4rem,3.8vh + .6vw,2.7rem);line-height:1.12;letter-spacing:.3px}
+.hl{background:rgba(157,182,140,.6);border-radius:6px;padding:0 8px}
 .hl2{color:var(--slate)}
-.hero p{max-width:640px;margin:12px auto 0;color:var(--gray);font-size:1.2rem}
-.doodle{position:absolute;pointer-events:none;opacity:.9}
-.star{color:var(--slate);font-size:1.6rem;position:absolute;animation:tw 3s ease-in-out infinite}
-@keyframes tw{50%{transform:scale(1.35) rotate(20deg);opacity:.5}}
+.hero p{display:none}
+.note{display:inline-block;background:#fffdf6;border:1.5px dashed var(--earth);border-radius:10px;padding:0 10px;font-size:.78rem;color:var(--earth);margin-bottom:2px}
+.star{position:absolute;color:var(--slate);font-size:1.5rem;animation:tw 3s ease-in-out infinite}
+.star.y{color:#E3B23C}
+@keyframes tw{50%{transform:scale(1.3) rotate(20deg);opacity:.55}}
 
 /* main card */
 .card{
-  display:grid;grid-template-columns:1.05fr 1fr;gap:0;
-  border:3.5px solid var(--ink);border-radius:var(--wob3);background:#FFFCF4;
-  box-shadow:8px 8px 0 var(--slate);overflow:hidden;
+  flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:22px;
+  border:1.5px solid rgba(43,43,48,.75);border-radius:18px;
+  background:rgba(251,247,236,.82);backdrop-filter:blur(3px);
+  box-shadow:0 8px 24px rgba(74,101,144,.18);padding:16px 20px;
 }
-.panel{padding:26px}
-.panel + .panel{border-left:3px dashed var(--gray);background:rgba(201,219,240,.25)}
-.label{display:flex;align-items:center;gap:8px;text-transform:uppercase;letter-spacing:1.5px;color:var(--slate);font-size:1rem}
-.sub{color:var(--gray);margin:2px 0 14px}
+.panel{display:flex;flex-direction:column;min-height:0}
+.panel + .panel{border-left:1.5px dashed rgba(111,111,117,.55);padding-left:22px;margin-left:-11px}
+.label{display:flex;align-items:center;gap:8px;text-transform:uppercase;letter-spacing:1.5px;color:var(--slate-d);font-size:.95rem;margin-bottom:8px}
+.sub{display:none}
 
 /* video */
 .video{
-  position:relative;aspect-ratio:16/10;border:3px solid var(--ink);border-radius:var(--wob2);overflow:hidden;
-  background:linear-gradient(180deg,var(--pale),#eaf1f8 60%,var(--sage) 60.5%,#a8bd98);
+  position:relative;flex:1;min-height:0;border:1.5px solid var(--ink);border-radius:12px;overflow:hidden;
+  background:#dbe9d0 url('assets/sol-meadow-scene.jpg') center/cover no-repeat;
 }
-.video svg{width:100%;height:100%;display:block}
-.sticker{position:absolute;background:var(--cream);border:2.5px solid var(--ink);border-radius:var(--wob3);padding:2px 10px;font-size:.9rem;text-transform:uppercase;transform:rotate(var(--r))}
-.caption{position:absolute;left:12px;bottom:12px;background:rgba(43,43,48,.82);color:#fff;padding:4px 10px;border-radius:8px;font-size:.95rem}
-.play{position:absolute;inset:0;margin:auto;width:76px;height:76px;border-radius:50%;border:3px solid var(--ink);background:var(--cream);font-size:1.9rem;cursor:pointer;box-shadow:4px 4px 0 var(--ink);transition:.15s;display:grid;place-items:center}
-.play:hover{transform:scale(1.08) rotate(-4deg)}
+.sticker{position:absolute;background:#F4E9B8;border:1.5px solid var(--ink);border-radius:8px;padding:1px 10px;font-size:.85rem;text-transform:uppercase;letter-spacing:.5px;z-index:1}
+.caption{position:absolute;left:12px;bottom:10px;background:rgba(43,43,48,.85);color:#fff;padding:3px 12px;border-radius:8px;font-size:.9rem;z-index:1}
+.play{position:absolute;inset:0;width:100%;height:100%;background:transparent;border:0;cursor:pointer;transition:.2s}
+.play:hover{background:rgba(255,255,255,.12)}
 .cta{
-  width:100%;margin-top:12px;padding:11px;border:3px solid var(--ink);border-radius:var(--wob1);
-  background:var(--sage);font:inherit;font-size:1.15rem;text-transform:uppercase;letter-spacing:1.5px;cursor:pointer;box-shadow:4px 4px 0 var(--ink);transition:.15s
+  width:100%;margin-top:8px;padding:6px;border:1.5px solid var(--ink);border-radius:10px;
+  background:var(--sage);font:inherit;font-size:1rem;text-transform:uppercase;letter-spacing:1.5px;cursor:pointer;box-shadow:0 2px 0 rgba(43,43,48,.3);transition:.15s
 }
-.cta:hover{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--ink);background:#9ab58a}
-.quote{margin-top:16px;border:2.5px solid var(--ink);border-radius:var(--wob2);padding:12px 16px;background:var(--cream);font-size:1.05rem}
-.quote small{display:block;margin-top:6px;color:var(--earth);text-transform:uppercase;letter-spacing:1px}
-.count{margin-top:12px;display:flex;align-items:center;gap:10px;border:2.5px dashed var(--gray);border-radius:var(--wob3);padding:8px 12px;font-size:1rem}
+.cta:hover{transform:translateY(1px);box-shadow:none;background:#abc49b}
+.quote{margin-top:8px;border:1.5px solid rgba(43,43,48,.7);border-radius:10px;padding:5px 12px 5px 38px;background:#F8F0D6;font-size:.95rem;position:relative}
+.quote::before{content:"“";position:absolute;left:10px;top:-2px;font-family:'Kalam';font-size:2.6rem;color:var(--earth)}
+.quote small{display:block;color:var(--earth);text-transform:uppercase;letter-spacing:1px;font-size:.78rem;text-align:right}
+.count{margin-top:8px;display:flex;align-items:center;gap:10px;font-size:.95rem}
+.count b{background:rgba(157,182,140,.55);border-radius:6px;padding:0 6px;font-weight:400}
 .dots{display:flex}
-.dots i{width:26px;height:26px;border-radius:50%;border:2px solid var(--ink);margin-left:-8px;display:grid;place-items:center;font-style:normal;font-size:.7rem}
+.dots i{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--ink);margin-left:-7px;display:grid;place-items:center;font-style:normal;font-size:.62rem}
 .dots i:first-child{margin-left:0}
 
 /* survey */
-.q{border:2.5px solid var(--ink);border-radius:var(--wob2);background:#fff;padding:12px 14px;margin-bottom:14px}
-.tag{display:inline-block;background:var(--pale);border:2px solid var(--ink);border-radius:var(--wob3);padding:0 10px;font-size:.85rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
-.q p{margin-bottom:8px}
+#form{flex:1;min-height:0;display:flex;flex-direction:column;gap:10px}
+.q{flex:1;min-height:0;border:1.5px solid rgba(43,43,48,.7);border-radius:10px;background:#fffdf7;padding:6px 12px;display:flex;flex-direction:column;justify-content:center}
+.tag{display:block;background:var(--pale);border-radius:6px;padding:0 10px;margin:0 -4px 3px;font-size:.78rem;text-transform:uppercase;letter-spacing:1px;line-height:1.35;color:#3a4a66}
+.q p{margin-bottom:4px;font-size:.92rem;line-height:1.15}
 .scale{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
-.scale button{
-  font:inherit;font-size:1.15rem;padding:5px 0;border:2.5px solid var(--ink);border-radius:var(--wob3);background:var(--cream);cursor:pointer;transition:.12s
-}
-.scale button:hover{background:var(--pale);transform:translateY(-2px) rotate(-2deg)}
-.scale button.on{background:var(--slate);color:#fff;box-shadow:2px 2px 0 var(--ink)}
-.ends{display:flex;justify-content:space-between;font-size:.8rem;color:var(--gray);margin-top:5px}
-.thanks{display:none;text-align:center;padding:30px 10px}
-.thanks h3{font-size:2rem;color:var(--sage)}
+.scale button{font:inherit;font-size:1rem;padding:1px 0;border:1.5px solid rgba(43,43,48,.7);border-radius:8px;background:#F3EAD0;cursor:pointer;transition:.12s}
+.scale button:hover{background:var(--pale);transform:translateY(-1px)}
+.scale button.on{background:var(--sage);border-color:var(--ink);box-shadow:0 2px 0 rgba(43,43,48,.3)}
+.ends{display:flex;justify-content:space-between;font-size:.72rem;line-height:1;color:var(--gray);margin-top:3px}
+#submit{margin-top:0;background:var(--slate);color:#fff;border-radius:10px}
+#submit:hover{background:var(--slate-d)}
+.thanks{display:none;flex:1;text-align:center;padding:30px 10px}
+.thanks h3{font-size:2rem;color:var(--sage-d)}
+.thanks svg{width:110px;height:110px}
 
-/* pillars */
-.pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin:56px 0 20px}
-.pil{border:3px solid var(--ink);border-radius:var(--wob1);padding:22px;background:#FFFCF4;text-align:center;box-shadow:5px 5px 0 var(--c);transition:.2s}
-.pil:hover{transform:translateY(-6px) rotate(-1deg)}
-.pil svg{width:90px;height:90px}
-.pil h3{font-size:1.7rem;margin:6px 0}
-.pil p{color:var(--gray)}
-.band{margin:40px 0;border:3px solid var(--ink);border-radius:var(--wob3);padding:34px;text-align:center;
-  background:var(--slate);color:#fff;position:relative;overflow:hidden}
-.band h2{font-size:2.3rem}
-.band .cta{width:auto;padding:11px 34px;margin-top:16px;color:var(--ink)}
-footer{text-align:center;color:var(--gray);padding:20px 0 40px;font-size:.95rem}
-.note{background:var(--cream);border:2px dashed var(--earth);border-radius:12px;padding:6px 12px;display:inline-block;font-size:.9rem;color:var(--earth);margin-bottom:10px}
+/* below-the-fold sections (hidden on the one-screen layout) */
+.pillars,.band,footer{display:none}
+.rough{filter:url(#rough)}
 
-svg .rough{filter:url(#rough)}
-
-/* ONE-SCREEN VIEW: fit viewport, no scrolling (desktop/tablet landscape) */
-@media(min-width:861px){
-  html,body{height:100%;overflow:hidden}
-  body{min-height:0}
-  .wrap{height:100vh;display:flex;flex-direction:column;padding-bottom:14px}
-  .top{padding:8px 0}
-  .brand{font-size:1.6rem}
-  .hero{padding:0 0 10px}
-  .hero h1{font-size:clamp(1.3rem,3.4vh + .5vw,2.5rem);line-height:1.1}
-  .hero p,.pillars,.band,footer{display:none}
-  .note{font-size:.8rem;padding:1px 10px;margin-bottom:4px}
-  .star,.doodle{display:none}
-  .card{flex:1;min-height:0;box-shadow:6px 6px 0 var(--slate)}
-  .panel{display:flex;flex-direction:column;min-height:0;padding:14px 20px}
-  .label{font-size:.9rem}
-  .sub{display:none}
-  .label{margin-bottom:8px}
-  .video{flex:1;min-height:0;aspect-ratio:auto}
-  .cta{margin-top:8px;padding:6px;font-size:1rem}
-  .quote{margin-top:8px;padding:6px 12px;font-size:.95rem}
-  .quote small{margin-top:2px;font-size:.85rem}
-  .count{margin-top:8px;padding:4px 10px;font-size:.95rem}
-  #form{flex:1;min-height:0;display:flex;flex-direction:column;gap:8px}
-  .q{flex:1;min-height:0;margin:0;padding:6px 12px;display:flex;flex-direction:column;justify-content:center}
-  .q p{margin-bottom:3px;font-size:.9rem;line-height:1.15}
-  .tag{margin-bottom:2px;font-size:.75rem;line-height:1.2}
-  .scale button{padding:1px 0;font-size:1rem}
-  .ends{margin-top:2px;font-size:.72rem;line-height:1}
-  #submit{margin-top:0}
-  .thanks{flex:1;padding:10px}
-}
+/* phones / narrow: stack & allow scroll */
 @media(max-width:860px){
-  .card{grid-template-columns:1fr}.panel+.panel{border-left:0;border-top:3px dashed var(--gray)}
-  .pillars{grid-template-columns:1fr}
+  body{overflow:auto}
+  .wrap{height:auto;min-height:100vh}
+  .top{grid-template-columns:1fr;justify-items:center;text-align:center}
+  .btn-sm{justify-self:center}
+  .card{grid-template-columns:1fr;gap:16px}
+  .panel + .panel{border-left:0;margin-left:0;padding-left:0;border-top:1.5px dashed rgba(111,111,117,.55);padding-top:14px}
+  .video{flex:none;aspect-ratio:16/10}
+  #form{flex:none}
+  .q{padding:10px 12px}
+  .star{display:none}
+}
+/* one-screen: lock page to viewport on desktop */
+@media(min-width:861px){
+  html,body{overflow:hidden}
 }
 </style>
 </head>
 <body>
-<!-- roughen filter for hand-drawn line quality -->
-<svg width="0" height="0" style="position:absolute"><filter id="rough"><feTurbulence type="fractalNoise" baseFrequency=".035" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="3"/></filter></svg>
+<svg width="0" height="0" style="position:absolute"><filter id="rough"><feTurbulence type="fractalNoise" baseFrequency=".035" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="2.5"/></filter></svg>
 
 <div class="wrap">
   <header class="top">
     <div class="brand">
-      <svg width="42" height="42" viewBox="0 0 60 60" class="rough"><g fill="none" stroke="#2B2B30" stroke-width="3" stroke-linecap="round"><circle cx="30" cy="30" r="11" fill="#F2C94C" stroke="#2B2B30"/><path d="M30 6v8M30 46v8M6 30h8M46 30h8M13 13l6 6M41 41l6 6M47 13l-6 6M19 41l-6 6"/></g></svg>
+      <svg width="40" height="40" viewBox="0 0 60 60" class="rough"><g fill="none" stroke="#2B2B30" stroke-width="3" stroke-linecap="round"><circle cx="30" cy="30" r="11" fill="#F2D675"/><path d="M30 6v8M30 46v8M6 30h8M46 30h8M13 13l6 6M41 41l6 6M47 13l-6 6M19 41l-6 6"/></g></svg>
       <span>SOL <b>THRiVE</b></span>
     </div>
-    <span class="pill">Community Impact Project</span>
-    <button class="btn-sm">Enter Full Homepage →</button>
+    <div class="center">
+      <span class="pill">Community Impact Project</span>
+      <span class="pill2">A community-led initiative</span>
+    </div>
+    <button class="btn-sm" onclick="location.href='index.html'">Enter Full Homepage →</button>
   </header>
 
   <section class="hero">
-    <span class="star" style="left:6%;top:20px">★</span>
-    <span class="star" style="right:8%;top:50px;animation-delay:1s">★</span>
-    <svg class="doodle" style="left:0;top:60px" width="120" height="60" viewBox="0 0 120 60"><path class="rough" d="M20 45c-14 0-16-18 0-18 2-16 28-18 34-4 14-4 24 8 14 18-6 6-40 6-48 4z" fill="#fff" stroke="#2B2B30" stroke-width="2.5"/></svg>
-    <svg class="doodle" style="right:0;top:20px" width="120" height="60" viewBox="0 0 120 60"><path class="rough" d="M20 45c-14 0-16-18 0-18 2-16 28-18 34-4 14-4 24 8 14 18-6 6-40 6-48 4z" fill="#fff" stroke="#2B2B30" stroke-width="2.5"/></svg>
+    <span class="star y" style="left:3%;top:36px">★</span>
+    <span class="star" style="right:4%;top:20px;animation-delay:1s">★</span>
     <span class="note">✎ Placeholder copy – wording TBD</span>
     <h1>Help Grow <span class="hl">$0,000,000+</span> in Community Funds<br>to Help Every Family <span class="hl2">THRiVE</span> by 50%</h1>
-    <p>Watch the short story, share what matters most to you, and help guide where the funding goes.</p>
+    <p>Placeholder subhead.</p>
   </section>
 
   <main class="card">
     <section class="panel">
-      <div class="label">🎬 The SOL THRiVE Story</div>
-      <p class="sub">Watch the video, then cast your input on the right.</p>
+      <div class="label">🖼️ The SOL THRiVE Story</div>
       <div class="video">
-        <svg viewBox="0 0 640 400" preserveAspectRatio="xMidYMid slice" aria-label="Stick figures on a hill">
-          <g class="rough" fill="none" stroke="#2B2B30" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="540" cy="70" r="30" fill="#F6E3A1"/>
-            <path d="M540 20v10M540 110v10M490 70h10M580 70h10M505 35l7 7M568 98l7 7M575 35l-7 7M512 98l-7 7" stroke-width="3"/>
-            <path d="M0 250c120-50 230-40 340 0s220 30 300-20" stroke-width="3"/>
-            <path d="M60 320l6-22M70 322l-2-26M78 321l10-20M470 330l5-22M480 332l-2-26M490 330l10-20" stroke="#4d6b3f" stroke-width="3"/>
-            <circle cx="260" cy="150" r="34" fill="#fff"/>
-            <circle cx="248" cy="144" r="3" fill="#2B2B30"/><circle cx="272" cy="144" r="3" fill="#2B2B30"/>
-            <path d="M246 134q4-6 10-3M268 131q6-3 10 3" stroke-width="3"/>
-            <path d="M246 162q14 14 28 0" stroke-width="3"/>
-            <path d="M260 184c-4 40-8 60-4 90M258 215c-24 8-40 22-52 40M262 215c24-18 44-34 60-46M256 274c-14 22-26 40-34 56M257 274c10 20 22 36 34 52"/>
-            <circle cx="410" cy="230" r="20" fill="#fff"/>
-            <circle cx="403" cy="226" r="2.5" fill="#2B2B30"/><circle cx="417" cy="226" r="2.5" fill="#2B2B30"/>
-            <path d="M401 238q9 8 18 0" stroke-width="3"/>
-            <path d="M410 250c0 30 0 44 0 62M410 266c-14 4-24 12-30 24M410 266c14-8 22-20 28-32M410 312c-8 14-14 24-18 32M410 312c8 14 16 22 22 30"/>
-          </g>
-          <g font-family="Caveat Brush" fill="#5F7BA3" font-size="30"><text x="30" y="60">★</text><text x="130" y="110">✦</text><text x="360" y="60">★</text></g>
-        </svg>
-        <span class="sticker" style="--r:-4deg;left:12px;top:18px">Every voice counts</span>
-        <span class="sticker" style="--r:3deg;right:12px;top:110px;background:var(--sage)">Build it together</span>
-        <button class="play" aria-label="Play video">▶</button>
-        <div class="caption">Placeholder: "When our community comes together…"</div>
+        <span class="sticker" style="left:12px;top:14px">Every voice counts</span>
+        <button class="play" aria-label="Play video"></button>
+        <div class="caption">“When our community comes together…”</div>
       </div>
       <button class="cta">↻ Click to Restart &amp; Unmute</button>
-      <div class="quote">“Placeholder quote — we don’t need more promises. We need a plan we can build together.”
+      <div class="quote">We don’t need more promises. We need a plan we can build together.
         <small>— Name Surname, Project Director</small></div>
       <div class="count"><span class="dots"><i style="background:var(--pale)">JM</i><i style="background:var(--sage)">KF</i><i style="background:#e6c9a8">+</i></span>
-        <span><b>47+ community members</b> have shared their input so far.</span></div>
+        <span><b>47+</b> community members have shared their input so far.</span></div>
     </section>
 
     <section class="panel" id="survey">
       <div class="label">📋 Community Impact Survey</div>
-      <p class="sub">Tell us what matters most — it only takes a minute.</p>
       <div id="form">
-        <div class="q"><span class="tag">Q1 · Baseline</span><p>How well do you feel current programs are reaching families in your community right now?</p>
-          <div class="scale"><button>1</button><button>2</button><button>3</button><button>4</button><button>5</button></div>
+        <div class="q"><span class="tag">Q1. Baseline</span><p>How well do you feel current programs are reaching families in your community right now?</p>
+          <div class="scale"><button>1</button><button>2</button><button class="on">3</button><button>4</button><button>5</button></div>
           <div class="ends"><span>1 = Not at all</span><span>5 = Very well</span></div></div>
-        <div class="q"><span class="tag">Q2 · Mentorship</span><p>How valuable would it be to offer trusted mentors for young people in your neighborhood?</p>
-          <div class="scale"><button>1</button><button>2</button><button>3</button><button>4</button><button>5</button></div>
+        <div class="q"><span class="tag">Q2. Mentorship</span><p>How valuable would it be to offer trusted mentors for young people in your neighborhood?</p>
+          <div class="scale"><button>1</button><button>2</button><button>3</button><button>4</button><button class="on">5</button></div>
           <div class="ends"><span>1 = Not valuable</span><span>5 = Essential</span></div></div>
-        <div class="q"><span class="tag">Q3 · Tools</span><p>How valuable would safe, easy-to-use digital tools be for supporting families day to day?</p>
-          <div class="scale"><button>1</button><button>2</button><button>3</button><button>4</button><button>5</button></div>
+        <div class="q"><span class="tag">Q3. Tools</span><p>How valuable would safe, easy-to-use digital tools be for supporting families day to day?</p>
+          <div class="scale"><button>1</button><button>2</button><button>3</button><button class="on">4</button><button>5</button></div>
           <div class="ends"><span>1 = Not valuable</span><span>5 = Essential</span></div></div>
-        <button class="cta" id="submit" style="background:var(--slate);color:#fff">Submit Survey Input →</button>
+        <button class="cta" id="submit">Submit Survey Input →</button>
       </div>
       <div class="thanks" id="thanks">
-        <svg width="110" height="110" viewBox="0 0 110 110"><g class="rough" fill="#fff" stroke="#2B2B30" stroke-width="4" stroke-linecap="round"><circle cx="55" cy="35" r="20"/><path d="M55 55v32M55 65l-24-18M55 65l24-18M55 87l-14 20M55 87l14 20" fill="none"/><circle cx="48" cy="32" r="2.5" fill="#2B2B30"/><circle cx="62" cy="32" r="2.5" fill="#2B2B30"/><path d="M46 42q9 8 18 0" fill="none"/></g></svg>
+        <svg viewBox="0 0 110 110"><g class="rough" fill="#fff" stroke="#2B2B30" stroke-width="4" stroke-linecap="round"><circle cx="55" cy="35" r="20"/><path d="M55 55v32M55 65l-24-18M55 65l24-18M55 87l-14 20M55 87l14 20" fill="none"/><circle cx="48" cy="32" r="2.5" fill="#2B2B30"/><circle cx="62" cy="32" r="2.5" fill="#2B2B30"/><path d="M46 42q9 8 18 0" fill="none"/></g></svg>
         <h3>Thank you!</h3><p>Your voice helps shape what comes next.</p>
       </div>
     </section>
   </main>
-
-  <section class="pillars">
-    <article class="pil" style="--c:var(--sage)">
-      <svg viewBox="0 0 90 90"><g class="rough" fill="none" stroke="#2B2B30" stroke-width="3.5" stroke-linecap="round"><circle cx="45" cy="28" r="14" fill="#fff"/><path d="M45 42v26M45 50l-18 10M45 50l18 -14M45 68l-10 16M45 68l10 16"/><path d="M63 36l6-14 5 3" stroke="#4d6b3f"/></g></svg>
-      <h3>Mentorship</h3><p>Placeholder text about pairing young people with trusted guides.</p></article>
-    <article class="pil" style="--c:var(--slate)">
-      <svg viewBox="0 0 90 90"><g class="rough" fill="none" stroke="#2B2B30" stroke-width="3.5" stroke-linecap="round"><circle cx="30" cy="30" r="12" fill="#fff"/><circle cx="62" cy="34" r="10" fill="#fff"/><path d="M30 42v22M30 50l-12 8M30 50l14 4M30 64l-8 14M30 64l8 14M62 44v18M62 50l-10 6M62 50l10 6M62 62l-6 14M62 62l6 14"/></g></svg>
-      <h3>Community</h3><p>Placeholder text about neighbors showing up for one another.</p></article>
-    <article class="pil" style="--c:var(--earth)">
-      <svg viewBox="0 0 90 90"><g class="rough" fill="none" stroke="#2B2B30" stroke-width="3.5" stroke-linecap="round"><path d="M10 70c20-20 40 8 70-12" stroke="#5F7BA3"/><path d="M20 80l3-12M30 80l-2-14M60 80l3-12" stroke="#4d6b3f"/><circle cx="45" cy="30" r="14" fill="#F6E3A1"/><path d="M45 6v6M45 48v6M21 30h6M63 30h6"/></g></svg>
-      <h3>Opportunity</h3><p>Placeholder text about tools and resources that help everyone grow.</p></article>
-  </section>
-
-  <section class="band">
-    <h2>Ready to help us THRiVE?</h2>
-    <p>Placeholder tagline — one small step from you, one big leap for us all.</p>
-    <button class="cta" onclick="document.getElementById('survey').scrollIntoView({behavior:'smooth'})">Share Your Voice</button>
-  </section>
-
-  <footer>© SOL THRiVE · Mockup – all wording is placeholder</footer>
 </div>
 
 <script>
