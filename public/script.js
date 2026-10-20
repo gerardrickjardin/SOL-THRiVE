@@ -29,9 +29,43 @@ const initThriveUI = () => {
         });
     }
 
-    // Video Placeholder Interactive Walkthrough
+    // Video Placeholder Interactive Walkthrough + Local Video Player
     const videoCard = document.getElementById('video-player-card');
     if (videoCard) {
+        const videoEl = document.getElementById('homepage-walkthrough-video');
+        const playToggleBtn = document.getElementById('video-toggle-play');
+        const restartBtn = document.getElementById('video-restart-btn');
+        const muteBtn = document.getElementById('video-mute-btn');
+        let narrationActive = false;
+
+        const walkthroughNarrationText = "Welcome to Thrive Coaching. Step 1: Name the Friction — pinpoint whether you feel stuck in a hole, on a hamster wheel, or juggling too much. Step 2: Map Your Strengths across Traits, Hobbies, Relationships, Interests, Values, and Expertise. Step 3: Reclaim Your Agency and turn insight into concrete daily momentum with your Personos AI coach.";
+
+        const stopWalkthroughSpeech = () => {
+            if (window.speechSynthesis) {
+                try { window.speechSynthesis.cancel(); } catch (_) {}
+            }
+        };
+
+        const speakWalkthrough = () => {
+            if (!window.speechSynthesis || !narrationActive) return;
+            try {
+                window.speechSynthesis.cancel();
+                const u = new SpeechSynthesisUtterance(walkthroughNarrationText);
+                u.rate = 1.0;
+                window.speechSynthesis.speak(u);
+            } catch (_) {}
+        };
+
+        const syncPlayBtnLabel = () => {
+            if (!playToggleBtn || !videoEl) return;
+            playToggleBtn.innerHTML = videoEl.paused ? '&#9654; Play Video' : '&#9208; Pause Video';
+        };
+
+        const syncMuteBtnLabel = () => {
+            if (!muteBtn || !videoEl) return;
+            muteBtn.innerHTML = (videoEl.muted && !narrationActive) ? '&#128266; Unmute Narration' : '&#128263; Mute';
+        };
+
         const activateVideoCard = () => {
             if (!videoCard.classList.contains('is-active')) {
                 videoCard.classList.add('is-active');
@@ -41,14 +75,84 @@ const initThriveUI = () => {
                 if (activePanel) {
                     activePanel.setAttribute('aria-hidden', 'false');
                 }
+                if (videoEl) {
+                    videoEl.currentTime = 0;
+                    const playPromise = videoEl.play();
+                    if (playPromise && typeof playPromise.then === 'function') {
+                        playPromise.then(syncPlayBtnLabel).catch(() => syncPlayBtnLabel());
+                    } else {
+                        syncPlayBtnLabel();
+                    }
+                }
             }
         };
+
+        if (playToggleBtn && videoEl) {
+            playToggleBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (videoEl.paused) {
+                    const p = videoEl.play();
+                    if (p && typeof p.then === 'function') p.then(syncPlayBtnLabel).catch(syncPlayBtnLabel);
+                    else syncPlayBtnLabel();
+                    if (narrationActive) speakWalkthrough();
+                } else {
+                    videoEl.pause();
+                    stopWalkthroughSpeech();
+                    syncPlayBtnLabel();
+                }
+            });
+        }
+
+        if (restartBtn && videoEl) {
+            restartBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                videoEl.currentTime = 0;
+                const p = videoEl.play();
+                if (p && typeof p.then === 'function') p.then(syncPlayBtnLabel).catch(syncPlayBtnLabel);
+                else syncPlayBtnLabel();
+                if (narrationActive) speakWalkthrough();
+            });
+        }
+
+        if (muteBtn && videoEl) {
+            muteBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const shouldUnmute = videoEl.muted && !narrationActive;
+                videoEl.muted = !shouldUnmute;
+                narrationActive = shouldUnmute;
+                if (narrationActive) {
+                    if (videoEl.paused) {
+                        const p = videoEl.play();
+                        if (p && typeof p.then === 'function') p.then(syncPlayBtnLabel).catch(syncPlayBtnLabel);
+                    }
+                    speakWalkthrough();
+                } else {
+                    stopWalkthroughSpeech();
+                }
+                syncMuteBtnLabel();
+            });
+        }
+
+        if (videoEl) {
+            videoEl.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (videoEl.paused) {
+                    const p = videoEl.play();
+                    if (p && typeof p.then === 'function') p.then(syncPlayBtnLabel).catch(syncPlayBtnLabel);
+                } else {
+                    videoEl.pause();
+                    stopWalkthroughSpeech();
+                    syncPlayBtnLabel();
+                }
+            });
+        }
+
         videoCard.addEventListener('click', (e) => {
-            if (e.target.closest('a')) return;
+            if (e.target.closest('a, button, video')) return;
             activateVideoCard();
         });
         videoCard.addEventListener('keydown', (e) => {
-            if (e.target.closest('a')) return;
+            if (e.target.closest('a, button, video')) return;
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
                 activateVideoCard();

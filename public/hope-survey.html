@@ -46,26 +46,26 @@
             gap: 0.5rem;
             flex-shrink: 0;
         }
-        @media (min-width: 1025px) and (max-width: 1280px) {
+        @media (min-width: 1025px) and (max-width: 1380px) {
             .header {
-                padding: 0.75rem 1.25rem;
-                gap: 0.75rem;
+                padding: 0.75rem 1rem;
+                gap: 0.5rem;
             }
             .logo {
-                font-size: 1.35rem;
+                font-size: 1.25rem;
             }
             .brand-sub {
-                font-size: 1.1rem;
+                font-size: 1rem;
             }
             .desktop-menu ul {
-                gap: 0.65rem;
+                gap: 0.55rem;
             }
             .desktop-menu a {
-                font-size: 0.82rem;
+                font-size: 0.78rem;
             }
             .nav-cta-pill {
-                padding: 0.4rem 0.85rem;
-                font-size: 0.82rem !important;
+                padding: 0.35rem 0.75rem;
+                font-size: 0.78rem !important;
             }
         }
         @media (max-width: 640px) {
@@ -120,6 +120,7 @@
                         </div>
                     </li>
                     <li><a href="index.html#video-section">Video</a></li>
+                    <li><a href="mockup-landing.html">SOL THRiVE</a></li>
                     <li><a href="survey.html" class="nav-cta-pill">Flow Survey &rarr;</a></li>
                 </ul>
             </div>
@@ -142,6 +143,7 @@
                 </li>
                 <li><a href="index.html#about">About</a></li>
                 <li><a href="index.html#video-section">Video</a></li>
+                <li><a href="mockup-landing.html">SOL THRiVE</a></li>
             </ul>
         </div>
     </header>
@@ -443,6 +445,123 @@ const apiKey = (injectedGeminiKey && !injectedGeminiKey.includes("VITE_GEMINI_AP
     ? injectedGeminiKey
     : "AIzaSyDhByu-gVi8PNLtDdl41ETxOmu2JOEVt8A";
 
+const injectedElevenLabsKey = "";
+const defaultElevenLabsKey = (injectedElevenLabsKey && !injectedElevenLabsKey.includes("VITE_ELEVENLABS_API_KEY"))
+    ? injectedElevenLabsKey
+    : "sk_d2fc2ac281afdb8a56178f44c8ebca76f21da62f7a256bf8";
+const defaultElevenLabsVoiceId = "4EfJOraSN0d4Lt6iDXwh";
+
+function getActiveGeminiKey() {
+    try {
+        const saved = localStorage.getItem('thriveGeminiKey');
+        if (saved && saved.trim()) return saved.trim();
+    } catch (e) {}
+    return apiKey || "";
+}
+
+function getActiveElevenLabsKey() {
+    try {
+        const saved = localStorage.getItem('thriveElevenLabsKey');
+        if (saved && saved.trim()) return saved.trim();
+    } catch (e) {}
+    return defaultElevenLabsKey || "";
+}
+
+function getActiveElevenLabsVoiceId() {
+    try {
+        const saved = localStorage.getItem('thriveElevenLabsVoiceId');
+        if (saved && saved.trim()) return saved.trim();
+    } catch (e) {}
+    return defaultElevenLabsVoiceId || "21m00Tcm4TlvDq8ikWAM";
+}
+
+// --- NON-OVERLAPPING TTS CONTROLLER FOR HOPE SURVEY ---
+let hopeAudio = null;
+let hopeAudioUrl = null;
+let hopeAudioAbort = null;
+let hopeRequestId = 0;
+
+function stopHopeAudio() {
+    hopeRequestId++;
+    if (hopeAudioAbort) {
+        hopeAudioAbort.abort();
+        hopeAudioAbort = null;
+    }
+    if (hopeAudio) {
+        hopeAudio.onended = null;
+        hopeAudio.onerror = null;
+        hopeAudio.pause();
+        hopeAudio.currentTime = 0;
+        hopeAudio = null;
+    }
+    if (hopeAudioUrl) {
+        URL.revokeObjectURL(hopeAudioUrl);
+        hopeAudioUrl = null;
+    }
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+        try { window.speechSynthesis.cancel(); } catch (e) {}
+    }
+}
+
+async function speakHopeText(rawText) {
+    stopHopeAudio();
+    const reqId = ++hopeRequestId;
+    const text = String(rawText || '').replace(/THRiVE/g, 'Thrive');
+    const elKey = getActiveElevenLabsKey();
+    const voiceId = getActiveElevenLabsVoiceId();
+
+    const fallbackWebSpeech = () => {
+        if (reqId !== hopeRequestId) return;
+        if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+        try {
+            window.speechSynthesis.cancel();
+            const utter = new SpeechSynthesisUtterance(text);
+            utter.rate = 0.98;
+            window.speechSynthesis.speak(utter);
+        } catch (e) {}
+    };
+
+    if (!elKey) {
+        fallbackWebSpeech();
+        return;
+    }
+
+    const abortController = new AbortController();
+    hopeAudioAbort = abortController;
+    try {
+        const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+            method: 'POST',
+            signal: abortController.signal,
+            headers: {
+                'Accept': 'audio/mpeg',
+                'xi-api-key': elKey,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                text,
+                model_id: 'eleven_turbo_v2_5',
+                voice_settings: { stability: 0.5, similarity_boost: 0.75 }
+            })
+        });
+        if (reqId !== hopeRequestId) return;
+        if (!res.ok) throw new Error(`ElevenLabs HTTP ${res.status}`);
+        const blob = await res.blob();
+        if (reqId !== hopeRequestId) return;
+        hopeAudioUrl = URL.createObjectURL(blob);
+        const audio = new Audio(hopeAudioUrl);
+        hopeAudio = audio;
+        hopeAudioAbort = null;
+        audio.onended = () => {
+            if (reqId === hopeRequestId) stopHopeAudio();
+        };
+        await audio.play();
+    } catch (err) {
+        if (err && err.name === 'AbortError') return;
+        if (reqId !== hopeRequestId) return;
+        fallbackWebSpeech();
+    }
+}
+
 // --- SCORE & CONSISTENCY HELPERS ---
 const getAnswerScore = (rawVal) => {
     if (rawVal === null || rawVal === undefined) return null;
@@ -533,28 +652,59 @@ const computeSurveyScores = (answersObj = {}, questionsList = surveyQuestions) =
     };
 };
 
+function formatLocalBullets(rawText) {
+    const trimmed = String(rawText || "").trim();
+    if (!trimmed) return "";
+    const cleanPart = (s) => {
+        const c = String(s || "")
+            .replace(/^(?:[•\-\*\u2022]+|\d+[\.\)])\s*/, '')
+            .replace(/^(?:um+|uh+|ah+|er+|you know|basically|honestly|okay|ok|so yeah|yeah|well|so)[,\s]+/i, '')
+            .replace(/[,;:\s]+$/, '')
+            .trim();
+        return c ? c.charAt(0).toUpperCase() + c.slice(1) : "";
+    };
+    let parts = trimmed
+        .split(/(?:\r?\n)+|[•\u2022]+|;+|(?<=[.!?])\s+|\s+(?:and\s+also|also|plus|on\s+top\s+of\s+that|in\s+addition)\s+/i)
+        .map(cleanPart)
+        .filter(Boolean);
+    if (parts.length < 2 && trimmed.includes(',')) {
+        parts = trimmed.split(/,\s+(?:and\s+)?/i).map(cleanPart).filter(Boolean);
+    }
+    if (parts.length === 0) return `• ${cleanPart(trimmed) || trimmed}`;
+    return parts.map((p) => `• ${/[.!?]$/.test(p) ? p : p + '.'}`).join('\n');
+}
+
 async function cleanTextWithGemini(text) {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+    const activeKey = getActiveGeminiKey();
+    if (!activeKey) {
+        return formatLocalBullets(text);
+    }
+
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${activeKey}`;
     const payload = {
         contents: [{ parts: [{ text: `Organize the following dictated text into clear bullet points. Remove conversational filler words (like "ums", "ahs", "OK great", "yeah", "I would say", "basically", etc.) and clean up the phrasing so it reads professionally and directly. Do NOT remove any core details or stories. Format it into a clean, bulleted list for maximum readability. Text:\n\n${text}` }] }],
         systemInstruction: { parts: [{ text: "You are a helpful assistant. Return ONLY the bullet points. Each point must start with a standard bullet character (•). Strip out conversational cruft and ensure the output is polished and direct, preserving the core meaning." }] }
     };
 
-    const delays = [1000, 2000, 4000, 8000, 16000];
-    for (let i = 0; i < 5; i++) {
-        try {
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-            if (!response.ok) throw new Error('API Error');
-            const data = await response.json();
-            return data.candidates?.[0]?.content?.parts?.[0]?.text || text;
-        } catch (err) {
-            if (i === 4) return "• " + text.split('. ').join('.\n• ');
-            await new Promise(r => setTimeout(r, delays[i]));
-        }
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 6000);
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            signal: controller.signal,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        clearTimeout(timeoutId);
+        if (!response.ok) throw new Error(`Gemini HTTP ${response.status}`);
+        const data = await response.json();
+        const candidate = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        return (candidate && candidate.trim()) ? candidate.trim() : formatLocalBullets(text);
+    } catch (err) {
+        clearTimeout(timeoutId);
+        console.warn("Gemini cleanup unavailable or timed out, using instant offline bullet formatter:", err?.message || err);
+        return formatLocalBullets(text);
     }
 }
 
@@ -1748,6 +1898,65 @@ const AuthModal = ({ onClose, onLogin }) => {
     );
 };
 
+const AISettingsModal = ({ isOpen, onClose }) => {
+    const [gemKey, setGemKey] = useState(() => getActiveGeminiKey());
+    const [elKey, setElKey] = useState(() => getActiveElevenLabsKey());
+    const [voiceId, setVoiceId] = useState(() => getActiveElevenLabsVoiceId());
+
+    if (!isOpen) return null;
+
+    const handleSave = () => {
+        try {
+            if (gemKey && gemKey.trim()) {
+                localStorage.setItem('thriveGeminiKey', gemKey.trim());
+            } else {
+                localStorage.removeItem('thriveGeminiKey');
+            }
+            if (elKey && elKey.trim()) {
+                localStorage.setItem('thriveElevenLabsKey', elKey.trim());
+            } else {
+                localStorage.removeItem('thriveElevenLabsKey');
+            }
+            if (voiceId && voiceId.trim()) {
+                localStorage.setItem('thriveElevenLabsVoiceId', voiceId.trim());
+            } else {
+                localStorage.removeItem('thriveElevenLabsVoiceId');
+            }
+        } catch (e) {}
+        onClose();
+    };
+
+    return (
+        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-in">
+            <div className="bg-white rounded-2xl shadow-2xl border-2 border-slate-800 w-full max-w-md overflow-hidden">
+                <div className="flex justify-between items-center p-5 border-b border-slate-200 bg-slate-50">
+                    <h3 className="font-black text-slate-900 text-lg">AI &amp; Voice Settings</h3>
+                    <button type="button" onClick={onClose} className="text-slate-500 hover:text-slate-800 p-1.5 rounded-full hover:bg-slate-200 transition-colors" aria-label="Close Settings">✕</button>
+                </div>
+                <div className="p-6 space-y-5 bg-white text-left">
+                    <div>
+                        <label htmlFor="hope-gemini-key" className="block text-xs uppercase tracking-widest font-bold text-slate-700 mb-2">Gemini API Key (Reflection Cleanup)</label>
+                        <input id="hope-gemini-key" type="password" value={gemKey} onChange={(e) => setGemKey(e.target.value)} placeholder="Paste Gemini API key..." className="w-full border-2 border-slate-300 rounded-xl p-3 outline-none focus:border-purple-600 focus:ring-4 focus:ring-purple-100 transition-all text-slate-800 font-mono text-sm" />
+                        <p className="text-xs text-slate-500 mt-1.5 font-medium">Automatically falls back to instant offline bullet formatting if quota is exceeded.</p>
+                    </div>
+                    <div>
+                        <label htmlFor="hope-elevenlabs-key" className="block text-xs uppercase tracking-widest font-bold text-slate-700 mb-2">ElevenLabs API Key (Premium Voice)</label>
+                        <input id="hope-elevenlabs-key" type="password" value={elKey} onChange={(e) => setElKey(e.target.value)} placeholder="Paste ElevenLabs API key..." className="w-full border-2 border-slate-300 rounded-xl p-3 outline-none focus:border-purple-600 focus:ring-4 focus:ring-purple-100 transition-all text-slate-800 font-mono text-sm" />
+                        <p className="text-xs text-slate-500 mt-1.5 font-medium">Automatically falls back to browser Web Speech narration if unavailable.</p>
+                    </div>
+                    <div>
+                        <label htmlFor="hope-elevenlabs-voice" className="block text-xs uppercase tracking-widest font-bold text-slate-700 mb-2">ElevenLabs Voice ID</label>
+                        <input id="hope-elevenlabs-voice" type="text" value={voiceId} onChange={(e) => setVoiceId(e.target.value)} placeholder="21m00Tcm4TlvDq8ikWAM" className="w-full border-2 border-slate-300 rounded-xl p-3 outline-none focus:border-purple-600 focus:ring-4 focus:ring-purple-100 transition-all text-slate-800 font-mono text-sm" />
+                    </div>
+                </div>
+                <div className="p-5 border-t border-slate-200 bg-slate-50 flex justify-end gap-3">
+                    <button type="button" onClick={handleSave} id="save-hope-settings-btn" className="bg-purple-600 hover:bg-purple-700 text-white font-bold px-6 py-2.5 rounded-full text-sm transition-colors">Save &amp; Close</button>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 const App = () => {
     const [step, setStep] = useState('intro'); // 'intro', 'survey', 'results', 'dashboard'
     const [currentQIndex, setCurrentQIndex] = useState(0);
@@ -1760,6 +1969,7 @@ const App = () => {
     const [user, setUser] = useState(null);
     const [authLoading, setAuthLoading] = useState(true);
     const [showAuthModal, setShowAuthModal] = useState(false);
+    const [showAISettings, setShowAISettings] = useState(false);
 
     // Refs to preserve in-memory guest progress/results when logging in
     const answersRef = useRef(answers);
@@ -1917,6 +2127,7 @@ const App = () => {
 
     const handleNextQ = () => {
         if (currentSelection === null) return;
+        stopHopeAudio();
         
         const qId = surveyQuestions[currentQIndex].id;
         const newAnswers = { ...answers, [qId]: currentSelection };
@@ -1933,6 +2144,7 @@ const App = () => {
     };
 
     const handlePrevQ = () => {
+        stopHopeAudio();
         const qId = surveyQuestions[currentQIndex].id;
         const updatedAnswers = currentSelection !== null ? { ...answers, [qId]: currentSelection } : answers;
         if (currentSelection !== null) {
@@ -1948,6 +2160,7 @@ const App = () => {
     };
 
     const handleRetake = () => {
+        stopHopeAudio();
         setAnswers({});
         setReflections({});
         setCurrentQIndex(0);
@@ -2025,6 +2238,16 @@ const App = () => {
                         Log In<span className="hidden sm:inline"> / Sign Up</span>
                     </button>
                 )}
+                <button
+                    type="button"
+                    id="open-hope-settings-btn"
+                    onClick={() => setShowAISettings(true)}
+                    className="p-1.5 sm:p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-full border border-slate-300 transition-colors text-xs leading-none"
+                    title="AI & Voice Settings"
+                    aria-label="AI & Voice Settings"
+                >
+                    ⚙️
+                </button>
             </div>,
             headerSlotEl
         );
@@ -2065,6 +2288,7 @@ const App = () => {
             <div className="relative">
                 {renderHeaderPortal()}
                 {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} onLogin={() => {}} />}
+                <AISettingsModal isOpen={showAISettings} onClose={() => setShowAISettings(false)} />
                 <Dashboard 
                     user={user} 
                     history={surveyHistory} 
@@ -2084,6 +2308,7 @@ const App = () => {
             <main className="flex-grow flex items-center justify-center p-4 md:p-6 relative" style={{ minHeight: 'calc(100vh - 80px)' }}>
                 {renderHeaderPortal()}
                 {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} onLogin={() => {}} />}
+                <AISettingsModal isOpen={showAISettings} onClose={() => setShowAISettings(false)} />
                 <div className="bg-white max-w-7xl w-full h-auto lg:h-full lg:max-h-[850px] rounded-[2rem] shadow-2xl border border-slate-100 relative overflow-hidden flex flex-col lg:flex-row">
                     
                     {/* Top gradient border */}
@@ -2100,7 +2325,18 @@ const App = () => {
                     {/* Right Side: Welcome Text and Actions */}
                     <div className="w-full lg:w-[45%] lg:h-full p-8 lg:p-12 flex flex-col justify-center lg:overflow-y-auto">
                         <div className="text-left space-y-4 lg:space-y-6 text-slate-800 text-base lg:text-lg leading-relaxed">
-                            <h2 className="text-2xl lg:text-3xl text-center font-bold text-slate-900 tracking-tight">Welcome to the HoPE Index!</h2>
+                            <div className="flex items-center justify-center gap-3">
+                                <h2 className="text-2xl lg:text-3xl text-center font-bold text-slate-900 tracking-tight">Welcome to the HoPE Index!</h2>
+                                <button
+                                    type="button"
+                                    onClick={() => speakHopeText("Welcome to the HoPE Index! Think of this as a visual dashboard that shows the fuel levels of your daily experience. Rate the level, not the player. Use the emojis to tell us how well your daily environments and spaces are supporting you today.")}
+                                    className="p-2 rounded-full bg-slate-100 hover:bg-purple-50 text-slate-700 hover:text-purple-700 border border-slate-300 transition-colors shrink-0"
+                                    title="Read Aloud"
+                                    aria-label="Read intro aloud"
+                                >
+                                    🔊
+                                </button>
+                            </div>
                             <p>Think of this as a visual dashboard that shows the fuel levels of your daily experience. It is a creative workspace designed to show you where your daily routine has plenty of energy, and where energy is a little bit low, so you can find ways to get more fuel, together with your coach.</p>
                             
                             <div className="space-y-4 pt-4 lg:pt-6 mt-4 lg:mt-6 border-t border-slate-100">
@@ -2120,6 +2356,7 @@ const App = () => {
                         <div className="flex flex-col items-center justify-center gap-4 mt-10">
                             {renderAuthWidget("w-full md:w-auto mb-2")}
                             <button type="button" onClick={() => { 
+                                stopHopeAudio();
                                 setStep('survey'); 
                                 setCurrentSelection(getAnswerScore(answers[surveyQuestions[currentQIndex]?.id]) ?? getAnswerScore(answers[surveyQuestions[0].id]) ?? null); 
                             }} className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white px-10 py-4 rounded-full font-bold text-xl transition-all shadow-lg hover:shadow-[0_10px_25px_rgba(59,130,246,0.4)] flex items-center justify-center gap-3 w-full md:w-auto">
@@ -2140,6 +2377,7 @@ const App = () => {
             <div className="relative">
                 {renderHeaderPortal()}
                 {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} onLogin={() => {}} />}
+                <AISettingsModal isOpen={showAISettings} onClose={() => setShowAISettings(false)} />
                 <ResultsScreen 
                     answers={displayResults.answers}
                     reflections={displayResults.reflections}
@@ -2160,6 +2398,7 @@ const App = () => {
         <main className="flex-grow w-full max-w-[1800px] mx-auto p-4 md:p-6 flex flex-col relative lg:overflow-hidden" style={{ minHeight: 'calc(100vh - 80px)' }}>
             {renderHeaderPortal()}
             {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} onLogin={() => {}} />}
+            <AISettingsModal isOpen={showAISettings} onClose={() => setShowAISettings(false)} />
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 flex-grow items-stretch lg:h-full">
                 
                 {/* Left Panel - Survey Form (50%) */}
@@ -2194,10 +2433,21 @@ const App = () => {
                         </div>
 
                         {/* Title & Concept */}
-                        <div className="mb-2 shrink-0 w-full">
-                            <div className="text-slate-400 font-bold text-sm tracking-wide mb-1">{q.dimension}</div>
-                            <h2 className="font-black text-slate-900 text-2xl md:text-3xl tracking-tight leading-tight mb-1">{q.title}</h2>
-                            {q.subtitle && <p className="text-slate-500 font-medium text-sm mb-2">{q.subtitle}</p>}
+                        <div className="mb-2 shrink-0 w-full flex items-start justify-between gap-3">
+                            <div>
+                                <div className="text-slate-400 font-bold text-sm tracking-wide mb-1">{q.dimension}</div>
+                                <h2 className="font-black text-slate-900 text-2xl md:text-3xl tracking-tight leading-tight mb-1">{q.title}</h2>
+                                {q.subtitle && <p className="text-slate-500 font-medium text-sm mb-2">{q.subtitle}</p>}
+                            </div>
+                            <button
+                                type="button"
+                                onClick={() => speakHopeText(`${q.dimension}. ${q.title}. ${q.subtitle || ''}`)}
+                                className="p-2 rounded-full bg-slate-100 hover:bg-purple-50 text-slate-700 hover:text-purple-700 border border-slate-300 transition-colors shrink-0"
+                                title="Read Question Aloud"
+                                aria-label="Read question aloud"
+                            >
+                                🔊
+                            </button>
                         </div>
 
                         {/* Interactive Card Selector & Reflection */}

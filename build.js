@@ -23,6 +23,7 @@ const path = require('path');
       fs.mkdirSync(assetsDirDest);
     }
     fs.readdirSync(assetsDirSrc).forEach(file => {
+      if (file === '.DS_Store') return;
       fs.copyFileSync(path.join(assetsDirSrc, file), path.join(assetsDirDest, file));
     });
   }

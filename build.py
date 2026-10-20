@@ -14,6 +14,8 @@ for out_dir in out_dirs:
     if os.path.exists(assets_src):
         os.makedirs(assets_dest, exist_ok=True)
         for asset in os.listdir(assets_src):
+            if asset == '.DS_Store':
+                continue
             shutil.copy2(os.path.join(assets_src, asset), os.path.join(assets_dest, asset))
 
     key = os.environ.get('VITE_ELEVENLABS_API_KEY', os.environ.get('ELEVENLABS_API_KEY', ''))

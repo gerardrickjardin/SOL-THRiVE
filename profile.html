@@ -115,6 +115,7 @@
                     </div>
                 </li>
                 <li><a href="index.html#video-section">Video</a></li>
+                <li><a href="mockup-landing.html">SOL THRiVE</a></li>
                 <li><a href="survey.html" class="nav-cta-pill">Flow Survey &rarr;</a></li>
             </ul>
         </div>
@@ -135,6 +136,7 @@
                 </li>
                 <li><a href="index.html#about">About</a></li>
                 <li><a href="index.html#video-section">Video</a></li>
+                <li><a href="mockup-landing.html">SOL THRiVE</a></li>
             </ul>
         </div>
     </header>
@@ -717,12 +719,14 @@ function normalizeBulletOutput(aiText, originalText) {
   return lines.join('\n');
 }
 
-async function cleanTextWithGemini(text) {
-  if (!apiKey) {
+async function cleanTextWithGemini(text, customGeminiKey) {
+  const savedGeminiKey = (typeof localStorage !== 'undefined' && localStorage.getItem('thriveGeminiKey')) || '';
+  const activeKey = (customGeminiKey && customGeminiKey.trim()) || savedGeminiKey.trim() || apiKey;
+  if (!activeKey) {
     return formatLocalBullets(text);
   }
 
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${activeKey}`;
   const payload = {
     contents: [{ parts: [{ text: `Organize the following dictated text into at least 3 clear bullet points (or 3 to 5 bullet points if multiple ideas are present). Remove conversational filler words (like "ums", "ahs", "OK great", "yeah", "I would say", "basically", etc.) and clean up the phrasing so it reads professionally and directly. Do NOT remove any core details or stories. Even if the text is unpunctuated voice dictation, split the distinct traits, activities, people, interests, values, or experiences into separate bullet points. Text:\n\n${text}` }] }],
     systemInstruction: { parts: [{ text: "You are a helpful assistant. Return ONLY the bullet points. Each point must start with a standard bullet character (•) on its own line. Produce at least 3 distinct bullet points whenever the input contains 3 or more words or ideas. Strip out conversational cruft and ensure the output is polished and direct, preserving the core meaning." }] }
@@ -778,6 +782,11 @@ function App() {
   });
   
   // Prioritize non-empty user-saved settings from localStorage over hardcoded fallback constants
+  const [geminiKey, setGeminiKey] = useState(() => {
+    const savedGemini = localStorage.getItem('thriveGeminiKey');
+    return (savedGemini && savedGemini.trim() !== "") ? savedGemini.trim() : (apiKey || "");
+  });
+
   const [elevenLabsKey, setElevenLabsKey] = useState(() => {
     const savedKey = localStorage.getItem('thriveElevenLabsKey');
     return (savedKey && savedKey.trim() !== "") ? savedKey.trim() : (HARDCODED_ELEVENLABS_API_KEY || "");
@@ -787,6 +796,14 @@ function App() {
     const savedVoice = localStorage.getItem('thriveElevenLabsVoiceId');
     return (savedVoice && savedVoice.trim() !== "") ? savedVoice.trim() : (HARDCODED_ELEVENLABS_VOICE_ID || defaultElevenLabsVoiceId);
   });
+
+  useEffect(() => {
+    if (geminiKey && geminiKey.trim() !== "") {
+      localStorage.setItem('thriveGeminiKey', geminiKey.trim());
+    } else {
+      localStorage.removeItem('thriveGeminiKey');
+    }
+  }, [geminiKey]);
 
   useEffect(() => {
     if (elevenLabsKey && elevenLabsKey.trim() !== "") {
@@ -900,6 +917,8 @@ function App() {
           {step === 0 && (
             <IntroScreen 
               onStart={() => { stopGlobalAudio(); setStep(1); window.scrollTo({ top: 0, behavior: 'smooth' }); }} 
+              geminiKey={geminiKey}
+              setGeminiKey={setGeminiKey}
               elevenLabsKey={elevenLabsKey} 
               setElevenLabsKey={setElevenLabsKey} 
               elevenLabsVoiceId={elevenLabsVoiceId}
@@ -914,8 +933,12 @@ function App() {
               section={currentSection} 
               stepNumber={step} 
               initialDraft={reportData[currentSection.key] || ''}
+              geminiKey={geminiKey}
+              setGeminiKey={setGeminiKey}
               elevenLabsKey={elevenLabsKey}
+              setElevenLabsKey={setElevenLabsKey}
               elevenLabsVoiceId={elevenLabsVoiceId}
+              setElevenLabsVoiceId={setElevenLabsVoiceId}
               onBack={handleBack}
               onComplete={(cleanedText) => handleCompleteSection(currentSection.key, cleanedText)} 
             />
@@ -964,7 +987,71 @@ function App() {
 
 // --- SUB-COMPONENTS ---
 
-function IntroScreen({ onStart, elevenLabsKey, setElevenLabsKey, elevenLabsVoiceId, setElevenLabsVoiceId, userDetails, setUserDetails }) {
+function SettingsModal({ isOpen, onClose, geminiKey, setGeminiKey, elevenLabsKey, setElevenLabsKey, elevenLabsVoiceId, setElevenLabsVoiceId }) {
+  if (!isOpen) return null;
+  return (
+    <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-in fade-in duration-200">
+      <div className="bg-white rounded-2xl shadow-2xl border-2 border-[#1E2430] w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200">
+        <div className="flex justify-between items-center p-5 border-b border-slate-200 bg-[#FAF8F3]">
+          <h3 className="font-black text-slate-900 text-lg">AI &amp; Voice Settings</h3>
+          <button 
+            type="button"
+            onClick={onClose} 
+            className="text-slate-500 hover:text-slate-800 p-1.5 rounded-full hover:bg-slate-200 transition-colors"
+          >
+            <CloseIcon className="w-5 h-5" />
+          </button>
+        </div>
+        <div className="p-6 space-y-5 bg-white">
+          <div>
+            <label className="block text-sm uppercase tracking-widest font-bold text-slate-700 mb-2">Gemini API Key (AI Bullet Cleanup)</label>
+            <input 
+              type="password" 
+              value={geminiKey || ""} 
+              onChange={(e) => setGeminiKey(e.target.value)}
+              placeholder="Paste Gemini API key (or leave blank for instant offline formatter)..."
+              className="w-full border-2 border-slate-300 rounded-xl p-3 outline-none focus:border-purple-600 focus:ring-4 focus:ring-purple-100 transition-all text-slate-800 font-mono text-sm"
+            />
+            <p className="text-xs text-slate-500 mt-1.5 font-medium">Automatically falls back to instant offline bullet formatting if quota is exceeded.</p>
+          </div>
+          <div>
+            <label className="block text-sm uppercase tracking-widest font-bold text-slate-700 mb-2">ElevenLabs API Key (Premium Voice)</label>
+            <input 
+              type="password" 
+              value={elevenLabsKey || ""} 
+              onChange={(e) => setElevenLabsKey(e.target.value)}
+              placeholder="Paste ElevenLabs API key here..."
+              className="w-full border-2 border-slate-300 rounded-xl p-3 outline-none focus:border-purple-600 focus:ring-4 focus:ring-purple-100 transition-all text-slate-800 font-mono text-sm"
+            />
+            <p className="text-xs text-slate-500 mt-1.5 font-medium">Automatically falls back to browser Web Speech narration if unavailable.</p>
+          </div>
+          <div>
+            <label className="block text-sm uppercase tracking-widest font-bold text-slate-700 mb-2">ElevenLabs Voice ID</label>
+            <input 
+              type="text" 
+              value={elevenLabsVoiceId || ""} 
+              onChange={(e) => setElevenLabsVoiceId(e.target.value)}
+              placeholder="Voice ID..."
+              className="w-full border-2 border-slate-300 rounded-xl p-3 outline-none focus:border-purple-600 focus:ring-4 focus:ring-purple-100 transition-all text-slate-800 font-mono text-sm"
+            />
+            <p className="text-xs text-slate-500 mt-2 font-medium">Default: 21m00Tcm4TlvDq8ikWAM (Rachel)</p>
+          </div>
+        </div>
+        <div className="p-5 border-t border-slate-200 bg-[#FAF8F3] flex justify-end">
+          <button 
+            type="button"
+            onClick={onClose} 
+            className="cta-button primary px-6 py-2.5 text-sm"
+          >
+            Save &amp; Close
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function IntroScreen({ onStart, geminiKey, setGeminiKey, elevenLabsKey, setElevenLabsKey, elevenLabsVoiceId, setElevenLabsVoiceId, userDetails, setUserDetails }) {
   const isReady = userDetails.interviewee.trim().length > 0;
   const [showSettings, setShowSettings] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -998,8 +1085,8 @@ function IntroScreen({ onStart, elevenLabsKey, setElevenLabsKey, elevenLabsVoice
           type="button"
           onClick={() => setShowSettings(true)}
           className="p-2.5 bg-[#FAF8F3] text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-full border-2 border-[#1E2430] transition-colors"
-          title="Premium Voice Settings"
-          aria-label="Premium Voice Settings"
+          title="AI & Voice Settings"
+          aria-label="AI & Voice Settings"
         >
           <GearIcon className="w-5 h-5" />
         </button>
@@ -1077,64 +1164,26 @@ function IntroScreen({ onStart, elevenLabsKey, setElevenLabsKey, elevenLabsVoice
         </button>
       </div>
 
-      {/* Premium Voice Settings Modal */}
-      {showSettings && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-in fade-in duration-200">
-          <div className="bg-white rounded-2xl shadow-2xl border-2 border-[#1E2430] w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200">
-            <div className="flex justify-between items-center p-5 border-b border-slate-200 bg-[#FAF8F3]">
-              <h3 className="font-black text-slate-900 text-lg">Premium Voice Settings</h3>
-              <button 
-                type="button"
-                onClick={() => setShowSettings(false)} 
-                className="text-slate-500 hover:text-slate-800 p-1.5 rounded-full hover:bg-slate-200 transition-colors"
-              >
-                <CloseIcon className="w-5 h-5" />
-              </button>
-            </div>
-            <div className="p-6 space-y-5 bg-white">
-              <div>
-                <label className="block text-sm uppercase tracking-widest font-bold text-slate-700 mb-2">ElevenLabs API Key</label>
-                <input 
-                  type="password" 
-                  value={elevenLabsKey} 
-                  onChange={(e) => setElevenLabsKey(e.target.value)}
-                  placeholder="Paste API key here..."
-                  className="w-full border-2 border-slate-300 rounded-xl p-3 outline-none focus:border-purple-600 focus:ring-4 focus:ring-purple-100 transition-all text-slate-800 font-mono text-sm"
-                />
-              </div>
-              <div>
-                <label className="block text-sm uppercase tracking-widest font-bold text-slate-700 mb-2">ElevenLabs Voice ID</label>
-                <input 
-                  type="text" 
-                  value={elevenLabsVoiceId} 
-                  onChange={(e) => setElevenLabsVoiceId(e.target.value)}
-                  placeholder="Voice ID..."
-                  className="w-full border-2 border-slate-300 rounded-xl p-3 outline-none focus:border-purple-600 focus:ring-4 focus:ring-purple-100 transition-all text-slate-800 font-mono text-sm"
-                />
-                <p className="text-xs text-slate-500 mt-2 font-medium">Default: 21m00Tcm4TlvDq8ikWAM (Rachel)</p>
-              </div>
-            </div>
-            <div className="p-5 border-t border-slate-200 bg-[#FAF8F3] flex justify-end">
-              <button 
-                type="button"
-                onClick={() => setShowSettings(false)} 
-                className="cta-button primary px-6 py-2.5 text-sm"
-              >
-                Save & Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <SettingsModal
+        isOpen={showSettings}
+        onClose={() => setShowSettings(false)}
+        geminiKey={geminiKey}
+        setGeminiKey={setGeminiKey}
+        elevenLabsKey={elevenLabsKey}
+        setElevenLabsKey={setElevenLabsKey}
+        elevenLabsVoiceId={elevenLabsVoiceId}
+        setElevenLabsVoiceId={setElevenLabsVoiceId}
+      />
     </div>
   );
 }
 
-function ChatSection({ section, stepNumber, initialDraft, elevenLabsKey, elevenLabsVoiceId, onComplete, onBack }) {
+function ChatSection({ section, stepNumber, initialDraft, geminiKey, setGeminiKey, elevenLabsKey, setElevenLabsKey, elevenLabsVoiceId, setElevenLabsVoiceId, onComplete, onBack }) {
   const [draft, setDraft] = useState('');
   const [chatState, setChatState] = useState('initial'); // 'initial', 'digging', 'cleaning', 'approval'
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
   const recognitionRef = useRef(null);
   const textAreaRef = useRef(null);
 
@@ -1230,7 +1279,7 @@ function ChatSection({ section, stepNumber, initialDraft, elevenLabsKey, elevenL
       setIsListening(false);
     }
     setChatState('cleaning');
-    const cleaned = await cleanTextWithGemini(draft);
+    const cleaned = await cleanTextWithGemini(draft, geminiKey);
     setDraft(cleaned);
     setChatState('approval');
   };
@@ -1263,18 +1312,40 @@ function ChatSection({ section, stepNumber, initialDraft, elevenLabsKey, elevenL
             <div className="flex-1 w-full overflow-hidden">
               {section.content ? section.content : <p className="text-slate-800 text-lg mb-2">{section.prompt}</p>}
             </div>
-            <button 
-              type="button"
-              onClick={handleSpeakPrompt}
-              className={`shrink-0 p-2.5 rounded-full border-2 border-[#1E2430] transition-all ${isSpeaking ? 'bg-purple-100 text-purple-700 animate-pulse' : 'bg-white text-slate-700 hover:text-purple-700 hover:bg-purple-50'}`}
-              title={isSpeaking ? "Stop Reading" : "Read Aloud"}
-              aria-label={isSpeaking ? "Stop Reading" : "Read Aloud"}
-            >
-              <SpeakerIcon className="w-5 h-5" />
-            </button>
+            <div className="flex flex-col sm:flex-row items-center gap-2 shrink-0">
+              <button 
+                type="button"
+                onClick={handleSpeakPrompt}
+                className={`shrink-0 p-2.5 rounded-full border-2 border-[#1E2430] transition-all ${isSpeaking ? 'bg-purple-100 text-purple-700 animate-pulse' : 'bg-white text-slate-700 hover:text-purple-700 hover:bg-purple-50'}`}
+                title={isSpeaking ? "Stop Reading" : "Read Aloud"}
+                aria-label={isSpeaking ? "Stop Reading" : "Read Aloud"}
+              >
+                <SpeakerIcon className="w-5 h-5" />
+              </button>
+              <button 
+                type="button"
+                onClick={() => setShowSettings(true)}
+                className="shrink-0 p-2.5 bg-white text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-full border-2 border-[#1E2430] transition-colors"
+                title="AI & Voice Settings"
+                aria-label="AI & Voice Settings"
+              >
+                <GearIcon className="w-5 h-5" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
+
+      <SettingsModal
+        isOpen={showSettings}
+        onClose={() => setShowSettings(false)}
+        geminiKey={geminiKey}
+        setGeminiKey={setGeminiKey}
+        elevenLabsKey={elevenLabsKey}
+        setElevenLabsKey={setElevenLabsKey}
+        elevenLabsVoiceId={elevenLabsVoiceId}
+        setElevenLabsVoiceId={setElevenLabsVoiceId}
+      />
 
       {/* Digging Deeper AI Prompt */}
       {chatState === 'digging' && (
