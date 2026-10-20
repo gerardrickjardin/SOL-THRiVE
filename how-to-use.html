@@ -3,47 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>How To Use This Page - THRiVE Coaching</title>
-    <meta name="description" content="Learn how to use Personos with common scenarios.">
+    <title>How To Use — THRiVE Coaching</title>
+    <meta name="description" content="Learn how to test-drive Personos AI with pre-built Common GAPS coaching scenarios across Rebuilding Life Challenges and Employment Challenges.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* Add background-pan animation for the gradient text */
-        @keyframes background-pan {
-            from { background-position: 0% center; }
-            to { background-position: -200% center; }
-        }
-        .animate-background-pan {
-            animation: background-pan 3s linear infinite;
-        }
-        .bg-300\% {
-            background-size: 300%;
-        }
-        /* Ensure footer stays at bottom */
-        body {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        main {
-            flex-grow: 1;
-        }
-        /* Override tailwind conflicting with style.css header */
-        .header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-        }
-        .footer {
-            margin-top: auto;
-        }
-    </style>
 </head>
-<body class="bg-white text-gray-600 flex flex-col min-h-screen font-sans">
+<body class="subpage-body">
     <header class="header">
         <nav class="nav-left">
             <button class="hamburger" aria-label="Toggle menu">
@@ -52,22 +19,27 @@
                 <span></span>
             </button>
         </nav>
-        <div class="logo"><a href="index.html" style="text-decoration: none; color: inherit;">THRiVE Coaching</a></div>
+        <div class="logo">
+            <a href="index.html" class="brand-logo-link">
+                <span class="brand-mark">THRiVE</span> <span class="brand-sub">Coaching</span>
+            </a>
+        </div>
         <div class="nav-right desktop-menu">
             <ul>
-                <li><a href="survey.html">Flow Survey</a></li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="approach.html">Our Approach</a></li>
                 <li><a href="profile.html">THRiVE Report</a></li>
                 <li><a href="hope-survey.html">HoPE Index</a></li>
-                <li><a href="approach.html">Our Approach</a></li>
                 <li class="dropdown">
-                    <a href="how-to-use.html">How To Use This Page</a>
+                    <a href="how-to-use.html" style="color: var(--accent-purple);">How To Use <span class="dropdown-caret">&#9662;</span></a>
                     <div class="dropdown-content">
+                        <a href="how-to-use.html">Overview &amp; Guide</a>
                         <a href="rebuilding-life-challenges.html">Rebuilding Life Challenges</a>
                         <a href="employment-challenges.html">Employment Challenges</a>
                     </div>
                 </li>
-                <li><a href="index.html#about">About</a></li>
                 <li><a href="index.html#video-section">Video</a></li>
+                <li><a href="survey.html" class="nav-cta-pill">Flow Survey &rarr;</a></li>
             </ul>
         </div>
 
@@ -91,41 +63,139 @@
         </div>
     </header>
 
-    <main class="flex-grow container mx-auto py-16 sm:py-24 px-4 sm:px-6 lg:px-8 mt-20">
-        <div class="max-w-4xl mx-auto">
-            <h1 class="text-4xl font-extrabold tracking-tight sm:text-6xl text-center bg-gradient-to-r from-purple-600 via-pink-500 to-red-400 bg-300% animate-background-pan bg-clip-text text-transparent py-2" style="font-family: 'Nunito', sans-serif;">
-                How To Use This Page
-            </h1>
-            <div class="mt-8 text-lg leading-8 text-gray-700 space-y-6" style="font-family: 'Poppins', sans-serif;">
-                <p>
-                    The categories below represent Common GAPS - Goals to Achieve and Problems to Solve - designed to help you test drive Personos.
-                </p>
-                <p>
-                    Each entry is pre-formatted to be copied and pasted directly into the Personos chat window.
-                </p>
-                <p>
-                    Simply choose a scenario that interests you, copy the entire text block (all three sections), and paste it into the chat window in Personos.
-                </p>
-                <p>
-                    This is a great way to experience the system's creativity and get comfortable with the platform before inputting your own personal challenges.
-                </p>
-            </div>
+    <main class="page-content">
+        <div class="subpage-container">
+            <!-- Hero Header -->
+            <section class="subpage-hero">
+                <span class="section-eyebrow">Personos AI • Interactive Test-Drive Guide</span>
+                <h1>How To Use <span class="highlight">This Page</span></h1>
+                <p class="section-lead">Test-drive Personos AI using realistic, pre-formatted coaching prompts before exploring your own personal goals and challenges.</p>
+            </section>
+
+            <!-- Guide & 3-Step Instructions Card -->
+            <section class="guide-overview-card" aria-label="How To Use Instructions">
+                <div class="guide-narrative">
+                    <p>
+                        The categories below represent <strong>Common GAPS — Goals to Achieve and Problems to Solve</strong> — designed to help you test drive Personos.
+                    </p>
+                    <p>
+                        Each entry is pre-formatted to be copied and pasted directly into the Personos chat window.
+                    </p>
+                    <p>
+                        Simply choose a scenario that interests you, copy the entire text block (all three sections) using the one-click <strong>Copy Scenario</strong> button, and paste it into the chat window in Personos.
+                    </p>
+                    <p>
+                        This is a great way to experience the system's creativity and get comfortable with the platform before inputting your own personal challenges.
+                    </p>
+                </div>
+
+                <div class="guide-steps-grid">
+                    <div class="guide-step-box">
+                        <span class="guide-step-num">Step 01</span>
+                        <h3>Pick a Common GAP Category</h3>
+                        <p>Choose between <strong>Rebuilding Life Challenges</strong> or <strong>Employment Challenges</strong> below to browse 9 real-world coaching scenarios.</p>
+                    </div>
+                    <div class="guide-step-box">
+                        <span class="guide-step-num">Step 02</span>
+                        <h3>Click "Copy Scenario"</h3>
+                        <p>Every card features a one-click button that copies all three prompt sections—framing, personal quote, and coaching instructions—to your clipboard.</p>
+                    </div>
+                    <div class="guide-step-box">
+                        <span class="guide-step-num">Step 03</span>
+                        <h3>Paste Into Personos AI</h3>
+                        <p>Paste the prompt into Personos to receive a tailored psychological insight plus five creative, strengths-aligned next steps.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Common GAPS Category Cards -->
+            <section id="common-gaps" class="gaps-categories-section" aria-label="Common GAPS Categories">
+                <div class="section-header" style="margin-bottom: 1.5rem;">
+                    <span class="section-eyebrow">Common GAPS • Goals to Achieve &amp; Problems to Solve</span>
+                    <h2>Explore the <span class="highlight-yellow">Scenario Categories</span></h2>
+                    <p class="section-lead">Select a category below to view ready-to-copy coaching prompts and illustrations.</p>
+                </div>
+
+                <div class="gaps-categories-grid">
+                    <!-- Category 1: Rebuilding Life Challenges -->
+                    <article class="gap-category-card">
+                        <a href="rebuilding-life-challenges.html" class="gap-category-media" aria-label="Explore Rebuilding Life Challenges">
+                            <img src="assets/metaphor-8-flood.jpg" data-legacy-src="https://firebasestorage.googleapis.com/v0/b/studio-4892448610-1a77b.firebasestorage.app/o/Intense%20Rage%20and%20Shame.webp?alt=media&token=9d47379b-f59f-4873-b20e-63d0f2745d60" alt="Rebuilding Life Challenges illustration" loading="lazy">
+                            <span class="gap-category-count">4 Scenarios</span>
+                        </a>
+                        <div class="gap-category-body">
+                            <h3><a href="rebuilding-life-challenges.html">Rebuilding Life Challenges</a></h3>
+                            <p>Practice navigating high-stakes moments of recovery, emotional regulation, re-entering the workforce, overcoming environmental triggers, and building trust with support staff.</p>
+                            <ul class="gap-scenario-tags" aria-label="Scenarios in Rebuilding Life Challenges">
+                                <li>1. Emotional Regulation</li>
+                                <li>2. Finding a Good Job</li>
+                                <li>3. Peer Pressure</li>
+                                <li>4. Trust with Staff</li>
+                            </ul>
+                            <a href="rebuilding-life-challenges.html" class="cta-button primary gap-category-cta">Explore Rebuilding Life Scenarios &rarr;</a>
+                        </div>
+                    </article>
+
+                    <!-- Category 2: Employment Challenges -->
+                    <article class="gap-category-card">
+                        <a href="employment-challenges.html" class="gap-category-media" aria-label="Explore Employment Challenges">
+                            <img src="assets/metaphor-2-hamster-wheel.jpg" data-legacy-src="https://firebasestorage.googleapis.com/v0/b/studio-4892448610-1a77b.firebasestorage.app/o/Career%20Change%20Fear%20%26%20Responsibility.webp?alt=media&token=6ac94773-6749-44f3-8bbb-5287ba36af26" alt="Employment Challenges illustration" loading="lazy">
+                            <span class="gap-category-count">5 Scenarios</span>
+                        </a>
+                        <div class="gap-category-body">
+                            <h3><a href="employment-challenges.html">Employment Challenges</a></h3>
+                            <p>Test-drive coaching strategies for job search burnout, feeling passed over for promotion, toxic workplace management, major career pivots, and graceful resignations.</p>
+                            <ul class="gap-scenario-tags" aria-label="Scenarios in Employment Challenges">
+                                <li>1. The Job Hunt</li>
+                                <li>2. Career Stagnation</li>
+                                <li>3. Difficult Workplace Dynamics</li>
+                                <li>4. The Major Career Pivot</li>
+                                <li>5. Resignation &amp; Departure</li>
+                            </ul>
+                            <a href="employment-challenges.html" class="cta-button primary gap-category-cta">Explore Employment Scenarios &rarr;</a>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <!-- Bottom Navigation / Coach CTA -->
+            <section class="challenge-bottom-nav" aria-label="Additional Tools">
+                <span class="section-eyebrow">Want Personalized Results?</span>
+                <h3>Combine Scenarios With Your Own THRiVE Profile</h3>
+                <p>When you add your THRiVE Report summary into the "Other Notes" section of Personos, every scenario above automatically adapts its five next steps to match your personal strengths.</p>
+                <div class="challenge-bottom-links">
+                    <a href="profile.html" class="cta-button primary">Build Your THRiVE Report &rarr;</a>
+                    <a href="survey.html" class="cta-button secondary-outline">Take the Flow Survey</a>
+                    <a href="index.html#coach" class="cta-button secondary-outline">Back to THRiVE Coach Home</a>
+                </div>
+            </section>
         </div>
     </main>
 
-    <footer class="footer mt-auto">
+    <footer class="footer">
         <div class="footer-content">
+            <div class="footer-brand">
+                <div class="footer-logo">THRiVE Coaching</div>
+                <p>Evidence-based psychology meets applied AI to help you find your flow.</p>
+            </div>
+            <div class="footer-nav">
+                <a href="survey.html">Flow Survey</a>
+                <a href="profile.html">THRiVE Report</a>
+                <a href="hope-survey.html">HoPE Index</a>
+                <a href="approach.html">Our Approach</a>
+                <a href="how-to-use.html">How To Use</a>
+            </div>
             <div class="footer-contact">
                 <a href="mailto:team@thrivecoaching.ai">team@thrivecoaching.ai</a>
                 <span class="separator">|</span>
                 <a href="tel:7205882002">(720) 588-2002</a>
             </div>
             <div class="footer-copyright">
-                &copy; 2026 Thrive Coaching AI. All rights reserved.
+                &copy; 2026 THRiVE Coaching AI. All rights reserved.
             </div>
         </div>
     </footer>
 
-    <script type="module" src="script.js"></script>
+    <script src="script.js" defer></script>
 </body>
 </html>

@@ -11,132 +11,87 @@
     
     <!-- Removed Recharts -->
     <!-- Removed Audio components -->
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
     <style>
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         .hope-drag-container {
             position: relative;
             width: 100%;
             margin: 10px auto 10px auto;
         }
-
-
-        /* The Draggable Slider Input */
-        .slider-track-wrapper {
-            position: relative;
-            margin-bottom: 40px;
-            margin-top: 150px;
+        @media print {
+            body {
+                background-color: #02050a !important;
+                color: #ffffff !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            .print\:hidden, header.header {
+                display: none !important;
+            }
+            h1 {
+                color: #ffffff !important;
+                -webkit-text-fill-color: #ffffff !important;
+                background: none !important;
+            }
         }
-        
-        .hope-range-slider {
-            -webkit-appearance: none;
-            width: 100%;
-            height: 12px;
-            background: linear-gradient(90deg, #00e5ff 0%, #2962FF 100%);
-            border-radius: 10px;
-            outline: none;
-            margin: 0;
-            position: relative;
-            z-index: 10;
-            cursor: pointer;
-        }
-
-        /* The Drag Handle (Thumb) */
-        .hope-range-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 26px;
-            height: 26px;
-            border-radius: 50%;
-            background: #2962FF; 
-            cursor: grab;
-            border: 4px solid #fff;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-            transition: transform 0.1s;
-        }
-        .hope-range-slider::-webkit-slider-thumb:active {
-            cursor: grabbing;
-            transform: scale(1.2);
-        }
-        .hope-range-slider::-moz-range-thumb {
-            width: 26px;
-            height: 26px;
-            border-radius: 50%;
-            background: #2962FF;
-            cursor: grab;
-            border: 4px solid #fff;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-        }
-
-        /* The Ticks underneath the slider */
-        .ticks-container {
-            display: flex;
-            justify-content: space-between;
-            padding: 0 10px;
-            margin-top: 15px;
-        }
-        .tick-mark {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 20px;
-        }
-        .tick-mark::before {
-            content: '';
-            height: 8px;
-            width: 3px;
-            background-color: #B0BEC5;
-            border-radius: 2px;
-            margin-bottom: 5px;
-            margin-top: -15px; /* Pulls tick close to track */
-        }
-        .tick-mark span {
-            font-size: 12px;
-            font-weight: 600;
-            color: #546E7A;
-        }
-
-        /* The Rating Display Box */
-        .rating-display-box {
-            border: 1px solid #E4E8EC;
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            max-width: 200px;
-            margin: 0 auto;
-            background: #FAFAFA;
-        }
-        .rating-label {
-            font-size: 11px;
-            letter-spacing: 1px;
-            font-weight: 700;
-            color: #6B7A90;
-            text-transform: uppercase;
-            margin-bottom: 5px;
-        }
-        .rating-value {
-            font-size: 36px;
-            font-weight: 800;
-            color: #2962FF;
+        .header-auth-wrap {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 5px;
+            gap: 0.5rem;
+            flex-shrink: 0;
         }
-        .star-icon {
-            font-size: 24px;
+        @media (min-width: 1025px) and (max-width: 1280px) {
+            .header {
+                padding: 0.75rem 1.25rem;
+                gap: 0.75rem;
+            }
+            .logo {
+                font-size: 1.35rem;
+            }
+            .brand-sub {
+                font-size: 1.1rem;
+            }
+            .desktop-menu ul {
+                gap: 0.65rem;
+            }
+            .desktop-menu a {
+                font-size: 0.82rem;
+            }
+            .nav-cta-pill {
+                padding: 0.4rem 0.85rem;
+                font-size: 0.82rem !important;
+            }
+        }
+        @media (max-width: 640px) {
+            .header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 0.4rem;
+                padding: 0.6rem 0.75rem;
+            }
+            .logo {
+                font-size: 1.15rem;
+            }
+            .brand-sub {
+                font-size: 0.95rem;
+            }
+            .header-auth-wrap {
+                gap: 0.35rem;
+            }
         }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 font-sans min-h-screen relative">
     
     <!-- THRiVE Global Header -->
-    <header class="header print:hidden z-50 relative">
+    <header class="header print:hidden">
         <nav class="nav-left">
             <button class="hamburger" aria-label="Toggle menu">
                 <span></span>
@@ -144,12 +99,39 @@
                 <span></span>
             </button>
         </nav>
-        <div class="logo"><a href="index.html" style="text-decoration: none; color: inherit;">THRiVE Coaching</a></div>
-        <div class="nav-right desktop-menu">
+        <div class="logo">
+            <a href="index.html" class="brand-logo-link">
+                <span class="brand-mark">THRiVE</span> <span class="brand-sub">Coaching</span>
+            </a>
+        </div>
+        <div class="nav-right">
+            <div class="desktop-menu">
+                <ul>
+                    <li><a href="index.html#about">About</a></li>
+                    <li><a href="approach.html">Our Approach</a></li>
+                    <li><a href="profile.html">THRiVE Report</a></li>
+                    <li><a href="hope-survey.html" style="color: var(--accent-purple);">HoPE Index</a></li>
+                    <li class="dropdown">
+                        <a href="how-to-use.html">How To Use <span class="dropdown-caret">&#9662;</span></a>
+                        <div class="dropdown-content">
+                            <a href="how-to-use.html">Overview &amp; Guide</a>
+                            <a href="rebuilding-life-challenges.html">Rebuilding Life Challenges</a>
+                            <a href="employment-challenges.html">Employment Challenges</a>
+                        </div>
+                    </li>
+                    <li><a href="index.html#video-section">Video</a></li>
+                    <li><a href="survey.html" class="nav-cta-pill">Flow Survey &rarr;</a></li>
+                </ul>
+            </div>
+            <div id="header-auth-slot" class="header-auth-wrap"></div>
+        </div>
+
+        <div class="nav-menu">
+            <div class="menu-title">FIND YOUR FLOW</div>
             <ul>
                 <li><a href="survey.html">Flow Survey</a></li>
                 <li><a href="profile.html">THRiVE Report</a></li>
-                <li><a href="hope-survey.html" class="text-blue-600 font-bold">HoPE Index</a></li>
+                <li><a href="hope-survey.html">HoPE Index</a></li>
                 <li><a href="approach.html">Our Approach</a></li>
                 <li class="dropdown">
                     <a href="how-to-use.html">How To Use This Page</a>
@@ -158,6 +140,8 @@
                         <a href="employment-challenges.html">Employment Challenges</a>
                     </div>
                 </li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#video-section">Video</a></li>
             </ul>
         </div>
     </header>
@@ -454,7 +438,100 @@ const surveyQuestions = [
 ];
 
 // --- AI & REFLECTION SETTINGS ---
-const apiKey = "%VITE_GEMINI_API_KEY%";
+const injectedGeminiKey = "%VITE_GEMINI_API_KEY%";
+const apiKey = (injectedGeminiKey && !injectedGeminiKey.includes("VITE_GEMINI_API_KEY"))
+    ? injectedGeminiKey
+    : "AIzaSyDhByu-gVi8PNLtDdl41ETxOmu2JOEVt8A";
+
+// --- SCORE & CONSISTENCY HELPERS ---
+const getAnswerScore = (rawVal) => {
+    if (rawVal === null || rawVal === undefined) return null;
+    if (typeof rawVal === 'object') {
+        const candidate = 'value' in rawVal ? rawVal.value : ('score' in rawVal ? rawVal.score : rawVal.rating);
+        const parsed = parseFloat(candidate);
+        return Number.isFinite(parsed) ? parsed : null;
+    }
+    const v = parseFloat(rawVal);
+    return Number.isFinite(v) ? v : null;
+};
+
+const getFlexStatusLabel = (questionId, score) => {
+    if (score === null || score === undefined || score <= 0) return "Unrated";
+    if (questionId === "flex_gas") {
+        return score >= 4.0 ? "Triumphant" : score >= 2.5 ? "Torn" : "Trapped";
+    }
+    if (questionId === "flex_pss") {
+        return score >= 4.0 ? "Fearless" : score >= 2.5 ? "Free-ish" : "Fear";
+    }
+    return "";
+};
+
+const computeSurveyScores = (answersObj = {}, questionsList = surveyQuestions) => {
+    const safeAnswers = answersObj || {};
+    const coreQuestions = questionsList.slice(0, 18);
+    const opsQuestions = coreQuestions.slice(0, 9);
+    const irsQuestions = coreQuestions.slice(9, 18);
+
+    const opsSum = opsQuestions.reduce((sum, q) => sum + (getAnswerScore(safeAnswers[q.id]) ?? 0), 0);
+    const irsSum = irsQuestions.reduce((sum, q) => sum + (getAnswerScore(safeAnswers[q.id]) ?? 0), 0);
+    const answeredCoreCount = coreQuestions.reduce((cnt, q) => {
+        const s = getAnswerScore(safeAnswers[q.id]);
+        return cnt + (s !== null && s > 0 ? 1 : 0);
+    }, 0);
+
+    const opsScore50 = Math.round((opsSum / 45) * 50);
+    const irsScore50 = Math.round((irsSum / 45) * 50);
+    const totalHoPEScore100 = opsScore50 + irsScore50;
+    const exactCorePct = ((opsSum + irsSum) / 90) * 100;
+
+    const flexGasScore = getAnswerScore(safeAnswers[questionsList[18]?.id]);
+    const flexPssScore = getAnswerScore(safeAnswers[questionsList[19]?.id]);
+
+    // Calculate 6 core dimension averages (Dimensions 1-6)
+    const dimensionMap = {};
+    coreQuestions.forEach((q) => {
+        if (!dimensionMap[q.dimension]) {
+            dimensionMap[q.dimension] = { name: q.dimension, space: q.space, sum: 0, count: 0 };
+        }
+        const val = getAnswerScore(safeAnswers[q.id]);
+        if (val !== null && val > 0) {
+            dimensionMap[q.dimension].sum += val;
+            dimensionMap[q.dimension].count += 1;
+        }
+    });
+
+    const dimensions = Object.values(dimensionMap).map((d) => ({
+        ...d,
+        score: d.count > 0 ? d.sum / d.count : null
+    }));
+
+    let lowestDimension = null;
+    dimensions.forEach((d) => {
+        if (d.score !== null) {
+            if (!lowestDimension || d.score < lowestDimension.score) {
+                lowestDimension = { name: d.name, score: d.score, space: d.space };
+            }
+        }
+    });
+
+    const coreAvg = (opsSum + irsSum) / 18;
+    const tierText = coreAvg >= 4.0 ? "THRIVING" : coreAvg >= 3.0 ? "STABILIZING" : coreAvg >= 2.0 ? "SURVIVING" : "CRITICAL";
+
+    return {
+        opsSum,
+        irsSum,
+        answeredCoreCount,
+        opsScore50,
+        irsScore50,
+        totalHoPEScore100,
+        exactCorePct,
+        flexGasScore,
+        flexPssScore,
+        dimensions,
+        lowestDimension,
+        tierText
+    };
+};
 
 async function cleanTextWithGemini(text) {
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
@@ -561,17 +638,19 @@ const ReflectionBox = ({ value, onChange }) => {
     return (
         <div className="mt-2 bg-slate-50 border border-slate-200 rounded-2xl p-3 shadow-sm animate-in fade-in slide-in-from-top-2 duration-500">
             <div className="flex justify-between items-center mb-2">
-                <label className="text-xs uppercase tracking-widest font-bold text-slate-500">Others</label>
+                <label className="text-xs uppercase tracking-widest font-bold text-slate-500">Personal Reflection &amp; Notes</label>
                 <div className="flex gap-2">
                     <button 
+                        type="button"
                         onClick={toggleListening}
                         className={`p-2 rounded-full transition-colors flex items-center justify-center ${isListening ? 'bg-red-100 text-red-600 animate-pulse' : 'bg-white border border-slate-200 text-slate-500 hover:text-blue-600 hover:bg-blue-50'}`}
                         title={isListening ? "Stop Recording" : "Voice to Text"}
                     >
                         {isListening ? <StopMicIcon className="w-4 h-4" /> : <MicIcon className="w-4 h-4" />}
                     </button>
-                    {value && value.trim().length > 10 && (
+                    {value && value.trim().length > 0 && (
                         <button 
+                            type="button"
                             onClick={handleCleanUp}
                             disabled={isCleaning}
                             className="text-xs flex items-center gap-1 font-bold bg-purple-50 text-purple-700 hover:bg-purple-100 border border-purple-200 px-3 py-1 rounded-full transition-colors disabled:opacity-50"
@@ -585,7 +664,7 @@ const ReflectionBox = ({ value, onChange }) => {
                 ref={textAreaRef}
                 value={value || ""}
                 onChange={(e) => onChange(e.target.value)}
-                placeholder="Describe your experience, environment, or reasoning behind your score..."
+                placeholder="Describe your experience, environment, or reasoning behind your score (optional)..."
                 className="w-full bg-white border border-slate-200 rounded-xl p-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-50 transition-all text-slate-700 custom-scrollbar resize-y min-h-[60px] text-sm md:text-base"
             />
         </div>
@@ -745,6 +824,7 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
     };
 
     const thumbBgColor = snappedValue > 3 ? '#a855f7' : snappedValue < 3 ? '#3b82f6' : '#64748b';
+    const hasActiveSelection = currentSelection !== null || isDragging;
 
     return (
         <div className="w-full flex flex-col gap-2 bg-white p-4 rounded-3xl mb-2 shadow-xl border border-slate-200 relative">
@@ -774,7 +854,7 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
                 {/* 1.0 Zone */}
                 <div className="flex flex-col items-center text-center gap-3 md:gap-4 relative h-full">
                     <div className="order-3 md:order-1 flex-1 flex items-start justify-center min-h-[40px] md:min-h-[80px] mt-1 md:mt-2">
-                        <p className={`text-[12px] md:text-sm leading-relaxed max-w-[200px] transition-colors duration-300 ${snappedValue >= 1.0 && snappedValue <= 2.0 ? "text-blue-700 font-bold" : "text-slate-500 font-medium"}`}>
+                        <p className={`text-[12px] md:text-sm leading-relaxed max-w-[200px] transition-colors duration-300 ${hasActiveSelection && snappedValue >= 1.0 && snappedValue <= 2.0 ? "text-blue-700 font-bold" : "text-slate-500 font-medium"}`}>
                             "...{shitholeData.desc}"
                         </p>
                     </div>
@@ -789,7 +869,7 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
                 {/* 3.0 Zone */}
                 <div className="flex flex-col items-center text-center gap-3 md:gap-4 relative h-full">
                     <div className="order-3 md:order-1 flex-1 flex items-start justify-center min-h-[40px] md:min-h-[80px] mt-1 md:mt-2">
-                        <p className={`text-[12px] md:text-sm leading-relaxed max-w-[200px] transition-colors duration-300 ${snappedValue >= 2.5 && snappedValue <= 3.5 ? "text-slate-800 font-bold" : "text-slate-500 font-medium"}`}>
+                        <p className={`text-[12px] md:text-sm leading-relaxed max-w-[200px] transition-colors duration-300 ${hasActiveSelection && snappedValue >= 2.5 && snappedValue <= 3.5 ? "text-slate-800 font-bold" : "text-slate-500 font-medium"}`}>
                             "...{stableData.desc}"
                         </p>
                     </div>
@@ -804,7 +884,7 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
                 {/* 5.0 Zone */}
                 <div className="flex flex-col items-center text-center gap-3 md:gap-4 relative h-full">
                     <div className="order-3 md:order-1 flex-1 flex items-start justify-center min-h-[40px] md:min-h-[80px] mt-1 md:mt-2">
-                        <p className={`text-[12px] md:text-sm leading-relaxed max-w-[200px] transition-colors duration-300 ${snappedValue >= 4.0 && snappedValue <= 5.0 ? "text-purple-700 font-bold" : "text-slate-500 font-medium"}`}>
+                        <p className={`text-[12px] md:text-sm leading-relaxed max-w-[200px] transition-colors duration-300 ${hasActiveSelection && snappedValue >= 4.0 && snappedValue <= 5.0 ? "text-purple-700 font-bold" : "text-slate-500 font-medium"}`}>
                             "...{sanctuaryData.desc}"
                         </p>
                     </div>
@@ -864,12 +944,12 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
 };
 
 
-const HopeChart = ({ answers, surveyQuestions, isFinal, onViewDashboard, isBanner }) => {
+const HopeChart = ({ answers, surveyQuestions, isFinal, onViewDashboard, onRetake, isBanner }) => {
     const [isMounted, setIsMounted] = useState(false);
-    const totalScore = Object.values(answers).reduce((a, b) => a + b, 0); 
-    
+
     useEffect(() => {
-        setTimeout(() => setIsMounted(true), 100);
+        const timer = setTimeout(() => setIsMounted(true), 100);
+        return () => clearTimeout(timer);
     }, []);
 
     const polarToCartesian = (centerX, centerY, radius, angleInDegrees) => {
@@ -896,45 +976,45 @@ const HopeChart = ({ answers, surveyQuestions, isFinal, onViewDashboard, isBanne
     };
 
     const cx = 500;
-    const cy = 340; // Moved up
-    const innerR = 145; // Scaled down 15%
-    const maxOutR = 290; // Scaled down 15%
+    const cy = 340;
+    const innerR = 145;
+    const maxOutR = 290;
     
     const dimensionColors = ['#ff3b30', '#ff9500', '#ffcc00', '#34c759', '#00c7ff', '#af52de'];
     const dimensionNames = ["PLACES", "BODY", "RESOURCES", "SELF", "OTHERS", "LIFE"];
 
     const coreQuestions = surveyQuestions.slice(0, 18);
-    
-    // Calculate OPS, IRS, and Total Scores
-    const opsSum = coreQuestions.slice(0, 9).reduce((sum, q) => sum + (answers[q.id] || 0), 0);
-    const irsSum = coreQuestions.slice(9, 18).reduce((sum, q) => sum + (answers[q.id] || 0), 0);
-    const opsScore50 = Math.round((opsSum / 45) * 50);
-    const irsScore50 = Math.round((irsSum / 45) * 50);
-    const totalHoPEScore100 = opsScore50 + irsScore50;
+    const {
+        opsScore50,
+        irsScore50,
+        totalHoPEScore100,
+        flexGasScore,
+        flexPssScore,
+        tierText
+    } = computeSurveyScores(answers, surveyQuestions);
 
-    const flex1Score = answers[surveyQuestions[18]?.id] ?? 0;
-    const flex2Score = answers[surveyQuestions[19]?.id] ?? 0;
-
-    const avgScore = totalScore / 20;
-    const tierText = avgScore >= 4.0 ? "THRIVING" : avgScore >= 3.0 ? "STABILIZING" : avgScore >= 2.0 ? "SURVIVING" : "CRITICAL";
+    const flex1Val = flexGasScore ?? 0;
+    const flex2Val = flexPssScore ?? 0;
+    const flex1Label = getFlexStatusLabel("flex_gas", flex1Val);
+    const flex2Label = getFlexStatusLabel("flex_pss", flex2Val);
 
     return (
-        <div className={`relative z-10 w-full h-full flex flex-col justify-center ${isBanner ? '' : 'rounded-[2rem] border border-cyan-500/20'} bg-[#02050a] backdrop-blur-3xl shadow-[0_20px_80px_rgba(0,229,255,0.07)] overflow-hidden transition-opacity duration-1000 ${isMounted ? 'opacity-100' : 'opacity-0'}`}>
+        <div className={`relative z-10 w-full ${isFinal ? 'h-auto py-4' : 'h-full'} flex flex-col justify-between ${isBanner ? '' : 'rounded-[2rem] border border-cyan-500/20'} bg-[#02050a] backdrop-blur-3xl shadow-[0_20px_80px_rgba(0,229,255,0.07)] overflow-hidden transition-opacity duration-1000 ${isMounted ? 'opacity-100' : 'opacity-0'}`}>
             <div className="absolute top-0 left-0 w-32 h-32 border-t border-l border-cyan-500/50 rounded-tl-3xl opacity-50 pointer-events-none"></div>
             <div className="absolute top-0 right-0 w-32 h-32 border-t border-r border-cyan-500/50 rounded-tr-3xl opacity-50 pointer-events-none"></div>
             
-            <div className="text-center mt-6 relative shrink-0 z-20 px-4">
-                <h1 className="font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-cyan-100 tracking-widest mb-0" style={{ textShadow: '0 0 40px rgba(0,229,255,0.3)', fontSize: 'clamp(1.8rem, 5vw, 2.5rem)' }}>
+            <div className="text-center mt-5 relative shrink-0 z-20 px-4">
+                <h1 className="font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-cyan-100 tracking-widest mb-0" style={{ textShadow: '0 0 40px rgba(0,229,255,0.3)', fontSize: 'clamp(1.6rem, 4.5vw, 2.4rem)' }}>
                     The HoPE Index
                 </h1>
-                <p className="text-cyan-400 font-medium tracking-[0.2em] uppercase mt-2" style={{ fontSize: 'clamp(0.8rem, 2vw, 1.2rem)' }}>
+                <p className="text-cyan-400 font-medium tracking-[0.2em] uppercase mt-1" style={{ fontSize: 'clamp(0.75rem, 1.8vw, 1.05rem)' }}>
                     HUMAN OPTIMIZED PERSONAL EXPERIENCE
                 </p>
             </div>
 
-            <div className={`relative w-full flex flex-col items-center justify-start overflow-hidden z-10 pt-4`} style={{ minHeight: 0 }}>
+            <div className="relative w-full flex flex-col items-center justify-start z-10 pt-2" style={{ minHeight: 0 }}>
                 {/* SVG Gauge */}
-                <div className={`w-full relative ${isBanner ? 'h-[420px]' : 'h-[330px]'}`}>
+                <div className={`w-full relative ${isBanner ? 'h-[400px]' : 'h-[290px] md:h-[320px]'}`}>
                     <svg viewBox="0 0 1000 480" className="w-full h-full drop-shadow-2xl overflow-visible absolute top-0 left-0">
                         <defs>
                             <filter id="glow-soft" x="-20%" y="-20%" width="140%" height="140%">
@@ -952,7 +1032,7 @@ const HopeChart = ({ answers, surveyQuestions, isFinal, onViewDashboard, isBanne
                             return (
                                 <g key={`dim-${i}`} style={{ opacity: isMounted ? 1 : 0, transition: `opacity 1s ease 0.5s` }}>
                                     <path d={describeArc(cx, cy, maxOutR + 20, maxOutR + 22, startA + 1, endA - 1)} fill={color} opacity="0.4" filter="url(#glow-soft)" />
-                                    <text x={labelPos.x} y={labelPos.y} fill={color} fontSize="16" fontWeight="800" textAnchor="middle"  alignmentBaseline="middle" style={{ transform: `rotate(${midA}deg)`, transformOrigin: `${labelPos.x}px ${labelPos.y}px`, letterSpacing: '2px', textShadow: `0 0 10px ${color}` }}>{name}</text>
+                                    <text x={labelPos.x} y={labelPos.y} fill={color} fontSize="16" fontWeight="800" textAnchor="middle" alignmentBaseline="middle" style={{ transform: `rotate(${midA}deg)`, transformOrigin: `${labelPos.x}px ${labelPos.y}px`, letterSpacing: '2px', textShadow: `0 0 10px ${color}` }}>{name}</text>
                                 </g>
                             );
                         })}
@@ -967,11 +1047,11 @@ const HopeChart = ({ answers, surveyQuestions, isFinal, onViewDashboard, isBanne
                             );
                         })}
 
-                        {/* Continuous Concentric Arc Guide Lines - drawn BEFORE the slices so they sit underneath the bars */}
+                        {/* Continuous Concentric Arc Guide Lines */}
                         <path d={describeArc(cx, cy, innerR + 45, innerR + 45, -90, 90)} fill="none" stroke="#ffffff" strokeWidth="1.5" opacity={isMounted ? "0.15" : "0"} style={{ transition: 'opacity 1s ease 0.5s' }} />
                         <path d={describeArc(cx, cy, innerR + 95, innerR + 95, -90, 90)} fill="none" stroke="#ffffff" strokeWidth="1.5" opacity={isMounted ? "0.15" : "0"} style={{ transition: 'opacity 1s ease 0.5s' }} />
                         {coreQuestions.map((q, i) => {
-                            const score = answers[q.id] ?? 0;
+                            const score = getAnswerScore(answers[q.id]) ?? 0;
                             const dimIndex = Math.floor(i / 3);
                             const color = dimensionColors[dimIndex];
                             const startA = -90 + (i * 10);
@@ -995,341 +1075,678 @@ const HopeChart = ({ answers, surveyQuestions, isFinal, onViewDashboard, isBanne
                                 </g>
                             );
                         })}
-
-
-
                     </svg>
                 </div>
 
-                {/* OPS and IRS Score Cards */}
+                {/* OPS, IRS, Total HoPE Score, and Contextual Layering Flex Slots */}
                 {!isBanner && (
-                <div className={`relative z-20 flex flex-col items-center w-full -mt-12 pb-8 transition-opacity duration-1000 delay-[800ms] ${isMounted ? 'opacity-100' : 'opacity-0'}`}>
-                    <div className="flex flex-row justify-center w-full max-w-[500px] gap-4 px-4">
+                <div className={`relative z-20 flex flex-col items-center w-full -mt-10 pb-6 px-4 transition-opacity duration-1000 delay-[400ms] ${isMounted ? 'opacity-100' : 'opacity-0'}`}>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 w-full max-w-[680px] gap-3">
                         {/* OPS Box */}
-                        <div className="bg-[#020d1c]/80 border-2 border-cyan-400/80 rounded-xl p-3 flex flex-col items-center justify-center w-1/2 shadow-[0_0_30px_rgba(0,229,255,0.2)]">
-                            <div className="text-cyan-400 font-bold text-[8.5px] md:text-[10px] whitespace-nowrap tracking-widest uppercase mb-1 text-center">
-                                OPS &ndash; Outer Physical Space
+                        <div className="bg-[#020d1c]/90 border-2 border-cyan-400/70 rounded-xl p-3 flex flex-col items-center justify-center shadow-[0_0_25px_rgba(0,229,255,0.15)]">
+                            <div className="text-cyan-400 font-bold text-[9px] md:text-[10px] tracking-widest uppercase mb-1 text-center">
+                                OPS &ndash; Outer Physical
                             </div>
-                            <div className="text-white font-black text-3xl flex items-baseline gap-1 mt-1" style={{ textShadow: '0 0 20px rgba(0,229,255,0.5)' }}>
-                                {opsScore50} <span className="text-cyan-400 font-bold text-base">/ 50</span>
+                            <div className="text-white font-black text-2xl md:text-3xl flex items-baseline gap-1" style={{ textShadow: '0 0 20px rgba(0,229,255,0.5)' }}>
+                                {opsScore50} <span className="text-cyan-400 font-bold text-sm">/ 50</span>
                             </div>
                         </div>
-                        {/* IRS Box */}
-                        <div className="bg-[#020d1c]/80 border-2 border-cyan-400/80 rounded-xl p-3 flex flex-col items-center justify-center w-1/2 shadow-[0_0_30px_rgba(0,229,255,0.2)]">
-                            <div className="text-cyan-400 font-bold text-[8.5px] md:text-[10px] whitespace-nowrap tracking-widest uppercase mb-1 text-center">
-                                IRS &ndash; Inner Relational Space
+
+                        {/* Total HoPE Index Score */}
+                        <div className="bg-[#04152d]/95 border-2 border-cyan-300 rounded-xl p-3 flex flex-col items-center justify-center shadow-[0_0_35px_rgba(0,229,255,0.28)]">
+                            <div className="text-cyan-300 font-extrabold text-[10px] tracking-widest uppercase">TOTAL HoPE SCORE</div>
+                            <div className="text-white font-black text-3xl md:text-4xl flex items-baseline gap-1 my-0.5" style={{ textShadow: '0 0 20px rgba(0,229,255,0.6)' }}>
+                                {totalHoPEScore100}%
                             </div>
-                            <div className="text-white font-black text-3xl flex items-baseline gap-1 mt-1" style={{ textShadow: '0 0 20px rgba(0,229,255,0.5)' }}>
-                                {irsScore50} <span className="text-cyan-400 font-bold text-base">/ 50</span>
+                            <span className="text-[9px] font-black tracking-[0.2em] px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-200 border border-cyan-400/40 uppercase">
+                                {tierText}
+                            </span>
+                        </div>
+
+                        {/* IRS Box */}
+                        <div className="bg-[#020d1c]/90 border-2 border-cyan-400/70 rounded-xl p-3 flex flex-col items-center justify-center shadow-[0_0_25px_rgba(0,229,255,0.15)]">
+                            <div className="text-cyan-400 font-bold text-[9px] md:text-[10px] tracking-widest uppercase mb-1 text-center">
+                                IRS &ndash; Inner Relational
+                            </div>
+                            <div className="text-white font-black text-2xl md:text-3xl flex items-baseline gap-1" style={{ textShadow: '0 0 20px rgba(0,229,255,0.5)' }}>
+                                {irsScore50} <span className="text-cyan-400 font-bold text-sm">/ 50</span>
                             </div>
                         </div>
                     </div>
 
-                    {/* Total HoPE Index Score */}
-                    <div className="mt-6 bg-[#020d1c]/80 border-2 border-cyan-400/80 rounded-xl p-4 flex flex-col items-center justify-center min-w-[240px] shadow-[0_0_30px_rgba(0,229,255,0.2)]">
-                        <div className="text-cyan-400 font-bold text-[10px] md:text-xs tracking-widest uppercase mb-1">TOTAL HoPE INDEX SCORE</div>
-                        <div className="text-cyan-500/80 font-bold text-[9px] tracking-widest uppercase mb-2">(0-100%)</div>
-                        <div className="text-white font-black text-5xl flex items-baseline gap-1" style={{ textShadow: '0 0 20px rgba(0,229,255,0.5)' }}>
-                            {totalHoPEScore100} <span className="text-cyan-400 font-bold text-lg">/ 100</span>
+                    {/* Contextual Layering: Flex Slot 1 (GAS) & Flex Slot 2 (PSS) */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 w-full max-w-[680px] gap-3 mt-3">
+                        <div className="bg-[#030914]/90 border border-purple-400/40 rounded-xl px-4 py-2.5 flex items-center justify-between shadow-[0_0_20px_rgba(168,85,247,0.12)]">
+                            <div className="text-left">
+                                <div className="text-[9px] font-bold uppercase tracking-widest text-purple-300">Flex Slot 1 &bull; Q19</div>
+                                <div className="text-xs md:text-sm font-bold text-white">Gang Affinity Score (GAS)</div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-200 border border-purple-400/30">
+                                    {flex1Label}
+                                </span>
+                                <span className="text-white font-black text-lg md:text-xl">
+                                    {flex1Val > 0 ? flex1Val.toFixed(1) : '—'}<span className="text-purple-300 text-xs font-bold">/5</span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div className="bg-[#030914]/90 border border-emerald-400/40 rounded-xl px-4 py-2.5 flex items-center justify-between shadow-[0_0_20px_rgba(52,199,89,0.12)]">
+                            <div className="text-left">
+                                <div className="text-[9px] font-bold uppercase tracking-widest text-emerald-300">Flex Slot 2 &bull; Q20</div>
+                                <div className="text-xs md:text-sm font-bold text-white">Psychological Safety (PSS)</div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-200 border border-emerald-400/30">
+                                    {flex2Label}
+                                </span>
+                                <span className="text-white font-black text-lg md:text-xl">
+                                    {flex2Val > 0 ? flex2Val.toFixed(1) : '—'}<span className="text-emerald-300 text-xs font-bold">/5</span>
+                                </span>
+                            </div>
                         </div>
                     </div>
+
+                    {/* Clean Action Bar Below Chart on Final Results Screen (Un-blurred & Hidden in Print) */}
+                    {isFinal && (
+                        <div className="print:hidden flex flex-wrap items-center justify-center gap-3 mt-6 pt-4 border-t border-cyan-500/20 w-full max-w-[680px]">
+                            <button
+                                type="button"
+                                onClick={() => window.print()}
+                                className="px-6 py-3 bg-[#0a1526] border-2 border-cyan-400/60 text-cyan-300 font-bold rounded-full hover:bg-cyan-500/15 hover:border-cyan-300 transition-all shadow-lg tracking-wide uppercase text-xs flex items-center gap-2"
+                            >
+                                <span>🖨️</span> Export PDF Report
+                            </button>
+                            {onViewDashboard && (
+                                <button
+                                    type="button"
+                                    onClick={onViewDashboard}
+                                    className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-black rounded-full hover:from-purple-500 hover:to-pink-500 transition-all shadow-lg tracking-wide uppercase text-xs border border-purple-400/50 flex items-center gap-2"
+                                >
+                                    <span>📊</span> View Progress Dashboard
+                                </button>
+                            )}
+                            <button
+                                type="button"
+                                onClick={onRetake || (() => window.location.reload())}
+                                className="px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-black rounded-full hover:from-cyan-500 hover:to-blue-500 transition-all shadow-lg tracking-wide uppercase text-xs border border-cyan-400/50 flex items-center gap-2"
+                            >
+                                <span>🔄</span> Retake Assessment
+                            </button>
+                        </div>
+                    )}
                 </div>
                 )}
             </div>
-
-            {/* Removed Population-Specific Context Footer */}
-
-            {isFinal && (
-                <div className={`absolute inset-0 bg-[#02050a]/60 backdrop-blur-sm z-30 flex items-center justify-center transition-opacity duration-1000 ${isMounted ? 'opacity-100 delay-[1000ms]' : 'opacity-0'}`}>
-                    <div className="flex flex-col sm:flex-row gap-4">
-                        <button onClick={() => window.print()} className="px-6 py-3 bg-[#0a1526] border-2 border-cyan-500/50 text-cyan-400 font-bold rounded-full hover:bg-cyan-500/10 hover:border-cyan-400 transition-all shadow-lg tracking-wide uppercase text-xs">
-                            Export PDF Report
-                        </button>
-                        {onViewDashboard ? (
-                            <button onClick={onViewDashboard} className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-black rounded-full hover:from-purple-500 hover:to-pink-500 transition-all shadow-lg tracking-wide uppercase text-xs border border-purple-400/50">
-                                View Dashboard
-                            </button>
-                        ) : (
-                            <button onClick={() => window.location.reload()} className="px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-black rounded-full hover:from-cyan-500 hover:to-blue-500 transition-all shadow-lg tracking-wide uppercase text-xs border border-cyan-400/50">
-                                Retake Assessment
-                            </button>
-                        )}
-                    </div>
-                </div>
-            )}
         </div>
     );
 };
-const ResultsScreen = ({ answers, surveyQuestions, onViewDashboard }) => {
+
+const ResultsScreen = ({ answers, reflections, surveyQuestions, onViewDashboard, onRetake, user, onOpenAuth }) => {
+    const scores = computeSurveyScores(answers, surveyQuestions);
+    const reflectionEntries = surveyQuestions
+        .map((q) => ({
+            question: q,
+            score: getAnswerScore(answers[q.id]),
+            text: reflections && reflections[q.id] ? reflections[q.id].trim() : ""
+        }))
+        .filter((entry) => entry.text.length > 0);
+
+    const flexGasQ = surveyQuestions[18];
+    const flexPssQ = surveyQuestions[19];
+    const flexGasVal = scores.flexGasScore;
+    const flexPssVal = scores.flexPssScore;
+
     return (
-        <main className="flex-grow flex items-center justify-center bg-[#02050a] p-4 relative w-full overflow-hidden" style={{ height: 'calc(100vh - 80px)' }}>
-            <div className="w-full h-full max-w-[1200px] flex justify-center items-center overflow-y-auto">
-                <HopeChart answers={answers} surveyQuestions={surveyQuestions} isFinal={true} onViewDashboard={onViewDashboard} />
+        <main className="flex-grow flex flex-col items-center bg-[#02050a] py-6 px-4 md:p-8 relative w-full" style={{ minHeight: 'calc(100vh - 80px)' }}>
+            <div className="w-full max-w-[1100px] flex flex-col gap-6">
+                {/* Un-blurred Final HoPE Chart */}
+                <HopeChart
+                    answers={answers}
+                    surveyQuestions={surveyQuestions}
+                    isFinal={true}
+                    onViewDashboard={onViewDashboard}
+                    onRetake={onRetake}
+                />
+
+                {/* Guest Save Prompt Banner (Hidden in Print) */}
+                {!user && (
+                    <div className="print:hidden bg-gradient-to-r from-blue-950/90 via-indigo-950/90 to-purple-950/90 border border-cyan-400/30 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
+                        <div className="text-center sm:text-left">
+                            <h3 className="text-white font-bold text-base md:text-lg">Save Your HoPE Index Results &amp; Track Growth Over Time</h3>
+                            <p className="text-cyan-200/80 text-xs md:text-sm mt-0.5">
+                                Log in or create a free account now — your completed answers and reflections on this screen will be saved automatically.
+                            </p>
+                        </div>
+                        <button
+                            type="button"
+                            onClick={onOpenAuth}
+                            className="shrink-0 bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-black px-6 py-3 rounded-full text-xs md:text-sm uppercase tracking-wider transition-all shadow-md"
+                        >
+                            Log In to Save Progress
+                        </button>
+                    </div>
+                )}
+
+                {/* Dimension Breakdown & Contextual Layering Detail Card */}
+                <div className="bg-[#050d1a] border border-cyan-500/25 rounded-[2rem] p-6 md:p-8 text-white shadow-xl">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 pb-4 border-b border-cyan-500/20">
+                        <div>
+                            <h2 className="text-xl md:text-2xl font-black tracking-wide text-white">Dimension &amp; Contextual Layering Breakdown</h2>
+                            <p className="text-cyan-300/80 text-xs md:text-sm mt-1">
+                                Core HoPE Capacity: <strong>{scores.totalHoPEScore100}%</strong> (OPS: {scores.opsScore50}/50 &bull; IRS: {scores.irsScore50}/50)
+                            </p>
+                        </div>
+                        {scores.lowestDimension && (
+                            <div className="bg-rose-500/15 border border-rose-400/40 rounded-xl px-4 py-2 text-xs md:text-sm">
+                                <span className="text-rose-300 font-bold uppercase tracking-wider text-[10px] block">Priority Focus Area</span>
+                                <span className="text-white font-bold">{scores.lowestDimension.name} ({scores.lowestDimension.score.toFixed(1)} / 5.0)</span>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* 6 Core Dimensions Grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                        {scores.dimensions.map((dim, idx) => {
+                            const dimColors = ['#ff3b30', '#ff9500', '#ffcc00', '#34c759', '#00c7ff', '#af52de'];
+                            const c = dimColors[idx % dimColors.length];
+                            const val = dim.score !== null ? dim.score : 0;
+                            const pct = Math.round((val / 5) * 100);
+                            return (
+                                <div key={dim.name} className="bg-[#020710] border border-slate-800 rounded-xl p-4">
+                                    <div className="flex justify-between items-center mb-1">
+                                        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">{dim.space}</span>
+                                        <span className="text-sm font-black" style={{ color: c }}>{val.toFixed(1)} / 5.0</span>
+                                    </div>
+                                    <div className="font-bold text-white text-sm mb-2">{dim.name}</div>
+                                    <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                                        <div className="h-full rounded-full transition-all duration-700" style={{ width: `${pct}%`, backgroundColor: c }}></div>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+
+                    {/* Q19 & Q20 Contextual Layering Details */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-cyan-500/15">
+                        <div className="bg-[#020710] border border-purple-500/30 rounded-xl p-4">
+                            <div className="flex justify-between items-center mb-1">
+                                <span className="text-[10px] font-bold uppercase tracking-widest text-purple-300">Contextual Layering &bull; Q19</span>
+                                <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-200 border border-purple-400/30">
+                                    {getFlexStatusLabel("flex_gas", flexGasVal)} ({flexGasVal !== null ? flexGasVal.toFixed(1) : '—'}/5.0)
+                                </span>
+                            </div>
+                            <h3 className="font-bold text-white text-base mb-1">{flexGasQ?.dimension || "Flex Slot 1: Gang Affinity Score (GAS)"}</h3>
+                            <p className="text-xs text-slate-300 leading-relaxed">
+                                {flexGasQ?.subtitle ? `Measures ${flexGasQ.subtitle}.` : ''}
+                            </p>
+                            {reflections?.flex_gas && (
+                                <div className="mt-3 pt-2 border-t border-purple-500/20 text-xs text-purple-100 whitespace-pre-line">
+                                    <strong className="uppercase tracking-wider text-[10px] text-purple-300 block mb-1">Reflection:</strong>
+                                    {reflections.flex_gas}
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="bg-[#020710] border border-emerald-500/30 rounded-xl p-4">
+                            <div className="flex justify-between items-center mb-1">
+                                <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-300">Contextual Layering &bull; Q20</span>
+                                <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-200 border border-emerald-400/30">
+                                    {getFlexStatusLabel("flex_pss", flexPssVal)} ({flexPssVal !== null ? flexPssVal.toFixed(1) : '—'}/5.0)
+                                </span>
+                            </div>
+                            <h3 className="font-bold text-white text-base mb-1">{flexPssQ?.dimension || "Flex Slot 2: Psychological Safety Score (PSS)"}</h3>
+                            <p className="text-xs text-slate-300 leading-relaxed">
+                                {flexPssQ?.subtitle ? `Measures ${flexPssQ.subtitle}.` : ''}
+                            </p>
+                            {reflections?.flex_pss && (
+                                <div className="mt-3 pt-2 border-t border-emerald-500/20 text-xs text-emerald-100 whitespace-pre-line">
+                                    <strong className="uppercase tracking-wider text-[10px] text-emerald-300 block mb-1">Reflection:</strong>
+                                    {reflections.flex_pss}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Personal Reflections & Notes Section */}
+                <div className="bg-[#050d1a] border border-cyan-500/25 rounded-[2rem] p-6 md:p-8 text-white shadow-xl">
+                    <h2 className="text-xl md:text-2xl font-black tracking-wide text-white mb-2">Personal Reflections &amp; Notes</h2>
+                    <p className="text-cyan-300/80 text-xs md:text-sm mb-5">
+                        Your recorded context and reflections across the 20 HoPE Index dimensions and flex slots.
+                    </p>
+                    {reflectionEntries.length > 0 ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {reflectionEntries.map(({ question, score, text }) => (
+                                <div key={question.id} className="bg-[#020710] border border-slate-800 rounded-xl p-4">
+                                    <div className="flex justify-between items-center mb-1">
+                                        <span className="font-bold text-cyan-300 text-sm">{question.title}</span>
+                                        <span className="text-xs font-bold text-slate-300 bg-slate-800 px-2.5 py-0.5 rounded-full">
+                                            {score !== null ? `${score.toFixed(1)} / 5.0` : 'Rated'}
+                                        </span>
+                                    </div>
+                                    <div className="text-[11px] text-slate-400 mb-2">{question.dimension}</div>
+                                    <p className="text-xs md:text-sm text-slate-200 whitespace-pre-line leading-relaxed">{text}</p>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <p className="text-slate-400 text-sm italic">
+                            No written reflections were added during this assessment. You can dictate or type notes in the "Personal Reflection &amp; Notes" box on any question when taking the survey.
+                        </p>
+                    )}
+                </div>
             </div>
         </main>
     );
 };
 
-    // --- DASHBOARD COMPONENT ---
-    const Dashboard = ({ user, history, onRetake }) => {
-        if (!history || history.length === 0) return null;
-        
-        const sortedHistory = [...history].sort((a, b) => new Date(a.date) - new Date(b.date));
-        const latest = sortedHistory[sortedHistory.length - 1];
-        
-        // Find lowest dimension from latest survey
-        const dimensionScores = {};
-        surveyQuestions.forEach(q => {
-            if (!dimensionScores[q.dimension]) dimensionScores[q.dimension] = { sum: 0, count: 0, space: q.space };
-            if (latest.answers[q.id]) {
-                dimensionScores[q.dimension].sum += parseFloat(latest.answers[q.id].value);
-                dimensionScores[q.dimension].count++;
-            }
-        });
-        
-        let lowestDimension = null;
-        let lowestScore = 6;
-        for (const dim in dimensionScores) {
-            const avg = dimensionScores[dim].sum / dimensionScores[dim].count;
-            if (avg < lowestScore) {
-                lowestScore = avg;
-                lowestDimension = { name: dim, score: avg, space: dimensionScores[dim].space };
-            }
-        }
-        
-        // Simple SVG Chart Config
-        const chartWidth = 600;
-        const chartHeight = 250;
-        const padding = 40;
-        
-        const minCapacity = Math.max(0, Math.min(...sortedHistory.map(h => h.capacity)) - 10);
-        const maxCapacity = Math.min(100, Math.max(...sortedHistory.map(h => h.capacity)) + 10);
-        
-        const getX = (index) => padding + (index * ((chartWidth - padding * 2) / Math.max(1, sortedHistory.length - 1)));
-        const getY = (val) => chartHeight - padding - ((val - minCapacity) / Math.max(1, maxCapacity - minCapacity)) * (chartHeight - padding * 2);
+// --- DASHBOARD COMPONENT ---
+const Dashboard = ({ user, history, onRetake, onViewLatestReport, onOpenAuth }) => {
+    if (!history || history.length === 0) return null;
 
-        const points = sortedHistory.map((h, i) => `${getX(i)},${getY(h.capacity)}`).join(" ");
+    // Normalize history entries so capacity and date are always valid and consistent with OPS+IRS
+    const normalizedHistory = history.map((h, idx) => {
+        const scores = computeSurveyScores(h.answers || {}, surveyQuestions);
+        const parsedCap = parseFloat(h.capacity);
+        const validCap = scores.answeredCoreCount > 0
+            ? scores.totalHoPEScore100
+            : (Number.isFinite(parsedCap) ? parsedCap : 0);
+        const rawTime = h.date && typeof h.date.toDate === 'function'
+            ? h.date.toDate().getTime()
+            : (h.date ? new Date(h.date).getTime() : NaN);
+        const validDate = Number.isFinite(rawTime)
+            ? new Date(rawTime).toISOString()
+            : new Date(Date.now() - (history.length - idx) * 60000).toISOString();
+        return {
+            ...h,
+            date: validDate,
+            capacity: validCap,
+            scores
+        };
+    });
 
-        return (
-            <main className="flex-grow flex flex-col items-center justify-center p-4 md:p-6 relative" style={{ minHeight: 'calc(100vh - 80px)' }}>
-                <div className="bg-white max-w-4xl w-full p-8 md:p-12 rounded-[2rem] shadow-2xl border border-slate-100 relative overflow-hidden">
-                    <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-500 to-purple-500"></div>
-                    
-                    <div className="flex justify-between items-center mb-8 border-b border-slate-100 pb-6">
-                        <div>
-                            <h1 className="text-4xl font-black text-slate-800 tracking-tight">Your Progress Dashboard</h1>
-                            <p className="text-slate-500 mt-2">Welcome back, {user?.email}!</p>
+    const sortedHistory = [...normalizedHistory].sort((a, b) => new Date(a.date) - new Date(b.date));
+    const latest = sortedHistory[sortedHistory.length - 1];
+    const latestScores = latest.scores;
+    const lowestDimension = latestScores.lowestDimension || (
+        latest.lowestDimension && typeof latest.lowestDimension === 'object' && latest.lowestDimension.name
+            ? {
+                name: latest.lowestDimension.name,
+                score: Number.isFinite(parseFloat(latest.lowestDimension.score)) ? parseFloat(latest.lowestDimension.score) : 0,
+                space: latest.lowestDimension.space || "HoPE Index"
+              }
+            : null
+    );
+
+    const flexGasScore = latestScores.flexGasScore;
+    const flexPssScore = latestScores.flexPssScore;
+    const flexGasLabel = getFlexStatusLabel("flex_gas", flexGasScore);
+    const flexPssLabel = getFlexStatusLabel("flex_pss", flexPssScore);
+
+    const latestReflections = surveyQuestions
+        .map((q) => ({
+            question: q,
+            score: getAnswerScore(latest.answers?.[q.id]),
+            text: latest.reflections && latest.reflections[q.id] ? String(latest.reflections[q.id]).trim() : ""
+        }))
+        .filter((entry) => entry.text.length > 0);
+
+    // SVG Growth Timeline Chart Config
+    const chartWidth = 600;
+    const chartHeight = 250;
+    const padding = 44;
+
+    const capacities = sortedHistory.map((h) => h.capacity);
+    const minCapacity = Math.max(0, Math.min(...capacities) - 10);
+    const maxCapacity = Math.min(100, Math.max(...capacities) + 10);
+    const capacityRange = Math.max(10, maxCapacity - minCapacity);
+
+    const getX = (index) => {
+        if (sortedHistory.length === 1) return chartWidth / 2;
+        return padding + (index * ((chartWidth - padding * 2) / (sortedHistory.length - 1)));
+    };
+    const getY = (val) => chartHeight - padding - ((val - minCapacity) / capacityRange) * (chartHeight - padding * 2);
+
+    const points = sortedHistory.map((h, i) => `${getX(i)},${getY(h.capacity)}`).join(" ");
+
+    return (
+        <main className="flex-grow flex flex-col items-center justify-center p-4 md:p-6 relative" style={{ minHeight: 'calc(100vh - 80px)' }}>
+            <div className="bg-white max-w-5xl w-full p-6 md:p-10 rounded-[2rem] shadow-2xl border border-slate-100 relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-500 to-purple-500"></div>
+                
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8 border-b border-slate-100 pb-6">
+                    <div>
+                        <h1 className="text-3xl md:text-4xl font-black text-slate-800 tracking-tight">Your Progress Dashboard</h1>
+                        <p className="text-slate-500 mt-1">
+                            {user?.email ? `Welcome back, ${user.email}!` : 'Viewing your current session progress.'}
+                        </p>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-3">
+                        <div className="text-center bg-slate-50 px-4 py-2.5 rounded-2xl border border-slate-200">
+                            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">OPS Score</p>
+                            <p className="text-xl font-black text-slate-800">{latestScores.opsScore50} <span className="text-xs font-bold text-slate-400">/ 50</span></p>
+                        </div>
+                        <div className="text-center bg-slate-50 px-4 py-2.5 rounded-2xl border border-slate-200">
+                            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">IRS Score</p>
+                            <p className="text-xl font-black text-slate-800">{latestScores.irsScore50} <span className="text-xs font-bold text-slate-400">/ 50</span></p>
                         </div>
                         <div className="text-center bg-blue-50 px-6 py-3 rounded-2xl border border-blue-100">
-                            <p className="text-xs font-bold text-blue-800 uppercase tracking-widest mb-1">Latest Capacity</p>
-                            <p className="text-3xl font-black text-blue-600">{latest.capacity.toFixed(1)}%</p>
+                            <p className="text-xs font-bold text-blue-800 uppercase tracking-widest mb-0.5">Latest Capacity</p>
+                            <p className="text-3xl font-black text-blue-600" data-testid="dashboard-latest-capacity">{latest.capacity.toFixed(1)}%</p>
                         </div>
                     </div>
-                    
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-                        <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200">
-                            <h3 className="font-bold text-slate-700 mb-6 uppercase tracking-widest text-sm flex items-center gap-2">
-                                <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
-                                Growth Timeline
-                            </h3>
-                            <div className="w-full overflow-x-auto">
-                                <svg width="100%" height={chartHeight} viewBox={`0 0 ${chartWidth} ${chartHeight}`} className="overflow-visible">
-                                    {/* Grid lines */}
-                                    {[0, 0.25, 0.5, 0.75, 1].map(pct => {
-                                        const y = chartHeight - padding - (pct * (chartHeight - padding * 2));
-                                        return (
-                                            <g key={pct}>
-                                                <line x1={padding} y1={y} x2={chartWidth - padding} y2={y} stroke="#e2e8f0" strokeDasharray="4 4" />
-                                                <text x={padding - 10} y={y + 4} textAnchor="end" fontSize="12" fill="#64748b" fontWeight="bold">
-                                                    {(minCapacity + pct * (maxCapacity - minCapacity)).toFixed(0)}%
-                                                </text>
-                                            </g>
-                                        );
-                                    })}
-                                    {/* Line */}
-                                    <polyline points={points} fill="none" stroke="#3b82f6" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
-                                    {/* Points */}
-                                    {sortedHistory.map((h, i) => (
-                                        <g key={i} className="group cursor-pointer">
-                                            <circle cx={getX(i)} cy={getY(h.capacity)} r="6" fill="#fff" stroke="#3b82f6" strokeWidth="3" className="transition-all duration-300 group-hover:r-8 group-hover:fill-blue-50" />
-                                            <text x={getX(i)} y={getY(h.capacity) - 15} textAnchor="middle" fontSize="12" fill="#334155" fontWeight="bold" opacity="0" className="group-hover:opacity-100 transition-opacity">
-                                                {h.capacity.toFixed(1)}%
-                                            </text>
-                                            <text x={getX(i)} y={chartHeight - 15} textAnchor="middle" fontSize="11" fill="#94a3b8" fontWeight="bold">
-                                                {new Date(h.date).toLocaleDateString(undefined, {month:'short', day:'numeric'})}
+                </div>
+
+                {!user && onOpenAuth && (
+                    <div className="mb-6 bg-blue-50 border border-blue-200 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+                        <p className="text-sm text-blue-900 font-medium">
+                            Want to keep this assessment in your permanent growth timeline? Log in or sign up to sync with your account.
+                        </p>
+                        <button
+                            type="button"
+                            onClick={onOpenAuth}
+                            className="shrink-0 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-full text-xs uppercase tracking-wider transition-colors"
+                        >
+                            Log In / Sign Up
+                        </button>
+                    </div>
+                )}
+                
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                    <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200">
+                        <h3 className="font-bold text-slate-700 mb-6 uppercase tracking-widest text-sm flex items-center gap-2">
+                            <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                            Growth Timeline
+                        </h3>
+                        <div className="w-full overflow-x-auto">
+                            <svg width="100%" height={chartHeight} viewBox={`0 0 ${chartWidth} ${chartHeight}`} className="overflow-visible">
+                                {/* Grid lines */}
+                                {[0, 0.25, 0.5, 0.75, 1].map(pct => {
+                                    const y = chartHeight - padding - (pct * (chartHeight - padding * 2));
+                                    return (
+                                        <g key={pct}>
+                                            <line x1={padding} y1={y} x2={chartWidth - padding} y2={y} stroke="#e2e8f0" strokeDasharray="4 4" />
+                                            <text x={padding - 10} y={y + 4} textAnchor="end" fontSize="12" fill="#64748b" fontWeight="bold">
+                                                {(minCapacity + pct * capacityRange).toFixed(0)}%
                                             </text>
                                         </g>
-                                    ))}
-                                </svg>
-                            </div>
-                        </div>
-
-                        <div className="flex flex-col gap-6">
-                            <div className="bg-emerald-50 rounded-2xl p-6 border border-emerald-100 flex-grow">
-                                <h3 className="font-bold text-emerald-800 mb-3 uppercase tracking-widest text-sm flex items-center gap-2">
-                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                    Interpretation
-                                </h3>
-                                <p className="text-emerald-950 leading-relaxed">
-                                    You have completed <strong>{history.length}</strong> assessment(s). Your current HoPE Capacity indicates your overall stability. 
-                                    Monitoring this trend helps ensure you are continuously moving toward an optimized personal experience.
-                                </p>
-                            </div>
-
-                            {lowestDimension && (
-                                <div className="bg-rose-50 rounded-2xl p-6 border border-rose-100 flex-grow">
-                                    <h3 className="font-bold text-rose-800 mb-3 uppercase tracking-widest text-sm flex items-center gap-2">
-                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                                        Recommended Action
-                                    </h3>
-                                    <p className="text-rose-950 leading-relaxed mb-4">
-                                        Your lowest score was in <strong>{lowestDimension.name}</strong> ({lowestDimension.score.toFixed(1)}/5) within your {lowestDimension.space}. 
-                                    </p>
-                                    <a href="rebuilding-life-challenges.html" className="inline-block bg-white text-rose-700 font-bold px-5 py-2.5 rounded-full border border-rose-200 hover:bg-rose-100 transition-colors shadow-sm text-sm">
-                                        Explore Rebuilding Modules →
-                                    </a>
-                                </div>
-                            )}
+                                    );
+                                })}
+                                {/* Reference line for single data point or polyline for multiple */}
+                                {sortedHistory.length === 1 ? (
+                                    <line
+                                        x1={padding}
+                                        y1={getY(sortedHistory[0].capacity)}
+                                        x2={chartWidth - padding}
+                                        y2={getY(sortedHistory[0].capacity)}
+                                        stroke="#93c5fd"
+                                        strokeWidth="2"
+                                        strokeDasharray="6 6"
+                                    />
+                                ) : (
+                                    <polyline points={points} fill="none" stroke="#3b82f6" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+                                )}
+                                {/* Points */}
+                                {sortedHistory.map((h, i) => (
+                                    <g key={i} className="group cursor-pointer">
+                                        <circle cx={getX(i)} cy={getY(h.capacity)} r="6" fill="#fff" stroke="#3b82f6" strokeWidth="3" className="transition-all duration-300 group-hover:r-8 group-hover:fill-blue-50" />
+                                        <text x={getX(i)} y={getY(h.capacity) - 14} textAnchor="middle" fontSize="12" fill="#1e293b" fontWeight="bold">
+                                            {h.capacity.toFixed(1)}%
+                                        </text>
+                                        <text x={getX(i)} y={chartHeight - 12} textAnchor="middle" fontSize="11" fill="#64748b" fontWeight="bold">
+                                            {new Date(h.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                                        </text>
+                                    </g>
+                                ))}
+                            </svg>
                         </div>
                     </div>
 
-                    <div className="flex justify-center mt-6">
-                        <button 
-                            onClick={onRetake}
-                            className="bg-slate-900 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-slate-800 hover:-translate-y-1 transition-all shadow-xl hover:shadow-[0_10px_25px_rgba(15,23,42,0.3)] inline-flex items-center gap-3"
-                        >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                            Retake Assessment
-                        </button>
+                    <div className="flex flex-col gap-6">
+                        <div className="bg-emerald-50 rounded-2xl p-6 border border-emerald-100 flex-grow">
+                            <h3 className="font-bold text-emerald-800 mb-3 uppercase tracking-widest text-sm flex items-center gap-2">
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                Interpretation ({latestScores.tierText})
+                            </h3>
+                            <p className="text-emerald-950 leading-relaxed text-sm md:text-base">
+                                You have completed <strong>{sortedHistory.length}</strong> assessment(s). Your current HoPE Capacity is <strong>{latest.capacity.toFixed(1)}%</strong> ({latestScores.opsScore50}/50 OPS + {latestScores.irsScore50}/50 IRS).
+                                Monitoring this trend helps ensure you are continuously moving toward an optimized personal experience.
+                            </p>
+                        </div>
+
+                        {lowestDimension && (
+                            <div className="bg-rose-50 rounded-2xl p-6 border border-rose-100 flex-grow" data-testid="dashboard-lowest-dimension">
+                                <h3 className="font-bold text-rose-800 mb-3 uppercase tracking-widest text-sm flex items-center gap-2">
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                                    Recommended Action
+                                </h3>
+                                <p className="text-rose-950 leading-relaxed mb-4 text-sm md:text-base">
+                                    Your lowest core dimension score was in <strong>{lowestDimension.name}</strong> ({lowestDimension.score.toFixed(1)}/5.0) within your {lowestDimension.space}.
+                                </p>
+                                <a href="rebuilding-life-challenges.html" className="inline-block bg-white text-rose-700 font-bold px-5 py-2.5 rounded-full border border-rose-200 hover:bg-rose-100 transition-colors shadow-sm text-sm">
+                                    Explore Rebuilding Modules &rarr;
+                                </a>
+                            </div>
+                        )}
                     </div>
                 </div>
-            </main>
-        );
-    };
 
-    // --- AUTHENTICATION MODAL COMPONENT ---
-    const AuthModal = ({ onClose, onLogin }) => {
-        const [isSignUp, setIsSignUp] = React.useState(false);
-        const [email, setEmail] = React.useState("");
-        const [password, setPassword] = React.useState("");
-        const [error, setError] = React.useState("");
-        const [loading, setLoading] = React.useState(false);
+                {/* Contextual Layering: Q19 (Gang Affinity Score) & Q20 (Psychological Safety Score) */}
+                <div className="mb-8">
+                    <h3 className="font-bold text-slate-700 mb-4 uppercase tracking-widest text-xs md:text-sm">
+                        Contextual Layering (Flex Slots)
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="bg-purple-50/70 border border-purple-200 rounded-2xl p-5 flex items-center justify-between">
+                            <div>
+                                <span className="text-[10px] font-extrabold uppercase tracking-widest text-purple-700 block">Flex Slot 1 &bull; Q19</span>
+                                <h4 className="font-black text-slate-900 text-base md:text-lg">Gang Affinity Score (GAS)</h4>
+                                <p className="text-xs text-slate-600 mt-0.5">Relationship to gangs and street hustle</p>
+                            </div>
+                            <div className="text-right">
+                                <span className="inline-block text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-800 border border-purple-200 mb-1">
+                                    {flexGasLabel}
+                                </span>
+                                <div className="text-2xl font-black text-purple-700">
+                                    {flexGasScore !== null ? flexGasScore.toFixed(1) : '—'} <span className="text-xs font-bold text-purple-500">/ 5.0</span>
+                                </div>
+                            </div>
+                        </div>
 
-        const handleEmailAuth = async (e) => {
-            e.preventDefault();
-            if (!window.firebaseAuth) {
-                setError("Firebase is not configured yet. Please contact support.");
-                return;
-            }
-            setLoading(true);
-            setError("");
-            try {
-                if (isSignUp) {
-                    await window.createUserWithEmailAndPassword(window.firebaseAuth, email, password);
-                } else {
-                    await window.signInWithEmailAndPassword(window.firebaseAuth, email, password);
-                }
-                onLogin();
-                onClose();
-            } catch (err) {
-                console.error(err);
-                setError(err.message.replace("Firebase:", "").trim());
-            } finally {
-                setLoading(false);
-            }
-        };
+                        <div className="bg-emerald-50/70 border border-emerald-200 rounded-2xl p-5 flex items-center justify-between">
+                            <div>
+                                <span className="text-[10px] font-extrabold uppercase tracking-widest text-emerald-700 block">Flex Slot 2 &bull; Q20</span>
+                                <h4 className="font-black text-slate-900 text-base md:text-lg">Psychological Safety Score (PSS)</h4>
+                                <p className="text-xs text-slate-600 mt-0.5">Emotional and physical safety in daily life</p>
+                            </div>
+                            <div className="text-right">
+                                <span className="inline-block text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200 mb-1">
+                                    {flexPssLabel}
+                                </span>
+                                <div className="text-2xl font-black text-emerald-700">
+                                    {flexPssScore !== null ? flexPssScore.toFixed(1) : '—'} <span className="text-xs font-bold text-emerald-500">/ 5.0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-        const handleSocialAuth = async (providerName) => {
-            if (!window.firebaseAuth) {
-                setError("Firebase is not configured yet.");
-                return;
-            }
-            setLoading(true);
-            setError("");
-            try {
-                const provider = providerName === "Google" 
-                    ? new window.GoogleAuthProvider() 
-                    : new window.FacebookAuthProvider();
-                await window.signInWithPopup(window.firebaseAuth, provider);
-                onLogin();
-                onClose();
-            } catch (err) {
-                console.error(err);
-                setError(err.message.replace("Firebase:", "").trim());
-            } finally {
-                setLoading(false);
-            }
-        };
+                {/* Personal Reflections & Notes from Latest Assessment */}
+                <div className="mb-8 bg-slate-50 rounded-2xl p-6 border border-slate-200">
+                    <h3 className="font-bold text-slate-700 mb-3 uppercase tracking-widest text-xs md:text-sm">
+                        Personal Reflections &amp; Notes (Latest Assessment)
+                    </h3>
+                    {latestReflections.length > 0 ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {latestReflections.map(({ question, score, text }) => (
+                                <div key={question.id} className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+                                    <div className="flex justify-between items-center mb-1">
+                                        <span className="font-bold text-slate-800 text-sm">{question.title}</span>
+                                        <span className="text-xs font-bold text-blue-600 bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-100">
+                                            {score !== null ? `${score.toFixed(1)} / 5.0` : 'Rated'}
+                                        </span>
+                                    </div>
+                                    <div className="text-[11px] text-slate-400 mb-1.5">{question.dimension}</div>
+                                    <p className="text-xs md:text-sm text-slate-700 whitespace-pre-line leading-relaxed">{text}</p>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <p className="text-slate-500 text-sm italic">
+                            No written reflections were recorded for this assessment.
+                        </p>
+                    )}
+                </div>
 
-        return (
-            <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 animate-in fade-in duration-300">
-                <div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl relative">
-                    <button onClick={onClose} className="absolute top-5 right-5 text-slate-400 hover:text-slate-600 transition-colors">
-                        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-                    </button>
-                    
-                    <h2 className="text-3xl font-black text-slate-900 mb-2">{isSignUp ? "Create Account" : "Welcome Back"}</h2>
-                    <p className="text-slate-500 mb-6">{isSignUp ? "Sign up to save your HoPE Index progress." : "Log in to resume your HoPE Index."}</p>
-
-                    {error && <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm mb-4 border border-red-100">{error}</div>}
-
-                    {/* Social Auth Buttons */}
-                    <div className="flex flex-col gap-3 mb-6">
-                        <button 
-                            onClick={() => handleSocialAuth("Google")}
-                            disabled={loading}
-                            className="w-full bg-white hover:bg-slate-50 text-slate-700 font-bold py-3 px-4 border border-slate-300 rounded-xl transition-all flex items-center justify-center gap-3 shadow-sm hover:shadow-md disabled:opacity-50"
+                <div className="flex flex-wrap justify-center gap-4 mt-6">
+                    {onViewLatestReport && (
+                        <button
+                            type="button"
+                            onClick={onViewLatestReport}
+                            className="bg-white text-slate-800 border-2 border-slate-300 px-7 py-3.5 rounded-full font-bold text-base hover:bg-slate-50 transition-all shadow-sm inline-flex items-center gap-2"
                         >
-                            <svg className="w-5 h-5" viewBox="0 0 24 24">
-                                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                            </svg>
-                            Continue with Google
+                            <span>🎯</span> View Latest HoPE Wheel
                         </button>
-                    </div>
-
-                    <div className="flex items-center mb-6">
-                        <div className="flex-grow border-t border-slate-200"></div>
-                        <span className="flex-shrink-0 text-xs text-slate-400 font-bold uppercase tracking-wider px-4">Or continue with email</span>
-                        <div className="flex-grow border-t border-slate-200"></div>
-                    </div>
-
-                    <form onSubmit={handleEmailAuth} className="flex flex-col gap-4">
-                        <div>
-                            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="w-full border-2 border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500 transition-colors" placeholder="Email Address" />
-                        </div>
-                        <div>
-                            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength="6" className="w-full border-2 border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500 transition-colors" placeholder="Password (min 6 chars)" />
-                        </div>
-                        
-                        <div className="flex flex-col gap-2 mt-2">
-                            {isSignUp ? (
-                                <>
-                                    <button type="submit" disabled={loading} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl transition-all shadow-md">
-                                        {loading ? "Processing..." : "Sign Up"}
-                                    </button>
-                                    <button type="button" onClick={() => setIsSignUp(false)} disabled={loading} className="w-full bg-white hover:bg-slate-50 text-blue-600 font-bold py-3.5 rounded-xl transition-all border border-blue-200">
-                                        Log In Instead
-                                    </button>
-                                </>
-                            ) : (
-                                <>
-                                    <button type="submit" disabled={loading} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl transition-all shadow-md">
-                                        {loading ? "Processing..." : "Log In"}
-                                    </button>
-                                    <button type="button" onClick={() => setIsSignUp(true)} disabled={loading} className="w-full bg-white hover:bg-slate-50 text-blue-600 font-bold py-3.5 rounded-xl transition-all border border-blue-200">
-                                        Create an Account
-                                    </button>
-                                </>
-                            )}
-                        </div>
-                    </form>
+                    )}
+                    <button 
+                        type="button"
+                        onClick={onRetake}
+                        className="bg-slate-900 text-white px-8 py-3.5 rounded-full font-bold text-base hover:bg-slate-800 hover:-translate-y-0.5 transition-all shadow-xl inline-flex items-center gap-3"
+                    >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                        Retake Assessment
+                    </button>
                 </div>
             </div>
-        );
+        </main>
+    );
+};
+
+// --- AUTHENTICATION MODAL COMPONENT ---
+const AuthModal = ({ onClose, onLogin }) => {
+    const [isSignUp, setIsSignUp] = React.useState(false);
+    const [email, setEmail] = React.useState("");
+    const [password, setPassword] = React.useState("");
+    const [error, setError] = React.useState("");
+    const [loading, setLoading] = React.useState(false);
+
+    const handleEmailAuth = async (e) => {
+        e.preventDefault();
+        if (!window.firebaseAuth) {
+            setError("Firebase is not configured yet. Please contact support.");
+            return;
+        }
+        setLoading(true);
+        setError("");
+        try {
+            if (isSignUp) {
+                await window.createUserWithEmailAndPassword(window.firebaseAuth, email, password);
+            } else {
+                await window.signInWithEmailAndPassword(window.firebaseAuth, email, password);
+            }
+            onLogin();
+            onClose();
+        } catch (err) {
+            console.error(err);
+            setError(err.message.replace("Firebase:", "").trim());
+        } finally {
+            setLoading(false);
+        }
     };
+
+    const handleSocialAuth = async (providerName) => {
+        if (!window.firebaseAuth) {
+            setError("Firebase is not configured yet.");
+            return;
+        }
+        setLoading(true);
+        setError("");
+        try {
+            const provider = providerName === "Google" 
+                ? new window.GoogleAuthProvider() 
+                : new window.FacebookAuthProvider();
+            await window.signInWithPopup(window.firebaseAuth, provider);
+            onLogin();
+            onClose();
+        } catch (err) {
+            console.error(err);
+            setError(err.message.replace("Firebase:", "").trim());
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <div className="fixed inset-0 z-[2000] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 animate-in fade-in duration-300">
+            <div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl relative">
+                <button type="button" onClick={onClose} className="absolute top-5 right-5 text-slate-400 hover:text-slate-600 transition-colors">
+                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+                
+                <h2 className="text-3xl font-black text-slate-900 mb-2">{isSignUp ? "Create Account" : "Welcome Back"}</h2>
+                <p className="text-slate-500 mb-6">{isSignUp ? "Sign up to save your HoPE Index progress." : "Log in to resume or save your HoPE Index."}</p>
+
+                {error && <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm mb-4 border border-red-100">{error}</div>}
+
+                {/* Social Auth Buttons */}
+                <div className="flex flex-col gap-3 mb-6">
+                    <button 
+                        type="button"
+                        onClick={() => handleSocialAuth("Google")}
+                        disabled={loading}
+                        className="w-full bg-white hover:bg-slate-50 text-slate-700 font-bold py-3 px-4 border border-slate-300 rounded-xl transition-all flex items-center justify-center gap-3 shadow-sm hover:shadow-md disabled:opacity-50"
+                    >
+                        <svg className="w-5 h-5" viewBox="0 0 24 24">
+                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                        </svg>
+                        Continue with Google
+                    </button>
+                </div>
+
+                <div className="flex items-center mb-6">
+                    <div className="flex-grow border-t border-slate-200"></div>
+                    <span className="flex-shrink-0 text-xs text-slate-400 font-bold uppercase tracking-wider px-4">Or continue with email</span>
+                    <div className="flex-grow border-t border-slate-200"></div>
+                </div>
+
+                <form onSubmit={handleEmailAuth} className="flex flex-col gap-4">
+                    <div>
+                        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="w-full border-2 border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500 transition-colors" placeholder="Email Address" />
+                    </div>
+                    <div>
+                        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength="6" className="w-full border-2 border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500 transition-colors" placeholder="Password (min 6 chars)" />
+                    </div>
+                    
+                    <div className="flex flex-col gap-2 mt-2">
+                        {isSignUp ? (
+                            <>
+                                <button type="submit" disabled={loading} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl transition-all shadow-md">
+                                    {loading ? "Processing..." : "Sign Up"}
+                                </button>
+                                <button type="button" onClick={() => setIsSignUp(false)} disabled={loading} className="w-full bg-white hover:bg-slate-50 text-blue-600 font-bold py-3.5 rounded-xl transition-all border border-blue-200">
+                                    Log In Instead
+                                </button>
+                            </>
+                        ) : (
+                            <>
+                                <button type="submit" disabled={loading} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl transition-all shadow-md">
+                                    {loading ? "Processing..." : "Log In"}
+                                </button>
+                                <button type="button" onClick={() => setIsSignUp(true)} disabled={loading} className="w-full bg-white hover:bg-slate-50 text-blue-600 font-bold py-3.5 rounded-xl transition-all border border-blue-200">
+                                    Create an Account
+                                </button>
+                            </>
+                        )}
+                    </div>
+                </form>
+            </div>
+        </div>
+    );
+};
 
 const App = () => {
     const [step, setStep] = useState('intro'); // 'intro', 'survey', 'results', 'dashboard'
@@ -1344,9 +1761,45 @@ const App = () => {
     const [authLoading, setAuthLoading] = useState(true);
     const [showAuthModal, setShowAuthModal] = useState(false);
 
-    useEffect(() => {
-        // Removed document.body overflow hidden to allow mobile scrolling
-    }, []);
+    // Refs to preserve in-memory guest progress/results when logging in
+    const answersRef = useRef(answers);
+    const reflectionsRef = useRef(reflections);
+    const stepRef = useRef(step);
+    const pendingGuestHistoryRef = useRef([]);
+
+    useEffect(() => { answersRef.current = answers; }, [answers]);
+    useEffect(() => { reflectionsRef.current = reflections; }, [reflections]);
+    useEffect(() => { stepRef.current = step; }, [step]);
+
+    const normalizeAnswersMap = (rawAnswers = {}) => {
+        const normalized = {};
+        if (rawAnswers && typeof rawAnswers === 'object') {
+            Object.keys(rawAnswers).forEach((k) => {
+                const s = getAnswerScore(rawAnswers[k]);
+                if (s !== null) normalized[k] = s;
+            });
+        }
+        return normalized;
+    };
+
+    const buildHistoryEntry = (finalAnswers, finalReflections, dateStr) => {
+        const normalizedAnswers = {};
+        surveyQuestions.forEach((q) => {
+            const val = getAnswerScore(finalAnswers?.[q.id]);
+            if (val !== null) normalizedAnswers[q.id] = val;
+        });
+        const scores = computeSurveyScores(normalizedAnswers, surveyQuestions);
+        return {
+            date: dateStr || new Date().toISOString(),
+            answers: normalizedAnswers,
+            reflections: finalReflections || {},
+            capacity: scores.totalHoPEScore100,
+            opsScore50: scores.opsScore50,
+            irsScore50: scores.irsScore50,
+            flexGasScore: scores.flexGasScore,
+            flexPssScore: scores.flexPssScore
+        };
+    };
 
     useEffect(() => {
         if (!window.firebaseAuth) {
@@ -1356,32 +1809,65 @@ const App = () => {
         const unsubscribe = window.onAuthStateChanged(window.firebaseAuth, async (currentUser) => {
             setUser(currentUser);
             setAuthLoading(false);
-            if (currentUser) {
+            if (currentUser && window.firebaseDb) {
                 try {
                     const docRef = window.doc(window.firebaseDb, "hope_surveys", currentUser.uid);
                     const docSnap = await window.getDoc(docRef);
-                    if (docSnap.exists()) {
-                        const data = docSnap.data();
-                        
-                        if (data.history) {
-                            setSurveyHistory(data.history);
-                        }
-                        
-                        if (data.reflections) {
-                            setReflections(data.reflections);
-                        }
+                    const data = docSnap.exists() ? docSnap.data() : {};
+                    const existingHistory = Array.isArray(data.history)
+                        ? data.history.map((h) => ({
+                            ...h,
+                            answers: normalizeAnswersMap(h?.answers || {}),
+                            reflections: h?.reflections || {}
+                        }))
+                        : [];
 
+                    const currentAnswers = normalizeAnswersMap(answersRef.current || {});
+                    const currentReflections = reflectionsRef.current || {};
+                    const answeredCount = Object.keys(currentAnswers).length;
+                    const guestCompletedItems = pendingGuestHistoryRef.current.length > 0
+                        ? [...pendingGuestHistoryRef.current]
+                        : (answeredCount >= surveyQuestions.length ? [buildHistoryEntry(currentAnswers, currentReflections)] : []);
+
+                    // Case 1 & 2: Guest completed assessment(s) and/or has an in-progress assessment in memory when logging in
+                    if (guestCompletedItems.length > 0 || (answeredCount > 0 && answeredCount < surveyQuestions.length)) {
+                        pendingGuestHistoryRef.current = [];
+                        const mergedHistory = [...existingHistory, ...guestCompletedItems];
+                        setSurveyHistory(mergedHistory);
+
+                        const hasPartialDraft = answeredCount > 0 && answeredCount < surveyQuestions.length;
+                        await window.setDoc(docRef, {
+                            answers: hasPartialDraft ? currentAnswers : {},
+                            reflections: hasPartialDraft ? currentReflections : {},
+                            history: mergedHistory,
+                            updatedAt: new Date().toISOString()
+                        }, { merge: true });
+                        return;
+                    }
+
+                    // Case 3: No in-memory guest answers; load saved state from Firestore
+                    if (docSnap.exists()) {
+                        if (existingHistory.length > 0) {
+                            setSurveyHistory(existingHistory);
+                        }
                         if (data.answers && Object.keys(data.answers).length > 0) {
-                            setAnswers(data.answers);
-                            const answeredCount = Object.keys(data.answers).length;
-                            if (answeredCount > 0 && answeredCount < surveyQuestions.length) {
-                                setCurrentQIndex(answeredCount);
+                            const normalizedSaved = normalizeAnswersMap(data.answers);
+                            const savedCount = Object.keys(normalizedSaved).length;
+                            if (savedCount > 0 && savedCount < surveyQuestions.length) {
+                                setAnswers(normalizedSaved);
+                                if (data.reflections) setReflections(data.reflections);
+                                setCurrentQIndex(savedCount);
+                                setCurrentSelection(normalizedSaved[surveyQuestions[savedCount].id] ?? null);
                                 setStep('survey');
-                            } else if (answeredCount >= surveyQuestions.length) {
+                            } else if (savedCount >= surveyQuestions.length) {
+                                setAnswers(normalizedSaved);
+                                if (data.reflections) setReflections(data.reflections);
+                                if (existingHistory.length === 0) {
+                                    setSurveyHistory([buildHistoryEntry(normalizedSaved, data.reflections || {})]);
+                                }
                                 setStep('results');
                             }
-                        } else if (data.history && data.history.length > 0) {
-                            // If they have history but no active survey, go to Dashboard
+                        } else if (existingHistory.length > 0) {
                             setStep('dashboard');
                         }
                     }
@@ -1407,20 +1893,15 @@ const App = () => {
     };
 
     const finishSurvey = async (finalAnswers, finalReflections) => {
-        if (!user || !window.firebaseDb) return;
-        
-        const totalScore = surveyQuestions.reduce((sum, q) => sum + parseFloat(finalAnswers[q.id].value), 0);
-        const capacity = ((totalScore / (surveyQuestions.length * 5)) * 100);
-        
-        const newHistoryItem = {
-            date: new Date().toISOString(),
-            answers: finalAnswers,
-            reflections: finalReflections,
-            capacity: capacity
-        };
-        
+        const newHistoryItem = buildHistoryEntry(finalAnswers, finalReflections);
         const updatedHistory = [...surveyHistory, newHistoryItem];
         setSurveyHistory(updatedHistory);
+
+        if (!user || !window.firebaseDb) {
+            // Preserve all completed guest assessments in memory so logging in on Results/Dashboard/Retake saves them to Firestore
+            pendingGuestHistoryRef.current = [...pendingGuestHistoryRef.current, newHistoryItem];
+            return;
+        }
         
         try {
             await window.setDoc(window.doc(window.firebaseDb, "hope_surveys", user.uid), {
@@ -1452,48 +1933,144 @@ const App = () => {
     };
 
     const handlePrevQ = () => {
+        const qId = surveyQuestions[currentQIndex].id;
+        const updatedAnswers = currentSelection !== null ? { ...answers, [qId]: currentSelection } : answers;
+        if (currentSelection !== null) {
+            setAnswers(updatedAnswers);
+        }
+        saveProgress(updatedAnswers, reflections);
         if (currentQIndex > 0) {
             setCurrentQIndex(currentQIndex - 1);
-            setCurrentSelection(answers[surveyQuestions[currentQIndex - 1].id] ?? null);
+            setCurrentSelection(updatedAnswers[surveyQuestions[currentQIndex - 1].id] ?? null);
         } else {
             setStep('intro');
         }
     };
 
+    const handleRetake = () => {
+        setAnswers({});
+        setReflections({});
+        setCurrentQIndex(0);
+        setCurrentSelection(null);
+        setStep('intro');
+    };
+
+    const handleSignOut = () => {
+        if (!window.firebaseAuth) return;
+        window.signOut(window.firebaseAuth).then(() => {
+            pendingGuestHistoryRef.current = [];
+            setAnswers({});
+            setReflections({});
+            setSurveyHistory([]);
+            setCurrentQIndex(0);
+            setCurrentSelection(null);
+            setStep('intro');
+        });
+    };
+
+    // Resolve the completed assessment data to display on ResultsScreen (even if user started/reset a retake)
+    const getDisplayResultsData = () => {
+        if (Object.keys(answers).length >= surveyQuestions.length) {
+            return { answers, reflections };
+        }
+        if (surveyHistory && surveyHistory.length > 0) {
+            const latestCompleted = surveyHistory[surveyHistory.length - 1];
+            return {
+                answers: normalizeAnswersMap(latestCompleted?.answers || {}),
+                reflections: latestCompleted?.reflections || {}
+            };
+        }
+        return { answers, reflections };
+    };
+
+    // --- HEADER PORTAL FOR DASHBOARD & AUTH CONTROLS ---
+    const headerSlotEl = typeof document !== 'undefined' ? document.getElementById('header-auth-slot') : null;
+    const renderHeaderPortal = () => {
+        if (!headerSlotEl || !window.ReactDOM?.createPortal) return null;
+        return window.ReactDOM.createPortal(
+            <div className="flex items-center gap-1.5 sm:gap-2">
+                {surveyHistory && surveyHistory.length > 0 && (
+                    <button
+                        type="button"
+                        onClick={() => setStep(step === 'dashboard' ? 'results' : 'dashboard')}
+                        className={`text-[11px] sm:text-xs font-extrabold px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-full transition-all border whitespace-nowrap ${
+                            step === 'dashboard'
+                                ? 'bg-purple-600 text-white border-purple-600 shadow-sm'
+                                : 'bg-purple-50 text-purple-700 border-purple-200 hover:bg-purple-100'
+                        }`}
+                    >
+                        {step === 'dashboard' ? <><span className="hidden sm:inline">HoPE </span>Wheel</> : 'Dashboard'}
+                    </button>
+                )}
+                {authLoading ? (
+                    <div className="w-6 h-6 rounded-full border-2 border-blue-500 border-t-transparent animate-spin"></div>
+                ) : user ? (
+                    <div className="flex items-center gap-1.5 sm:gap-2 bg-slate-100 text-slate-700 px-2.5 sm:px-3 py-1.5 rounded-full border border-slate-200 text-[11px] sm:text-xs whitespace-nowrap">
+                        <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                        <span className="font-bold hidden xl:inline max-w-[140px] truncate">{user.email}</span>
+                        <button
+                            type="button"
+                            onClick={handleSignOut}
+                            className="text-slate-500 hover:text-slate-900 font-bold xl:border-l border-slate-300 xl:pl-2"
+                        >
+                            Log Out
+                        </button>
+                    </div>
+                ) : (
+                    <button
+                        type="button"
+                        onClick={() => setShowAuthModal(true)}
+                        className="text-[11px] sm:text-xs font-extrabold text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-full transition-colors whitespace-nowrap"
+                    >
+                        Log In<span className="hidden sm:inline"> / Sign Up</span>
+                    </button>
+                )}
+            </div>,
+            headerSlotEl
+        );
+    };
+
     // --- DYNAMIC AUTH WIDGET ---
     const renderAuthWidget = (customClass = "") => (
-        <div className={`transition-all duration-300 z-50 ${customClass}`}>
+        <div className={`print:hidden transition-all duration-300 z-40 ${customClass}`}>
             {authLoading ? (
                 <div className="w-8 h-8 rounded-full border-2 border-blue-500 border-t-transparent animate-spin shadow-md mx-auto"></div>
             ) : user ? (
                 <div className="flex items-center justify-center gap-3 bg-slate-100 text-slate-600 px-5 py-2.5 rounded-full border border-slate-200">
                     <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></div>
                     <span className="font-bold text-sm hidden sm:block">{user.email}</span>
-                    <button onClick={() => window.signOut(window.firebaseAuth).then(() => { setAnswers({}); setReflections({}); setStep('intro'); setCurrentQIndex(0); })} className="text-slate-400 hover:text-slate-700 font-bold text-sm transition-colors sm:ml-2 sm:border-l border-slate-300 sm:pl-3">Log Out</button>
+                    {surveyHistory && surveyHistory.length > 0 && step !== 'dashboard' && (
+                        <button
+                            type="button"
+                            onClick={() => setStep('dashboard')}
+                            className="text-purple-600 hover:text-purple-800 font-bold text-sm transition-colors sm:border-l border-slate-300 sm:pl-3"
+                        >
+                            Dashboard
+                        </button>
+                    )}
+                    <button type="button" onClick={handleSignOut} className="text-slate-400 hover:text-slate-700 font-bold text-sm transition-colors sm:ml-1 sm:border-l border-slate-300 sm:pl-3">Log Out</button>
                 </div>
             ) : (
-                <button onClick={() => setShowAuthModal(true)} className="text-blue-600 font-bold hover:text-blue-700 transition-colors flex items-center justify-center gap-2 text-sm bg-blue-50 hover:bg-blue-100 px-6 py-3 rounded-full w-full md:w-auto border border-blue-100 shadow-sm">
+                <button type="button" onClick={() => setShowAuthModal(true)} className="text-blue-600 font-bold hover:text-blue-700 transition-colors flex items-center justify-center gap-2 text-sm bg-blue-50 hover:bg-blue-100 px-6 py-3 rounded-full w-full md:w-auto border border-blue-100 shadow-sm">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg>
                     Log in to track your progress
                 </button>
             )}
-            {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} onLogin={() => {}} />}
         </div>
     );
 
     if (step === 'dashboard') {
+        const canViewLatestWheel = Object.keys(answers).length >= surveyQuestions.length || (surveyHistory && surveyHistory.length > 0);
         return (
             <div className="relative">
-                {renderAuthWidget("absolute top-4 right-4 md:top-6 md:right-6")}
+                {renderHeaderPortal()}
+                {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} onLogin={() => {}} />}
                 <Dashboard 
                     user={user} 
                     history={surveyHistory} 
-                    onRetake={() => {
-                        setAnswers({});
-                        setReflections({});
-                        setCurrentQIndex(0);
-                        setStep('intro');
-                    }} 
+                    onRetake={handleRetake}
+                    onViewLatestReport={canViewLatestWheel ? () => setStep('results') : null}
+                    onOpenAuth={() => setShowAuthModal(true)}
                 />
             </div>
         );
@@ -1505,6 +2082,8 @@ const App = () => {
 
         return (
             <main className="flex-grow flex items-center justify-center p-4 md:p-6 relative" style={{ minHeight: 'calc(100vh - 80px)' }}>
+                {renderHeaderPortal()}
+                {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} onLogin={() => {}} />}
                 <div className="bg-white max-w-7xl w-full h-auto lg:h-full lg:max-h-[850px] rounded-[2rem] shadow-2xl border border-slate-100 relative overflow-hidden flex flex-col lg:flex-row">
                     
                     {/* Top gradient border */}
@@ -1540,9 +2119,9 @@ const App = () => {
                         
                         <div className="flex flex-col items-center justify-center gap-4 mt-10">
                             {renderAuthWidget("w-full md:w-auto mb-2")}
-                            <button onClick={() => { 
+                            <button type="button" onClick={() => { 
                                 setStep('survey'); 
-                                setCurrentSelection(answers[surveyQuestions[0].id] ?? null); 
+                                setCurrentSelection(getAnswerScore(answers[surveyQuestions[currentQIndex]?.id]) ?? getAnswerScore(answers[surveyQuestions[0].id]) ?? null); 
                             }} className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white px-10 py-4 rounded-full font-bold text-xl transition-all shadow-lg hover:shadow-[0_10px_25px_rgba(59,130,246,0.4)] flex items-center justify-center gap-3 w-full md:w-auto">
                                 Let's Begin 
                                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
@@ -1556,13 +2135,19 @@ const App = () => {
     }
 
     if (step === 'results') {
+        const displayResults = getDisplayResultsData();
         return (
             <div className="relative">
-                {renderAuthWidget("absolute top-4 right-4 md:top-6 md:right-6 z-50")}
+                {renderHeaderPortal()}
+                {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} onLogin={() => {}} />}
                 <ResultsScreen 
-                    answers={answers} 
+                    answers={displayResults.answers}
+                    reflections={displayResults.reflections}
                     surveyQuestions={surveyQuestions} 
-                    onViewDashboard={(user && surveyHistory && surveyHistory.length > 0) ? () => setStep('dashboard') : null} 
+                    onViewDashboard={(surveyHistory && surveyHistory.length > 0) ? () => setStep('dashboard') : null}
+                    onRetake={handleRetake}
+                    user={user}
+                    onOpenAuth={() => setShowAuthModal(true)}
                 />
             </div>
         );
@@ -1573,31 +2158,51 @@ const App = () => {
 
     return (
         <main className="flex-grow w-full max-w-[1800px] mx-auto p-4 md:p-6 flex flex-col relative lg:overflow-hidden" style={{ minHeight: 'calc(100vh - 80px)' }}>
+            {renderHeaderPortal()}
+            {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} onLogin={() => {}} />}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 flex-grow items-stretch lg:h-full">
                 
                 {/* Left Panel - Survey Form (50%) */}
                 <div className="flex flex-col bg-white rounded-[2rem] shadow-2xl border border-slate-100 relative lg:h-full lg:min-h-0" style={{ transform: 'translateZ(0)' }}>
-
-                    
-                    <div className="p-4 md:p-6 pt-6 flex-grow flex flex-col lg:h-full">
+                    <div className="p-4 md:p-6 pt-5 flex-grow flex flex-col lg:h-full">
                         
-                        {/* Header & Meta */}
-                        <div className="flex justify-between items-center mb-3 shrink-0">
-                            <div className="inline-block bg-blue-50 text-blue-700 px-3 py-1 rounded-lg font-bold uppercase tracking-widest text-[10px] border border-blue-100">
-                                {q.space}
+                        {/* Visible Question X of 20 Progress Header & Bar */}
+                        <div className="mb-3 shrink-0">
+                            <div className="flex flex-wrap justify-between items-center gap-2 mb-2">
+                                <div className="inline-block bg-blue-50 text-blue-700 px-3 py-1 rounded-lg font-bold uppercase tracking-widest text-[10px] border border-blue-100">
+                                    {q.space}
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <span className="text-xs font-extrabold text-slate-600 uppercase tracking-wider" data-testid="question-progress-label">
+                                        Question {currentQIndex + 1} of {surveyQuestions.length}
+                                    </span>
+                                    <span className="text-xs font-black text-blue-600 bg-blue-50 border border-blue-100 px-2.5 py-0.5 rounded-full">
+                                        {Math.round(progress)}%
+                                    </span>
+                                </div>
+                            </div>
+                            <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden shadow-inner">
+                                <div
+                                    className="bg-gradient-to-r from-emerald-400 via-blue-500 to-purple-600 h-full transition-all duration-500 ease-out rounded-full"
+                                    style={{ width: `${progress}%` }}
+                                    role="progressbar"
+                                    aria-valuenow={currentQIndex + 1}
+                                    aria-valuemin={1}
+                                    aria-valuemax={surveyQuestions.length}
+                                ></div>
                             </div>
                         </div>
 
                         {/* Title & Concept */}
                         <div className="mb-2 shrink-0 w-full">
-                            <div className="text-slate-400 font-bold text-sm tracking-wide mb-2">{q.dimension}</div>
+                            <div className="text-slate-400 font-bold text-sm tracking-wide mb-1">{q.dimension}</div>
                             <h2 className="font-black text-slate-900 text-2xl md:text-3xl tracking-tight leading-tight mb-1">{q.title}</h2>
-                            {q.subtitle && <p className="text-slate-500 font-medium text-sm mb-3">{q.subtitle}</p>}
-
+                            {q.subtitle && <p className="text-slate-500 font-medium text-sm mb-2">{q.subtitle}</p>}
                         </div>
 
                         {/* Interactive Card Selector & Reflection */}
                         <HopeEmojiSlider 
+                            key={q.id}
                             currentSelection={currentSelection} 
                             onSelect={(val) => {
                                 setCurrentSelection(val);
@@ -1614,12 +2219,14 @@ const App = () => {
                         {/* Navigation Footer */}
                         <div className="flex justify-between items-center mt-auto pt-3 border-t border-slate-100 shrink-0">
                             <button 
+                                type="button"
                                 onClick={handlePrevQ}
-                                className={`text-slate-500 font-bold hover:text-slate-800 px-6 py-2 transition-colors flex items-center gap-2 ${currentQIndex === 0 ? 'invisible' : ''}`}
+                                className="text-slate-500 font-bold hover:text-slate-800 px-6 py-2 transition-colors flex items-center gap-2"
                             >
-                                <span>←</span> Back
+                                <span>←</span> {currentQIndex === 0 ? 'Intro' : 'Back'}
                             </button>
                             <button 
+                                type="button"
                                 onClick={handleNextQ}
                                 disabled={currentSelection === null}
                                 className={`px-6 py-2 rounded-full font-bold text-sm transition-all flex items-center gap-2 ${currentSelection === null ? 'bg-slate-100 text-slate-400 cursor-not-allowed' : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:-translate-y-1 shadow-md hover:shadow-lg'}`}

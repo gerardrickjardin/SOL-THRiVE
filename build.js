@@ -8,7 +8,7 @@ const path = require('path');
     fs.mkdirSync(outDir);
   }
 
-  const files = ['index.html', 'mockup-landing.html', 'results.html', 'profile.html', 'survey.html', 'approach.html', 'how-to-use.html', 'rebuilding-life-challenges.html', 'employment-challenges.html', 'style.css', 'script.js', 'hope-survey.html', 'minds-eye-white-bg.mp4', 'minds-eye.png', 'minds-eye-animated.mp4', 'minds-eye-animated.webm'];
+  const files = ['index.html', 'mockup-landing.html', 'results.html', 'profile.html', 'survey.html', 'approach.html', 'how-to-use.html', 'rebuilding-life-challenges.html', 'employment-challenges.html', 'style.css', 'script.js', 'hope-survey.html', 'ai-avatar.png', 'minds-eye-white-bg.mp4', 'minds-eye.png', 'minds-eye-animated.mp4', 'minds-eye-animated.webm'];
 
   files.forEach(file => {
     if (fs.existsSync(file)) {
@@ -28,7 +28,7 @@ const path = require('path');
   }
 
   const key = process.env.VITE_ELEVENLABS_API_KEY || process.env.ELEVENLABS_API_KEY || "";
-  const geminiKey = process.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY || "";
+  const geminiKey = process.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY || "AIzaSyDhByu-gVi8PNLtDdl41ETxOmu2JOEVt8A";
 
   ['profile.html', 'survey.html', 'hope-survey.html'].forEach(file => {
     const filePath = path.join(outDir, file);

@@ -3,31 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>THRiVE Report</title>
+    <title>The THRiVE Report — THRiVE Coaching</title>
+    <meta name="description" content="Uncover your unique strengths across Traits, Hobbies, Relationships, Interests, Values, and Experiences with the AI-powered THRiVE Report.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+    <style>
+        body.profile-page {
+            background-color: var(--bg-cream, #F7F4EB);
+            color: var(--text-color, #141824);
+            font-family: var(--font-body, 'Poppins', sans-serif);
+        }
+        .thrive-card {
+            background-color: #ffffff;
+            border: 2px solid var(--ink-border, #1E2430);
+            border-radius: 24px;
+            box-shadow: 6px 6px 0 var(--ink-border, #1E2430);
+        }
+        .thrive-subcard {
+            background-color: #FAF8F3;
+            border: 2px solid var(--ink-border, #1E2430);
+            border-radius: 18px;
+            box-shadow: 4px 4px 0 var(--ink-border, #1E2430);
+        }
+        .step-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.3rem 0.75rem;
+            border-radius: 999px;
+            font-family: var(--font-heading, 'Nunito', sans-serif);
+            font-size: 0.75rem;
+            font-weight: 800;
+            border: 1.5px solid rgba(30, 36, 48, 0.15);
+            background-color: rgba(255, 255, 255, 0.75);
+            color: #6B7280;
+            transition: all 0.2s ease;
+        }
+        .step-pill.active {
+            background-color: #1E2430;
+            color: #ffffff;
+            border-color: #1E2430;
+            box-shadow: 2px 2px 0 rgba(139, 47, 201, 0.4);
+        }
+        .step-pill.completed {
+            background-color: #F5EBFD;
+            color: #8B2FC9;
+            border-color: #8B2FC9;
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        @media print {
+            @page {
+                margin: 0.4in;
+            }
+            body, body.profile-page {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                background: #ffffff !important;
+                color: #141824 !important;
+                min-height: 0 !important;
+                height: auto !important;
+            }
+            header.header, .nav-menu, .print\:hidden {
+                display: none !important;
+            }
+            .thrive-card, .print\:shadow-none {
+                box-shadow: none !important;
+            }
+            .print\:border-none {
+                border: none !important;
+            }
+        }
+    </style>
 </head>
-<body class="bg-slate-50 text-slate-900 font-sans min-h-screen flex flex-col relative">
-    <nav class="absolute top-6 left-6 z-50 print:hidden">
-        <a href="index.html" class="flex items-center gap-2 text-slate-400 hover:text-blue-600 font-bold transition-all no-underline">
-            &larr; Back to Home
-        </a>
-    </nav>
-    <div id="root"></div>
+<body class="profile-page min-h-screen flex flex-col relative">
+    <!-- Brand Header -->
+    <header class="header print:hidden">
+        <nav class="nav-left">
+            <button class="hamburger" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </nav>
+        <div class="logo">
+            <a href="index.html" class="brand-logo-link">
+                <span class="brand-mark">THRiVE</span> <span class="brand-sub">Coaching</span>
+            </a>
+        </div>
+        <div class="nav-right desktop-menu">
+            <ul>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="approach.html">Our Approach</a></li>
+                <li><a href="profile.html" style="color: var(--accent-purple);">THRiVE Report</a></li>
+                <li><a href="hope-survey.html">HoPE Index</a></li>
+                <li class="dropdown">
+                    <a href="how-to-use.html">How To Use <span class="dropdown-caret">&#9662;</span></a>
+                    <div class="dropdown-content">
+                        <a href="how-to-use.html">Overview &amp; Guide</a>
+                        <a href="rebuilding-life-challenges.html">Rebuilding Life Challenges</a>
+                        <a href="employment-challenges.html">Employment Challenges</a>
+                    </div>
+                </li>
+                <li><a href="index.html#video-section">Video</a></li>
+                <li><a href="survey.html" class="nav-cta-pill">Flow Survey &rarr;</a></li>
+            </ul>
+        </div>
+
+        <div class="nav-menu">
+            <div class="menu-title">FIND YOUR FLOW</div>
+            <ul>
+                <li><a href="survey.html">Flow Survey</a></li>
+                <li><a href="profile.html">THRiVE Report</a></li>
+                <li><a href="hope-survey.html">HoPE Index</a></li>
+                <li><a href="approach.html">Our Approach</a></li>
+                <li class="dropdown">
+                    <a href="how-to-use.html">How To Use This Page</a>
+                    <div class="dropdown-content">
+                        <a href="rebuilding-life-challenges.html">Rebuilding Life Challenges</a>
+                        <a href="employment-challenges.html">Employment Challenges</a>
+                    </div>
+                </li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#video-section">Video</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div id="root" class="flex-grow"></div>
     <script type="text/babel">
 const { useState, useEffect, useRef } = React;
 
 // =========================================================================
 // ⚙️ DEVELOPER SETTINGS (PASTE YOUR KEYS HERE TO SAVE THEM PERMANENTLY)
-// Because the preview completely resets when I update the code, 
-// pasting your key here ensures it is NEVER lost during our session!
 // =========================================================================
-const HARDCODED_ELEVENLABS_API_KEY = "sk_d2fc2ac281afdb8a56178f44c8ebca76f21da62f7a256bf8"; // <--- PASTE YOUR API KEY INSIDE THESE QUOTES
-const HARDCODED_ELEVENLABS_VOICE_ID = "4EfJOraSN0d4Lt6iDXwh"; // Default: Rachel
+const ENV_ELEVENLABS_KEY = "";
+const HARDCODED_ELEVENLABS_API_KEY = (ENV_ELEVENLABS_KEY && !ENV_ELEVENLABS_KEY.includes("VITE_ELEVENLABS_API_KEY"))
+  ? ENV_ELEVENLABS_KEY
+  : "sk_d2fc2ac281afdb8a56178f44c8ebca76f21da62f7a256bf8";
+const HARDCODED_ELEVENLABS_VOICE_ID = "4EfJOraSN0d4Lt6iDXwh";
 // =========================================================================
 
 // --- CONFIGURATION & DATA ---
@@ -255,9 +378,84 @@ const SECTIONS = [
   },
 ];
 
-const apiKey = ""; // Gemini API Key injected by environment
+const SECTION_COLOR_CLASSES = {
+  blue: {
+    border: 'border-blue-200 group-hover:border-blue-400',
+    leftBorder: 'border-l-blue-300',
+    iconBg: 'bg-blue-50 border-blue-200'
+  },
+  emerald: {
+    border: 'border-emerald-200 group-hover:border-emerald-400',
+    leftBorder: 'border-l-emerald-300',
+    iconBg: 'bg-emerald-50 border-emerald-200'
+  },
+  amber: {
+    border: 'border-amber-200 group-hover:border-amber-400',
+    leftBorder: 'border-l-amber-300',
+    iconBg: 'bg-amber-50 border-amber-200'
+  },
+  purple: {
+    border: 'border-purple-200 group-hover:border-purple-400',
+    leftBorder: 'border-l-purple-300',
+    iconBg: 'bg-purple-50 border-purple-200'
+  },
+  slate: {
+    border: 'border-slate-300 group-hover:border-slate-500',
+    leftBorder: 'border-l-slate-400',
+    iconBg: 'bg-slate-100 border-slate-300'
+  },
+  rose: {
+    border: 'border-rose-200 group-hover:border-rose-400',
+    leftBorder: 'border-l-rose-300',
+    iconBg: 'bg-rose-50 border-rose-200'
+  }
+};
 
-// --- API & TTS HELPERS ---
+const ENV_GEMINI_KEY = "AIzaSyDhByu-gVi8PNLtDdl41ETxOmu2JOEVt8A";
+const FALLBACK_GEMINI_API_KEY = "AIzaSyDhByu-gVi8PNLtDdl41ETxOmu2JOEVt8A";
+const apiKey = (ENV_GEMINI_KEY && !ENV_GEMINI_KEY.includes("VITE_GEMINI_API_KEY"))
+  ? ENV_GEMINI_KEY
+  : FALLBACK_GEMINI_API_KEY;
+
+// --- NON-OVERLAPPING GLOBAL AUDIO CONTROLLER ---
+let globalAudio = null;
+let globalAudioUrl = null;
+let globalAudioAbortController = null;
+let globalAudioRequestId = 0;
+let globalStopCallback = null;
+let globalUtterance = null;
+
+function stopGlobalAudio() {
+  globalAudioRequestId++;
+  if (globalAudioAbortController) {
+    globalAudioAbortController.abort();
+    globalAudioAbortController = null;
+  }
+  if (globalAudio) {
+    globalAudio.onended = null;
+    globalAudio.onerror = null;
+    globalAudio.pause();
+    globalAudio.currentTime = 0;
+    globalAudio = null;
+  }
+  if (globalAudioUrl) {
+    URL.revokeObjectURL(globalAudioUrl);
+    globalAudioUrl = null;
+  }
+  if (globalUtterance) {
+    globalUtterance.onend = null;
+    globalUtterance.onerror = null;
+    globalUtterance = null;
+  }
+  if (window.speechSynthesis) {
+    window.speechSynthesis.cancel();
+  }
+  if (globalStopCallback) {
+    const cb = globalStopCallback;
+    globalStopCallback = null;
+    cb(false);
+  }
+}
 
 // This function cleans up text specifically so AI voices read it with natural inflection.
 function prepareTextForTTS(text) {
@@ -267,28 +465,288 @@ function prepareTextForTTS(text) {
     .replace(/([.!?])\s+/g, "$1 <break time=\"0.8s\" /> "); // Add natural 0.8s breathing pauses
 }
 
-async function cleanTextWithGemini(text) {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-  const payload = {
-    contents: [{ parts: [{ text: `Organize the following dictated text into clear bullet points. Remove conversational filler words (like "ums", "ahs", "OK great", "yeah", "I would say", "basically", etc.) and clean up the phrasing so it reads professionally and directly. Do NOT remove any core details or stories. Format it into a clean, bulleted list for maximum readability. Text:\n\n${text}` }] }],
-    systemInstruction: { parts: [{ text: "You are a helpful assistant. Return ONLY the bullet points. Each point must start with a standard bullet character (•). Strip out conversational cruft and ensure the output is polished and direct, preserving the core meaning." }] }
+async function speakTextNonOverlapping(rawText, elevenLabsKey, elevenLabsVoiceId, isCurrentlySpeaking, setSpeakingState) {
+  if (isCurrentlySpeaking) {
+    stopGlobalAudio();
+    setSpeakingState(false);
+    return;
+  }
+
+  // Stop any previous audio or in-flight request before starting a new one
+  stopGlobalAudio();
+
+  const requestId = ++globalAudioRequestId;
+  const abortController = new AbortController();
+  globalAudioAbortController = abortController;
+  globalStopCallback = setSpeakingState;
+  setSpeakingState(true);
+
+  const fallbackTTS = () => {
+    if (requestId !== globalAudioRequestId) return;
+    if (!window.speechSynthesis) {
+      setSpeakingState(false);
+      return;
+    }
+    window.speechSynthesis.cancel();
+    const cleanSpeechText = rawText.replace(/THRiVE/g, "Thrive");
+    const utterance = new SpeechSynthesisUtterance(cleanSpeechText);
+    globalUtterance = utterance;
+    utterance.onend = () => {
+      if (requestId === globalAudioRequestId) {
+        globalUtterance = null;
+        setSpeakingState(false);
+        if (globalStopCallback === setSpeakingState) globalStopCallback = null;
+      }
+    };
+    utterance.onerror = () => {
+      if (requestId === globalAudioRequestId) {
+        globalUtterance = null;
+        setSpeakingState(false);
+        if (globalStopCallback === setSpeakingState) globalStopCallback = null;
+      }
+    };
+    window.speechSynthesis.speak(utterance);
   };
 
-  const delays = [1000, 2000, 4000, 8000, 16000];
-  for (let i = 0; i < 5; i++) {
+  const apiKeyToUse = elevenLabsKey ? elevenLabsKey.trim() : "";
+  const voiceIdToUse = (elevenLabsVoiceId && elevenLabsVoiceId.trim() !== "")
+    ? elevenLabsVoiceId.trim()
+    : defaultElevenLabsVoiceId;
+  const textWithPauses = prepareTextForTTS(rawText);
+
+  if (apiKeyToUse) {
     try {
-      const response = await fetch(url, {
+      const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceIdToUse}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        signal: abortController.signal,
+        headers: {
+          'Accept': 'audio/mpeg',
+          'xi-api-key': apiKeyToUse,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          text: textWithPauses,
+          model_id: 'eleven_turbo_v2_5',
+          voice_settings: { stability: 0.5, similarity_boost: 0.75 }
+        })
       });
-      if (!response.ok) throw new Error('API Error');
-      const data = await response.json();
-      return data.candidates?.[0]?.content?.parts?.[0]?.text || text;
-    } catch (err) {
-      if (i === 4) return "• " + text.split('. ').join('.\n• '); // Fallback formatting
-      await new Promise(r => setTimeout(r, delays[i]));
+
+      if (requestId !== globalAudioRequestId) return;
+      if (!response.ok) throw new Error(`ElevenLabs HTTP ${response.status}`);
+
+      const blob = await response.blob();
+      if (requestId !== globalAudioRequestId) return;
+
+      const url = URL.createObjectURL(blob);
+      globalAudioUrl = url;
+      const audio = new Audio(url);
+      globalAudio = audio;
+      globalAudioAbortController = null;
+
+      audio.onended = () => {
+        if (requestId === globalAudioRequestId) {
+          stopGlobalAudio();
+        }
+      };
+
+      try {
+        await audio.play();
+        if (requestId !== globalAudioRequestId) {
+          audio.pause();
+        }
+      } catch (playError) {
+        if (requestId !== globalAudioRequestId) return;
+        console.warn("Audio playback prevented by browser, using speechSynthesis fallback:", playError);
+        fallbackTTS();
+      }
+    } catch (error) {
+      if (error && error.name === 'AbortError') return;
+      if (requestId !== globalAudioRequestId) return;
+      console.warn("ElevenLabs TTS unavailable, using standard voice fallback.");
+      fallbackTTS();
     }
+  } else {
+    fallbackTTS();
+  }
+}
+
+// --- LOCAL BULLET FORMATTER & GEMINI CLEANUP ---
+function cleanSingleItem(str) {
+  if (!str) return "";
+  let cleaned = str.trim();
+  let prev;
+  do {
+    prev = cleaned;
+    cleaned = cleaned
+      .replace(/^(?:[•\u2022\*\-]+)\s*/, '')
+      .replace(/^(?:\d+[\.\)]|\(\d+\))\s+/, '')
+      .replace(/^(?:um+|uh+|ah+|er+|you know|basically|honestly|okay|ok|so yeah|yeah|and then|and also|also|plus|and|or)(?:[\s,]+|$)/i, '')
+      .replace(/^(?:well|so|like|first|second|third|fourth|fifth|firstly|secondly|thirdly|finally|lastly),\s+/i, '')
+      .replace(/^well\s+(?=I\b|I'm\b|my\b|we\b|it\b|um\b|uh\b)/i, '')
+      .trim();
+  } while (cleaned !== prev);
+
+  cleaned = cleaned
+    .replace(/\s+\d+[\.\)]$/, '')
+    .replace(/[,;:\s]+$/, '')
+    .trim();
+  if (!cleaned) return "";
+  return cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
+}
+
+function formatLocalBullets(rawText) {
+  const trimmed = (rawText || "").trim();
+  if (!trimmed) return "";
+
+  const pushSplit = (items, regex) => {
+    const out = [];
+    for (const item of items) {
+      const parts = item.split(regex).map(cleanSingleItem).filter(Boolean);
+      if (parts.length > 1) {
+        out.push(...parts);
+      } else {
+        const single = cleanSingleItem(item);
+        if (single) out.push(single);
+      }
+    }
+    return out;
+  };
+
+  // Step 1: Split on newlines, bullets, semicolons, inline numbered lists ("1. ... 2. ..."), or spaced dashes (" - ")
+  let items = trimmed
+    .split(/(?:\r?\n)+|[•\u2022]+|;+|(?:^|\s+)(?:\d+[\.\)]|\(\d+\))\s+|\s+-\s+/)
+    .map(cleanSingleItem)
+    .filter(Boolean);
+
+  // Step 2: Split on sentence boundaries (. ! ?), avoiding common abbreviations like Dr., Mr., Mrs., Ms., St.
+  if (items.length < 3) {
+    items = pushSplit(items.length ? items : [trimmed], /(?<!\b(?:Dr|Mr|Mrs|Ms|St|Jr|Sr|Prof|vs|etc)\.)(?<=[.!?])\s+/i);
+  }
+
+  // Step 3: Split on spoken discourse markers & transition phrases common in voice dictation
+  if (items.length < 3) {
+    items = pushSplit(
+      items,
+      /,?\s*\b(?:and\s+(?:I\s+|we\s+)?also|also|plus|as well as|another (?:one|thing|trait|hobby|person|interest|value|experience)(?:\s+is)?|first of all|firstly|secondly|thirdly|fourthly|fifthly|next up|finally|on top of that|in addition|and then)\b[\s,:]*/i
+    );
+  }
+
+  // Step 4: Split on list commas (never inside numbers like 10,000, and not after a single introductory prepositional clause before ", I/my/we")
+  if (items.length < 3) {
+    const commaOut = [];
+    for (const item of items) {
+      if (/^(?:in|on|at|during|for|when|while|if|after|before|as|by|with|from|to)\b[^,]{1,30},\s+(?:I|I'm|my|we)\b/i.test(item) && (item.match(/,/g) || []).length === 1) {
+        commaOut.push(item);
+      } else {
+        const parts = item.split(/(?<!\d),\s+(?:and\s+|also\s+|or\s+)?/i).map(cleanSingleItem).filter(Boolean);
+        if (parts.length > 1) {
+          commaOut.push(...parts);
+        } else {
+          const single = cleanSingleItem(item);
+          if (single) commaOut.push(single);
+        }
+      }
+    }
+    items = commaOut;
+  }
+
+  // Step 5: Split on coordinating "and" / "or"
+  if (items.length < 3) {
+    items = pushSplit(items, /\s+(?:and|or)\s+/i);
+  }
+
+  // Step 6: Split on repeated pronoun/subject starts in unpunctuated speech ("I am ... I love ... my friend ...")
+  if (items.length < 3) {
+    items = pushSplit(
+      items,
+      /\s+(?=I\s+(?:am|like|love|enjoy|always|usually|try|value|think|feel|have|was|went|do|can|tend|work|play|read|watch|want|need|believe)\b|I'm\b|my\s+(?:first|second|third|other|next|best|favorite|mom|mother|dad|father|wife|husband|partner|spouse|friend|brother|sister|son|daughter|kids|mentor|coach|boss|dog|cat|family)\b)/i
+    );
+  }
+
+  // Step 7: Split on gerund/activity phrase starts in unpunctuated lists
+  if (items.length < 3) {
+    items = pushSplit(
+      items,
+      /(?<!\b(?:am|is|are|was|were|be|been|like|likes|love|loves|enjoy|enjoys|keep|keeps|start|started|stop|stopped|into|of|for|about|from|in|on|by|with|without)\s+)\s+(?=(?:being|raising|building|traveling|travelling|playing|reading|writing|working|running|hiking|camping|fishing|cooking|baking|painting|drawing|creating|helping|spending|learning|teaching|coaching|leading|solving|making|starting|growing|exploring|gardening|swimming|biking|cycling|lifting|meditating|volunteering|mentoring|designing|coding)\s+\w)/i
+    );
+  }
+
+  // Step 8: Guarantee at least 3 bullets whenever the user provided 3+ words
+  if (items.length < 3) {
+    const allWords = trimmed
+      .replace(/^(?:[•\-\*\u2022]+|\d+[\.\)])\s*/gm, '')
+      .split(/\s+/)
+      .filter(Boolean);
+
+    if (allWords.length >= 3) {
+      const grammarWords = new Set(['i', "i'm", 'my', 'we', 'the', 'a', 'an', 'to', 'in', 'on', 'of', 'for', 'with', 'is', 'am', 'are', 'was', 'were', 'be', 'been', 'have', 'has', 'had', 'do', 'does', 'did', 'that', 'this', 'it', 'at', 'by', 'from', 'as', 'into', 'like', 'love', 'enjoy', 'very', 'really', 'so', 'too']);
+      const hasGrammarWords = allWords.some(w => grammarWords.has(w.toLowerCase().replace(/[^a-z']/g, '')));
+      if (allWords.length <= 7 && !hasGrammarWords) {
+        items = allWords.map(cleanSingleItem).filter(Boolean);
+      } else {
+        const n = allWords.length;
+        const p1 = cleanSingleItem(allWords.slice(0, Math.floor(n / 3)).join(' '));
+        const p2 = cleanSingleItem(allWords.slice(Math.floor(n / 3), Math.floor((2 * n) / 3)).join(' '));
+        const p3 = cleanSingleItem(allWords.slice(Math.floor((2 * n) / 3)).join(' '));
+        items = [p1, p2, p3].filter(Boolean);
+      }
+    }
+  }
+
+  return items.map(item => `• ${item}`).join('\n');
+}
+
+function normalizeBulletOutput(aiText, originalText) {
+  if (!aiText || !aiText.trim()) {
+    return formatLocalBullets(originalText);
+  }
+  const lines = aiText
+    .split(/\r?\n/)
+    .map(l => l.trim())
+    .filter(Boolean)
+    .map(l => {
+      const stripped = l.replace(/^(?:[•\-\*\u2022]+|\d+[\.\)]|\(\d+\))\s*/, '').trim();
+      return stripped ? `• ${stripped.charAt(0).toUpperCase() + stripped.slice(1)}` : '';
+    })
+    .filter(Boolean);
+
+  const wordCount = (originalText || "").trim().split(/\s+/).filter(Boolean).length;
+  if (lines.length < 3 && wordCount >= 3) {
+    return formatLocalBullets(aiText.replace(/^(?:[•\-\*\u2022]+|\d+[\.\)])\s*/gm, '') || originalText);
+  }
+  return lines.join('\n');
+}
+
+async function cleanTextWithGemini(text) {
+  if (!apiKey) {
+    return formatLocalBullets(text);
+  }
+
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+  const payload = {
+    contents: [{ parts: [{ text: `Organize the following dictated text into at least 3 clear bullet points (or 3 to 5 bullet points if multiple ideas are present). Remove conversational filler words (like "ums", "ahs", "OK great", "yeah", "I would say", "basically", etc.) and clean up the phrasing so it reads professionally and directly. Do NOT remove any core details or stories. Even if the text is unpunctuated voice dictation, split the distinct traits, activities, people, interests, values, or experiences into separate bullet points. Text:\n\n${text}` }] }],
+    systemInstruction: { parts: [{ text: "You are a helpful assistant. Return ONLY the bullet points. Each point must start with a standard bullet character (•) on its own line. Produce at least 3 distinct bullet points whenever the input contains 3 or more words or ideas. Strip out conversational cruft and ensure the output is polished and direct, preserving the core meaning." }] }
+  };
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 6000);
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      signal: controller.signal,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    clearTimeout(timeoutId);
+    if (!response.ok) throw new Error(`Gemini API HTTP ${response.status}`);
+    const data = await response.json();
+    const rawCandidate = data.candidates?.[0]?.content?.parts?.[0]?.text;
+    return normalizeBulletOutput(rawCandidate, text);
+  } catch (err) {
+    clearTimeout(timeoutId);
+    console.warn("Gemini cleanup unavailable or timed out, using local bullet formatter:", err?.message || err);
+    return formatLocalBullets(text);
   }
 }
 
@@ -312,41 +770,56 @@ function App() {
   const [reportData, setReportData] = useState({});
   const [copied, setCopied] = useState(false);
   
-  // Pre-filled defaults for rapid testing
+  // Clean empty initial user details for production
   const [userDetails, setUserDetails] = useState({ 
-    interviewee: 'John Doe', 
-    interviewer: 'John Smith', 
-    email: 'johnsmith@gmail.com' 
+    interviewee: '', 
+    interviewer: '', 
+    email: '' 
   });
   
+  // Prioritize non-empty user-saved settings from localStorage over hardcoded fallback constants
   const [elevenLabsKey, setElevenLabsKey] = useState(() => {
-    return HARDCODED_ELEVENLABS_API_KEY || localStorage.getItem('thriveElevenLabsKey') || "";
+    const savedKey = localStorage.getItem('thriveElevenLabsKey');
+    return (savedKey && savedKey.trim() !== "") ? savedKey.trim() : (HARDCODED_ELEVENLABS_API_KEY || "");
   });
   
   const [elevenLabsVoiceId, setElevenLabsVoiceId] = useState(() => {
-    return HARDCODED_ELEVENLABS_VOICE_ID || localStorage.getItem('thriveElevenLabsVoiceId') || "21m00Tcm4TlvDq8ikWAM";
+    const savedVoice = localStorage.getItem('thriveElevenLabsVoiceId');
+    return (savedVoice && savedVoice.trim() !== "") ? savedVoice.trim() : (HARDCODED_ELEVENLABS_VOICE_ID || defaultElevenLabsVoiceId);
   });
 
   useEffect(() => {
-    localStorage.setItem('thriveElevenLabsKey', elevenLabsKey);
+    if (elevenLabsKey && elevenLabsKey.trim() !== "") {
+      localStorage.setItem('thriveElevenLabsKey', elevenLabsKey.trim());
+    } else {
+      localStorage.removeItem('thriveElevenLabsKey');
+    }
   }, [elevenLabsKey]);
 
   useEffect(() => {
-    localStorage.setItem('thriveElevenLabsVoiceId', elevenLabsVoiceId);
+    if (elevenLabsVoiceId && elevenLabsVoiceId.trim() !== "") {
+      localStorage.setItem('thriveElevenLabsVoiceId', elevenLabsVoiceId.trim());
+    } else {
+      localStorage.removeItem('thriveElevenLabsVoiceId');
+    }
   }, [elevenLabsVoiceId]);
 
   const currentSection = SECTIONS[step - 1];
 
   const handleCompleteSection = (sectionKey, cleanedText) => {
+    stopGlobalAudio();
     setReportData(prev => ({ ...prev, [sectionKey]: cleanedText }));
     setStep(prev => prev + 1);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleBack = () => {
+    stopGlobalAudio();
     setStep(prev => Math.max(0, prev - 1));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const copyToClipboard = () => {
+  const copyToClipboard = async () => {
     const headerTitle = userDetails.interviewee ? `${userDetails.interviewee.toUpperCase()}'S THRIVE REPORT` : "MY THRiVE REPORT";
     const interviewerInfo = userDetails.interviewer ? ` • Interviewed by ${userDetails.interviewer}` : "";
 
@@ -355,47 +828,78 @@ function App() {
       reportText += `${sec.title}\n${reportData[sec.key] || 'No data provided.'}\n\n`;
     });
     
-    // Create a temporary textarea to perform the copy
-    const el = document.createElement('textarea');
-    el.value = reportText;
-    document.body.appendChild(el);
-    el.select();
-    document.execCommand('copy');
-    document.body.removeChild(el);
+    let copiedOk = false;
+    if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+      try {
+        await navigator.clipboard.writeText(reportText);
+        copiedOk = true;
+      } catch (err) {
+        console.warn("Clipboard API writeText failed, using fallback:", err);
+      }
+    }
+
+    if (!copiedOk) {
+      const el = document.createElement('textarea');
+      el.value = reportText;
+      el.setAttribute('readonly', '');
+      el.style.position = 'fixed';
+      el.style.opacity = '0';
+      document.body.appendChild(el);
+      el.select();
+      try {
+        document.execCommand('copy');
+      } catch (err) {
+        console.error("Fallback copy failed:", err);
+      }
+      document.body.removeChild(el);
+    }
     
     setCopied(true);
     setTimeout(() => setCopied(false), 3000);
   };
 
+  const stepLabels = [
+    { idx: 0, label: 'Intro' },
+    { idx: 1, label: '1. Traits' },
+    { idx: 2, label: '2. Hobbies' },
+    { idx: 3, label: '3. Relationships' },
+    { idx: 4, label: '4. Interests' },
+    { idx: 5, label: '5. Values' },
+    { idx: 6, label: '6. Experiences' },
+    { idx: 7, label: 'Report' }
+  ];
+
   return (
-    <div className="min-h-screen bg-slate-50 font-sans p-4 md:p-12 text-slate-600 selection:bg-blue-100 selection:text-blue-900">
-      <style dangerouslySetInnerHTML={{__html: `
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-        @media print {
-          body { -webkit-print-color-adjust: exact; print-color-adjust: exact; background: white; }
-          .print\\:hidden { display: none !important; }
-          .print\\:shadow-none { box-shadow: none !important; }
-          .print\\:border-none { border: none !important; }
-        }
-      `}} />
-      <div className="max-w-3xl mx-auto">
+    <div className="min-h-screen print:min-h-0 font-sans py-8 print:py-0 px-4 md:px-8 print:px-0 text-slate-700 selection:bg-purple-100 selection:text-purple-900">
+      <div className="max-w-3xl print:max-w-none mx-auto">
         
-        {/* Header - Hidden on Final Report for cleaner layout */}
+        {/* Page Header & Step Pills - Hidden on Final Report and when printing */}
         {step < 7 && (
           <header className="mb-8 text-center animate-in fade-in slide-in-from-top-4 duration-500 print:hidden">
-            <h1 className="text-slate-800 font-black text-4xl md:text-5xl mb-2 tracking-tight">The THRiVE Report 🌱</h1>
-            <p className="text-slate-500 uppercase tracking-widest font-bold text-xs md:text-sm">Created by Dr. Steve Huff • Based on the Strengths Model • Powered by Gemini</p>
+            <span className="section-eyebrow">SOL THRiVE • Strengths-First Autobiography</span>
+            <h1 className="text-slate-900 font-black text-3xl md:text-5xl mb-2 tracking-tight">The THRiVE Report 🌱</h1>
+            <p className="text-slate-600 uppercase tracking-widest font-bold text-xs md:text-sm">Created by Dr. Steve Huff • Based on the Strengths Model • Powered by Gemini</p>
+            
+            <div className="flex flex-wrap items-center justify-center gap-1.5 mt-5">
+              {stepLabels.map((item, i) => (
+                <React.Fragment key={item.idx}>
+                  <span className={`step-pill ${step === item.idx ? 'active' : (step > item.idx ? 'completed' : '')}`}>
+                    {item.label}
+                  </span>
+                  {i < stepLabels.length - 1 && (
+                    <span className="text-slate-400 text-xs font-bold">&rarr;</span>
+                  )}
+                </React.Fragment>
+              ))}
+            </div>
           </header>
         )}
 
-        <main className="bg-white p-6 md:p-8 lg:p-10 rounded-2xl shadow-xl border border-slate-100 mb-6 transition-all duration-500 print:shadow-none print:border-none print:p-0">
+        <main className="thrive-card p-6 md:p-8 lg:p-10 mb-8 print:mb-0 transition-all duration-500 print:shadow-none print:border-none print:p-0">
           
           {step === 0 && (
             <IntroScreen 
-              onStart={() => setStep(1)} 
+              onStart={() => { stopGlobalAudio(); setStep(1); window.scrollTo({ top: 0, behavior: 'smooth' }); }} 
               elevenLabsKey={elevenLabsKey} 
               setElevenLabsKey={setElevenLabsKey} 
               elevenLabsVoiceId={elevenLabsVoiceId}
@@ -430,24 +934,24 @@ function App() {
 
         {/* Post-Report Callout */}
         {step === 7 && (
-          <footer className="space-y-8 mb-16 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-300 fill-mode-both">
-            <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6 md:p-8 shadow-md">
+          <footer className="space-y-8 mb-16 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-300 fill-mode-both print:hidden">
+            <div className="thrive-subcard p-6 md:p-8">
               <div className="flex flex-col md:flex-row gap-6 items-center mb-8">
-                <div className="text-6xl drop-shadow-md">🍌</div>
+                <div className="text-6xl drop-shadow-sm">🍌</div>
                 <div className="flex-1 text-center md:text-left">
-                  <p className="text-sm uppercase tracking-widest font-bold text-amber-800 mb-2">Make it Visual! (Coming Soon)</p>
-                  <p className="text-amber-950 leading-relaxed text-lg">
+                  <p className="text-sm uppercase tracking-widest font-extrabold text-purple-800 mb-2">Make it Visual! (Coming Soon)</p>
+                  <p className="text-slate-800 leading-relaxed text-lg">
                     Ready to visualize your unique strengths? Soon you will be able to take your THRiVE report and plug it into an image generator like <strong>Nano Banana 2</strong> to create a powerful, personalized reflection map based <em>only</em> on who you are!
                   </p>
                 </div>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="rounded-xl overflow-hidden shadow-lg border-4 border-white transform transition hover:scale-[1.02]">
-                  <img src="Generated Image March 13, 2026 - 11_45AM.jpg" alt="Space Avatar Concept" className="w-full h-auto object-cover" onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/600x400/e2e8f0/475569?text=Space+Avatar+Sample'; }} />
+                <div className="rounded-xl overflow-hidden shadow-md border-2 border-[#1E2430] bg-white transform transition hover:scale-[1.02]">
+                  <img src="ai-avatar.png" alt="AI Coaching Avatar Concept" className="w-full h-64 object-cover" />
                 </div>
-                <div className="rounded-xl overflow-hidden shadow-lg border-4 border-white transform transition hover:scale-[1.02]">
-                  <img src="THRiVE Report Image LEGO - for Steve Huff.jpeg" alt="Lego Avatar Concept" className="w-full h-auto object-cover" onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/600x400/e2e8f0/475569?text=LEGO+Avatar+Sample'; }} />
+                <div className="rounded-xl overflow-hidden shadow-md border-2 border-[#1E2430] bg-white transform transition hover:scale-[1.02]">
+                  <img src="assets/three-archetypes.jpg" alt="THRiVE Strengths Archetypes Concept" className="w-full h-64 object-cover" />
                 </div>
               </div>
             </div>
@@ -464,83 +968,17 @@ function IntroScreen({ onStart, elevenLabsKey, setElevenLabsKey, elevenLabsVoice
   const isReady = userDetails.interviewee.trim().length > 0;
   const [showSettings, setShowSettings] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
-  const audioRef = useRef(null);
 
-  // We break the spoken text into shorter sentences and remove parentheses for much better AI inflection.
-  // The visual text on the screen remains the same!
   const spokenIntroText = "Welcome! The Thrive Report is a mini-autobiography about you. It is best created as a guided conversation between two people, an Interviewer and an Interviewee. This takes approximately 30 minutes. The purpose of the Thrive Report is to help you uncover your unique strengths and resources to better help you achieve goals and solve problems. If you're flying solo today, that's totally OK too! Just be your own best interviewer, follow your bliss, and let's get to it. Together, we are going to explore what makes you, you.";
 
   useEffect(() => {
     return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-      }
-      window.speechSynthesis.cancel();
+      stopGlobalAudio();
     };
   }, []);
 
-  const fallbackTTS = () => {
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(spokenIntroText);
-    utterance.onend = () => setIsSpeaking(false);
-    window.speechSynthesis.speak(utterance);
-  };
-
-  const handleSpeakIntro = async () => {
-    if (isSpeaking) {
-      setIsSpeaking(false);
-      if (audioRef.current) {
-        audioRef.current.pause();
-      }
-      window.speechSynthesis.cancel();
-      return;
-    }
-
-    setIsSpeaking(true);
-    
-    const apiKeyToUse = elevenLabsKey ? elevenLabsKey.trim() : "";
-    const voiceIdToUse = elevenLabsVoiceId && elevenLabsVoiceId.trim() !== "" ? elevenLabsVoiceId.trim() : defaultElevenLabsVoiceId;
-
-    // Apply our TTS formatting to ensure natural breathing and pacing
-    const textWithPauses = prepareTextForTTS(spokenIntroText);
-
-    if (apiKeyToUse) {
-      try {
-        const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceIdToUse}`, {
-          method: 'POST',
-          headers: {
-            'Accept': 'audio/mpeg',
-            'xi-api-key': apiKeyToUse,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            text: textWithPauses,
-            model_id: 'eleven_turbo_v2_5', 
-            voice_settings: { stability: 0.5, similarity_boost: 0.75 }
-          })
-        });
-
-        if (!response.ok) throw new Error("API Error");
-
-        const blob = await response.blob();
-        const url = URL.createObjectURL(blob);
-        audioRef.current = new Audio(url);
-        audioRef.current.onended = () => setIsSpeaking(false);
-        
-        try {
-          await audioRef.current.play();
-        } catch (playError) {
-          console.warn("Audio playback prevented by browser:", playError);
-          fallbackTTS();
-        }
-
-      } catch (error) {
-        console.warn("ElevenLabs TTS failed, using standard voice fallback.");
-        fallbackTTS(); 
-      }
-    } else {
-      fallbackTTS();
-    }
+  const handleSpeakIntro = () => {
+    speakTextNonOverlapping(spokenIntroText, elevenLabsKey, elevenLabsVoiceId, isSpeaking, setIsSpeaking);
   };
 
   return (
@@ -548,71 +986,78 @@ function IntroScreen({ onStart, elevenLabsKey, setElevenLabsKey, elevenLabsVoice
       
       <div className="absolute top-0 right-0 flex items-center gap-2 z-10">
         <button 
+          type="button"
           onClick={handleSpeakIntro}
-          className={`p-2 rounded-full transition-colors ${isSpeaking ? 'bg-blue-100 text-blue-600' : 'text-slate-400 hover:text-blue-600 hover:bg-blue-50'}`}
+          className={`p-2.5 rounded-full border-2 border-[#1E2430] transition-all ${isSpeaking ? 'bg-purple-100 text-purple-700 animate-pulse' : 'bg-[#FAF8F3] text-slate-700 hover:text-purple-700 hover:bg-purple-50'}`}
           title={isSpeaking ? "Stop Reading" : "Read Aloud"}
+          aria-label={isSpeaking ? "Stop Reading" : "Read Aloud"}
         >
-          <SpeakerIcon className="w-6 h-6" />
+          <SpeakerIcon className="w-5 h-5" />
         </button>
         <button 
+          type="button"
           onClick={() => setShowSettings(true)}
-          className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors"
+          className="p-2.5 bg-[#FAF8F3] text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-full border-2 border-[#1E2430] transition-colors"
           title="Premium Voice Settings"
+          aria-label="Premium Voice Settings"
         >
-          <GearIcon className="w-6 h-6" />
+          <GearIcon className="w-5 h-5" />
         </button>
       </div>
 
-      <div className="mb-8 border-b border-slate-100 pb-8">
-        <h2 className="text-slate-800 font-bold text-3xl mb-4 pr-16">Welcome! 👋</h2>
+      <div className="mb-8 border-b border-slate-200 pb-8">
+        <h2 className="text-slate-900 font-black text-3xl mb-4 pr-24">Welcome! 👋</h2>
         <p className="text-slate-700 leading-relaxed mb-6 text-lg">
           The THRiVE Report is a mini-autobiography about you, best created as a guided conversation between two people (an <strong>Interviewer</strong> and an <strong>Interviewee</strong>) that takes approximately 30 minutes. The purpose of the THRiVE Report is to help you uncover your unique strengths and resources to better help you achieve goals and solve problems. (More on that later!) If you're flying solo today, that's totally OK too! Just be your own best interviewer (feel free to use different voices 🎭), follow your bliss, and let's get to it. Together, we are going to explore what makes you, <em>you</em>.
         </p>
         
-        <div className="bg-blue-50 border border-blue-100 rounded-xl p-5 flex gap-4 md:gap-5 shadow-sm mb-8">
+        <div className="bg-[#FAF8F3] border-2 border-[#1E2430] rounded-2xl p-5 flex gap-4 md:gap-5 shadow-[4px_4px_0_#1E2430] mb-8">
           <div className="text-3xl md:text-4xl mt-1">🎙️</div>
           <div>
-            <p className="text-sm uppercase tracking-widest font-black text-blue-800 mb-2">Ditch the Keyboard</p>
-            <p className="text-blue-900 leading-relaxed">
+            <p className="text-sm uppercase tracking-widest font-black text-purple-800 mb-1.5">Ditch the Keyboard</p>
+            <p className="text-slate-800 leading-relaxed">
               For the best experience, we encourage you to use the microphone button to just talk! Don't worry about rambling, stumbling over words, or missing punctuation. Just speak your mind, and our AI will organize it for you before you submit.
             </p>
           </div>
         </div>
 
         {/* Report Details Form */}
-        <div className="bg-slate-50 border border-slate-200 rounded-xl p-5 md:p-6 mb-8 space-y-5">
-          <h3 className="font-black text-slate-800 text-lg border-b border-slate-200 pb-2">Report Details</h3>
+        <div className="bg-[#FAF8F3] border-2 border-[#1E2430] rounded-2xl p-5 md:p-6 space-y-5">
+          <h3 className="font-black text-slate-900 text-lg border-b border-slate-200 pb-2">Report Details</h3>
           
           <div>
-            <label className="block text-sm uppercase tracking-widest font-bold text-slate-600 mb-2">Interviewee Name (or Alias) <span className="text-blue-600">*</span></label>
+            <label htmlFor="interviewee-input" className="block text-sm uppercase tracking-widest font-bold text-slate-700 mb-2">Interviewee Name (or Alias) <span className="text-purple-700">*</span></label>
             <input 
+              id="interviewee-input"
               type="text" 
               value={userDetails.interviewee} 
               onChange={(e) => setUserDetails(prev => ({...prev, interviewee: e.target.value}))}
               placeholder="Who is this report for?"
-              className="w-full border-2 border-slate-200 rounded-xl p-3 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition-all text-slate-700 text-lg font-medium"
+              className="w-full border-2 border-slate-300 bg-white rounded-xl p-3 outline-none focus:border-purple-600 focus:ring-4 focus:ring-purple-100 transition-all text-slate-800 text-lg font-medium"
             />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div>
-              <label className="block text-sm uppercase tracking-widest font-bold text-slate-600 mb-2">Interviewer Name <span className="text-slate-400 font-normal normal-case">(Optional)</span></label>
+              <label htmlFor="interviewer-input" className="block text-sm uppercase tracking-widest font-bold text-slate-700 mb-2">Interviewer Name <span className="text-slate-400 font-normal normal-case">(Optional)</span></label>
               <input 
+                id="interviewer-input"
                 type="text" 
                 value={userDetails.interviewer} 
                 onChange={(e) => setUserDetails(prev => ({...prev, interviewer: e.target.value}))}
                 placeholder="Who is asking the questions?"
-                className="w-full border-2 border-slate-200 rounded-xl p-3 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition-all text-slate-700"
+                className="w-full border-2 border-slate-300 bg-white rounded-xl p-3 outline-none focus:border-purple-600 focus:ring-4 focus:ring-purple-100 transition-all text-slate-800"
               />
             </div>
             <div>
-              <label className="block text-sm uppercase tracking-widest font-bold text-slate-600 mb-2">Email Address <span className="text-slate-400 font-normal normal-case">(Optional)</span></label>
+              <label htmlFor="email-input" className="block text-sm uppercase tracking-widest font-bold text-slate-700 mb-2">Email Address <span className="text-slate-400 font-normal normal-case">(Optional)</span></label>
               <input 
+                id="email-input"
                 type="email" 
                 value={userDetails.email} 
                 onChange={(e) => setUserDetails(prev => ({...prev, email: e.target.value}))}
                 placeholder="For sending your final PDF"
-                className="w-full border-2 border-slate-200 rounded-xl p-3 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition-all text-slate-700"
+                className="w-full border-2 border-slate-300 bg-white rounded-xl p-3 outline-none focus:border-purple-600 focus:ring-4 focus:ring-purple-100 transition-all text-slate-800"
               />
             </div>
           </div>
@@ -620,20 +1065,12 @@ function IntroScreen({ onStart, elevenLabsKey, setElevenLabsKey, elevenLabsVoice
       </div>
       
       <div className="flex flex-col sm:flex-row justify-end items-center gap-4">
-        {/* TEMPORARY ADMIN BUTTON */}
         <button 
-          onClick={onStart}
-          className="w-full sm:w-auto text-rose-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl font-bold transition-all px-4 py-3 flex items-center justify-center text-xs uppercase tracking-widest"
-          title="Skip intro screen"
-        >
-          Admin Skip ⏩
-        </button>
-
-        <button 
+          type="button"
           onClick={onStart}
           disabled={!isReady}
           className={`w-full sm:w-auto text-white rounded-full font-bold transition-all px-8 py-4 shadow-md flex items-center justify-center gap-2 text-lg
-            ${isReady ? 'bg-blue-600 hover:bg-blue-700 hover:shadow-xl' : 'bg-slate-400 opacity-50 cursor-not-allowed'}
+            ${isReady ? 'cta-button primary' : 'bg-slate-400 opacity-50 cursor-not-allowed'}
           `}
         >
           {isReady ? "Let's Get Started" : "Enter Name to Start"} <ArrowRightIcon className="w-5 h-5" />
@@ -643,43 +1080,45 @@ function IntroScreen({ onStart, elevenLabsKey, setElevenLabsKey, elevenLabsVoice
       {/* Premium Voice Settings Modal */}
       {showSettings && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-in fade-in duration-200">
-          <div className="bg-white rounded-2xl shadow-2xl border border-slate-100 w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200">
-            <div className="flex justify-between items-center p-5 border-b border-slate-100 bg-slate-50">
-              <h3 className="font-black text-slate-800 text-lg">Premium Voice Settings</h3>
+          <div className="bg-white rounded-2xl shadow-2xl border-2 border-[#1E2430] w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="flex justify-between items-center p-5 border-b border-slate-200 bg-[#FAF8F3]">
+              <h3 className="font-black text-slate-900 text-lg">Premium Voice Settings</h3>
               <button 
+                type="button"
                 onClick={() => setShowSettings(false)} 
-                className="text-slate-400 hover:text-slate-600 p-1.5 rounded-full hover:bg-slate-200 transition-colors"
+                className="text-slate-500 hover:text-slate-800 p-1.5 rounded-full hover:bg-slate-200 transition-colors"
               >
                 <CloseIcon className="w-5 h-5" />
               </button>
             </div>
             <div className="p-6 space-y-5 bg-white">
               <div>
-                <label className="block text-sm uppercase tracking-widest font-bold text-slate-600 mb-2">ElevenLabs API Key</label>
+                <label className="block text-sm uppercase tracking-widest font-bold text-slate-700 mb-2">ElevenLabs API Key</label>
                 <input 
                   type="password" 
                   value={elevenLabsKey} 
                   onChange={(e) => setElevenLabsKey(e.target.value)}
                   placeholder="Paste API key here..."
-                  className="w-full border-2 border-slate-200 rounded-xl p-3 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition-all text-slate-700 font-mono text-sm"
+                  className="w-full border-2 border-slate-300 rounded-xl p-3 outline-none focus:border-purple-600 focus:ring-4 focus:ring-purple-100 transition-all text-slate-800 font-mono text-sm"
                 />
               </div>
               <div>
-                <label className="block text-sm uppercase tracking-widest font-bold text-slate-600 mb-2">ElevenLabs Voice ID</label>
+                <label className="block text-sm uppercase tracking-widest font-bold text-slate-700 mb-2">ElevenLabs Voice ID</label>
                 <input 
                   type="text" 
                   value={elevenLabsVoiceId} 
                   onChange={(e) => setElevenLabsVoiceId(e.target.value)}
                   placeholder="Voice ID..."
-                  className="w-full border-2 border-slate-200 rounded-xl p-3 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition-all text-slate-700 font-mono text-sm"
+                  className="w-full border-2 border-slate-300 rounded-xl p-3 outline-none focus:border-purple-600 focus:ring-4 focus:ring-purple-100 transition-all text-slate-800 font-mono text-sm"
                 />
                 <p className="text-xs text-slate-500 mt-2 font-medium">Default: 21m00Tcm4TlvDq8ikWAM (Rachel)</p>
               </div>
             </div>
-            <div className="p-5 border-t border-slate-100 bg-slate-50 flex justify-end">
+            <div className="p-5 border-t border-slate-200 bg-[#FAF8F3] flex justify-end">
               <button 
+                type="button"
                 onClick={() => setShowSettings(false)} 
-                className="bg-blue-600 hover:bg-blue-700 text-white rounded-full font-bold transition-all px-6 py-2 shadow-md hover:shadow-lg"
+                className="cta-button primary px-6 py-2.5 text-sm"
               >
                 Save & Close
               </button>
@@ -698,22 +1137,16 @@ function ChatSection({ section, stepNumber, initialDraft, elevenLabsKey, elevenL
   const [isSpeaking, setIsSpeaking] = useState(false);
   const recognitionRef = useRef(null);
   const textAreaRef = useRef(null);
-  const audioRef = useRef(null);
 
   // Reset state when section changes or populate if going backward
   useEffect(() => {
+    stopGlobalAudio();
     setDraft(initialDraft);
-    // If they go back and already have a clean draft, jump straight to the approval state
     setChatState(initialDraft ? 'approval' : 'initial'); 
     setIsListening(false);
     setIsSpeaking(false);
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current = null;
-    }
-    window.speechSynthesis.cancel();
     if (recognitionRef.current) {
-      recognitionRef.current.stop();
+      try { recognitionRef.current.stop(); } catch (e) {}
     }
   }, [section, initialDraft]);
 
@@ -727,16 +1160,11 @@ function ChatSection({ section, stepNumber, initialDraft, elevenLabsKey, elevenL
       
       recognition.onresult = (event) => {
         let finalTranscript = '';
-        let interimTranscript = '';
         for (let i = event.resultIndex; i < event.results.length; ++i) {
           if (event.results[i].isFinal) {
             finalTranscript += event.results[i][0].transcript + ' ';
-          } else {
-            interimTranscript += event.results[i][0].transcript;
           }
         }
-        
-        // Append final transcript
         if (finalTranscript) {
           setDraft(prev => (prev + ' ' + finalTranscript).trim());
         }
@@ -755,12 +1183,17 @@ function ChatSection({ section, stepNumber, initialDraft, elevenLabsKey, elevenL
     }
     
     return () => {
-      if (recognitionRef.current) recognitionRef.current.stop();
-      window.speechSynthesis.cancel();
+      if (recognitionRef.current) {
+        try { recognitionRef.current.stop(); } catch (e) {}
+      }
+      stopGlobalAudio();
     };
   }, []);
 
   const toggleListen = () => {
+    if (chatState === 'approval') {
+      setChatState('initial');
+    }
     if (!recognitionRef.current) {
       alert("Dictation is not supported in this browser. Please type your answers.");
       return;
@@ -769,8 +1202,12 @@ function ChatSection({ section, stepNumber, initialDraft, elevenLabsKey, elevenL
     if (isListening) {
       recognitionRef.current.stop();
     } else {
-      recognitionRef.current.start();
-      setIsListening(true);
+      try {
+        recognitionRef.current.start();
+        setIsListening(true);
+      } catch (e) {
+        console.warn("Speech recognition start error:", e);
+      }
       if (textAreaRef.current) textAreaRef.current.focus();
     }
   };
@@ -778,7 +1215,7 @@ function ChatSection({ section, stepNumber, initialDraft, elevenLabsKey, elevenL
   const handlePreSubmit = () => {
     if (draft.trim().length === 0) return;
     
-    // Digging Deeper Logic: If text is relatively short, push back
+    // Digging Deeper Logic: If text is relatively short, push back once
     if (draft.length < 80 && chatState === 'initial') {
       setChatState('digging');
     } else {
@@ -787,106 +1224,51 @@ function ChatSection({ section, stepNumber, initialDraft, elevenLabsKey, elevenL
   };
 
   const handleCleanUp = async () => {
+    if (draft.trim().length === 0) return;
+    if (isListening && recognitionRef.current) {
+      try { recognitionRef.current.stop(); } catch (e) {}
+      setIsListening(false);
+    }
     setChatState('cleaning');
     const cleaned = await cleanTextWithGemini(draft);
     setDraft(cleaned);
     setChatState('approval');
   };
 
-  const fallbackTTS = () => {
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(section.prompt);
-    utterance.onend = () => setIsSpeaking(false);
-    window.speechSynthesis.speak(utterance);
-  };
-
-  const handleSpeakPrompt = async () => {
-    if (isSpeaking) {
-      setIsSpeaking(false);
-      if (audioRef.current) {
-        audioRef.current.pause();
-      }
-      window.speechSynthesis.cancel();
-      return;
-    }
-
-    setIsSpeaking(true);
-    
-    const apiKeyToUse = elevenLabsKey ? elevenLabsKey.trim() : "";
-    const voiceIdToUse = elevenLabsVoiceId && elevenLabsVoiceId.trim() !== "" ? elevenLabsVoiceId.trim() : "21m00Tcm4TlvDq8ikWAM";
-
-    // Apply our TTS formatting to ensure natural breathing and pacing
-    const textWithPauses = prepareTextForTTS(section.prompt);
-
-    if (apiKeyToUse) {
-      try {
-        const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceIdToUse}`, {
-          method: 'POST',
-          headers: {
-            'Accept': 'audio/mpeg',
-            'xi-api-key': apiKeyToUse,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            text: textWithPauses,
-            model_id: 'eleven_turbo_v2_5', 
-            voice_settings: { stability: 0.5, similarity_boost: 0.75 }
-          })
-        });
-
-        if (!response.ok) {
-          const errData = await response.json().catch(() => null);
-          const errMsg = errData?.detail?.message || `HTTP error ${response.status}`;
-          throw new Error(errMsg);
-        }
-
-        const blob = await response.blob();
-        const url = URL.createObjectURL(blob);
-        audioRef.current = new Audio(url);
-        audioRef.current.onended = () => setIsSpeaking(false);
-        
-        try {
-          await audioRef.current.play();
-        } catch (playError) {
-          console.warn("Audio playback prevented by browser:", playError);
-          fallbackTTS();
-        }
-
-      } catch (error) {
-        console.warn("ElevenLabs TTS failed, using standard voice fallback."); // Cleaned up the console log so it doesn't look like a critical crash
-        fallbackTTS(); // Fallback if API fails
-      }
-    } else {
-      fallbackTTS(); // Fallback if no API key is provided
-    }
+  const handleSpeakPrompt = () => {
+    speakTextNonOverlapping(section.prompt, elevenLabsKey, elevenLabsVoiceId, isSpeaking, setIsSpeaking);
   };
 
   const isCleaning = chatState === 'cleaning';
   
-  // Calculate items to enforce the "At least 3" rule
-  const bulletCount = (draft.match(/•/g) || []).length;
+  // Calculate items to enforce the "At least 3" rule while supporting bulleted or multi-line edited text
+  const rawBulletMatches = (draft.match(/•/g) || []).length;
+  const nonEmptyLineCount = draft.split(/\r?\n/).map(l => l.trim()).filter(Boolean).length;
+  const bulletCount = Math.max(rawBulletMatches, nonEmptyLineCount);
   const hasEnoughItems = bulletCount >= 3;
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500 relative print:hidden">
-      <div className="text-center mb-8 border-b border-slate-100 pb-4">
-        <span className="text-slate-400 text-xs md:text-sm uppercase tracking-widest font-black">{section.title.split(' ')[0]}: Step {stepNumber} of 6</span>
+      <div className="text-center mb-6 border-b border-slate-200 pb-4">
+        <span className="text-purple-700 text-xs md:text-sm uppercase tracking-widest font-black">{section.title.split(' ')[0]}: Step {stepNumber} of 6</span>
       </div>
 
       {/* Primary AI Prompt */}
       <div className="flex gap-4 items-start">
-        <div className={`w-10 h-10 md:w-12 md:h-12 bg-slate-900 rounded-full flex items-center justify-center text-white shrink-0 shadow-md text-xl md:text-2xl`}>
+        <div className="w-10 h-10 md:w-12 md:h-12 bg-[#1E2430] rounded-full flex items-center justify-center text-white shrink-0 shadow-md text-xl md:text-2xl">
           {section.icon}
         </div>
-        <div className="bg-slate-50 border border-slate-200 rounded-2xl rounded-tl-none p-4 md:p-6 text-slate-700 leading-relaxed shadow-sm flex-1 overflow-hidden">
+        <div className="bg-[#FAF8F3] border-2 border-[#1E2430] rounded-2xl rounded-tl-none p-4 md:p-6 text-slate-700 leading-relaxed shadow-[4px_4px_0_#1E2430] flex-1 overflow-hidden">
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1 w-full overflow-hidden">
               {section.content ? section.content : <p className="text-slate-800 text-lg mb-2">{section.prompt}</p>}
             </div>
             <button 
+              type="button"
               onClick={handleSpeakPrompt}
-              className={`shrink-0 p-2 rounded-full transition-colors ${isSpeaking ? 'bg-blue-100 text-blue-600' : 'text-slate-400 hover:text-blue-600 hover:bg-blue-50'}`}
+              className={`shrink-0 p-2.5 rounded-full border-2 border-[#1E2430] transition-all ${isSpeaking ? 'bg-purple-100 text-purple-700 animate-pulse' : 'bg-white text-slate-700 hover:text-purple-700 hover:bg-purple-50'}`}
               title={isSpeaking ? "Stop Reading" : "Read Aloud"}
+              aria-label={isSpeaking ? "Stop Reading" : "Read Aloud"}
             >
               <SpeakerIcon className="w-5 h-5" />
             </button>
@@ -897,10 +1279,10 @@ function ChatSection({ section, stepNumber, initialDraft, elevenLabsKey, elevenL
       {/* Digging Deeper AI Prompt */}
       {chatState === 'digging' && (
         <div className="flex gap-4 items-start mt-6 animate-in slide-in-from-bottom-4 fade-in duration-300">
-          <div className="w-10 h-10 md:w-12 md:h-12 bg-emerald-500 rounded-full flex items-center justify-center text-white shrink-0 shadow-md">
+          <div className="w-10 h-10 md:w-12 md:h-12 bg-emerald-600 rounded-full flex items-center justify-center text-white shrink-0 shadow-md">
             <SparkleIcon className="w-5 h-5 md:w-6 md:h-6" />
           </div>
-          <div className="bg-emerald-50 border border-emerald-100 rounded-2xl rounded-tl-none p-4 md:p-6 text-emerald-900 leading-relaxed shadow-sm">
+          <div className="bg-emerald-50 border-2 border-emerald-700 rounded-2xl rounded-tl-none p-4 md:p-6 text-emerald-950 leading-relaxed shadow-sm">
             <p className="font-bold mb-1 text-lg">That's a great start! 🌟</p>
             <p>But I want to know a little bit more. Tell me a quick story, or give me a specific example. Tap the mic and just let the thoughts flow!</p>
           </div>
@@ -910,7 +1292,7 @@ function ChatSection({ section, stepNumber, initialDraft, elevenLabsKey, elevenL
       {/* Interaction Area */}
       <div className="mt-8 relative">
         {chatState === 'approval' && (
-          <div className={`flex items-center gap-2 mb-3 font-bold text-xs md:text-sm uppercase tracking-widest animate-in fade-in ${hasEnoughItems ? 'text-emerald-600' : 'text-amber-600'}`}>
+          <div className={`flex items-center gap-2 mb-3 font-bold text-xs md:text-sm uppercase tracking-widest animate-in fade-in ${hasEnoughItems ? 'text-emerald-700' : 'text-amber-700'}`}>
             {hasEnoughItems ? (
               <>
                 <CheckIcon className="w-5 h-5" />
@@ -928,10 +1310,10 @@ function ChatSection({ section, stepNumber, initialDraft, elevenLabsKey, elevenL
         <textarea 
           ref={textAreaRef}
           rows={chatState === 'approval' ? 8 : 6} 
-          className={`w-full border-2 rounded-2xl p-4 md:p-5 pb-16 outline-none transition-all text-slate-700 leading-relaxed resize-none text-base md:text-lg
+          className={`w-full border-2 rounded-2xl p-4 md:p-5 pb-16 outline-none transition-all text-slate-800 leading-relaxed resize-none text-base md:text-lg
             ${chatState === 'approval' 
-              ? (hasEnoughItems ? 'border-emerald-300 bg-emerald-50/50 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100' : 'border-amber-300 bg-amber-50/50 focus:border-amber-500 focus:ring-4 focus:ring-amber-100')
-              : 'border-slate-200 bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-50'
+              ? (hasEnoughItems ? 'border-emerald-500 bg-emerald-50/40 focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100' : 'border-amber-400 bg-amber-50/50 focus:border-amber-500 focus:ring-4 focus:ring-amber-100')
+              : 'border-slate-300 bg-white focus:border-purple-600 focus:ring-4 focus:ring-purple-100'
             }
             ${isCleaning ? 'opacity-50 pointer-events-none' : ''}
           `}
@@ -941,49 +1323,33 @@ function ChatSection({ section, stepNumber, initialDraft, elevenLabsKey, elevenL
         ></textarea>
         
         {/* Floating Dictation Button */}
-        {chatState !== 'approval' ? (
-          <button 
-            onClick={toggleListen}
-            disabled={isCleaning}
-            className={`absolute bottom-4 left-4 rounded-full p-3 transition-all flex items-center justify-center shadow-md border 
-              ${isListening 
-                ? 'bg-red-500 text-white border-red-600 animate-pulse' 
-                : 'bg-blue-50 text-blue-600 border-blue-200 hover:bg-blue-100 hover:text-blue-700'
-              }
-            `}
-            title="Toggle Dictation"
-          >
-            {isListening ? <StopMicIcon className="w-6 h-6" /> : <MicIcon className="w-6 h-6" />}
-          </button>
-        ) : (
-          <button 
-            onClick={() => setChatState('initial')}
-            className="absolute bottom-4 left-4 bg-slate-900 text-white hover:bg-slate-800 rounded-full p-3 transition-all flex items-center justify-center shadow-md"
-            title="Edit / Add More Details"
-          >
-            <MicIcon className="w-6 h-6" />
-          </button>
-        )}
+        <button 
+          type="button"
+          onClick={toggleListen}
+          disabled={isCleaning}
+          className={`absolute bottom-4 left-4 rounded-full p-3 transition-all flex items-center justify-center shadow-md border-2 
+            ${isListening 
+              ? 'bg-red-500 text-white border-red-700 animate-pulse' 
+              : (chatState === 'approval' ? 'bg-[#1E2430] text-white border-[#1E2430] hover:bg-slate-800' : 'bg-[#FAF8F3] text-purple-700 border-[#1E2430] hover:bg-purple-50')
+            }
+          `}
+          title={chatState === 'approval' ? "Dictate / Add More Details" : "Toggle Dictation"}
+          aria-label={chatState === 'approval' ? "Dictate / Add More Details" : "Toggle Dictation"}
+        >
+          {isListening ? <StopMicIcon className="w-6 h-6" /> : <MicIcon className="w-6 h-6" />}
+        </button>
       </div>
 
       {/* Action Buttons */}
       <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-6 w-full">
-        {/* Back Button & Admin Skip */}
+        {/* Back Button */}
         <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
           <button 
+            type="button"
             onClick={onBack}
-            className="w-full sm:w-auto text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-xl font-bold transition-all px-6 py-3 flex items-center justify-center gap-2"
+            className="w-full sm:w-auto text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-xl font-bold transition-all px-6 py-3 flex items-center justify-center gap-2"
           >
             <ArrowLeftIcon className="w-5 h-5" /> Back
-          </button>
-          
-          {/* TEMPORARY ADMIN BUTTON */}
-          <button 
-            onClick={() => onComplete(draft || "• Admin Skipped 1\n• Admin Skipped 2\n• Admin Skipped 3")}
-            className="w-full sm:w-auto text-rose-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl font-bold transition-all px-4 py-3 flex items-center justify-center text-xs uppercase tracking-widest"
-            title="Skip this section for testing"
-          >
-            Admin Skip ⏩
           </button>
         </div>
 
@@ -991,14 +1357,23 @@ function ChatSection({ section, stepNumber, initialDraft, elevenLabsKey, elevenL
         <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
           {chatState === 'approval' ? (
             <>
-               <div className={`text-sm italic ${hasEnoughItems ? 'text-slate-500' : 'text-amber-600 font-bold'}`}>
-                {hasEnoughItems ? 'Tap the mic to add more details!' : 'Tap the mic to add more items to reach 3!'}
+              <div className={`text-sm italic ${hasEnoughItems ? 'text-slate-500' : 'text-amber-700 font-bold'}`}>
+                {hasEnoughItems ? 'Tap the mic to add more details!' : 'Tap the mic or Clean Up Text to reach 3 items!'}
               </div>
               <button 
+                type="button"
+                onClick={handleCleanUp}
+                disabled={isCleaning || draft.trim() === ''}
+                className="w-full sm:w-auto bg-[#1E2430] hover:bg-slate-800 text-white rounded-full font-bold transition-all px-6 py-4 shadow-md flex items-center justify-center gap-2 disabled:opacity-50 text-base"
+              >
+                ✨ Clean Up Text
+              </button>
+              <button 
+                type="button"
                 onClick={() => onComplete(draft)}
                 disabled={!hasEnoughItems}
                 className={`w-full sm:w-auto text-white rounded-full font-bold transition-all px-8 py-4 shadow-md flex items-center justify-center gap-2 text-lg
-                  ${hasEnoughItems ? 'bg-blue-600 hover:bg-blue-700 hover:shadow-lg' : 'bg-slate-400 cursor-not-allowed opacity-70'}
+                  ${hasEnoughItems ? 'cta-button primary' : 'bg-slate-400 cursor-not-allowed opacity-70'}
                 `}
               >
                 Approve & Continue <CheckIcon className="w-5 h-5" />
@@ -1008,18 +1383,20 @@ function ChatSection({ section, stepNumber, initialDraft, elevenLabsKey, elevenL
             <>
               {(draft.length > 0 || chatState === 'digging') && (
                 <button 
+                  type="button"
                   onClick={handleCleanUp}
                   disabled={isCleaning || draft.trim() === ''}
-                  className="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-white rounded-full font-bold transition-all px-6 py-4 shadow-md flex items-center justify-center gap-2 disabled:opacity-50 text-lg"
+                  className="w-full sm:w-auto bg-[#1E2430] hover:bg-slate-800 text-white rounded-full font-bold transition-all px-6 py-4 shadow-md flex items-center justify-center gap-2 disabled:opacity-50 text-lg"
                 >
                   {isCleaning ? '✨ Organizing...' : '✨ Clean Up Text'}
                 </button>
               )}
 
               <button 
+                type="button"
                 onClick={handlePreSubmit}
                 disabled={draft.trim().length === 0 || isCleaning}
-                className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white rounded-full font-bold transition-all px-8 py-4 shadow-md hover:shadow-lg flex items-center justify-center gap-2 disabled:opacity-50 text-lg"
+                className="w-full sm:w-auto cta-button primary rounded-full font-bold transition-all px-8 py-4 shadow-md hover:shadow-lg flex items-center justify-center gap-2 disabled:opacity-50 text-lg"
               >
                 Submit <ArrowRightIcon className="w-5 h-5" />
               </button>
@@ -1036,7 +1413,6 @@ function FinalReport({ data, userDetails, onCopy, copied, onBack }) {
 
   const handleSaveCloud = () => {
     setIsSavingCloud(true);
-    // Simulate API call to save to thrivecoaching.ai
     setTimeout(() => setIsSavingCloud(false), 3000);
   };
 
@@ -1044,45 +1420,48 @@ function FinalReport({ data, userDetails, onCopy, copied, onBack }) {
     <div className="animate-in fade-in slide-in-from-bottom-8 duration-700">
       
       <div className="text-center mb-12 print:hidden">
-        <div className="inline-flex items-center justify-center w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full mb-6 shadow-inner border-4 border-white transform hover:rotate-12 transition-transform">
+        <div className="inline-flex items-center justify-center w-20 h-20 bg-emerald-100 text-emerald-700 rounded-full mb-6 border-2 border-[#1E2430] shadow-[3px_3px_0_#1E2430] transform hover:rotate-12 transition-transform">
           <span className="text-4xl">🎉</span>
         </div>
-        <h2 className="text-slate-800 font-black text-4xl md:text-5xl mb-4 tracking-tight">Congratulations{userDetails.interviewee ? `, ${userDetails.interviewee.split(' ')[0]}` : ''}!</h2>
+        <h2 className="text-slate-900 font-black text-4xl md:text-5xl mb-4 tracking-tight">Congratulations{userDetails.interviewee ? `, ${userDetails.interviewee.split(' ')[0]}` : ''}!</h2>
         <p className="text-slate-600 text-lg md:text-xl leading-relaxed max-w-2xl mx-auto">
           You've done incredible work uncovering your core strengths. Here is your official THRiVE Report, ready for action.
         </p>
       </div>
 
-      <div className="bg-slate-50 border-2 border-slate-100 p-6 md:p-10 rounded-3xl mb-12 relative overflow-hidden shadow-inner print:shadow-none print:border-none print:p-0 print:bg-white">
+      <div className="bg-[#FAF8F3] border-2 border-[#1E2430] p-6 md:p-10 rounded-3xl mb-12 print:mb-0 relative overflow-hidden print:overflow-visible shadow-[4px_4px_0_#1E2430] print:shadow-none print:border-none print:p-0 print:bg-white">
         
         {/* Branding Header */}
-        <div className="border-b-2 border-slate-200 pb-6 mb-8 text-center md:text-left">
-          <h3 className="text-slate-800 font-black text-3xl mb-2">
+        <div className="border-b-2 border-slate-200 pb-6 mb-8 print:pb-3 print:mb-4 text-center md:text-left print:text-left">
+          <h3 className="text-slate-900 font-black text-3xl print:text-2xl mb-2 print:mb-1">
             {userDetails.interviewee ? `${userDetails.interviewee.toUpperCase()}'S THRIVE REPORT` : 'YOUR THRIVE REPORT'}
           </h3>
-          <p className="text-slate-500 uppercase tracking-widest font-bold text-sm leading-relaxed">
+          <p className="text-slate-600 uppercase tracking-widest font-bold text-sm print:text-xs leading-relaxed">
             Created by Dr. Steve Huff • Based on the Strengths Model • Powered by Gemini
-            {userDetails.interviewer && <><br/><span className="text-blue-600">Interviewed by {userDetails.interviewer}</span></>}
+            {userDetails.interviewer && <><br/><span className="text-purple-700">Interviewed by {userDetails.interviewer}</span></>}
           </p>
         </div>
 
         {/* 6 Sections Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10 text-slate-700">
-          {SECTIONS.map((sec) => (
-            <div key={sec.id} className="group">
-              <div className="flex items-center gap-3 mb-4">
-                <div className={`w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-xl border border-slate-100`}>
-                  {sec.icon}
+        <div className="grid grid-cols-1 md:grid-cols-2 print:grid-cols-2 gap-x-10 gap-y-8 print:gap-x-5 print:gap-y-4 text-slate-700">
+          {SECTIONS.map((sec) => {
+            const colorClasses = SECTION_COLOR_CLASSES[sec.color] || SECTION_COLOR_CLASSES.slate;
+            return (
+              <div key={sec.id} className="group bg-white p-5 print:p-3.5 rounded-2xl border-2 border-slate-200 hover:border-[#1E2430] transition-colors print:border-slate-300 print:break-inside-avoid">
+                <div className="flex items-center gap-3 mb-4 print:mb-2">
+                  <div className={`w-10 h-10 print:w-8 print:h-8 rounded-full shadow-sm flex items-center justify-center text-xl print:text-base border ${colorClasses.iconBg}`}>
+                    {sec.icon}
+                  </div>
+                  <h4 className={`text-slate-900 font-black text-lg print:text-base uppercase tracking-widest border-b-2 pb-1 ${colorClasses.border} transition-colors`}>
+                    {sec.title}
+                  </h4>
                 </div>
-                <h4 className={`text-slate-800 font-black text-lg uppercase tracking-widest border-b-2 pb-1 border-${sec.color}-200 group-hover:border-${sec.color}-400 transition-colors`}>
-                  {sec.title}
-                </h4>
+                <div className={`text-slate-700 print:text-sm leading-relaxed whitespace-pre-wrap pl-3 border-l-2 ${colorClasses.leftBorder}`}>
+                  {data[sec.key] || "No response provided."}
+                </div>
               </div>
-              <div className="text-slate-600 leading-relaxed whitespace-pre-wrap pl-2 border-l-2 border-slate-200">
-                {data[sec.key] || "No response provided."}
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
@@ -1092,25 +1471,28 @@ function FinalReport({ data, userDetails, onCopy, copied, onBack }) {
         {/* Primary Save Actions */}
         <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
           <button 
+            type="button"
             onClick={() => window.print()}
-            className="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-white rounded-full font-bold transition-all px-8 py-4 shadow-lg hover:shadow-xl flex items-center justify-center gap-3 text-lg"
+            className="w-full sm:w-auto bg-[#1E2430] hover:bg-slate-800 text-white rounded-full font-bold transition-all px-8 py-4 shadow-lg hover:shadow-xl flex items-center justify-center gap-3 text-lg"
           >
             <PdfIcon className="w-6 h-6" /> Save as PDF
           </button>
 
           <button 
+            type="button"
             onClick={handleSaveCloud}
             className={`w-full sm:w-auto rounded-full font-bold transition-all px-8 py-4 shadow-lg hover:shadow-xl flex items-center justify-center gap-3 text-lg
-              ${isSavingCloud ? 'bg-purple-500 text-white ring-4 ring-purple-100' : 'bg-purple-600 hover:bg-purple-700 text-white'}
+              ${isSavingCloud ? 'bg-purple-500 text-white ring-4 ring-purple-100' : 'bg-purple-700 hover:bg-purple-800 text-white'}
             `}
           >
             {isSavingCloud ? <><CheckIcon className="w-6 h-6" /> Saved to thrivecoaching.ai!</> : <><CloudIcon className="w-6 h-6" /> Save to Free Account</>}
           </button>
 
           <button 
+            type="button"
             onClick={onCopy}
             className={`w-full sm:w-auto rounded-full font-bold transition-all px-8 py-4 shadow-lg hover:shadow-xl flex items-center justify-center gap-3 text-lg
-              ${copied ? 'bg-emerald-500 text-white ring-4 ring-emerald-100' : 'bg-blue-600 hover:bg-blue-700 text-white'}
+              ${copied ? 'bg-emerald-600 text-white ring-4 ring-emerald-100' : 'bg-blue-600 hover:bg-blue-700 text-white'}
             `}
           >
             {copied ? <><CheckIcon className="w-6 h-6" /> Copied!</> : <><CopyIcon className="w-6 h-6" /> Copy Text</>}
@@ -1118,10 +1500,11 @@ function FinalReport({ data, userDetails, onCopy, copied, onBack }) {
         </div>
 
         {/* Secondary Action */}
-        <div className="flex justify-center mt-4">
+        <div className="flex justify-center mt-2">
           <button 
+            type="button"
             onClick={onBack}
-            className="text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-full font-bold transition-all px-8 py-3 flex items-center justify-center gap-2 text-md"
+            className="text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-full font-bold transition-all px-8 py-3 flex items-center justify-center gap-2 text-md"
           >
             <ArrowLeftIcon className="w-5 h-5" /> Back to Edit Responses
           </button>

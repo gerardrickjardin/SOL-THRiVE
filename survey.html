@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SOL Theory Flow Survey</title>
+    <title>The Flow Survey — THRiVE Coaching</title>
+    <meta name="description" content="Pinpoint what kind of friction is slowing you down and measure your current Flow Score across Agency, Actions, Support, and Tools.">
     
     <!-- ========================================== -->
     <!-- ⚙️ DEVELOPER CONFIGURATION                 -->
@@ -18,149 +19,424 @@
     </script>
     <!-- ========================================== -->
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
     <style>
+        body.survey-page {
+            background-color: var(--bg-cream, #F7F4EB);
+            color: var(--text-color, #141824);
+            font-family: var(--font-body, 'Poppins', sans-serif);
+        }
+        .survey-card {
+            background-color: #ffffff;
+            border: 2px solid var(--ink-border, #1E2430);
+            border-radius: 24px;
+            box-shadow: 6px 6px 0 var(--ink-border, #1E2430);
+        }
         .flow-segment {
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             transform-origin: center;
         }
-        input[type="radio"]:checked + div {
-            border-color: #3b82f6;
-            background-color: #eff6ff;
+        .metaphor-card {
+            position: relative;
+            border: 2px solid rgba(30, 36, 48, 0.16);
+            border-radius: 18px;
+            background-color: #ffffff;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+        }
+        .metaphor-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent-purple, #8B2FC9);
+            box-shadow: 4px 4px 0 var(--ink-border, #1E2430);
+        }
+        .metaphor-check-badge {
+            opacity: 0;
+            transform: scale(0.8);
+            transition: opacity 0.18s ease, transform 0.18s ease;
+        }
+        input[type="radio"]:checked + .metaphor-card {
+            border-color: var(--ink-border, #1E2430);
+            background-color: #F5EBFD;
+            box-shadow: 5px 5px 0 var(--ink-border, #1E2430);
+            transform: translate(-2px, -2px);
+        }
+        input[type="radio"]:checked + .metaphor-card .metaphor-check-badge {
+            opacity: 1;
+            transform: scale(1);
         }
         .pulse-animation {
             animation: pulse 2s infinite;
         }
         @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.5); }
-            70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+            0% { box-shadow: 0 0 0 0 rgba(225, 29, 72, 0.5); }
+            70% { box-shadow: 0 0 0 10px rgba(225, 29, 72, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(225, 29, 72, 0); }
+        }
         @keyframes shimmer-gradient {
             0% { background-position: 200% 0; }
             100% { background-position: -200% 0; }
         }
         .smooth-gradient-bar {
-            background: linear-gradient(90deg, #2563eb, #3b82f6, #06b6d4, #3b82f6, #2563eb) !important;
+            background: linear-gradient(90deg, #8B2FC9, #D81159, #0478fe, #8B2FC9) !important;
             background-size: 200% 100% !important;
             animation: shimmer-gradient 4s linear infinite;
         }
+        .step-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.35rem 0.9rem;
+            border-radius: 999px;
+            font-family: var(--font-heading, 'Nunito', sans-serif);
+            font-size: 0.8rem;
+            font-weight: 800;
+            border: 1.5px solid rgba(30, 36, 48, 0.15);
+            background-color: rgba(255, 255, 255, 0.7);
+            color: #6B7280;
+            transition: all 0.2s ease;
+        }
+        .step-pill.active {
+            background-color: #1E2430;
+            color: #ffffff;
+            border-color: #1E2430;
+            box-shadow: 2px 2px 0 rgba(139, 47, 201, 0.4);
+        }
+        .step-pill.completed {
+            background-color: #F5EBFD;
+            color: #8B2FC9;
+            border-color: #8B2FC9;
+        }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900 font-sans min-h-screen flex flex-col relative">
+<body class="survey-page min-h-screen flex flex-col relative">
 
-    <nav class="absolute top-6 left-6 z-50">
-        <a href="index.html" class="flex items-center gap-2 text-slate-400 hover:text-blue-600 font-bold transition-all no-underline">
-            &larr; Back to Home
-        </a>
-    </nav>
+    <!-- Brand Header -->
+    <header class="header">
+        <nav class="nav-left">
+            <button class="hamburger" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </nav>
+        <div class="logo">
+            <a href="index.html" class="brand-logo-link">
+                <span class="brand-mark">THRiVE</span> <span class="brand-sub">Coaching</span>
+            </a>
+        </div>
+        <div class="nav-right desktop-menu">
+            <ul>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="approach.html">Our Approach</a></li>
+                <li><a href="profile.html">THRiVE Report</a></li>
+                <li><a href="hope-survey.html">HoPE Index</a></li>
+                <li class="dropdown">
+                    <a href="how-to-use.html">How To Use <span class="dropdown-caret">&#9662;</span></a>
+                    <div class="dropdown-content">
+                        <a href="how-to-use.html">Overview &amp; Guide</a>
+                        <a href="rebuilding-life-challenges.html">Rebuilding Life Challenges</a>
+                        <a href="employment-challenges.html">Employment Challenges</a>
+                    </div>
+                </li>
+                <li><a href="index.html#video-section">Video</a></li>
+                <li><a href="survey.html" class="nav-cta-pill">Flow Survey &rarr;</a></li>
+            </ul>
+        </div>
 
-    <!-- Global Header -->
-    <header class="text-center py-8" id="global-header">
-        <h1 class="text-4xl mb-2 flex items-center justify-center gap-3 font-bold text-slate-800">
-            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-blue-500">
+        <div class="nav-menu">
+            <div class="menu-title">FIND YOUR FLOW</div>
+            <ul>
+                <li><a href="survey.html">Flow Survey</a></li>
+                <li><a href="profile.html">THRiVE Report</a></li>
+                <li><a href="hope-survey.html">HoPE Index</a></li>
+                <li><a href="approach.html">Our Approach</a></li>
+                <li class="dropdown">
+                    <a href="how-to-use.html">How To Use This Page</a>
+                    <div class="dropdown-content">
+                        <a href="rebuilding-life-challenges.html">Rebuilding Life Challenges</a>
+                        <a href="employment-challenges.html">Employment Challenges</a>
+                    </div>
+                </li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#video-section">Video</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Global Survey Header -->
+    <section class="text-center pt-8 pb-4 px-4" id="global-header">
+        <span class="section-eyebrow">SOL THRiVE • 3-Minute Flow Diagnostic</span>
+        <h1 class="text-3xl md:text-5xl mb-2 flex items-center justify-center gap-3 font-black text-slate-900">
+            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-purple-700 shrink-0">
                 <path d="M2 6c1.6 0 2.4-1.6 4-1.6s2.4 1.6 4 1.6 2.4-1.6 4-1.6 2.4 1.6 4 1.6"/>
                 <path d="M2 12c1.6 0 2.4-1.6 4-1.6s2.4 1.6 4 1.6 2.4-1.6 4-1.6 2.4 1.6 4 1.6"/>
                 <path d="M2 18c1.6 0 2.4-1.6 4-1.6s2.4 1.6 4 1.6 2.4-1.6 4-1.6 2.4 1.6 4 1.6"/>
             </svg>
-            The Flow Survey
+            <span>The <span class="highlight">Flow Survey</span></span>
         </h1>
-        <p class="text-slate-500 italic">Let's see how much friction you're experiencing.</p>
-    </header>
+        <p class="text-slate-600 italic max-w-xl mx-auto">Let's see how much friction you're experiencing—and how much flow we can reclaim.</p>
 
-    <main class="flex-grow w-full max-w-4xl mx-auto p-4 md:p-8">
+        <!-- Step Progress Pills -->
+        <div class="flex flex-wrap items-center justify-center gap-2 mt-5" id="step-progress-bar">
+            <span class="step-pill active" id="pill-step-0">Intro</span>
+            <span class="text-slate-400 text-xs font-bold">&rarr;</span>
+            <span class="step-pill" id="pill-step-1">1. What Is It?</span>
+            <span class="text-slate-400 text-xs font-bold">&rarr;</span>
+            <span class="step-pill" id="pill-step-2">2. What Is It Like?</span>
+            <span class="text-slate-400 text-xs font-bold">&rarr;</span>
+            <span class="step-pill" id="pill-step-3">3. Flow Score</span>
+        </div>
+    </section>
+
+    <main class="flex-grow w-full max-w-5xl mx-auto p-4 md:p-8">
         
         <!-- ================= INTRO SCREEN ================= -->
-        <div id="step-intro" class="bg-white p-8 md:p-12 rounded-2xl shadow-xl border border-slate-100 text-center max-w-2xl mx-auto relative">
+        <div id="step-intro" class="survey-card p-8 md:p-12 text-center max-w-2xl mx-auto relative">
             
             <div class="mb-6 flex justify-center">
-                <button onclick="playAudio('Before we can help you find your flow, we need to know exactly what kind of friction is slowing you down. Are we talking slightly annoying pebble in your shoe or swimming upstream in peanut butter? This quick survey measures the specific Ugg in one area of your life, so the Thrive method can help you reclaim your sanity and uncover your future potential. If you prefer talking to typing, you will be able to use your microphone to describe your problem on the next screen. Let\'s do this!', this)" id="play-intro-btn" class="text-2xl p-3 bg-slate-50 rounded-full hover:bg-blue-50 hover:text-blue-600 transition-all shadow-sm border border-slate-100" title="Read Aloud">
+                <button type="button" onclick="playAudio('Before we can help you find your flow, we need to know exactly what kind of friction is slowing you down. Are we talking slightly annoying pebble in your shoe or swimming upstream in peanut butter? This quick survey measures the specific Ugg in one area of your life, so the Thrive method can help you reclaim your sanity and uncover your future potential. If you prefer talking to typing, you will be able to use your microphone to describe your problem on the next screen. Let\'s do this!', this)" id="play-intro-btn" class="text-2xl p-3.5 bg-[#FAF8F3] rounded-full hover:bg-purple-50 hover:text-purple-700 transition-all shadow-sm border-2 border-[#1E2430]" title="Read Aloud" aria-label="Read intro aloud">
                     🔊
                 </button>
             </div>
 
             <div id="intro-text-content">
-                <p class="text-lg text-slate-600 mb-4 leading-relaxed pt-2">
+                <p class="text-lg text-slate-700 mb-4 leading-relaxed pt-1">
                     Before we can help you find your flow, we need to know exactly what kind of friction is slowing you down.
                 </p>
-                <p class="text-sm italic text-slate-400 mb-6">
+                <p class="text-sm italic text-slate-500 mb-6">
                     (Are we talking "slightly annoying pebble in your shoe" or "swimming upstream in peanut butter"?)
                 </p>
-                <p class="text-lg text-slate-600 mb-4 leading-relaxed">
-                    This quick survey measures the specific "Ugg" in one area of your life, so the <strong>THRiVE method</strong> can help you reclaim your sanity and uncover your future potential. 
+                <p class="text-lg text-slate-700 mb-5 leading-relaxed">
+                    This quick survey measures the specific <strong>"Ugg"</strong> in one area of your life, so the <strong>THRiVE method</strong> can help you reclaim your sanity and uncover your future potential.
                 </p>
-                <p class="text-sm text-blue-600 font-medium mb-8 bg-blue-50 p-3 rounded-lg inline-block">
+                <p class="text-sm text-purple-900 font-medium mb-8 bg-purple-50 border border-purple-200 px-4 py-3 rounded-xl inline-block">
                     🎙️ Prefer talking to typing? You'll be able to use your microphone to describe your problem on the next screen. Let's do this!
                 </p>
             </div>
             
-            <button onclick="goToStep(1)" class="bg-blue-600 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-blue-700 transition-all shadow-lg hover:shadow-blue-500/30 inline-flex items-center justify-center gap-2">
-                🏎️ Start your engines
-            </button>
+            <div>
+                <button type="button" onclick="goToStep(1)" class="cta-button primary text-lg px-9 py-4">
+                    🏎️ Start Your Engines &rarr;
+                </button>
+            </div>
         </div>
 
         <!-- ================= STEP 1: WHAT IS IT? ================= -->
-        <div id="step-1" class="hidden bg-white p-8 rounded-2xl shadow-xl border border-slate-100 max-w-2xl mx-auto">
+        <div id="step-1" class="hidden survey-card p-6 md:p-10 max-w-2xl mx-auto">
             <div class="flex justify-between items-start mb-2">
                 <div>
-                    <div class="mb-2 text-sm font-bold text-slate-400 uppercase tracking-widest">Section 1</div>
-                    <h2 class="text-3xl font-bold">What is it?</h2>
+                    <div class="mb-1 text-xs font-extrabold text-purple-700 uppercase tracking-widest">Section 1 of 3</div>
+                    <h2 class="text-3xl font-black text-slate-900">What is it?</h2>
                 </div>
-                <button onclick="playAudio('Section 1. What is it? Name it to tame it. Think of a specific area in your life where you feel friction, tension, or frustration. Describe it below in 2 to 3 sentences.', this)" class="text-xl p-2 bg-slate-50 rounded-full hover:bg-blue-50 hover:text-blue-600 transition-all border border-slate-100" title="Read Aloud">🔊</button>
+                <button type="button" onclick="playAudio('Section 1. What is it? Name it to tame it. Think of a specific area in your life where you feel friction, tension, or frustration. Describe it below in 2 to 3 sentences.', this)" class="text-xl p-2.5 bg-[#FAF8F3] rounded-full hover:bg-purple-50 hover:text-purple-700 transition-all border-2 border-[#1E2430]" title="Read Aloud" aria-label="Read Section 1 aloud">🔊</button>
             </div>
-            <p class="text-slate-500 italic mb-6">“Name it to tame it.”</p>
+            <p class="text-slate-500 italic mb-5">“Name it to tame it.”</p>
             
             <p class="mb-4 text-slate-700">Think of a specific area in your life where you feel friction, tension, or frustration. Describe it below in 2 to 3 sentences.</p>
             
-            <div class="bg-amber-50 border border-amber-200 p-4 rounded-lg mb-6">
-                <span class="font-bold text-amber-800">💡 Pro Tip: Be as specific as possible.</span>
-                <span class="text-amber-700 text-sm block mt-1">Instead of saying "Parenting," say "I am having difficulty helping my 10-year-old son complete his homework on time without a fight."</span>
+            <div class="bg-[#FAF8F3] border-2 border-[#1E2430] p-4 rounded-xl mb-6 shadow-[3px_3px_0_#1E2430]">
+                <span class="font-extrabold text-slate-900">💡 Pro Tip: Be as specific as possible.</span>
+                <span class="text-slate-700 text-sm block mt-1">Instead of saying "Parenting," say "I am having difficulty helping my 10-year-old son complete his homework on time without a fight."</span>
             </div>
 
-            <div class="relative mb-6">
-                <textarea id="problem-description" class="w-full border-2 border-slate-200 rounded-xl p-4 pb-14 min-h-[160px] focus:border-blue-500 focus:ring-4 focus:ring-blue-50 outline-none transition-all" placeholder="Describe the friction here... (or click the microphone to talk)"></textarea>
+            <div class="relative mb-4">
+                <textarea id="problem-description" oninput="clearStep1Error()" class="w-full border-2 border-slate-300 rounded-xl p-4 pb-16 min-h-[170px] focus:border-purple-600 focus:ring-4 focus:ring-purple-100 outline-none transition-all text-slate-800" placeholder="Describe the friction here... (or click Dictate to talk)"></textarea>
                 
                 <!-- Dictation & Clean Up Controls -->
                 <div class="absolute bottom-3 left-3 right-3 flex justify-between items-center bg-white pt-2 border-t border-slate-100">
-                    <button onclick="toggleDictation()" id="dictation-btn" class="flex items-center gap-2 text-sm font-bold text-slate-600 hover:text-blue-600 px-3 py-2 rounded-lg hover:bg-slate-50 transition-all">
+                    <button type="button" onclick="toggleDictation()" id="dictation-btn" class="flex items-center gap-2 text-sm font-bold text-slate-700 hover:text-purple-700 px-3 py-2 rounded-lg hover:bg-slate-50 transition-all">
                         <span class="text-xl" id="mic-icon">🎙️</span> <span id="dictation-text">Dictate</span>
                     </button>
                     
-                    <button onclick="cleanUpText()" id="cleanup-btn" class="flex items-center gap-2 text-sm font-bold text-purple-600 hover:bg-purple-50 px-3 py-2 rounded-lg border border-purple-200 transition-all bg-white shadow-sm">
+                    <button type="button" onclick="cleanUpText()" id="cleanup-btn" class="flex items-center gap-2 text-sm font-bold text-purple-700 hover:bg-purple-50 px-3 py-2 rounded-lg border border-purple-200 transition-all bg-white shadow-sm">
                         <span class="text-lg">✨</span> Clean Up Text
                     </button>
                 </div>
             </div>
 
-            <div class="flex justify-end">
-                <button onclick="goToStep(2)" class="bg-slate-900 text-white px-8 py-3 rounded-full font-bold hover:bg-slate-800 transition-all">Next Step</button>
+            <!-- Validation Error Message for Step 1 -->
+            <div id="step-1-error" class="hidden mb-5 p-3.5 rounded-xl bg-rose-50 border-2 border-rose-500 text-rose-800 text-sm font-semibold flex items-center gap-2" role="alert">
+                <span>⚠️</span>
+                <span>Please describe the friction you're experiencing in a sentence or two (or use Dictate) before moving to Step 2.</span>
+            </div>
+
+            <div class="flex justify-between items-center pt-2">
+                <button type="button" onclick="goToStep(0)" class="text-slate-500 font-bold hover:text-slate-900 transition-all">&larr; Back</button>
+                <button type="button" onclick="validateAndGoToStep2()" class="cta-button primary">Next Step &rarr;</button>
             </div>
         </div>
 
         <!-- ================= STEP 2: WHAT IS IT LIKE? ================= -->
-        <div id="step-2" class="hidden bg-white p-8 rounded-2xl shadow-xl border border-slate-100 max-w-3xl mx-auto">
+        <div id="step-2" class="hidden survey-card p-6 md:p-10 max-w-5xl mx-auto">
             <div class="flex justify-between items-start mb-2">
                 <div>
-                    <div class="mb-2 text-sm font-bold text-slate-400 uppercase tracking-widest">Section 2</div>
-                    <h2 class="text-3xl font-bold">What is it like?</h2>
+                    <div class="mb-1 text-xs font-extrabold text-purple-700 uppercase tracking-widest">Section 2 of 3</div>
+                    <h2 class="text-3xl md:text-4xl font-black text-slate-900">What is it like?</h2>
                 </div>
-                <button onclick="playAudio('Section 2. What is it like? Looking at the problem you just described, which of these metaphors best describes your daily experience right now? The Treadmill. The Parking Brake. Beating my head against a wall. Herding cats in a thunderstorm. Swimming in Molasses. The sinking life raft. Or, your own metaphor.', this)" class="text-xl p-2 bg-slate-50 rounded-full hover:bg-blue-50 hover:text-blue-600 transition-all border border-slate-100" title="Read Aloud">🔊</button>
+                <button type="button" onclick="playAudio('Section 2. What is it like? Looking at the problem you just described, which of these metaphors best describes your daily experience right now? Down in a hole. On a hamster wheel. Pushing a rock up a hill. Pulled in every direction. Stuck in a maze. Juggling too many things. Walking a tightrope. Holding back the flood. Or, your own metaphor.', this)" class="text-xl p-2.5 bg-[#FAF8F3] rounded-full hover:bg-purple-50 hover:text-purple-700 transition-all border-2 border-[#1E2430]" title="Read Aloud" aria-label="Read Section 2 aloud">🔊</button>
             </div>
-            <p class="text-slate-500 mb-6">Looking at the problem you just described, which of these metaphors best describes your daily experience right now?</p>
+            <p class="text-slate-600 mb-6">Looking at the problem you just described, which of these illustrated metaphors best captures what your daily experience feels like right now?</p>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                <label class="cursor-pointer"><input type="radio" name="metaphor" class="hidden"><div class="border-2 border-slate-100 rounded-xl p-4 transition-all hover:border-blue-300 h-full"><div class="text-2xl mb-2">🏃‍♂️</div><h3 class="font-bold text-slate-800">The Treadmill</h3><p class="text-sm text-slate-600 mt-1">I’m running as fast as I can, but I’m staying in the exact same place.</p></div></label>
-                <label class="cursor-pointer"><input type="radio" name="metaphor" class="hidden"><div class="border-2 border-slate-100 rounded-xl p-4 transition-all hover:border-blue-300 h-full"><div class="text-2xl mb-2">💨</div><h3 class="font-bold text-slate-800">The Parking Brake</h3><p class="text-sm text-slate-600 mt-1">I’m trying to move forward, but something unseen is dragging and smelling like smoke.</p></div></label>
-                <label class="cursor-pointer"><input type="radio" name="metaphor" class="hidden"><div class="border-2 border-slate-100 rounded-xl p-4 transition-all hover:border-blue-300 h-full"><div class="text-2xl mb-2">🧱</div><h3 class="font-bold text-slate-800">Beating My Head Against a Wall</h3><p class="text-sm text-slate-600 mt-1">I keep trying the same things, and it just hurts more every time.</p></div></label>
-                <label class="cursor-pointer"><input type="radio" name="metaphor" class="hidden"><div class="border-2 border-slate-100 rounded-xl p-4 transition-all hover:border-blue-300 h-full"><div class="text-2xl mb-2">🐈</div><h3 class="font-bold text-slate-800">Herding Cats in a Thunderstorm</h3><p class="text-sm text-slate-600 mt-1">Everything is chaotic, out of my control, and slightly terrifying.</p></div></label>
-                <label class="cursor-pointer"><input type="radio" name="metaphor" class="hidden"><div class="border-2 border-slate-100 rounded-xl p-4 transition-all hover:border-blue-300 h-full"><div class="text-2xl mb-2">🍯</div><h3 class="font-bold text-slate-800">Swimming in Molasses</h3><p class="text-sm text-slate-600 mt-1">Every single movement—no matter how small—requires massive effort.</p></div></label>
-                <label class="cursor-pointer"><input type="radio" name="metaphor" class="hidden"><div class="border-2 border-slate-100 rounded-xl p-4 transition-all hover:border-blue-300 h-full"><div class="text-2xl mb-2">🛶</div><h3 class="font-bold text-slate-800">The Sinking Life Raft</h3><p class="text-sm text-slate-600 mt-1">I’m busy plugging holes just to stay afloat, with no time to actually row.</p></div></label>
-                <label class="cursor-pointer md:col-span-2"><input type="radio" name="metaphor" class="hidden" onchange="document.getElementById('custom-metaphor-input').classList.remove('hidden')"><div class="border-2 border-slate-100 rounded-xl p-4 transition-all hover:border-blue-300"><div class="text-2xl mb-2">🖊️</div><h3 class="font-bold text-slate-800">Your Own Metaphor</h3><p class="text-sm text-slate-600 mt-1 mb-3">If none of these land for you, describe your own.</p><input type="text" id="custom-metaphor-input" class="hidden w-full border-2 border-slate-200 rounded-lg p-2 focus:border-blue-500 outline-none" placeholder="It feels like..."></div></label>
+            <!-- 8 Illustrated Metaphor Cards + Your Own Metaphor -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 mb-6" id="metaphor-grid">
+                
+                <!-- 1. Down in a Hole -->
+                <label class="cursor-pointer block h-full">
+                    <input type="radio" name="metaphor" value="Down in a Hole" data-icon="🕳️" data-img="assets/metaphor-1-hole.jpg" class="hidden" onchange="handleMetaphorChange(this)">
+                    <div class="metaphor-card p-3.5 h-full flex flex-col">
+                        <span class="metaphor-check-badge absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-[#1E2430] text-white flex items-center justify-center text-xs font-bold shadow">✓</span>
+                        <div class="bg-[#FCF8F2] rounded-xl overflow-hidden border border-slate-200 mb-3 aspect-[16/15] flex items-center justify-center">
+                            <img src="assets/metaphor-1-hole.jpg" alt="It's like I'm down in a hole..." class="w-full h-full object-contain">
+                        </div>
+                        <div class="flex items-center gap-1.5 mb-1">
+                            <span class="text-2xl leading-none metaphor-icon">🕳️</span>
+                            <h3 class="font-extrabold text-slate-900 text-base leading-tight">Down in a Hole</h3>
+                        </div>
+                        <p class="text-xs text-slate-600 mt-1 leading-relaxed">I feel trapped at the bottom of a deep pit while others look down, unsure how to climb out.</p>
+                    </div>
+                </label>
+
+                <!-- 2. On a Hamster Wheel -->
+                <label class="cursor-pointer block h-full">
+                    <input type="radio" name="metaphor" value="On a Hamster Wheel" data-icon="🐹" data-img="assets/metaphor-2-hamster-wheel.jpg" class="hidden" onchange="handleMetaphorChange(this)">
+                    <div class="metaphor-card p-3.5 h-full flex flex-col">
+                        <span class="metaphor-check-badge absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-[#1E2430] text-white flex items-center justify-center text-xs font-bold shadow">✓</span>
+                        <div class="bg-[#FCF8F2] rounded-xl overflow-hidden border border-slate-200 mb-3 aspect-[16/15] flex items-center justify-center">
+                            <img src="assets/metaphor-2-hamster-wheel.jpg" alt="It's like I'm on a hamster wheel..." class="w-full h-full object-contain">
+                        </div>
+                        <div class="flex items-center gap-1.5 mb-1">
+                            <span class="text-2xl leading-none metaphor-icon">🐹</span>
+                            <h3 class="font-extrabold text-slate-900 text-base leading-tight">On a Hamster Wheel</h3>
+                        </div>
+                        <p class="text-xs text-slate-600 mt-1 leading-relaxed">I’m running as fast as I can and burning all my energy, but staying in the exact same place.</p>
+                    </div>
+                </label>
+
+                <!-- 3. Pushing a Rock Up a Hill -->
+                <label class="cursor-pointer block h-full">
+                    <input type="radio" name="metaphor" value="Pushing a Rock Up a Hill" data-icon="🪨" data-img="assets/metaphor-3-rock-hill.jpg" class="hidden" onchange="handleMetaphorChange(this)">
+                    <div class="metaphor-card p-3.5 h-full flex flex-col">
+                        <span class="metaphor-check-badge absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-[#1E2430] text-white flex items-center justify-center text-xs font-bold shadow">✓</span>
+                        <div class="bg-[#FCF8F2] rounded-xl overflow-hidden border border-slate-200 mb-3 aspect-[16/15] flex items-center justify-center">
+                            <img src="assets/metaphor-3-rock-hill.jpg" alt="It's like I'm pushing a rock up a hill..." class="w-full h-full object-contain">
+                        </div>
+                        <div class="flex items-center gap-1.5 mb-1">
+                            <span class="text-2xl leading-none metaphor-icon">🪨</span>
+                            <h3 class="font-extrabold text-slate-900 text-base leading-tight">Pushing a Rock Up a Hill</h3>
+                        </div>
+                        <p class="text-xs text-slate-600 mt-1 leading-relaxed">Every single inch of progress takes exhausting uphill effort—and if I let go, it rolls right back.</p>
+                    </div>
+                </label>
+
+                <!-- 4. Pulled in Every Direction -->
+                <label class="cursor-pointer block h-full">
+                    <input type="radio" name="metaphor" value="Pulled in Every Direction" data-icon="🪢" data-img="assets/metaphor-4-pulled.jpg" class="hidden" onchange="handleMetaphorChange(this)">
+                    <div class="metaphor-card p-3.5 h-full flex flex-col">
+                        <span class="metaphor-check-badge absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-[#1E2430] text-white flex items-center justify-center text-xs font-bold shadow">✓</span>
+                        <div class="bg-[#FCF8F2] rounded-xl overflow-hidden border border-slate-200 mb-3 aspect-[16/15] flex items-center justify-center">
+                            <img src="assets/metaphor-4-pulled.jpg" alt="It's like I'm being pulled in every direction..." class="w-full h-full object-contain">
+                        </div>
+                        <div class="flex items-center gap-1.5 mb-1">
+                            <span class="text-2xl leading-none metaphor-icon">🪢</span>
+                            <h3 class="font-extrabold text-slate-900 text-base leading-tight">Pulled in Every Direction</h3>
+                        </div>
+                        <p class="text-xs text-slate-600 mt-1 leading-relaxed">Everyone and everything is tugging on me at once, leaving me stretched thin and ready to snap.</p>
+                    </div>
+                </label>
+
+                <!-- 5. Stuck in a Maze -->
+                <label class="cursor-pointer block h-full">
+                    <input type="radio" name="metaphor" value="Stuck in a Maze" data-icon="🧩" data-img="assets/metaphor-5-maze.jpg" class="hidden" onchange="handleMetaphorChange(this)">
+                    <div class="metaphor-card p-3.5 h-full flex flex-col">
+                        <span class="metaphor-check-badge absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-[#1E2430] text-white flex items-center justify-center text-xs font-bold shadow">✓</span>
+                        <div class="bg-[#FCF8F2] rounded-xl overflow-hidden border border-slate-200 mb-3 aspect-[16/15] flex items-center justify-center">
+                            <img src="assets/metaphor-5-maze.jpg" alt="It's like I'm stuck in a maze..." class="w-full h-full object-contain">
+                        </div>
+                        <div class="flex items-center gap-1.5 mb-1">
+                            <span class="text-2xl leading-none metaphor-icon">🧩</span>
+                            <h3 class="font-extrabold text-slate-900 text-base leading-tight">Stuck in a Maze</h3>
+                        </div>
+                        <p class="text-xs text-slate-600 mt-1 leading-relaxed">Every turn looks the same, and no matter which path I try, I keep hitting another dead end.</p>
+                    </div>
+                </label>
+
+                <!-- 6. Juggling Too Many Things -->
+                <label class="cursor-pointer block h-full">
+                    <input type="radio" name="metaphor" value="Juggling Too Many Things" data-icon="🤹" data-img="assets/metaphor-6-juggling.jpg" class="hidden" onchange="handleMetaphorChange(this)">
+                    <div class="metaphor-card p-3.5 h-full flex flex-col">
+                        <span class="metaphor-check-badge absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-[#1E2430] text-white flex items-center justify-center text-xs font-bold shadow">✓</span>
+                        <div class="bg-[#FCF8F2] rounded-xl overflow-hidden border border-slate-200 mb-3 aspect-[16/15] flex items-center justify-center">
+                            <img src="assets/metaphor-6-juggling.jpg" alt="It's like I'm juggling too many things..." class="w-full h-full object-contain">
+                        </div>
+                        <div class="flex items-center gap-1.5 mb-1">
+                            <span class="text-2xl leading-none metaphor-icon">🤹</span>
+                            <h3 class="font-extrabold text-slate-900 text-base leading-tight">Juggling Too Many Things</h3>
+                        </div>
+                        <p class="text-xs text-slate-600 mt-1 leading-relaxed">I’m frantically trying to keep too many balls, plates, and deadlines in the air without dropping one.</p>
+                    </div>
+                </label>
+
+                <!-- 7. Walking a Tightrope -->
+                <label class="cursor-pointer block h-full">
+                    <input type="radio" name="metaphor" value="Walking a Tightrope" data-icon="🎪" data-img="assets/metaphor-7-tightrope.jpg" class="hidden" onchange="handleMetaphorChange(this)">
+                    <div class="metaphor-card p-3.5 h-full flex flex-col">
+                        <span class="metaphor-check-badge absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-[#1E2430] text-white flex items-center justify-center text-xs font-bold shadow">✓</span>
+                        <div class="bg-[#FCF8F2] rounded-xl overflow-hidden border border-slate-200 mb-3 aspect-[16/15] flex items-center justify-center">
+                            <img src="assets/metaphor-7-tightrope.jpg" alt="It's like I'm walking a tightrope..." class="w-full h-full object-contain">
+                        </div>
+                        <div class="flex items-center gap-1.5 mb-1">
+                            <span class="text-2xl leading-none metaphor-icon">🎪</span>
+                            <h3 class="font-extrabold text-slate-900 text-base leading-tight">Walking a Tightrope</h3>
+                        </div>
+                        <p class="text-xs text-slate-600 mt-1 leading-relaxed">One tiny misstep feels like disaster, and the constant pressure not to fall is exhausting.</p>
+                    </div>
+                </label>
+
+                <!-- 8. Holding Back the Flood -->
+                <label class="cursor-pointer block h-full">
+                    <input type="radio" name="metaphor" value="Holding Back the Flood" data-icon="🌊" data-img="assets/metaphor-8-flood.jpg" class="hidden" onchange="handleMetaphorChange(this)">
+                    <div class="metaphor-card p-3.5 h-full flex flex-col">
+                        <span class="metaphor-check-badge absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-[#1E2430] text-white flex items-center justify-center text-xs font-bold shadow">✓</span>
+                        <div class="bg-[#FCF8F2] rounded-xl overflow-hidden border border-slate-200 mb-3 aspect-[16/15] flex items-center justify-center">
+                            <img src="assets/metaphor-8-flood.jpg" alt="It's like I'm trying to hold back the flood..." class="w-full h-full object-contain">
+                        </div>
+                        <div class="flex items-center gap-1.5 mb-1">
+                            <span class="text-2xl leading-none metaphor-icon">🌊</span>
+                            <h3 class="font-extrabold text-slate-900 text-base leading-tight">Holding Back the Flood</h3>
+                        </div>
+                        <p class="text-xs text-slate-600 mt-1 leading-relaxed">I’m using everything I have just to brace against the cracks and keep it all from bursting through.</p>
+                    </div>
+                </label>
+
+                <!-- 9. Your Own Metaphor -->
+                <label class="cursor-pointer sm:col-span-2 lg:col-span-4 block">
+                    <input type="radio" name="metaphor" value="custom" id="custom-metaphor-radio" data-icon="🖊️" data-img="" class="hidden" onchange="handleMetaphorChange(this)">
+                    <div class="metaphor-card p-5">
+                        <span class="metaphor-check-badge absolute top-3.5 right-3.5 w-7 h-7 rounded-full bg-[#1E2430] text-white flex items-center justify-center text-xs font-bold shadow">✓</span>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-2xl leading-none metaphor-icon">🖊️</span>
+                            <h3 class="font-extrabold text-slate-900 text-lg">Your Own Metaphor</h3>
+                        </div>
+                        <p class="text-sm text-slate-600 mt-1">If none of the 8 illustrations above quite capture it, describe your own metaphor.</p>
+                        <input type="text" id="custom-metaphor-input" oninput="clearStep2Error()" class="hidden mt-3 w-full border-2 border-slate-300 rounded-xl p-3 bg-white focus:border-purple-600 focus:ring-4 focus:ring-purple-100 outline-none text-slate-800" placeholder="It feels like...">
+                    </div>
+                </label>
             </div>
 
-            <div class="flex justify-between items-center">
-                <button onclick="goToStep(1)" class="text-slate-400 font-bold hover:text-slate-700 transition-all">&larr; Back</button>
-                <button onclick="goToStep(3)" class="bg-slate-900 text-white px-8 py-3 rounded-full font-bold hover:bg-slate-800 transition-all">Begin Survey</button>
+            <!-- Validation Error Message for Step 2 -->
+            <div id="step-2-error" class="hidden mb-5 p-3.5 rounded-xl bg-rose-50 border-2 border-rose-500 text-rose-800 text-sm font-semibold flex items-center gap-2" role="alert">
+                <span>⚠️</span>
+                <span id="step-2-error-text">Please select a metaphor card (or write your own) before starting the survey.</span>
+            </div>
+
+            <div class="flex justify-between items-center pt-2">
+                <button type="button" onclick="goToStep(1)" class="text-slate-500 font-bold hover:text-slate-900 transition-all">&larr; Back</button>
+                <button type="button" onclick="validateAndGoToStep3()" class="cta-button primary">Begin Survey &rarr;</button>
             </div>
         </div>
 
@@ -168,31 +444,31 @@
         <div id="step-3" class="hidden grid grid-cols-1 lg:grid-cols-2 gap-8 items-start relative">
             
             <!-- Left Side: The Survey UI / Results -->
-            <div id="survey-container" class="bg-white p-6 rounded-2xl shadow-xl border border-slate-100">
+            <div id="survey-container" class="survey-card p-6 md:p-8">
                 <!-- Question Card -->
                 <div id="question-card">
-                    <div class="flex items-center gap-2 mb-2 text-blue-600">
-                        <span id="category-icon">🕯️</span>
-                        <span id="category-name" class="font-bold uppercase tracking-wider text-sm">Agency</span>
+                    <div class="flex items-center gap-2 mb-2 text-purple-700">
+                        <span id="category-icon" class="text-xl">🕯️</span>
+                        <span id="category-name" class="font-extrabold uppercase tracking-wider text-sm">Agency</span>
                     </div>
                     <div class="flex justify-between items-start mb-1">
-                        <h2 class="text-xl font-semibold pr-4" id="question-prompt">How often do you...</h2>
-                        <button onclick="playCurrentQuestion(this)" class="text-lg p-2 bg-slate-50 rounded-full hover:bg-blue-50 hover:text-blue-600 transition-all border border-slate-100 shrink-0" title="Read Aloud">🔊</button>
+                        <h2 class="text-xl font-bold pr-4 text-slate-900" id="question-prompt">How often do you...</h2>
+                        <button type="button" onclick="playCurrentQuestion(this)" class="text-lg p-2.5 bg-[#FAF8F3] rounded-full hover:bg-purple-50 hover:text-purple-700 transition-all border-2 border-[#1E2430] shrink-0" title="Read Aloud" aria-label="Read current question aloud">🔊</button>
                     </div>
-                    <p class="text-lg mb-6" id="question-text">I feel a sense of hope that the problem can be resolved.</p>
+                    <p class="text-lg mb-6 text-slate-700" id="question-text">feel a sense of hope that this situation can be resolved?</p>
 
                     <!-- Score Buttons Grid -->
-                    <div class="grid grid-cols-6 gap-2 mb-1">
-                        <button onclick="recordScore(0)" class="p-3 rounded-lg border-2 border-slate-200 hover:border-blue-500 hover:bg-blue-50 transition-all text-center">0</button>
-                        <button onclick="recordScore(1)" class="p-3 rounded-lg border-2 border-slate-200 hover:border-blue-500 hover:bg-blue-50 transition-all text-center">1</button>
-                        <button onclick="recordScore(2)" class="p-3 rounded-lg border-2 border-slate-200 hover:border-blue-500 hover:bg-blue-50 transition-all text-center">2</button>
-                        <button onclick="recordScore(3)" class="p-3 rounded-lg border-2 border-slate-200 hover:border-blue-500 hover:bg-blue-50 transition-all text-center">3</button>
-                        <button onclick="recordScore(4)" class="p-3 rounded-lg border-2 border-slate-200 hover:border-blue-500 hover:bg-blue-50 transition-all text-center">4</button>
-                        <button onclick="recordScore(5)" class="p-3 rounded-lg border-2 border-slate-200 hover:border-blue-500 hover:bg-blue-50 transition-all text-center">5</button>
+                    <div class="grid grid-cols-6 gap-2 mb-1.5">
+                        <button type="button" onclick="recordScore(0)" class="p-3 rounded-xl border-2 border-slate-200 font-bold text-slate-800 hover:border-purple-600 hover:bg-purple-50 transition-all text-center">0</button>
+                        <button type="button" onclick="recordScore(1)" class="p-3 rounded-xl border-2 border-slate-200 font-bold text-slate-800 hover:border-purple-600 hover:bg-purple-50 transition-all text-center">1</button>
+                        <button type="button" onclick="recordScore(2)" class="p-3 rounded-xl border-2 border-slate-200 font-bold text-slate-800 hover:border-purple-600 hover:bg-purple-50 transition-all text-center">2</button>
+                        <button type="button" onclick="recordScore(3)" class="p-3 rounded-xl border-2 border-slate-200 font-bold text-slate-800 hover:border-purple-600 hover:bg-purple-50 transition-all text-center">3</button>
+                        <button type="button" onclick="recordScore(4)" class="p-3 rounded-xl border-2 border-slate-200 font-bold text-slate-800 hover:border-purple-600 hover:bg-purple-50 transition-all text-center">4</button>
+                        <button type="button" onclick="recordScore(5)" class="p-3 rounded-xl border-2 border-slate-200 font-bold text-slate-800 hover:border-purple-600 hover:bg-purple-50 transition-all text-center">5</button>
                     </div>
 
                     <!-- Labels -->
-                    <div class="grid grid-cols-6 gap-2 text-[10px] leading-tight text-slate-400 font-medium uppercase tracking-tighter">
+                    <div class="grid grid-cols-6 gap-2 text-[10px] leading-tight text-slate-500 font-semibold uppercase tracking-tighter">
                         <div class="text-center">Never</div>
                         <div class="text-center">Rarely</div>
                         <div class="text-center">Sometimes</div>
@@ -201,46 +477,45 @@
                         <div class="text-center">Always</div>
                     </div>
 
-                    <div class="flex justify-between items-center text-sm text-slate-400 font-medium border-t border-slate-50 pt-6 mt-8">
-                        <button onclick="goBackQuestion()" class="hover:text-slate-700 transition-all w-12 text-left">&larr; Back</button>
-                        <div class="flex flex-col items-center flex-grow px-8">
-
-                            <span>Question <span id="current-q-num">1</span> of 20</span>
+                    <div class="flex justify-between items-center text-sm text-slate-500 font-semibold border-t border-slate-100 pt-6 mt-8">
+                        <button type="button" onclick="goBackQuestion()" class="hover:text-slate-900 transition-all w-16 text-left">&larr; Back</button>
+                        <div class="flex flex-col items-center flex-grow px-4">
+                            <span>Question <span id="current-q-num" class="text-slate-900 font-extrabold">1</span> of 20</span>
                         </div>
-                        <div class="w-12"></div> 
+                        <div class="w-16"></div> 
                     </div>
                 </div>
 
                 <!-- Results Card -->
                 <div id="results-card" class="hidden text-center">
-                    <h2 class="text-3xl font-bold mb-4">Your Results</h2>
+                    <h2 class="text-3xl font-black mb-4 text-slate-900">Your Results</h2>
                     <div class="mb-6">
                         <div class="flex items-baseline justify-center gap-2 mb-1">
-                            <div class="text-5xl font-black text-blue-600" id="final-score">0</div>
+                            <div class="text-5xl font-black text-purple-700" id="final-score">0</div>
                             <div class="text-2xl font-bold text-slate-400">/ 100</div>
                         </div>
-                        <div class="text-slate-500 uppercase tracking-widest text-sm">Current Flow Score</div>
+                        <div class="text-slate-500 uppercase tracking-widest text-sm font-bold">Current Flow Score</div>
                     </div>
-                    <div class="bg-blue-50 p-4 rounded-xl mb-6">
-                        <p class="text-sm text-blue-800">With the THRiVE method, our target is to reach:</p>
+                    <div class="bg-[#FAF8F3] border-2 border-[#1E2430] p-4 rounded-2xl mb-6 shadow-[4px_4px_0_#1E2430]">
+                        <p class="text-sm text-slate-700 font-medium">With the THRiVE method, our target is to reach:</p>
                         <div class="flex justify-center items-baseline gap-1 mt-1">
-                            <p class="text-3xl font-bold text-blue-600" id="target-score">0</p>
-                            <p class="text-lg font-bold text-blue-400">/ 100</p>
+                            <p class="text-3xl font-black text-purple-700" id="target-score">0</p>
+                            <p class="text-lg font-bold text-slate-400">/ 100</p>
                         </div>
-                        <p class="text-xs text-blue-500 mt-1">Bridging 60% of the Friction Gap</p>
+                        <p class="text-xs text-purple-700 font-bold mt-1">Bridging 60% of the Friction Gap</p>
                     </div>
                     <div class="flex flex-col gap-3">
-                        <button onclick="showDetailedSummary()" class="bg-blue-600 text-white px-8 py-3 rounded-full font-bold hover:bg-blue-700 transition-all w-full flex items-center justify-center gap-2">
+                        <button type="button" onclick="showDetailedSummary()" class="cta-button primary w-full">
                             <span class="text-xl">📊</span> View Detailed Interpretation
                         </button>
-                        <button onclick="location.reload()" class="bg-slate-900 text-white px-8 py-3 rounded-full font-bold hover:bg-slate-800 transition-all w-full">Start Over</button>
+                        <button type="button" onclick="location.reload()" class="cta-button secondary-outline w-full">Start Over</button>
                     </div>
                 </div>
 
-                <!-- Detailed Summary Card (NEW FINGERPRINT UI) -->
+                <!-- Detailed Summary Card (FLOW FINGERPRINT UI) -->
                 <div id="detailed-summary-card" class="hidden text-left pb-4">
-                    <h2 class="text-3xl font-bold mb-6 text-center border-b border-slate-100 pb-4 flex items-center justify-center gap-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-slate-800">
+                    <h2 class="text-3xl font-black mb-6 text-center border-b border-slate-100 pb-4 flex items-center justify-center gap-3 text-slate-900">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-purple-700">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M7.864 4.243A7.5 7.5 0 0119.5 10.5c0 2.92-.556 5.709-1.568 8.268M5.742 6.364A7.465 7.465 0 004.5 10.5a7.464 7.464 0 01-1.15 3.993m1.989 3.559A11.209 11.209 0 008.25 10.5a3.75 3.75 0 117.5 0c0 .527-.021 1.049-.064 1.565M12 10.5a14.94 14.94 0 01-3.6 9.75m6.633-4.596a18.666 18.666 0 01-2.485 5.33" />
                         </svg>
                         Your Flow Fingerprint
@@ -248,13 +523,16 @@
                     
                     <div class="mb-6">
                         <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-2">1. The Friction</h3>
-                        <div class="bg-amber-50 rounded-xl p-4 border border-amber-100">
-                            <p class="text-slate-700 italic mb-4 text-sm font-medium" id="summary-problem">"..."</p>
-                            <div class="bg-white border border-amber-200 rounded-lg p-3">
-                                <div class="flex items-center gap-2 text-amber-800 font-bold text-sm mb-1">
-                                    <span id="summary-metaphor-icon"></span> <span id="summary-metaphor-text"></span>
+                        <div class="bg-[#FAF8F3] rounded-xl p-4 border-2 border-[#1E2430]">
+                            <p class="text-slate-800 italic mb-4 text-sm font-medium" id="summary-problem">"..."</p>
+                            <div class="bg-white border border-slate-200 rounded-xl p-3 flex items-center gap-3">
+                                <img id="summary-metaphor-img" alt="" class="hidden w-16 h-16 object-contain rounded-lg bg-[#FCF8F2] border border-slate-200 p-0.5 shrink-0">
+                                <div>
+                                    <div class="flex items-center gap-2 text-purple-900 font-extrabold text-sm mb-1">
+                                        <span id="summary-metaphor-icon"></span> <span id="summary-metaphor-text"></span>
+                                    </div>
+                                    <p class="text-[13px] text-slate-600 leading-tight" id="summary-metaphor-desc"></p>
                                 </div>
-                                <p class="text-[13px] text-slate-600 leading-tight" id="summary-metaphor-desc"></p>
                             </div>
                         </div>
                     </div>
@@ -269,12 +547,12 @@
                                 </div>
                                 <div class="text-[10px] uppercase text-slate-500 font-bold mt-1">Current</div>
                             </div>
-                            <div class="bg-blue-50 rounded-xl p-3 border border-blue-200">
+                            <div class="bg-purple-50 rounded-xl p-3 border border-purple-200">
                                 <div class="flex items-baseline justify-center gap-1">
-                                    <div class="text-2xl font-black text-blue-600" id="summary-target">0</div>
-                                    <div class="text-xs font-bold text-blue-400">/ 100</div>
+                                    <div class="text-2xl font-black text-purple-700" id="summary-target">0</div>
+                                    <div class="text-xs font-bold text-purple-400">/ 100</div>
                                 </div>
-                                <div class="text-[10px] uppercase text-blue-500 font-bold mt-1">Target</div>
+                                <div class="text-[10px] uppercase text-purple-700 font-bold mt-1">Target</div>
                             </div>
                             <div class="bg-green-50 rounded-xl p-3 border border-green-200 shadow-sm shadow-green-100">
                                 <div class="flex items-baseline justify-center gap-1">
@@ -305,20 +583,20 @@
 
                     <!-- Action Buttons Container -->
                     <div id="blueprint-buttons" class="flex flex-col gap-3 mt-6">
-                        <button onclick="downloadImage()" class="bg-slate-900 text-white px-8 py-4 rounded-full font-bold hover:bg-slate-800 transition-all flex justify-center items-center gap-2 shadow-lg">
+                        <button type="button" onclick="downloadImage()" class="cta-button primary w-full">
                             <span class="text-xl">📸</span> Save as Image (JPG)
                         </button>
-                        <button onclick="location.reload()" class="bg-blue-100 text-blue-700 px-8 py-4 rounded-full font-bold hover:bg-blue-200 transition-all flex justify-center items-center gap-2 shadow-sm">
+                        <button type="button" onclick="location.reload()" class="cta-button secondary-outline w-full">
                             <span class="text-xl">🔄</span> Take Another Survey
                         </button>
-                        <button onclick="hideDetailedSummary()" class="text-slate-400 font-bold hover:text-slate-700 transition-all text-center mt-2">&larr; Back</button>
+                        <button type="button" onclick="hideDetailedSummary()" class="text-slate-500 font-bold hover:text-slate-900 transition-all text-center mt-2">&larr; Back</button>
                     </div>
                 </div>
             </div>
 
             <!-- Right Side: The Visual Anchor -->
-            <div id="visual-anchor" class="sticky top-8 flex flex-col items-center transition-all duration-300">
-                <h2 id="visual-title" class="text-3xl font-bold mb-6 text-center border-b border-slate-100 pb-4 hidden w-full">Your Flow Circle</h2>
+            <div id="visual-anchor" class="sticky top-24 flex flex-col items-center transition-all duration-300 survey-card p-6">
+                <h2 id="visual-title" class="text-3xl font-black mb-6 text-center border-b border-slate-100 pb-4 hidden w-full text-slate-900">Your Flow Circle</h2>
                 
                 <div class="relative w-full max-w-[350px] aspect-square">
                     <!-- Quadrant Labels -->
@@ -329,7 +607,7 @@
                         <span class="absolute top-1 left-2 text-[10px] font-bold text-purple-500 uppercase tracking-widest">Tools</span>
                     </div>
 
-                    <svg viewBox="0 0 100 100" class="w-full h-full -rotate-90">
+                    <svg viewBox="0 0 100 100" class="w-full h-full">
                         <!-- Background Circles -->
                         <circle cx="50" cy="50" r="45" fill="none" stroke="#f1f5f9" stroke-width="0.5" />
                         <circle cx="50" cy="50" r="31.5" fill="none" stroke="#f1f5f9" stroke-width="0.5" />
@@ -347,13 +625,13 @@
                         <span class="text-[9px] uppercase font-bold text-slate-400 -mt-1">Flow</span>
                     </div>
                 </div>
-                <p class="text-sm text-slate-400 mt-6 text-center px-4" id="visual-caption">The lighter outer ring shows your Future Potential — the flow we will reclaim together.</p>
+                <p class="text-sm text-slate-500 mt-6 text-center px-4" id="visual-caption">The lighter outer ring shows your Future Potential — the flow we will reclaim together.</p>
                 
                 <!-- THRiVE CTA Block -->
-                <div id="thrive-cta" class="mt-6 mb-2 bg-blue-50 border-2 border-blue-100 rounded-2xl p-5 text-left shadow-sm hidden w-full">
+                <div id="thrive-cta" class="mt-6 mb-2 bg-[#FAF8F3] border-2 border-[#1E2430] rounded-2xl p-5 text-left shadow-[4px_4px_0_#1E2430] hidden w-full">
                     <div class="flex items-center gap-3 mb-3">
                         <span class="text-3xl">🚀</span>
-                        <h3 class="text-xl font-black text-slate-800 leading-tight">The Diagnosis is Complete.<br>Ready for the Treatment?</h3>
+                        <h3 class="text-xl font-black text-slate-900 leading-tight">The Diagnosis is Complete.<br>Ready for the Treatment?</h3>
                     </div>
                     <p class="text-[13px] text-slate-700 mb-3 leading-relaxed">
                         Diagnosing your current level of friction is just the first step. The treatment is a 6-week program called <strong>THRiVE Coaching</strong>. 
@@ -361,7 +639,7 @@
                     <p class="text-[13px] text-slate-700 mb-3 leading-relaxed">
                         Join a class with 19 other adults—parents, aunts, uncles, and grandparents. We are the adults in the room, and we have a responsibility to help our kids. We use AI as a tool to help them, not harm them.
                     </p>
-                    <div class="bg-white rounded-xl p-3 mb-3 border border-blue-100">
+                    <div class="bg-white rounded-xl p-3 mb-3 border border-slate-200">
                         <ul class="text-[13px] font-bold text-slate-800 space-y-1.5">
                             <li class="flex items-center gap-2"><span>⏱️</span> 6 Weeks</li>
                             <li class="flex items-center gap-2"><span>💵</span> $600 Total</li>
@@ -371,8 +649,8 @@
                     <p class="text-[13px] text-slate-700 mb-4 leading-relaxed">
                         Run by Dr. Steve Huff, a 30-year veteran in the mental health community collaborating with AI to create a method that <em>actually</em> works. Stop just reading more books and watching more YouTube videos, and get to work on reducing the friction in your parenting.
                     </p>
-                    <a href="https://thrivecoaching.ai" target="_blank" class="block w-full bg-blue-600 text-white text-center px-6 py-3.5 rounded-xl font-bold hover:bg-blue-700 transition-all shadow-md text-sm">
-                        Visit thrivecoaching.ai to watch the video
+                    <a href="https://thrivecoaching.ai" target="_blank" class="cta-button primary w-full text-sm">
+                        Visit thrivecoaching.ai to watch the video &rarr;
                     </a>
                 </div>
             </div>
@@ -382,10 +660,37 @@
 
     <script>
         // ==========================================
-        // 1. SETTINGS & AUDIO LOGIC
+        // 1. SETTINGS & NON-OVERLAPPING AUDIO LOGIC
         // ==========================================
-        
         let currentAudio = null;
+        let currentAudioUrl = null;
+        let currentAudioBtn = null;
+        let currentAudioAbortController = null;
+        let activeAudioRequestId = 0;
+
+        function stopCurrentAudio() {
+            activeAudioRequestId++;
+            if (currentAudioAbortController) {
+                currentAudioAbortController.abort();
+                currentAudioAbortController = null;
+            }
+            if (currentAudio) {
+                currentAudio.onended = null;
+                currentAudio.onerror = null;
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+                currentAudio = null;
+            }
+            if (currentAudioUrl) {
+                URL.revokeObjectURL(currentAudioUrl);
+                currentAudioUrl = null;
+            }
+            if (currentAudioBtn) {
+                currentAudioBtn.innerText = "🔊";
+                currentAudioBtn.classList.remove('animate-pulse');
+                currentAudioBtn = null;
+            }
+        }
 
         async function playAudio(text, btnElement) {
             if (!elevenLabsApiKey) {
@@ -393,15 +698,25 @@
                 return;
             }
 
+            // Stop any playing audio or in-flight request immediately so clips never overlap
+            stopCurrentAudio();
+
+            const requestId = ++activeAudioRequestId;
+            const abortController = new AbortController();
+            currentAudioAbortController = abortController;
+            currentAudioBtn = btnElement || null;
+
             const voiceId = elevenLabsVoiceId || '21m00Tcm4TlvDq8ikWAM';
 
-            const originalText = btnElement.innerText;
-            btnElement.classList.add('animate-pulse');
-            btnElement.innerText = "⏳";
+            if (btnElement) {
+                btnElement.classList.add('animate-pulse');
+                btnElement.innerText = "⏳";
+            }
 
             try {
                 const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
                     method: 'POST',
+                    signal: abortController.signal,
                     headers: {
                         'Accept': 'audio/mpeg',
                         'xi-api-key': elevenLabsApiKey,
@@ -414,29 +729,40 @@
                     })
                 });
 
+                if (requestId !== activeAudioRequestId) return;
                 if (!response.ok) throw new Error("Audio generation failed. Check your API key.");
                 
                 const blob = await response.blob();
+                if (requestId !== activeAudioRequestId) return;
+
                 const audioUrl = URL.createObjectURL(blob);
+                currentAudioUrl = audioUrl;
                 
-                if (currentAudio) {
-                    currentAudio.pause();
-                }
-                
-                currentAudio = new Audio(audioUrl);
-                currentAudio.onended = () => {
-                    btnElement.innerText = originalText;
-                    btnElement.classList.remove('animate-pulse');
+                const audio = new Audio(audioUrl);
+                currentAudio = audio;
+                currentAudioAbortController = null;
+
+                audio.onended = () => {
+                    if (currentAudio === audio) {
+                        stopCurrentAudio();
+                    }
                 };
-                currentAudio.play();
-                btnElement.innerText = "🔊";
-                btnElement.classList.remove('animate-pulse');
+
+                if (btnElement) {
+                    btnElement.innerText = "🔊";
+                    btnElement.classList.remove('animate-pulse');
+                }
+                await audio.play();
+                if (requestId !== activeAudioRequestId) {
+                    audio.pause();
+                }
 
             } catch (error) {
+                if (error && error.name === 'AbortError') return;
+                if (requestId !== activeAudioRequestId) return;
                 console.error(error);
                 alert("Failed to generate audio. Make sure your ElevenLabs API key is correct.");
-                btnElement.innerText = originalText;
-                btnElement.classList.remove('animate-pulse');
+                stopCurrentAudio();
             }
         }
 
@@ -453,9 +779,6 @@
         let isRecording = false;
 
         function toggleDictation() {
-            const btn = document.getElementById('dictation-btn');
-            const icon = document.getElementById('mic-icon');
-            const text = document.getElementById('dictation-text');
             const textArea = document.getElementById('problem-description');
 
             if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
@@ -470,18 +793,16 @@
                 recognition.interimResults = true;
 
                 recognition.onresult = (event) => {
-                    let interimTranscript = '';
                     let finalTranscript = '';
 
                     for (let i = event.resultIndex; i < event.results.length; ++i) {
                         if (event.results[i].isFinal) {
                             finalTranscript += event.results[i][0].transcript;
-                        } else {
-                            interimTranscript += event.results[i][0].transcript;
                         }
                     }
                     if (finalTranscript) {
                         textArea.value += (textArea.value ? ' ' : '') + finalTranscript;
+                        clearStep1Error();
                     }
                 };
 
@@ -491,7 +812,7 @@
                 };
                 
                 recognition.onend = () => {
-                    if (isRecording) recognition.start(); // Keep going if it paused automatically
+                    if (isRecording) recognition.start();
                 };
             }
 
@@ -505,15 +826,18 @@
         function startDictation() {
             isRecording = true;
             recognition.start();
-            document.getElementById('dictation-btn').classList.add('text-red-500', 'pulse-animation');
+            document.getElementById('dictation-btn').classList.add('text-red-600', 'pulse-animation');
             document.getElementById('mic-icon').innerText = '🔴';
             document.getElementById('dictation-text').innerText = 'Listening... (Click to Stop)';
         }
 
         function stopDictation() {
+            if (!isRecording) return;
             isRecording = false;
-            recognition.stop();
-            document.getElementById('dictation-btn').classList.remove('text-red-500', 'pulse-animation');
+            try {
+                if (recognition) recognition.stop();
+            } catch (e) {}
+            document.getElementById('dictation-btn').classList.remove('text-red-600', 'pulse-animation');
             document.getElementById('mic-icon').innerText = '🎙️';
             document.getElementById('dictation-text').innerText = 'Dictate';
         }
@@ -541,7 +865,10 @@
                 const data = await response.json();
                 const cleanedText = data.candidates?.[0]?.content?.parts?.[0]?.text;
                 
-                if (cleanedText) textArea.value = cleanedText;
+                if (cleanedText) {
+                    textArea.value = cleanedText.trim();
+                    clearStep1Error();
+                }
 
             } catch (error) {
                 console.error("Cleanup Error:", error);
@@ -552,27 +879,108 @@
             }
         }
 
+        // ==========================================
+        // 3. STEP VALIDATION, NAVIGATION & VISUAL LOGIC
+        // ==========================================
+        function clearStep1Error() {
+            const err = document.getElementById('step-1-error');
+            const textArea = document.getElementById('problem-description');
+            if (err) err.classList.add('hidden');
+            if (textArea) textArea.classList.remove('border-rose-500', 'ring-4', 'ring-rose-100');
+        }
 
-        // ==========================================
-        // 3. STEP NAVIGATION & VISUAL LOGIC
-        // ==========================================
+        function validateAndGoToStep2() {
+            const textArea = document.getElementById('problem-description');
+            const val = textArea.value.trim();
+            if (!val) {
+                const err = document.getElementById('step-1-error');
+                err.classList.remove('hidden');
+                textArea.classList.add('border-rose-500', 'ring-4', 'ring-rose-100');
+                textArea.focus();
+                return;
+            }
+            clearStep1Error();
+            goToStep(2);
+        }
+
+        function handleMetaphorChange(radioEl) {
+            const customInput = document.getElementById('custom-metaphor-input');
+            if (radioEl.value === 'custom') {
+                customInput.classList.remove('hidden');
+                customInput.focus();
+            } else {
+                customInput.classList.add('hidden');
+                customInput.classList.remove('border-rose-500', 'ring-4', 'ring-rose-100');
+            }
+            clearStep2Error();
+        }
+
+        function clearStep2Error() {
+            const err = document.getElementById('step-2-error');
+            const customInput = document.getElementById('custom-metaphor-input');
+            if (err) err.classList.add('hidden');
+            if (customInput) customInput.classList.remove('border-rose-500', 'ring-4', 'ring-rose-100');
+        }
+
+        function validateAndGoToStep3() {
+            const selectedRadio = document.querySelector('input[name="metaphor"]:checked');
+            const err = document.getElementById('step-2-error');
+            const errText = document.getElementById('step-2-error-text');
+            const customInput = document.getElementById('custom-metaphor-input');
+
+            if (!selectedRadio) {
+                errText.innerText = "Please select one of the 8 illustrated metaphors (or choose 'Your Own Metaphor') before starting the survey.";
+                err.classList.remove('hidden');
+                return;
+            }
+
+            if (selectedRadio.value === 'custom' && !customInput.value.trim()) {
+                errText.innerText = "Please describe your custom metaphor in the box above (or select one of the 8 illustrated cards) before starting the survey.";
+                err.classList.remove('hidden');
+                customInput.classList.remove('hidden');
+                customInput.classList.add('border-rose-500', 'ring-4', 'ring-rose-100');
+                customInput.focus();
+                return;
+            }
+
+            clearStep2Error();
+            goToStep(3);
+        }
+
+        function updateProgressPills(stepNum) {
+            for (let i = 0; i <= 3; i++) {
+                const pill = document.getElementById(`pill-step-${i}`);
+                if (!pill) continue;
+                pill.classList.remove('active', 'completed');
+                if (i === stepNum) {
+                    pill.classList.add('active');
+                } else if (i < stepNum) {
+                    pill.classList.add('completed');
+                }
+            }
+        }
+
         function goToStep(stepNum) {
+            stopCurrentAudio();
+            if (isRecording) stopDictation();
+
             document.getElementById('step-intro').classList.add('hidden');
             document.getElementById('step-1').classList.add('hidden');
             document.getElementById('step-2').classList.add('hidden');
             document.getElementById('step-3').classList.add('hidden');
             
-            if(stepNum === 0) document.getElementById('step-intro').classList.remove('hidden');
-            if(stepNum === 1) document.getElementById('step-1').classList.remove('hidden');
-            if(stepNum === 2) document.getElementById('step-2').classList.remove('hidden');
-            if(stepNum === 3) {
+            if (stepNum === 0) document.getElementById('step-intro').classList.remove('hidden');
+            if (stepNum === 1) document.getElementById('step-1').classList.remove('hidden');
+            if (stepNum === 2) document.getElementById('step-2').classList.remove('hidden');
+            if (stepNum === 3) {
                 document.getElementById('step-3').classList.remove('hidden');
                 initVisual();
             }
-            window.scrollTo(0,0);
+            updateProgressPills(stepNum);
+            window.scrollTo(0, 0);
         }
 
-                        const questions = [
+        const questions = [
             { id: 1, cat: "Agency", icon: "🕯️", text: "feel a sense of hope that this situation can be resolved?", color: "#3b82f6" },
             { id: 2, cat: "Agency", icon: "🕯️", text: "believe you have the power to shift the outcome of this challenge?", color: "#3b82f6" },
             { id: 3, cat: "Agency", icon: "🕯️", text: "stay calm enough to think clearly rather than just reacting to this stressor?", color: "#3b82f6" },
@@ -616,7 +1024,6 @@
             }
             visualInitialized = true;
             renderQuestion();
-            
         }
 
         function updateSegmentPath(el, index, score) {
@@ -624,8 +1031,8 @@
             const maxRadius = 45;
             const radius = innerRadius + (score / 5) * (maxRadius - innerRadius);
             
-            const startAngle = (index * 18) * (Math.PI / 180);
-            const endAngle = ((index + 1) * 18) * (Math.PI / 180);
+            const startAngle = ((index * 18) - 90) * (Math.PI / 180);
+            const endAngle = (((index + 1) * 18) - 90) * (Math.PI / 180);
             
             const x1 = 50 + radius * Math.cos(startAngle);
             const y1 = 50 + radius * Math.sin(startAngle);
@@ -637,6 +1044,7 @@
         }
 
         function recordScore(val) {
+            stopCurrentAudio();
             scores[currentQ] = val;
             updateSegmentPath(document.getElementById(`seg-${currentQ}`), currentQ, val);
             
@@ -652,6 +1060,7 @@
         }
 
         function goBackQuestion() {
+            stopCurrentAudio();
             if (currentQ > 0) {
                 currentQ--; 
                 scores[currentQ] = 0;
@@ -669,7 +1078,6 @@
             document.getElementById('category-icon').innerText = q.icon;
             document.getElementById('question-text').innerText = q.text;
             document.getElementById('current-q-num').innerText = currentQ + 1;
-            
         }
 
         function showResults() {
@@ -717,7 +1125,6 @@
             if (lowCats.length > 0) {
                 diagnosisHTML += `<p>However, the specific "Ugg" you're experiencing is stemming from a drop in <strong>${lowCats.join(' and ')}</strong>.</p>`;
                 
-                // Add specific insights
                 if (lowCats.includes("Agency")) diagnosisHTML += `<p class="pl-4 border-l-2 border-indigo-200"><em>When Agency is low, the problem drives you, leading to reactive overwhelm.</em></p>`;
                 if (lowCats.includes("Actions")) diagnosisHTML += `<p class="pl-4 border-l-2 border-indigo-200"><em>When Actions drop, the path gets confusing, leading to analysis paralysis.</em></p>`;
                 if (lowCats.includes("Support")) diagnosisHTML += `<p class="pl-4 border-l-2 border-indigo-200"><em>When Support is lacking, you carry the whole burden alone, leading to isolation.</em></p>`;
@@ -736,13 +1143,23 @@
             actionButtons.classList.add('hidden');
 
             const mainContainer = document.getElementById('step-3');
+            const surveyContainer = document.getElementById('survey-container');
             const visualAnchor = document.getElementById('visual-anchor');
             
             const origMain = mainContainer.className;
+            const origSurvey = surveyContainer.className;
             const origVisual = visualAnchor.className;
 
-            mainContainer.className = 'flex flex-col w-[768px] max-w-[768px] mx-auto bg-white rounded-2xl shadow-none p-8';
+            mainContainer.className = 'flex flex-col w-[768px] max-w-[768px] mx-auto bg-white rounded-3xl border-2 border-[#1E2430] p-8';
+            surveyContainer.className = 'w-full';
             visualAnchor.className = 'w-full flex flex-col items-center pt-8 mt-8 border-t-2 border-slate-100';
+
+            const restoreLayout = () => {
+                actionButtons.classList.remove('hidden');
+                mainContainer.className = origMain;
+                surveyContainer.className = origSurvey;
+                visualAnchor.className = origVisual;
+            };
 
             setTimeout(() => {
                 html2canvas(mainContainer, {
@@ -756,9 +1173,10 @@
                     link.download = 'My_Flow_Fingerprint.jpg';
                     link.href = imgData;
                     link.click();
-                    actionButtons.classList.remove('hidden');
-                    mainContainer.className = origMain;
-                    visualAnchor.className = origVisual;
+                }).catch(err => {
+                    console.error('Failed to export image:', err);
+                }).finally(() => {
+                    restoreLayout();
                 });
             }, 150);
         }
@@ -779,8 +1197,7 @@
             document.getElementById('detailed-summary-card').classList.add('hidden');
             document.getElementById('results-card').classList.remove('hidden');
             const visualAnchor = document.getElementById('visual-anchor');
-            visualAnchor.classList.remove('bg-white', 'p-6', 'rounded-2xl', 'shadow-xl', 'border', 'border-slate-100');
-            visualAnchor.classList.add('sticky', 'top-8');
+            visualAnchor.classList.add('sticky', 'top-24');
             document.getElementById('visual-title').classList.add('hidden');
             document.getElementById('thrive-cta').classList.add('hidden');
         }
@@ -790,37 +1207,54 @@
             document.getElementById('detailed-summary-card').classList.remove('hidden');
 
             const visualAnchor = document.getElementById('visual-anchor');
-            visualAnchor.classList.add('bg-white', 'p-6', 'rounded-2xl', 'shadow-xl', 'border', 'border-slate-100');
-            visualAnchor.classList.remove('sticky', 'top-8');
+            visualAnchor.classList.remove('sticky', 'top-24');
             document.getElementById('visual-title').classList.remove('hidden');
             document.getElementById('thrive-cta').classList.remove('hidden');
 
             // Set Friction Inputs
-            const problemDesc = document.getElementById('problem-description').value || "No specific friction described.";
+            const problemDesc = document.getElementById('problem-description').value.trim() || "No specific friction described.";
             document.getElementById('summary-problem').innerText = `"${problemDesc}"`;
 
             let metaphorText = "None selected";
             let metaphorIcon = "❓";
             let metaphorDesc = "";
+            let metaphorImg = "";
             const selectedRadio = document.querySelector('input[name="metaphor"]:checked');
             if (selectedRadio) {
-                const h3 = selectedRadio.nextElementSibling.querySelector('h3');
-                const p = selectedRadio.nextElementSibling.querySelector('p');
-                const icon = selectedRadio.nextElementSibling.querySelector('.text-2xl').innerText;
+                const cardEl = selectedRadio.nextElementSibling;
+                const h3 = cardEl.querySelector('h3');
+                const p = cardEl.querySelector('p');
+                const iconEl = cardEl.querySelector('.metaphor-icon') || cardEl.querySelector('.text-2xl');
+                const icon = selectedRadio.dataset.icon || (iconEl ? iconEl.innerText : "✨");
+                metaphorImg = selectedRadio.dataset.img || "";
                 
-                if (h3.innerText === "Your Own Metaphor") {
-                    metaphorText = document.getElementById('custom-metaphor-input').value || "Custom metaphor";
+                if (selectedRadio.value === "custom" || (h3 && h3.innerText === "Your Own Metaphor")) {
+                    metaphorText = document.getElementById('custom-metaphor-input').value.trim() || "Custom metaphor";
                     metaphorIcon = "🖊️";
                     metaphorDesc = "A custom description of your current friction.";
+                    metaphorImg = "";
                 } else {
-                    metaphorText = h3.innerText;
+                    metaphorText = h3 ? h3.innerText : selectedRadio.value;
                     metaphorIcon = icon;
-                    metaphorDesc = p.innerText;
+                    metaphorDesc = p ? p.innerText : "";
                 }
             }
             document.getElementById('summary-metaphor-text').innerText = metaphorText;
             document.getElementById('summary-metaphor-icon').innerText = metaphorIcon;
             document.getElementById('summary-metaphor-desc').innerText = metaphorDesc;
+
+            const summaryImgEl = document.getElementById('summary-metaphor-img');
+            if (summaryImgEl) {
+                if (metaphorImg) {
+                    summaryImgEl.src = metaphorImg;
+                    summaryImgEl.alt = metaphorText;
+                    summaryImgEl.classList.remove('hidden');
+                } else {
+                    summaryImgEl.removeAttribute('src');
+                    summaryImgEl.alt = '';
+                    summaryImgEl.classList.add('hidden');
+                }
+            }
 
             // Set Math Inputs
             const currentTotal = scores.reduce((a, b) => a + b, 0);
@@ -865,9 +1299,9 @@
                 
                 catContainer.innerHTML += `
                     <div class="border border-slate-200 rounded-xl overflow-hidden bg-white shadow-sm">
-                        <button onclick="toggleDimension(${index})" class="w-full flex items-center justify-between p-3 hover:bg-slate-50 transition-all text-left">
+                        <div role="button" tabindex="0" onclick="toggleDimension(${index})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleDimension(${index});}" class="w-full flex items-center justify-between p-3.5 hover:bg-slate-50 transition-all text-left cursor-pointer">
                             <div class="flex-grow pr-4">
-                                <div class="flex justify-between text-xs font-bold text-slate-600 mb-1">
+                                <div class="flex justify-between text-xs font-bold text-slate-600 mb-2">
                                     <span>${c.icon} ${c.name}</span>
                                     <span>${total} / 25</span>
                                 </div>
@@ -876,7 +1310,7 @@
                                 </div>
                             </div>
                             <div class="text-slate-400 text-2xl font-light leading-none w-6 text-center" id="dim-icon-${index}">−</div>
-                        </button>
+                        </div>
                         <div id="dim-content-${index}" class="p-4 bg-slate-50 border-t border-slate-100 text-sm text-slate-700">
                             <p class="mb-2"><span class="font-bold text-slate-900">When Low (0-10):</span> ${c.lowDesc}</p>
                             <p><span class="font-bold text-slate-900">When High (15-25):</span> ${c.highDesc}</p>

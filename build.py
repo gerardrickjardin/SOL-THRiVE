@@ -1,7 +1,7 @@
 import os, shutil
 
 out_dirs = ['dist', 'public']
-files = ['index.html', 'profile.html', 'survey.html', 'approach.html', 'how-to-use.html', 'rebuilding-life-challenges.html', 'employment-challenges.html', 'style.css', 'script.js', 'hope-survey.html', 'minds-eye-white-bg.mp4', 'minds-eye.png', 'minds-eye-animated.mp4', 'minds-eye-animated.webm']
+files = ['index.html', 'mockup-landing.html', 'results.html', 'profile.html', 'survey.html', 'approach.html', 'how-to-use.html', 'rebuilding-life-challenges.html', 'employment-challenges.html', 'style.css', 'script.js', 'hope-survey.html', 'ai-avatar.png', 'minds-eye-white-bg.mp4', 'minds-eye.png', 'minds-eye-animated.mp4', 'minds-eye-animated.webm']
 
 for out_dir in out_dirs:
     os.makedirs(out_dir, exist_ok=True)
@@ -17,7 +17,7 @@ for out_dir in out_dirs:
             shutil.copy2(os.path.join(assets_src, asset), os.path.join(assets_dest, asset))
 
     key = os.environ.get('VITE_ELEVENLABS_API_KEY', os.environ.get('ELEVENLABS_API_KEY', ''))
-    gemini_key = os.environ.get('VITE_GEMINI_API_KEY', os.environ.get('GEMINI_API_KEY', ''))
+    gemini_key = os.environ.get('VITE_GEMINI_API_KEY', os.environ.get('GEMINI_API_KEY', 'AIzaSyDhByu-gVi8PNLtDdl41ETxOmu2JOEVt8A'))
 
     for file in ['profile.html', 'survey.html', 'hope-survey.html']:
         file_path = os.path.join(out_dir, file)
