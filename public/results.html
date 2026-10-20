@@ -132,10 +132,14 @@ h1,h2,h3{font-family:'Kalam',cursive;font-weight:700}
   @page{margin:0.4in}
   html,body{height:auto !important;min-height:0 !important;overflow:visible !important;background:#fff !important;-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important}
   .wrap{height:auto !important;min-height:0 !important;padding:0 !important}
-  .btn-sm,.share,.actions,#restart-blueprint-btn,.play,#vote{display:none !important}
-  .card{display:block !important;border:1.5px solid #2B2B30 !important;box-shadow:none !important;background:#fff !important}
-  .col + .col{border-left:0 !important;padding-left:0 !important;margin-left:0 !important;margin-top:14px !important}
-  .video{height:140px !important;flex:none !important}
+  .btn-sm,.share,.actions,#restart-blueprint-btn,.play,#vote,#vote-prompt-hint,.video{display:none !important}
+  .card{display:block !important;border:1.5px solid #2B2B30 !important;box-shadow:none !important;background:#fff !important;break-inside:avoid !important;page-break-inside:avoid !important}
+  .box{break-inside:avoid !important;page-break-inside:avoid !important}
+  .col + .col{border-left:0 !important;padding-left:0 !important;margin-left:0 !important;margin-top:12px !important}
+  .fill{transition:none !important}
+  .fill[data-w="84"]{width:84% !important}
+  .fill[data-w="94"]{width:94% !important}
+  .fill[data-w="89"]{width:89% !important}
 }
 </style>
 </head>
@@ -392,9 +396,13 @@ try {
 document.querySelectorAll('.opt').forEach(o => o.addEventListener('click', e => {
   e.preventDefault();
   const voteBtn = document.getElementById('vote');
-  if (voteBtn && voteBtn.disabled) {
-    voteBtn.disabled = false;
-    voteBtn.textContent = 'Update Vote →';
+  if (voteBtn) {
+    if (voteBtn.disabled) {
+      voteBtn.disabled = false;
+      voteBtn.textContent = 'Update Vote →';
+    } else if (voteBtn.textContent && voteBtn.textContent.includes('Pick')) {
+      voteBtn.textContent = 'Submit Vote →';
+    }
   }
   o.classList.toggle('on');
 }));
@@ -420,8 +428,10 @@ document.getElementById('vote').onclick = function(){
     localStorage.setItem('solThriveVotes', JSON.stringify(votePayload));
     const merged = { ...d, votes: priorities, votedAt: votePayload.timestamp };
     localStorage.setItem('solThrive', JSON.stringify(merged));
-    localStorage.setItem('solThriveLead', JSON.stringify(merged));
     sessionStorage.setItem('solThrive', JSON.stringify(merged));
+    if (d && d.first) {
+      localStorage.setItem('solThriveLead', JSON.stringify(merged));
+    }
   } catch (_) {}
 
   updateVoteTallies(priorities);

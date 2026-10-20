@@ -24,7 +24,7 @@
         function getActiveGeminiKey() {
             try {
                 const saved = localStorage.getItem('thriveGeminiKey');
-                if (saved && saved.trim()) return saved.trim();
+                if (saved !== null) return saved.trim();
             } catch (e) {}
             return apiKey || "";
         }
@@ -32,7 +32,7 @@
         function getActiveElevenLabsKey() {
             try {
                 const saved = localStorage.getItem('thriveElevenLabsKey');
-                if (saved && saved.trim()) return saved.trim();
+                if (saved !== null) return saved.trim();
             } catch (e) {}
             return elevenLabsApiKey || "";
         }
@@ -40,7 +40,7 @@
         function getActiveElevenLabsVoiceId() {
             try {
                 const saved = localStorage.getItem('thriveElevenLabsVoiceId');
-                if (saved && saved.trim()) return saved.trim();
+                if (saved !== null && saved.trim() !== "") return saved.trim();
             } catch (e) {}
             return elevenLabsVoiceId || "21m00Tcm4TlvDq8ikWAM";
         }
@@ -754,15 +754,11 @@
             const elInput = document.getElementById('survey-elevenlabs-key');
             const voiceInput = document.getElementById('survey-elevenlabs-voice');
             try {
-                if (gemInput && gemInput.value.trim()) {
+                if (gemInput) {
                     localStorage.setItem('thriveGeminiKey', gemInput.value.trim());
-                } else {
-                    localStorage.removeItem('thriveGeminiKey');
                 }
-                if (elInput && elInput.value.trim()) {
+                if (elInput) {
                     localStorage.setItem('thriveElevenLabsKey', elInput.value.trim());
-                } else {
-                    localStorage.removeItem('thriveElevenLabsKey');
                 }
                 if (voiceInput && voiceInput.value.trim()) {
                     localStorage.setItem('thriveElevenLabsVoiceId', voiceInput.value.trim());

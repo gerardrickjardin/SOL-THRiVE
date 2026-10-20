@@ -454,7 +454,7 @@ const defaultElevenLabsVoiceId = "4EfJOraSN0d4Lt6iDXwh";
 function getActiveGeminiKey() {
     try {
         const saved = localStorage.getItem('thriveGeminiKey');
-        if (saved && saved.trim()) return saved.trim();
+        if (saved !== null) return saved.trim();
     } catch (e) {}
     return apiKey || "";
 }
@@ -462,7 +462,7 @@ function getActiveGeminiKey() {
 function getActiveElevenLabsKey() {
     try {
         const saved = localStorage.getItem('thriveElevenLabsKey');
-        if (saved && saved.trim()) return saved.trim();
+        if (saved !== null) return saved.trim();
     } catch (e) {}
     return defaultElevenLabsKey || "";
 }
@@ -470,7 +470,7 @@ function getActiveElevenLabsKey() {
 function getActiveElevenLabsVoiceId() {
     try {
         const saved = localStorage.getItem('thriveElevenLabsVoiceId');
-        if (saved && saved.trim()) return saved.trim();
+        if (saved !== null && saved.trim() !== "") return saved.trim();
     } catch (e) {}
     return defaultElevenLabsVoiceId || "21m00Tcm4TlvDq8ikWAM";
 }
@@ -1903,20 +1903,20 @@ const AISettingsModal = ({ isOpen, onClose }) => {
     const [elKey, setElKey] = useState(() => getActiveElevenLabsKey());
     const [voiceId, setVoiceId] = useState(() => getActiveElevenLabsVoiceId());
 
+    useEffect(() => {
+        if (isOpen) {
+            setGemKey(getActiveGeminiKey());
+            setElKey(getActiveElevenLabsKey());
+            setVoiceId(getActiveElevenLabsVoiceId());
+        }
+    }, [isOpen]);
+
     if (!isOpen) return null;
 
     const handleSave = () => {
         try {
-            if (gemKey && gemKey.trim()) {
-                localStorage.setItem('thriveGeminiKey', gemKey.trim());
-            } else {
-                localStorage.removeItem('thriveGeminiKey');
-            }
-            if (elKey && elKey.trim()) {
-                localStorage.setItem('thriveElevenLabsKey', elKey.trim());
-            } else {
-                localStorage.removeItem('thriveElevenLabsKey');
-            }
+            localStorage.setItem('thriveGeminiKey', (gemKey || '').trim());
+            localStorage.setItem('thriveElevenLabsKey', (elKey || '').trim());
             if (voiceId && voiceId.trim()) {
                 localStorage.setItem('thriveElevenLabsVoiceId', voiceId.trim());
             } else {

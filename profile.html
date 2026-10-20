@@ -719,9 +719,34 @@ function normalizeBulletOutput(aiText, originalText) {
   return lines.join('\n');
 }
 
+function resolveGeminiKey() {
+  try {
+    const saved = localStorage.getItem('thriveGeminiKey');
+    if (saved !== null) return saved.trim();
+  } catch (e) {}
+  return apiKey || "";
+}
+
+function resolveElevenLabsKey() {
+  try {
+    const saved = localStorage.getItem('thriveElevenLabsKey');
+    if (saved !== null) return saved.trim();
+  } catch (e) {}
+  return HARDCODED_ELEVENLABS_API_KEY || "";
+}
+
+function resolveElevenLabsVoiceId() {
+  try {
+    const saved = localStorage.getItem('thriveElevenLabsVoiceId');
+    if (saved !== null && saved.trim() !== "") return saved.trim();
+  } catch (e) {}
+  return HARDCODED_ELEVENLABS_VOICE_ID || defaultElevenLabsVoiceId;
+}
+
 async function cleanTextWithGemini(text, customGeminiKey) {
-  const savedGeminiKey = (typeof localStorage !== 'undefined' && localStorage.getItem('thriveGeminiKey')) || '';
-  const activeKey = (customGeminiKey && customGeminiKey.trim()) || savedGeminiKey.trim() || apiKey;
+  const activeKey = (typeof customGeminiKey === 'string')
+    ? customGeminiKey.trim()
+    : resolveGeminiKey();
   if (!activeKey) {
     return formatLocalBullets(text);
   }
@@ -781,45 +806,28 @@ function App() {
     email: '' 
   });
   
-  // Prioritize non-empty user-saved settings from localStorage over hardcoded fallback constants
-  const [geminiKey, setGeminiKey] = useState(() => {
-    const savedGemini = localStorage.getItem('thriveGeminiKey');
-    return (savedGemini && savedGemini.trim() !== "") ? savedGemini.trim() : (apiKey || "");
-  });
+  // Resolve user-saved settings from localStorage (including explicit "" for offline mode) or fallback constants
+  const [geminiKey, setGeminiKeyState] = useState(() => resolveGeminiKey());
+  const [elevenLabsKey, setElevenLabsKeyState] = useState(() => resolveElevenLabsKey());
+  const [elevenLabsVoiceId, setElevenLabsVoiceIdState] = useState(() => resolveElevenLabsVoiceId());
 
-  const [elevenLabsKey, setElevenLabsKey] = useState(() => {
-    const savedKey = localStorage.getItem('thriveElevenLabsKey');
-    return (savedKey && savedKey.trim() !== "") ? savedKey.trim() : (HARDCODED_ELEVENLABS_API_KEY || "");
-  });
-  
-  const [elevenLabsVoiceId, setElevenLabsVoiceId] = useState(() => {
-    const savedVoice = localStorage.getItem('thriveElevenLabsVoiceId');
-    return (savedVoice && savedVoice.trim() !== "") ? savedVoice.trim() : (HARDCODED_ELEVENLABS_VOICE_ID || defaultElevenLabsVoiceId);
-  });
+  const setGeminiKey = (val) => {
+    const str = val == null ? "" : String(val);
+    setGeminiKeyState(str);
+    try { localStorage.setItem('thriveGeminiKey', str.trim()); } catch (e) {}
+  };
 
-  useEffect(() => {
-    if (geminiKey && geminiKey.trim() !== "") {
-      localStorage.setItem('thriveGeminiKey', geminiKey.trim());
-    } else {
-      localStorage.removeItem('thriveGeminiKey');
-    }
-  }, [geminiKey]);
+  const setElevenLabsKey = (val) => {
+    const str = val == null ? "" : String(val);
+    setElevenLabsKeyState(str);
+    try { localStorage.setItem('thriveElevenLabsKey', str.trim()); } catch (e) {}
+  };
 
-  useEffect(() => {
-    if (elevenLabsKey && elevenLabsKey.trim() !== "") {
-      localStorage.setItem('thriveElevenLabsKey', elevenLabsKey.trim());
-    } else {
-      localStorage.removeItem('thriveElevenLabsKey');
-    }
-  }, [elevenLabsKey]);
-
-  useEffect(() => {
-    if (elevenLabsVoiceId && elevenLabsVoiceId.trim() !== "") {
-      localStorage.setItem('thriveElevenLabsVoiceId', elevenLabsVoiceId.trim());
-    } else {
-      localStorage.removeItem('thriveElevenLabsVoiceId');
-    }
-  }, [elevenLabsVoiceId]);
+  const setElevenLabsVoiceId = (val) => {
+    const str = val == null ? "" : String(val);
+    setElevenLabsVoiceIdState(str);
+    try { localStorage.setItem('thriveElevenLabsVoiceId', str.trim()); } catch (e) {}
+  };
 
   const currentSection = SECTIONS[step - 1];
 

@@ -384,8 +384,16 @@ async function saveLeadToFirestore(payload){
   }
 }
 
+let isSubmittingLead = false;
 document.getElementById('lead').addEventListener('submit', async e=>{
   e.preventDefault();
+  if (isSubmittingLead) return;
+  isSubmittingLead = true;
+  const submitBtn = e.target.querySelector('button[type="submit"]');
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Saving your input…';
+  }
   const ratings=[...document.querySelectorAll('.scale')].map(s=>{
     const b=[...s.querySelectorAll('button')];return b.findIndex(x=>x.classList.contains('on'))+1||null;
   });
