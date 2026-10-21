@@ -115,6 +115,7 @@ h1,h2,h3{font-family:'Kalam',cursive;font-weight:700}
 .actions .cta{margin-top:0}
 .actions .gold{background:var(--gold)}
 .actions .plain{background:#fffdf7}
+.print-blueprint-summary{display:none}
 
 @media(max-width:860px){
   body{overflow:auto}.wrap{height:auto;min-height:100vh}
@@ -132,10 +133,11 @@ h1,h2,h3{font-family:'Kalam',cursive;font-weight:700}
   @page{margin:0.4in}
   html,body{height:auto !important;min-height:0 !important;overflow:visible !important;background:#fff !important;-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important}
   .wrap{height:auto !important;min-height:0 !important;padding:0 !important}
-  .btn-sm,.share,.actions,#restart-blueprint-btn,.play,#vote,#vote-prompt-hint,.video{display:none !important}
+  #video-section-box,.box.vote,.btn-sm,.share,.actions,#restart-blueprint-btn,.play,#vote,#vote-prompt-hint,.video{display:none !important}
+  .print-blueprint-summary{display:block !important;margin-top:12px !important}
   .card{display:block !important;border:1.5px solid #2B2B30 !important;box-shadow:none !important;background:#fff !important;break-inside:avoid !important;page-break-inside:avoid !important}
   .box{break-inside:avoid !important;page-break-inside:avoid !important}
-  .col + .col{border-left:0 !important;padding-left:0 !important;margin-left:0 !important;margin-top:12px !important}
+  .col + .col{border-left:0 !important;padding-left:0 !important;margin-left:0 !important;margin-top:0 !important}
   .fill{transition:none !important}
   .fill[data-w="84"]{width:84% !important}
   .fill[data-w="94"]{width:94% !important}
@@ -165,7 +167,17 @@ h1,h2,h3{font-family:'Kalam',cursive;font-weight:700}
         <div class="bar"><div class="row"><span class="name">🛠️ Guardrailed, HIPAA-compliant AI co-pilot</span><span class="chip">YOUR RATING: <em id="r3">–</em>/5</span><span class="pct">89%</span></div><div class="track"><div class="fill c" data-w="89"></div></div></div>
       </div>
 
-      <div class="box grow">
+      <div class="box print-blueprint-summary">
+        <div class="tagrow"><span class="tag">📋 Community Blueprint Pillars</span><span class="tag gold">Regional Grant Dossier</span></div>
+        <div style="display:grid;gap:8px;margin-top:8px;font-size:.92rem">
+          <div><strong>🏫 Transform Community Spaces:</strong> Turn schools, recreation centers, and third spaces into high-safety sanctuaries where youth and families can reset and thrive.</div>
+          <div><strong>⚡ Empower Mentors:</strong> Equip clinicians, coaches, and youth mentors with HIPAA-guardrailed Personos AI co-pilots and Strengths Model tools between sessions.</div>
+          <div><strong>💛 Heal Our Neighborhoods:</strong> Fund 6-week THRiVE parent-and-mentor cohorts that reduce family friction by 60% and build neighborhood-level resilience.</div>
+        </div>
+        <div class="note" style="margin-top:10px"><b>Community Initiative:</b> Every verified audit and priority vote is compiled into our regional grant evidence dossier—directly guiding local mental health, youth mentorship, and family resilience funding allocations.</div>
+      </div>
+
+      <div class="box grow" id="video-section-box">
         <div class="tagrow"><span class="tag">🎬 Blueprint documentary</span><span class="tag gold" id="video-status-tag">5:30 briefing</span></div>
         <h3 style="font-size:1.05rem;margin-bottom:4px">Watch the Blueprint Video &amp; Vote</h3>
         <div class="video" id="blueprint-video-box">

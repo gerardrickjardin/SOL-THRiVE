@@ -844,11 +844,33 @@ function App() {
 
   const currentSection = SECTIONS[step - 1];
 
+  const persistProfileToLocalStorage = (details, sections) => {
+    try {
+      localStorage.setItem('thrive_profile_state_v1', JSON.stringify({
+        userDetails: details,
+        reportData: sections,
+        savedAt: new Date().toISOString()
+      }));
+    } catch (e) {}
+  };
+
   const handleCompleteSection = (sectionKey, cleanedText) => {
     stopGlobalAudio();
-    setReportData(prev => ({ ...prev, [sectionKey]: cleanedText }));
+    setReportData(prev => {
+      const next = { ...prev, [sectionKey]: cleanedText };
+      persistProfileToLocalStorage(userDetails, next);
+      return next;
+    });
     setStep(prev => prev + 1);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleUpdateSection = (sectionKey, updatedText) => {
+    setReportData(prev => {
+      const next = { ...prev, [sectionKey]: updatedText };
+      persistProfileToLocalStorage(userDetails, next);
+      return next;
+    });
   };
 
   const handleBack = () => {
@@ -972,6 +994,8 @@ function App() {
               onCopy={copyToClipboard} 
               copied={copied} 
               onBack={handleBack}
+              onUpdateSection={handleUpdateSection}
+              onPersistReport={() => persistProfileToLocalStorage(userDetails, reportData)}
             />
           )}
         </main>
@@ -1009,7 +1033,18 @@ function App() {
 // --- SUB-COMPONENTS ---
 
 function SettingsModal({ isOpen, onClose, geminiKey, setGeminiKey, elevenLabsKey, setElevenLabsKey, elevenLabsVoiceId, setElevenLabsVoiceId }) {
+  const [savedSettings, setSavedSettings] = useState(false);
+  useEffect(() => {
+    if (isOpen) setSavedSettings(false);
+  }, [isOpen]);
   if (!isOpen) return null;
+  const handleSaveSettings = () => {
+    setSavedSettings(true);
+    setTimeout(() => {
+      setSavedSettings(false);
+      onClose();
+    }, 450);
+  };
   return (
     <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-in fade-in duration-200">
       <div className="bg-white rounded-2xl shadow-2xl border-2 border-[#1E2430] w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200">
@@ -1061,10 +1096,10 @@ function SettingsModal({ isOpen, onClose, geminiKey, setGeminiKey, elevenLabsKey
         <div className="p-5 border-t border-slate-200 bg-[#FAF8F3] flex justify-end">
           <button 
             type="button"
-            onClick={onClose} 
-            className="cta-button primary px-6 py-2.5 text-sm"
+            onClick={handleSaveSettings} 
+            className={`px-6 py-2.5 text-sm rounded-full font-bold transition-all ${savedSettings ? 'bg-emerald-600 text-white border-2 border-[#1E2430]' : 'cta-button primary'}`}
           >
-            Save &amp; Close
+            {savedSettings ? 'Saved ✓' : 'Save & Close'}
           </button>
         </div>
       </div>
@@ -1502,12 +1537,32 @@ function ChatSection({ section, stepNumber, initialDraft, geminiKey, setGeminiKe
   );
 }
 
-function FinalReport({ data, userDetails, onCopy, copied, onBack }) {
+function FinalReport({ data, userDetails, onCopy, copied, onBack, onUpdateSection, onPersistReport }) {
   const [isSavingCloud, setIsSavingCloud] = useState(false);
+  const [editingSectionKey, setEditingSectionKey] = useState(null);
+  const [editDraft, setEditDraft] = useState('');
+  const [savedSectionKey, setSavedSectionKey] = useState(null);
 
   const handleSaveCloud = () => {
+    if (onPersistReport) onPersistReport();
     setIsSavingCloud(true);
     setTimeout(() => setIsSavingCloud(false), 3000);
+  };
+
+  const handleStartEditSection = (secKey, currentVal) => {
+    setEditingSectionKey(secKey);
+    setEditDraft(currentVal || '');
+  };
+
+  const handleSaveSection = (secKey) => {
+    if (onUpdateSection) {
+      onUpdateSection(secKey, editDraft.trim());
+    }
+    setEditingSectionKey(null);
+    setSavedSectionKey(secKey);
+    setTimeout(() => {
+      setSavedSectionKey(prev => (prev === secKey ? null : prev));
+    }, 2500);
   };
 
   return (
@@ -1540,19 +1595,66 @@ function FinalReport({ data, userDetails, onCopy, copied, onBack }) {
         <div className="grid grid-cols-1 md:grid-cols-2 print:grid-cols-2 gap-x-10 gap-y-8 print:gap-x-5 print:gap-y-4 text-slate-700">
           {SECTIONS.map((sec) => {
             const colorClasses = SECTION_COLOR_CLASSES[sec.color] || SECTION_COLOR_CLASSES.slate;
+            const isEditingThis = editingSectionKey === sec.key;
+            const isSavedThis = savedSectionKey === sec.key;
             return (
               <div key={sec.id} className="group bg-white p-5 print:p-3.5 rounded-2xl border-2 border-slate-200 hover:border-[#1E2430] transition-colors print:border-slate-300 print:break-inside-avoid">
-                <div className="flex items-center gap-3 mb-4 print:mb-2">
-                  <div className={`w-10 h-10 print:w-8 print:h-8 rounded-full shadow-sm flex items-center justify-center text-xl print:text-base border ${colorClasses.iconBg}`}>
-                    {sec.icon}
+                <div className="flex items-center justify-between gap-3 mb-4 print:mb-2">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-10 h-10 print:w-8 print:h-8 rounded-full shadow-sm flex items-center justify-center text-xl print:text-base border ${colorClasses.iconBg}`}>
+                      {sec.icon}
+                    </div>
+                    <h4 className={`text-slate-900 font-black text-lg print:text-base uppercase tracking-widest border-b-2 pb-1 ${colorClasses.border} transition-colors`}>
+                      {sec.title}
+                    </h4>
                   </div>
-                  <h4 className={`text-slate-900 font-black text-lg print:text-base uppercase tracking-widest border-b-2 pb-1 ${colorClasses.border} transition-colors`}>
-                    {sec.title}
-                  </h4>
+                  <div className="print:hidden flex items-center gap-2">
+                    {isSavedThis && !isEditingThis && (
+                      <span className="text-xs font-extrabold text-emerald-700 bg-emerald-50 border border-emerald-300 px-2.5 py-1 rounded-full">
+                        Saved ✓
+                      </span>
+                    )}
+                    {!isEditingThis && (
+                      <button
+                        type="button"
+                        onClick={() => handleStartEditSection(sec.key, data[sec.key])}
+                        className="text-xs font-bold text-slate-500 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 px-3 py-1 rounded-full transition-colors"
+                      >
+                        Edit
+                      </button>
+                    )}
+                  </div>
                 </div>
-                <div className={`text-slate-700 print:text-sm leading-relaxed whitespace-pre-wrap pl-3 border-l-2 ${colorClasses.leftBorder}`}>
-                  {data[sec.key] || "No response provided."}
-                </div>
+                {isEditingThis ? (
+                  <div className="space-y-3 print:hidden">
+                    <textarea
+                      rows={5}
+                      value={editDraft}
+                      onChange={(e) => setEditDraft(e.target.value)}
+                      className="w-full border-2 border-purple-400 rounded-xl p-3 text-slate-800 text-sm leading-relaxed outline-none focus:border-purple-600 focus:ring-2 focus:ring-purple-100 resize-y"
+                    />
+                    <div className="flex justify-end gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setEditingSectionKey(null)}
+                        className="text-xs font-bold text-slate-600 hover:text-slate-900 px-3.5 py-1.5 rounded-full hover:bg-slate-100 transition-colors"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleSaveSection(sec.key)}
+                        className="text-xs font-bold bg-[#1E2430] hover:bg-slate-800 text-white px-4 py-1.5 rounded-full transition-colors"
+                      >
+                        Save
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className={`text-slate-700 print:text-sm leading-relaxed whitespace-pre-wrap pl-3 border-l-2 ${colorClasses.leftBorder}`}>
+                    {data[sec.key] || "No response provided."}
+                  </div>
+                )}
               </div>
             );
           })}
@@ -1576,10 +1678,10 @@ function FinalReport({ data, userDetails, onCopy, copied, onBack }) {
             type="button"
             onClick={handleSaveCloud}
             className={`w-full sm:w-auto rounded-full font-bold transition-all px-8 py-4 shadow-lg hover:shadow-xl flex items-center justify-center gap-3 text-lg
-              ${isSavingCloud ? 'bg-purple-500 text-white ring-4 ring-purple-100' : 'bg-purple-700 hover:bg-purple-800 text-white'}
+              ${isSavingCloud ? 'bg-emerald-600 text-white ring-4 ring-emerald-100' : 'bg-purple-700 hover:bg-purple-800 text-white'}
             `}
           >
-            {isSavingCloud ? <><CheckIcon className="w-6 h-6" /> Saved to thrivecoaching.ai!</> : <><CloudIcon className="w-6 h-6" /> Save to Free Account</>}
+            {isSavingCloud ? <><CheckIcon className="w-6 h-6" /> Saved ✓</> : <><CloudIcon className="w-6 h-6" /> Save to Free Account</>}
           </button>
 
           <button 
