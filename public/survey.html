@@ -822,8 +822,15 @@
                 currentAudioBtn = null;
             }
         }
-        window.addEventListener('pagehide', stopCurrentAudio);
-        window.addEventListener('beforeunload', stopCurrentAudio);
+        function cleanupSurveyPageAudio() {
+            stopCurrentAudio();
+            if (typeof isRecording !== 'undefined' && isRecording && typeof stopDictation === 'function') {
+                stopDictation();
+            }
+        }
+        window.addEventListener('pagehide', cleanupSurveyPageAudio);
+        window.addEventListener('beforeunload', cleanupSurveyPageAudio);
+        window.addEventListener('pageshow', (e) => { if (e && e.persisted) cleanupSurveyPageAudio(); });
 
         function playSpeechFallback(text, requestId, btnElement) {
             if (requestId !== activeAudioRequestId) return;
@@ -990,6 +997,7 @@
         }
 
         function startDictation() {
+            stopCurrentAudio();
             isRecording = true;
             recognition.start();
             document.getElementById('dictation-btn').classList.add('text-red-600', 'pulse-animation');

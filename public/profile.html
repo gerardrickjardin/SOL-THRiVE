@@ -470,6 +470,7 @@ function stopGlobalAudio() {
 }
 window.addEventListener('pagehide', stopGlobalAudio);
 window.addEventListener('beforeunload', stopGlobalAudio);
+window.addEventListener('pageshow', (e) => { if (e && e.persisted) stopGlobalAudio(); });
 
 // This function cleans up text specifically so AI voices read it with natural inflection.
 function prepareTextForTTS(text) {
@@ -1271,6 +1272,8 @@ function ChatSection({ section, stepNumber, initialDraft, geminiKey, setGeminiKe
     if (isListening) {
       recognitionRef.current.stop();
     } else {
+      stopGlobalAudio();
+      setIsSpeaking(false);
       try {
         recognitionRef.current.start();
         setIsListening(true);

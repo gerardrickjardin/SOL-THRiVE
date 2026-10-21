@@ -37,10 +37,16 @@ const initThriveUI = () => {
         const restartBtn = document.getElementById('video-restart-btn');
         const muteBtn = document.getElementById('video-mute-btn');
         let narrationActive = false;
+        let walkthroughUtterance = null;
 
         const walkthroughNarrationText = "Welcome to Thrive Coaching. Step 1: Name the Friction — pinpoint whether you feel stuck in a hole, on a hamster wheel, or juggling too much. Step 2: Map Your Strengths across Traits, Hobbies, Relationships, Interests, Values, and Expertise. Step 3: Reclaim Your Agency and turn insight into concrete daily momentum with your Personos AI coach.";
 
         const stopWalkthroughSpeech = () => {
+            if (walkthroughUtterance) {
+                walkthroughUtterance.onend = null;
+                walkthroughUtterance.onerror = null;
+                walkthroughUtterance = null;
+            }
             if (window.speechSynthesis) {
                 try { window.speechSynthesis.cancel(); } catch (_) {}
             }
@@ -49,9 +55,12 @@ const initThriveUI = () => {
         const speakWalkthrough = () => {
             if (!window.speechSynthesis || (!narrationActive && (!videoEl || videoEl.muted))) return;
             try {
-                window.speechSynthesis.cancel();
+                stopWalkthroughSpeech();
                 const u = new SpeechSynthesisUtterance(walkthroughNarrationText);
                 u.rate = 1.0;
+                walkthroughUtterance = u;
+                u.onend = () => { if (walkthroughUtterance === u) walkthroughUtterance = null; };
+                u.onerror = () => { if (walkthroughUtterance === u) walkthroughUtterance = null; };
                 window.speechSynthesis.speak(u);
             } catch (_) {}
         };
@@ -66,6 +75,13 @@ const initThriveUI = () => {
             muteBtn.innerHTML = (videoEl.muted && !narrationActive) ? '&#128266; Unmute Narration' : '&#128263; Mute';
         };
 
+        const handleWalkthroughPlayFailure = () => {
+            if (videoEl && videoEl.paused) {
+                stopWalkthroughSpeech();
+            }
+            syncPlayBtnLabel();
+        };
+
         const activateVideoCard = () => {
             if (!videoCard.classList.contains('is-active')) {
                 videoCard.classList.add('is-active');
@@ -78,10 +94,9 @@ const initThriveUI = () => {
                 if (videoEl) {
                     videoEl.currentTime = 0;
                     const playPromise = videoEl.play();
+                    syncPlayBtnLabel();
                     if (playPromise && typeof playPromise.then === 'function') {
-                        playPromise.then(syncPlayBtnLabel).catch(() => syncPlayBtnLabel());
-                    } else {
-                        syncPlayBtnLabel();
+                        playPromise.then(syncPlayBtnLabel).catch(handleWalkthroughPlayFailure);
                     }
                 }
             }
@@ -92,8 +107,8 @@ const initThriveUI = () => {
                 e.stopPropagation();
                 if (videoEl.paused) {
                     const p = videoEl.play();
-                    if (p && typeof p.then === 'function') p.then(syncPlayBtnLabel).catch(syncPlayBtnLabel);
-                    else syncPlayBtnLabel();
+                    syncPlayBtnLabel();
+                    if (p && typeof p.then === 'function') p.then(syncPlayBtnLabel).catch(handleWalkthroughPlayFailure);
                     if (narrationActive || !videoEl.muted) speakWalkthrough();
                 } else {
                     videoEl.pause();
@@ -108,8 +123,8 @@ const initThriveUI = () => {
                 e.stopPropagation();
                 videoEl.currentTime = 0;
                 const p = videoEl.play();
-                if (p && typeof p.then === 'function') p.then(syncPlayBtnLabel).catch(syncPlayBtnLabel);
-                else syncPlayBtnLabel();
+                syncPlayBtnLabel();
+                if (p && typeof p.then === 'function') p.then(syncPlayBtnLabel).catch(handleWalkthroughPlayFailure);
                 if (narrationActive || !videoEl.muted) speakWalkthrough();
             });
         }
@@ -123,7 +138,8 @@ const initThriveUI = () => {
                 if (narrationActive) {
                     if (videoEl.paused) {
                         const p = videoEl.play();
-                        if (p && typeof p.then === 'function') p.then(syncPlayBtnLabel).catch(syncPlayBtnLabel);
+                        syncPlayBtnLabel();
+                        if (p && typeof p.then === 'function') p.then(syncPlayBtnLabel).catch(handleWalkthroughPlayFailure);
                     }
                     speakWalkthrough();
                 } else {
@@ -138,8 +154,8 @@ const initThriveUI = () => {
                 e.stopPropagation();
                 if (videoEl.paused) {
                     const p = videoEl.play();
-                    if (p && typeof p.then === 'function') p.then(syncPlayBtnLabel).catch(syncPlayBtnLabel);
-                    else syncPlayBtnLabel();
+                    syncPlayBtnLabel();
+                    if (p && typeof p.then === 'function') p.then(syncPlayBtnLabel).catch(handleWalkthroughPlayFailure);
                     if (narrationActive || !videoEl.muted) speakWalkthrough();
                 } else {
                     videoEl.pause();
@@ -165,11 +181,13 @@ const initThriveUI = () => {
             stopWalkthroughSpeech();
             if (videoEl && !videoEl.paused) {
                 try { videoEl.pause(); } catch (_) {}
-                syncPlayBtnLabel();
             }
+            syncPlayBtnLabel();
+            syncMuteBtnLabel();
         };
         window.addEventListener('pagehide', cleanupWalkthroughAudio);
         window.addEventListener('beforeunload', cleanupWalkthroughAudio);
+        window.addEventListener('pageshow', (e) => { if (e && e.persisted) cleanupWalkthroughAudio(); });
     }
 
     const cancelPageSpeech = () => {
@@ -179,6 +197,7 @@ const initThriveUI = () => {
     };
     window.addEventListener('pagehide', cancelPageSpeech);
     window.addEventListener('beforeunload', cancelPageSpeech);
+    window.addEventListener('pageshow', (e) => { if (e && e.persisted) cancelPageSpeech(); });
 
     // Offer Cards: Touch & Keyboard Flip Support without desktop hover lock
     const offerCards = document.querySelectorAll('.offer-card');

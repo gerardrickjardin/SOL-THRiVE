@@ -268,7 +268,14 @@ requestAnimationFrame(() => setTimeout(() => {
     if (timer) { clearInterval(timer); timer = null; }
   }
 
+  let blueprintUtterance = null;
+
   function narrateBlueprint(unmuted){
+    if (blueprintUtterance) {
+      blueprintUtterance.onend = null;
+      blueprintUtterance.onerror = null;
+      blueprintUtterance = null;
+    }
     if (!window.speechSynthesis) return;
     try {
       window.speechSynthesis.cancel();
@@ -277,6 +284,9 @@ requestAnimationFrame(() => setTimeout(() => {
         "Thank you for contributing to the SOL Thrive Community Blueprint. Across our clinical practice audit, 94 percent report clients turning to unverified AI or search for emotional stress, and 89 percent agree a guardrailed, HIPAA-compliant AI co-pilot is essential. Select your top community priorities to guide local grant allocations."
       );
       u.rate = 1.0;
+      blueprintUtterance = u;
+      u.onend = () => { if (blueprintUtterance === u) blueprintUtterance = null; };
+      u.onerror = () => { if (blueprintUtterance === u) blueprintUtterance = null; };
       window.speechSynthesis.speak(u);
     } catch (_) {}
   }
@@ -286,19 +296,33 @@ requestAnimationFrame(() => setTimeout(() => {
     const playing = !videoEl.paused;
     videoBox.classList.toggle('is-playing', playing);
     if (playIcon) playIcon.textContent = playing ? '⏸' : '▶';
+    if (playBtn) playBtn.setAttribute('aria-label', playing ? 'Pause video' : 'Play video');
     if (statusTag) {
       statusTag.textContent = playing
         ? (videoEl.muted ? 'Playing (Muted)' : '🔊 Playing Briefing')
         : '5:30 briefing';
     }
+    if (restartBtn) {
+      restartBtn.textContent = (playing && !videoEl.muted)
+        ? '🔊 Playing Briefing (Click to Restart)'
+        : '↻ Click to Restart & Unmute';
+    }
+  }
+
+  function handlePlayFailure(){
+    if (videoEl && videoEl.paused) {
+      stopCaptions();
+      narrateBlueprint(false);
+    }
+    updateUI();
   }
 
   if (playBtn && videoEl) {
     playBtn.addEventListener('click', () => {
       if (videoEl.paused) {
         const p = videoEl.play();
-        if (p && typeof p.then === 'function') p.then(updateUI).catch(updateUI);
-        else updateUI();
+        updateUI();
+        if (p && typeof p.then === 'function') p.then(updateUI).catch(handlePlayFailure);
         startCaptions();
         if (!videoEl.muted) narrateBlueprint(true);
       } else {
@@ -317,8 +341,8 @@ requestAnimationFrame(() => setTimeout(() => {
       idx = 0;
       if (captionEl) captionEl.textContent = captions[0];
       const p = videoEl.play();
-      if (p && typeof p.then === 'function') p.then(updateUI).catch(updateUI);
-      else updateUI();
+      updateUI();
+      if (p && typeof p.then === 'function') p.then(updateUI).catch(handlePlayFailure);
       startCaptions();
       narrateBlueprint(true);
       restartBtn.textContent = '🔊 Playing Briefing (Click to Restart)';
@@ -330,11 +354,13 @@ requestAnimationFrame(() => setTimeout(() => {
     narrateBlueprint(false);
     if (videoEl && !videoEl.paused) {
       try { videoEl.pause(); } catch (_) {}
-      updateUI();
     }
+    updateUI();
   }
+  window.cleanupBlueprintAudio = cleanupBlueprintAudio;
   window.addEventListener('pagehide', cleanupBlueprintAudio);
   window.addEventListener('beforeunload', cleanupBlueprintAudio);
+  window.addEventListener('pageshow', (e) => { if (e && e.persisted) cleanupBlueprintAudio(); });
 })();
 
 // 3. Community Priorities Voting & Persistence (localStorage + non-blocking Firestore)
@@ -517,6 +543,7 @@ if (ttBtn) {
 
 // 5. Download Blueprint PDF (Clean One-Page Print Export)
 document.getElementById('download-pdf-btn').addEventListener('click', () => {
+  if (typeof window.cleanupBlueprintAudio === 'function') window.cleanupBlueprintAudio();
   window.print();
 });
 </script>

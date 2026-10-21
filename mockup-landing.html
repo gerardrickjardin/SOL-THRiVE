@@ -260,7 +260,14 @@ const FIRESTORE_PROJECT_ID = "hope-survey";
     if (captionTimer) { clearInterval(captionTimer); captionTimer = null; }
   }
 
+  let storyUtterance = null;
+
   function narrateStory(unmuted){
+    if (storyUtterance) {
+      storyUtterance.onend = null;
+      storyUtterance.onerror = null;
+      storyUtterance = null;
+    }
     if (!window.speechSynthesis) return;
     try {
       window.speechSynthesis.cancel();
@@ -269,6 +276,9 @@ const FIRESTORE_PROJECT_ID = "hope-survey";
         "When our community comes together, every family gains a corner coach. By combining Dr. Steve Huff's Strengths Model with guardrailed Personos AI, clinicians and mentors bridge the gap between sessions and help unlock over 2.5 million dollars in community mental health funding."
       );
       u.rate = 1.0;
+      storyUtterance = u;
+      u.onend = () => { if (storyUtterance === u) storyUtterance = null; };
+      u.onerror = () => { if (storyUtterance === u) storyUtterance = null; };
       window.speechSynthesis.speak(u);
     } catch (_) {}
   }
@@ -278,19 +288,33 @@ const FIRESTORE_PROJECT_ID = "hope-survey";
     const playing = !videoEl.paused;
     videoBox.classList.toggle('is-playing', playing);
     if (badgeIcon) badgeIcon.textContent = playing ? '⏸' : '▶';
+    if (playBtn) playBtn.setAttribute('aria-label', playing ? 'Pause video' : 'Play video');
     if (stickerEl) {
       stickerEl.textContent = playing
         ? (videoEl.muted ? 'Playing (Muted)' : '🔊 Playing with Audio')
         : 'Every voice counts';
     }
+    if (restartBtn) {
+      restartBtn.textContent = (playing && !videoEl.muted)
+        ? '🔊 Playing Story (Click to Restart)'
+        : '↻ Click to Restart & Unmute';
+    }
+  }
+
+  function handlePlayFailure(){
+    if (videoEl && videoEl.paused) {
+      stopCaptions();
+      narrateStory(false);
+    }
+    updateUI();
   }
 
   if (playBtn && videoEl) {
     playBtn.addEventListener('click', ()=>{
       if (videoEl.paused) {
         const p = videoEl.play();
-        if (p && typeof p.then === 'function') p.then(updateUI).catch(updateUI);
-        else updateUI();
+        updateUI();
+        if (p && typeof p.then === 'function') p.then(updateUI).catch(handlePlayFailure);
         startCaptions();
         if (!videoEl.muted) narrateStory(true);
       } else {
@@ -309,8 +333,8 @@ const FIRESTORE_PROJECT_ID = "hope-survey";
       captionIdx = 0;
       if (captionEl) captionEl.textContent = captions[0];
       const p = videoEl.play();
-      if (p && typeof p.then === 'function') p.then(updateUI).catch(updateUI);
-      else updateUI();
+      updateUI();
+      if (p && typeof p.then === 'function') p.then(updateUI).catch(handlePlayFailure);
       startCaptions();
       narrateStory(true);
       restartBtn.textContent = '🔊 Playing Story (Click to Restart)';
@@ -322,11 +346,13 @@ const FIRESTORE_PROJECT_ID = "hope-survey";
     narrateStory(false);
     if (videoEl && !videoEl.paused) {
       try { videoEl.pause(); } catch (_) {}
-      updateUI();
     }
+    updateUI();
   }
+  window.cleanupStoryAudio = cleanupStoryAudio;
   window.addEventListener('pagehide', cleanupStoryAudio);
   window.addEventListener('beforeunload', cleanupStoryAudio);
+  window.addEventListener('pageshow', (e)=>{ if (e && e.persisted) cleanupStoryAudio(); });
 })();
 
 // Restore community count if user already submitted a lead
@@ -401,6 +427,7 @@ document.getElementById('lead').addEventListener('submit', async e=>{
   e.preventDefault();
   if (isSubmittingLead) return;
   isSubmittingLead = true;
+  if (typeof window.cleanupStoryAudio === 'function') window.cleanupStoryAudio();
   const submitBtn = e.target.querySelector('button[type="submit"]');
   if (submitBtn) {
     submitBtn.disabled = true;

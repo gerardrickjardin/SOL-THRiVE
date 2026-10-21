@@ -490,6 +490,7 @@ function getActiveElevenLabsVoiceId() {
 let hopeAudio = null;
 let hopeAudioUrl = null;
 let hopeAudioAbort = null;
+let hopeUtterance = null;
 let hopeRequestId = 0;
 
 function stopHopeAudio() {
@@ -509,12 +510,18 @@ function stopHopeAudio() {
         URL.revokeObjectURL(hopeAudioUrl);
         hopeAudioUrl = null;
     }
+    if (hopeUtterance) {
+        hopeUtterance.onend = null;
+        hopeUtterance.onerror = null;
+        hopeUtterance = null;
+    }
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
         try { window.speechSynthesis.cancel(); } catch (e) {}
     }
 }
 window.addEventListener('pagehide', stopHopeAudio);
 window.addEventListener('beforeunload', stopHopeAudio);
+window.addEventListener('pageshow', (e) => { if (e && e.persisted) stopHopeAudio(); });
 
 async function speakHopeText(rawText) {
     stopHopeAudio();
@@ -530,6 +537,13 @@ async function speakHopeText(rawText) {
             window.speechSynthesis.cancel();
             const utter = new SpeechSynthesisUtterance(text);
             utter.rate = 0.98;
+            hopeUtterance = utter;
+            utter.onend = () => {
+                if (reqId === hopeRequestId) stopHopeAudio();
+            };
+            utter.onerror = () => {
+                if (reqId === hopeRequestId) stopHopeAudio();
+            };
             window.speechSynthesis.speak(utter);
         } catch (e) {}
     };
@@ -568,6 +582,9 @@ async function speakHopeText(rawText) {
             if (reqId === hopeRequestId) stopHopeAudio();
         };
         await audio.play();
+        if (reqId !== hopeRequestId) {
+            audio.pause();
+        }
     } catch (err) {
         if (err && err.name === 'AbortError') return;
         if (reqId !== hopeRequestId) return;
@@ -2227,6 +2244,7 @@ const App = () => {
     };
 
     const handleSignOut = () => {
+        stopHopeAudio();
         if (!window.firebaseAuth) return;
         window.signOut(window.firebaseAuth).then(() => {
             pendingGuestHistoryRef.current = [];
@@ -2263,7 +2281,7 @@ const App = () => {
                 {surveyHistory && surveyHistory.length > 0 && (
                     <button
                         type="button"
-                        onClick={() => setStep(step === 'dashboard' ? 'results' : 'dashboard')}
+                        onClick={() => { stopHopeAudio(); setStep(step === 'dashboard' ? 'results' : 'dashboard'); }}
                         className={`text-[11px] sm:text-xs font-extrabold px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-full transition-all border whitespace-nowrap ${
                             step === 'dashboard'
                                 ? 'bg-purple-600 text-white border-purple-600 shadow-sm'
@@ -2323,7 +2341,7 @@ const App = () => {
                     {surveyHistory && surveyHistory.length > 0 && step !== 'dashboard' && (
                         <button
                             type="button"
-                            onClick={() => setStep('dashboard')}
+                            onClick={() => { stopHopeAudio(); setStep('dashboard'); }}
                             className="text-purple-600 hover:text-purple-800 font-bold text-sm transition-colors sm:border-l border-slate-300 sm:pl-3"
                         >
                             Dashboard
