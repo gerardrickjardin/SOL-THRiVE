@@ -822,6 +822,8 @@
                 currentAudioBtn = null;
             }
         }
+        window.addEventListener('pagehide', stopCurrentAudio);
+        window.addEventListener('beforeunload', stopCurrentAudio);
 
         function playSpeechFallback(text, requestId, btnElement) {
             if (requestId !== activeAudioRequestId) return;

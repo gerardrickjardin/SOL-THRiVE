@@ -460,7 +460,7 @@ function stopGlobalAudio() {
     globalUtterance = null;
   }
   if (window.speechSynthesis) {
-    window.speechSynthesis.cancel();
+    try { window.speechSynthesis.cancel(); } catch (e) {}
   }
   if (globalStopCallback) {
     const cb = globalStopCallback;
@@ -468,6 +468,8 @@ function stopGlobalAudio() {
     cb(false);
   }
 }
+window.addEventListener('pagehide', stopGlobalAudio);
+window.addEventListener('beforeunload', stopGlobalAudio);
 
 // This function cleans up text specifically so AI voices read it with natural inflection.
 function prepareTextForTTS(text) {

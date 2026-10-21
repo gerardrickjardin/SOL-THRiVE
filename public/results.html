@@ -300,6 +300,7 @@ requestAnimationFrame(() => setTimeout(() => {
         if (p && typeof p.then === 'function') p.then(updateUI).catch(updateUI);
         else updateUI();
         startCaptions();
+        if (!videoEl.muted) narrateBlueprint(true);
       } else {
         videoEl.pause();
         stopCaptions();
@@ -323,6 +324,17 @@ requestAnimationFrame(() => setTimeout(() => {
       restartBtn.textContent = '🔊 Playing Briefing (Click to Restart)';
     });
   }
+
+  function cleanupBlueprintAudio(){
+    stopCaptions();
+    narrateBlueprint(false);
+    if (videoEl && !videoEl.paused) {
+      try { videoEl.pause(); } catch (_) {}
+      updateUI();
+    }
+  }
+  window.addEventListener('pagehide', cleanupBlueprintAudio);
+  window.addEventListener('beforeunload', cleanupBlueprintAudio);
 })();
 
 // 3. Community Priorities Voting & Persistence (localStorage + non-blocking Firestore)

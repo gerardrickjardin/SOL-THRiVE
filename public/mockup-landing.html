@@ -292,6 +292,7 @@ const FIRESTORE_PROJECT_ID = "hope-survey";
         if (p && typeof p.then === 'function') p.then(updateUI).catch(updateUI);
         else updateUI();
         startCaptions();
+        if (!videoEl.muted) narrateStory(true);
       } else {
         videoEl.pause();
         stopCaptions();
@@ -315,6 +316,17 @@ const FIRESTORE_PROJECT_ID = "hope-survey";
       restartBtn.textContent = '🔊 Playing Story (Click to Restart)';
     });
   }
+
+  function cleanupStoryAudio(){
+    stopCaptions();
+    narrateStory(false);
+    if (videoEl && !videoEl.paused) {
+      try { videoEl.pause(); } catch (_) {}
+      updateUI();
+    }
+  }
+  window.addEventListener('pagehide', cleanupStoryAudio);
+  window.addEventListener('beforeunload', cleanupStoryAudio);
 })();
 
 // Restore community count if user already submitted a lead

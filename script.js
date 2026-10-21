@@ -47,7 +47,7 @@ const initThriveUI = () => {
         };
 
         const speakWalkthrough = () => {
-            if (!window.speechSynthesis || !narrationActive) return;
+            if (!window.speechSynthesis || (!narrationActive && (!videoEl || videoEl.muted))) return;
             try {
                 window.speechSynthesis.cancel();
                 const u = new SpeechSynthesisUtterance(walkthroughNarrationText);
@@ -94,7 +94,7 @@ const initThriveUI = () => {
                     const p = videoEl.play();
                     if (p && typeof p.then === 'function') p.then(syncPlayBtnLabel).catch(syncPlayBtnLabel);
                     else syncPlayBtnLabel();
-                    if (narrationActive) speakWalkthrough();
+                    if (narrationActive || !videoEl.muted) speakWalkthrough();
                 } else {
                     videoEl.pause();
                     stopWalkthroughSpeech();
@@ -110,7 +110,7 @@ const initThriveUI = () => {
                 const p = videoEl.play();
                 if (p && typeof p.then === 'function') p.then(syncPlayBtnLabel).catch(syncPlayBtnLabel);
                 else syncPlayBtnLabel();
-                if (narrationActive) speakWalkthrough();
+                if (narrationActive || !videoEl.muted) speakWalkthrough();
             });
         }
 
@@ -139,6 +139,8 @@ const initThriveUI = () => {
                 if (videoEl.paused) {
                     const p = videoEl.play();
                     if (p && typeof p.then === 'function') p.then(syncPlayBtnLabel).catch(syncPlayBtnLabel);
+                    else syncPlayBtnLabel();
+                    if (narrationActive || !videoEl.muted) speakWalkthrough();
                 } else {
                     videoEl.pause();
                     stopWalkthroughSpeech();
@@ -158,7 +160,25 @@ const initThriveUI = () => {
                 activateVideoCard();
             }
         });
+
+        const cleanupWalkthroughAudio = () => {
+            stopWalkthroughSpeech();
+            if (videoEl && !videoEl.paused) {
+                try { videoEl.pause(); } catch (_) {}
+                syncPlayBtnLabel();
+            }
+        };
+        window.addEventListener('pagehide', cleanupWalkthroughAudio);
+        window.addEventListener('beforeunload', cleanupWalkthroughAudio);
     }
+
+    const cancelPageSpeech = () => {
+        if (window.speechSynthesis) {
+            try { window.speechSynthesis.cancel(); } catch (_) {}
+        }
+    };
+    window.addEventListener('pagehide', cancelPageSpeech);
+    window.addEventListener('beforeunload', cancelPageSpeech);
 
     // Offer Cards: Touch & Keyboard Flip Support without desktop hover lock
     const offerCards = document.querySelectorAll('.offer-card');

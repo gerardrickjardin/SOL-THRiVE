@@ -513,6 +513,8 @@ function stopHopeAudio() {
         try { window.speechSynthesis.cancel(); } catch (e) {}
     }
 }
+window.addEventListener('pagehide', stopHopeAudio);
+window.addEventListener('beforeunload', stopHopeAudio);
 
 async function speakHopeText(rawText) {
     stopHopeAudio();
