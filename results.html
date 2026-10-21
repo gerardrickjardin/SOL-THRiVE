@@ -212,7 +212,14 @@ h1,h2,h3{font-family:'Kalam',cursive;font-weight:700}
 </div>
 
 <script>
-const FIRESTORE_PROJECT_ID = "hope-survey";
+const FIRESTORE_PROJECT_ID = "sol-thrive";
+function isFirestoreSyncEnabled(){
+  try {
+    return Boolean(window.SOL_ENABLE_FIRESTORE_SYNC || localStorage.getItem('solEnableFirestoreSync') === 'true');
+  } catch (_) {
+    return false;
+  }
+}
 
 // 1. Personalise from survey lead (sessionStorage or localStorage fallback)
 let d = {};
@@ -383,6 +390,7 @@ function updateVoteTallies(selectedPriorities){
 }
 
 async function saveVoteToFirestore(votePayload){
+  if (!isFirestoreSyncEnabled()) return false;
   const url = `https://firestore.googleapis.com/v1/projects/${FIRESTORE_PROJECT_ID}/databases/(default)/documents/sol_thrive_votes`;
   const body = {
     fields: {
