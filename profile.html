@@ -148,10 +148,23 @@ const { useState, useEffect, useRef } = React;
 // =========================================================================
 // ⚙️ DEVELOPER SETTINGS (PASTE YOUR KEYS HERE TO SAVE THEM PERMANENTLY)
 // =========================================================================
+const REVOKED_API_KEYS = new Set([
+  "AIzaSyDhByu-gVi8PNLtDdl41ETxOmu2JOEVt8A",
+  "sk_d2fc2ac281afdb8a56178f44c8ebca76f21da62f7a256bf8"
+]);
+function sanitizeApiKey(rawKey, storageKey) {
+  const k = String(rawKey || "").trim();
+  if (!k || k.includes("VITE_") || REVOKED_API_KEYS.has(k)) {
+    if (storageKey && REVOKED_API_KEYS.has(k)) {
+      try { localStorage.removeItem(storageKey); } catch (e) {}
+    }
+    return "";
+  }
+  return k;
+}
+
 const ENV_ELEVENLABS_KEY = "%VITE_ELEVENLABS_API_KEY%";
-const HARDCODED_ELEVENLABS_API_KEY = (ENV_ELEVENLABS_KEY && !ENV_ELEVENLABS_KEY.includes("VITE_ELEVENLABS_API_KEY"))
-  ? ENV_ELEVENLABS_KEY
-  : "sk_d2fc2ac281afdb8a56178f44c8ebca76f21da62f7a256bf8";
+const HARDCODED_ELEVENLABS_API_KEY = sanitizeApiKey(ENV_ELEVENLABS_KEY);
 const HARDCODED_ELEVENLABS_VOICE_ID = "4EfJOraSN0d4Lt6iDXwh";
 // =========================================================================
 
@@ -414,10 +427,7 @@ const SECTION_COLOR_CLASSES = {
 };
 
 const ENV_GEMINI_KEY = "%VITE_GEMINI_API_KEY%";
-const FALLBACK_GEMINI_API_KEY = "AIzaSyDhByu-gVi8PNLtDdl41ETxOmu2JOEVt8A";
-const apiKey = (ENV_GEMINI_KEY && !ENV_GEMINI_KEY.includes("VITE_GEMINI_API_KEY"))
-  ? ENV_GEMINI_KEY
-  : FALLBACK_GEMINI_API_KEY;
+const apiKey = sanitizeApiKey(ENV_GEMINI_KEY);
 
 // --- NON-OVERLAPPING GLOBAL AUDIO CONTROLLER ---
 let globalAudio = null;
@@ -722,7 +732,7 @@ function normalizeBulletOutput(aiText, originalText) {
 function resolveGeminiKey() {
   try {
     const saved = localStorage.getItem('thriveGeminiKey');
-    if (saved !== null) return saved.trim();
+    if (saved !== null) return sanitizeApiKey(saved, 'thriveGeminiKey');
   } catch (e) {}
   return apiKey || "";
 }
@@ -730,7 +740,7 @@ function resolveGeminiKey() {
 function resolveElevenLabsKey() {
   try {
     const saved = localStorage.getItem('thriveElevenLabsKey');
-    if (saved !== null) return saved.trim();
+    if (saved !== null) return sanitizeApiKey(saved, 'thriveElevenLabsKey');
   } catch (e) {}
   return HARDCODED_ELEVENLABS_API_KEY || "";
 }
@@ -745,7 +755,7 @@ function resolveElevenLabsVoiceId() {
 
 async function cleanTextWithGemini(text, customGeminiKey) {
   const activeKey = (typeof customGeminiKey === 'string')
-    ? customGeminiKey.trim()
+    ? sanitizeApiKey(customGeminiKey)
     : resolveGeminiKey();
   if (!activeKey) {
     return formatLocalBullets(text);

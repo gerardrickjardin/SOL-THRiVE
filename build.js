@@ -28,8 +28,17 @@ const path = require('path');
     });
   }
 
-  const key = process.env.VITE_ELEVENLABS_API_KEY || process.env.ELEVENLABS_API_KEY || "";
-  const geminiKey = process.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY || "AIzaSyDhByu-gVi8PNLtDdl41ETxOmu2JOEVt8A";
+  const REVOKED_KEYS = new Set([
+    "AIzaSyDhByu-gVi8PNLtDdl41ETxOmu2JOEVt8A",
+    "sk_d2fc2ac281afdb8a56178f44c8ebca76f21da62f7a256bf8"
+  ]);
+  const sanitizeKey = (val) => {
+    const trimmed = String(val || "").trim();
+    return (!trimmed || REVOKED_KEYS.has(trimmed)) ? "" : trimmed;
+  };
+
+  const key = sanitizeKey(process.env.VITE_ELEVENLABS_API_KEY || process.env.ELEVENLABS_API_KEY || "");
+  const geminiKey = sanitizeKey(process.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY || "");
 
   ['profile.html', 'survey.html', 'hope-survey.html'].forEach(file => {
     const filePath = path.join(outDir, file);

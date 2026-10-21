@@ -10,21 +10,32 @@
     <!-- ⚙️ DEVELOPER CONFIGURATION                 -->
     <!-- ========================================== -->
     <script>
+        const REVOKED_API_KEYS = new Set([
+            "AIzaSyDhByu-gVi8PNLtDdl41ETxOmu2JOEVt8A",
+            "sk_d2fc2ac281afdb8a56178f44c8ebca76f21da62f7a256bf8"
+        ]);
+        function sanitizeApiKey(rawKey, storageKey) {
+            const k = String(rawKey || "").trim();
+            if (!k || k.includes("VITE_") || REVOKED_API_KEYS.has(k)) {
+                if (storageKey && REVOKED_API_KEYS.has(k)) {
+                    try { localStorage.removeItem(storageKey); } catch (e) {}
+                }
+                return "";
+            }
+            return k;
+        }
+
         const ENV_ELEVENLABS_KEY = "";
-        const elevenLabsApiKey = (ENV_ELEVENLABS_KEY && !ENV_ELEVENLABS_KEY.includes("VITE_ELEVENLABS_API_KEY"))
-            ? ENV_ELEVENLABS_KEY
-            : "sk_d2fc2ac281afdb8a56178f44c8ebca76f21da62f7a256bf8";
+        const elevenLabsApiKey = sanitizeApiKey(ENV_ELEVENLABS_KEY);
         const elevenLabsVoiceId = "4EfJOraSN0d4Lt6iDXwh"; 
 
-        const ENV_GEMINI_KEY = "AIzaSyDhByu-gVi8PNLtDdl41ETxOmu2JOEVt8A";
-        const apiKey = (ENV_GEMINI_KEY && !ENV_GEMINI_KEY.includes("VITE_GEMINI_API_KEY"))
-            ? ENV_GEMINI_KEY
-            : "AIzaSyDhByu-gVi8PNLtDdl41ETxOmu2JOEVt8A";
+        const ENV_GEMINI_KEY = "";
+        const apiKey = sanitizeApiKey(ENV_GEMINI_KEY);
 
         function getActiveGeminiKey() {
             try {
                 const saved = localStorage.getItem('thriveGeminiKey');
-                if (saved !== null) return saved.trim();
+                if (saved !== null) return sanitizeApiKey(saved, 'thriveGeminiKey');
             } catch (e) {}
             return apiKey || "";
         }
@@ -32,7 +43,7 @@
         function getActiveElevenLabsKey() {
             try {
                 const saved = localStorage.getItem('thriveElevenLabsKey');
-                if (saved !== null) return saved.trim();
+                if (saved !== null) return sanitizeApiKey(saved, 'thriveElevenLabsKey');
             } catch (e) {}
             return elevenLabsApiKey || "";
         }
@@ -522,13 +533,13 @@
                     <p class="text-lg mb-6 text-slate-700" id="question-text">feel a sense of hope that this situation can be resolved?</p>
 
                     <!-- Score Buttons Grid -->
-                    <div class="grid grid-cols-6 gap-2 mb-1.5">
-                        <button type="button" onclick="recordScore(0)" class="p-3 rounded-xl border-2 border-slate-200 font-bold text-slate-800 hover:border-purple-600 hover:bg-purple-50 transition-all text-center">0</button>
-                        <button type="button" onclick="recordScore(1)" class="p-3 rounded-xl border-2 border-slate-200 font-bold text-slate-800 hover:border-purple-600 hover:bg-purple-50 transition-all text-center">1</button>
-                        <button type="button" onclick="recordScore(2)" class="p-3 rounded-xl border-2 border-slate-200 font-bold text-slate-800 hover:border-purple-600 hover:bg-purple-50 transition-all text-center">2</button>
-                        <button type="button" onclick="recordScore(3)" class="p-3 rounded-xl border-2 border-slate-200 font-bold text-slate-800 hover:border-purple-600 hover:bg-purple-50 transition-all text-center">3</button>
-                        <button type="button" onclick="recordScore(4)" class="p-3 rounded-xl border-2 border-slate-200 font-bold text-slate-800 hover:border-purple-600 hover:bg-purple-50 transition-all text-center">4</button>
-                        <button type="button" onclick="recordScore(5)" class="p-3 rounded-xl border-2 border-slate-200 font-bold text-slate-800 hover:border-purple-600 hover:bg-purple-50 transition-all text-center">5</button>
+                    <div class="grid grid-cols-6 gap-2 mb-1.5" id="score-buttons" role="group" aria-label="Choose how often">
+                        <button type="button" onclick="recordScore(0)" data-score="0" aria-pressed="false" class="score-btn p-3 rounded-xl border-2 border-slate-200 font-bold text-slate-800 hover:border-purple-600 hover:bg-purple-50 transition-all text-center">0</button>
+                        <button type="button" onclick="recordScore(1)" data-score="1" aria-pressed="false" class="score-btn p-3 rounded-xl border-2 border-slate-200 font-bold text-slate-800 hover:border-purple-600 hover:bg-purple-50 transition-all text-center">1</button>
+                        <button type="button" onclick="recordScore(2)" data-score="2" aria-pressed="false" class="score-btn p-3 rounded-xl border-2 border-slate-200 font-bold text-slate-800 hover:border-purple-600 hover:bg-purple-50 transition-all text-center">2</button>
+                        <button type="button" onclick="recordScore(3)" data-score="3" aria-pressed="false" class="score-btn p-3 rounded-xl border-2 border-slate-200 font-bold text-slate-800 hover:border-purple-600 hover:bg-purple-50 transition-all text-center">3</button>
+                        <button type="button" onclick="recordScore(4)" data-score="4" aria-pressed="false" class="score-btn p-3 rounded-xl border-2 border-slate-200 font-bold text-slate-800 hover:border-purple-600 hover:bg-purple-50 transition-all text-center">4</button>
+                        <button type="button" onclick="recordScore(5)" data-score="5" aria-pressed="false" class="score-btn p-3 rounded-xl border-2 border-slate-200 font-bold text-slate-800 hover:border-purple-600 hover:bg-purple-50 transition-all text-center">5</button>
                     </div>
 
                     <!-- Labels -->
@@ -546,7 +557,12 @@
                         <div class="flex flex-col items-center flex-grow px-4">
                             <span>Question <span id="current-q-num" class="text-slate-900 font-extrabold">1</span> of 20</span>
                         </div>
-                        <div class="w-16"></div> 
+                        <div class="w-16 text-right">
+                            <button type="button" id="next-question-btn" onclick="goForwardQuestion()" class="hidden hover:text-slate-900 transition-all">Next &rarr;</button>
+                        </div>
+                    </div>
+                    <div id="return-to-results-row" class="hidden text-center mt-4">
+                        <button type="button" onclick="showResults()" class="text-sm font-bold text-purple-700 hover:text-purple-900 underline underline-offset-4 transition-all">&check; Done editing &mdash; back to results</button>
                     </div>
                 </div>
 
@@ -573,6 +589,7 @@
                             <span class="text-xl">📊</span> View Detailed Interpretation
                         </button>
                         <button type="button" onclick="location.reload()" class="cta-button secondary-outline w-full">Start Over</button>
+                        <button type="button" id="edit-responses-btn" onclick="editResponses()" class="text-slate-500 font-bold hover:text-slate-900 transition-all text-center mt-2">&larr; Edit Responses</button>
                     </div>
                 </div>
 
@@ -713,9 +730,14 @@
                     <p class="text-[13px] text-slate-700 mb-4 leading-relaxed">
                         Run by Dr. Steve Huff, a 30-year veteran in the mental health community collaborating with AI to create a method that <em>actually</em> works. Stop just reading more books and watching more YouTube videos, and get to work on reducing the friction in your parenting.
                     </p>
-                    <a href="https://thrivecoaching.ai" target="_blank" class="cta-button primary w-full text-sm">
-                        Visit thrivecoaching.ai to watch the video &rarr;
-                    </a>
+                    <div class="flex flex-col gap-2.5">
+                        <a href="profile.html" class="cta-button primary w-full text-sm">
+                            Continue to Step 2: Build Your THRiVE Report &rarr;
+                        </a>
+                        <a href="index.html#video-section" class="cta-button secondary-outline w-full text-sm">
+                            <span aria-hidden="true">&#9654;</span> Watch How It Works
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1183,6 +1205,8 @@
 
         let currentQ = 0;
         let scores = new Array(20).fill(0);
+        // 0 ("Never") is a valid answer, so track answered state separately from the score value.
+        let answered = new Array(20).fill(false);
         const segmentsGroup = document.getElementById('visual-segments');
         const targetGroup = document.getElementById('target-segments');
         let visualInitialized = false;
@@ -1221,32 +1245,46 @@
             el.setAttribute('d', d);
         }
 
+        function updateLiveScore() {
+            document.getElementById('live-score').innerText = scores.reduce((a, b) => a + b, 0);
+        }
+
         function recordScore(val) {
             stopCurrentAudio();
             scores[currentQ] = val;
+            answered[currentQ] = true;
             updateSegmentPath(document.getElementById(`seg-${currentQ}`), currentQ, val);
-            
-            const total = scores.reduce((a, b) => a + b, 0);
-            document.getElementById('live-score').innerText = total;
+            updateLiveScore();
 
-            currentQ++;
-            if (currentQ < 20) {
+            if (currentQ < questions.length - 1) {
+                currentQ++;
                 renderQuestion();
             } else {
                 showResults();
             }
         }
 
+        // Step back one question WITHOUT discarding the answer — it stays recorded
+        // (and highlighted) so the user can keep it or pick a different score.
         function goBackQuestion() {
             stopCurrentAudio();
             if (currentQ > 0) {
-                currentQ--; 
-                scores[currentQ] = 0;
-                updateSegmentPath(document.getElementById(`seg-${currentQ}`), currentQ, 0);
-                document.getElementById('live-score').innerText = scores.reduce((a, b) => a + b, 0);
+                currentQ--;
                 renderQuestion();
             } else {
                 goToStep(2);
+            }
+        }
+
+        // Move forward over a question that already has an answer (after going Back / while editing).
+        function goForwardQuestion() {
+            stopCurrentAudio();
+            if (!answered[currentQ]) return;
+            if (currentQ < questions.length - 1) {
+                currentQ++;
+                renderQuestion();
+            } else {
+                showResults();
             }
         }
 
@@ -1256,9 +1294,35 @@
             document.getElementById('category-icon').innerText = q.icon;
             document.getElementById('question-text').innerText = q.text;
             document.getElementById('current-q-num').innerText = currentQ + 1;
+
+            // Highlight the previously chosen score (if any) for this question.
+            const hasAnswer = answered[currentQ];
+            document.querySelectorAll('#score-buttons .score-btn').forEach(btn => {
+                const selected = hasAnswer && Number(btn.dataset.score) === scores[currentQ];
+                btn.setAttribute('aria-pressed', selected ? 'true' : 'false');
+                btn.classList.toggle('border-purple-600', selected);
+                btn.classList.toggle('bg-purple-50', selected);
+                btn.classList.toggle('text-purple-800', selected);
+                btn.classList.toggle('ring-2', selected);
+                btn.classList.toggle('ring-purple-200', selected);
+                btn.classList.toggle('border-slate-200', !selected);
+                btn.classList.toggle('text-slate-800', !selected);
+            });
+
+            document.getElementById('next-question-btn').classList.toggle('hidden', !(hasAnswer && currentQ < questions.length - 1));
+            document.getElementById('return-to-results-row').classList.toggle('hidden', !answered.every(Boolean));
         }
 
         function showResults() {
+            stopCurrentAudio();
+            // Defensive: never show results with unanswered questions.
+            const firstUnanswered = answered.indexOf(false);
+            if (firstUnanswered !== -1) {
+                currentQ = firstUnanswered;
+                renderQuestion();
+                return;
+            }
+
             document.getElementById('question-card').classList.add('hidden');
             document.getElementById('results-card').classList.remove('hidden');
             
@@ -1279,46 +1343,109 @@
             });
         }
 
+        // Re-open the completed survey from the Results screen with every answer preserved.
+        function editResponses() {
+            stopCurrentAudio();
+            document.getElementById('results-card').classList.add('hidden');
+            document.getElementById('detailed-summary-card').classList.add('hidden');
+            document.getElementById('thrive-cta').classList.add('hidden');
+            document.getElementById('visual-title').classList.add('hidden');
+            document.getElementById('visual-anchor').classList.add('sticky', 'top-24');
+            targetGroup.innerHTML = ''; // target ring is recalculated when results are shown again
+
+            currentQ = 0;
+            document.getElementById('question-card').classList.remove('hidden');
+            renderQuestion();
+            document.getElementById('survey-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
         // ==========================================
         // 4. CUSTOM DIAGNOSIS & EXPORT LOGIC
         // ==========================================
+        // Dimension tiers (each dimension = 5 questions x 0-5 = 0-25):
+        //   Low 0-10 · Steady (middle) 11-14 · High 15-25
+        function getDimensionTier(total) {
+            if (total >= 15) return 'high';
+            if (total >= 11) return 'mid';
+            return 'low';
+        }
+
+        function formatList(items) {
+            if (items.length <= 1) return items.join('');
+            if (items.length === 2) return `${items[0]} and ${items[1]}`;
+            return `${items.slice(0, -1).join(', ')}, and ${items[items.length - 1]}`;
+        }
+
         function generateDiagnosis(cats) {
-            let highCats = [];
-            let lowCats = [];
+            const highCats = [];
+            const midCats = [];
+            const lowCats = [];
 
             cats.forEach(c => {
-                const total = c.scores.reduce((a, b) => a + b, 0);
-                if (total >= 15) highCats.push(c.name);
+                const tier = getDimensionTier(c.scores.reduce((a, b) => a + b, 0));
+                if (tier === 'high') highCats.push(c.name);
+                else if (tier === 'mid') midCats.push(c.name);
                 else lowCats.push(c.name);
             });
+
+            const strongList = list => `<strong>${formatList(list)}</strong>`;
+            const isAre = list => (list.length === 1 ? 'is' : 'are');
+            const note = text => `<p class="pl-4 border-l-2 border-indigo-200"><em>${text}</em></p>`;
+            const midNotes = {
+                Agency: "With Agency in the middle, you can usually hold steady—but a hard day can still knock you out of the driver's seat.",
+                Actions: "With Actions in the middle, you're moving—but not always consistently, or with a clear next step.",
+                Support: "With Support in the middle, you have some people in your corner—but you may not be leaning on them for this specific struggle.",
+                Tools: "With Tools in the middle, you have some strategies—but not yet a reliable Plan B when your first approach stalls."
+            };
 
             let diagnosisHTML = "";
 
             if (highCats.length > 0) {
-                diagnosisHTML += `<p>Based on your Flow Fingerprint, your superpowers right now are in <strong>${highCats.join(' and ')}</strong>. This is a fantastic starting point—it means you already have real strengths to lean on.</p>`;
+                diagnosisHTML += `<p>Based on your Flow Fingerprint, your superpowers right now are in ${strongList(highCats)}. This is a fantastic starting point—it means you already have real strengths to lean on.</p>`;
+                if (midCats.length > 0) {
+                    diagnosisHTML += `<p>Your ${strongList(midCats)} ${isAre(midCats)} holding steady in the middle range (11–14 / 25)—working for you, but not yet a real source of momentum.</p>`;
+                }
+            } else if (midCats.length > 0) {
+                diagnosisHTML += `<p>You're not running on empty. Your ${strongList(midCats)} ${isAre(midCats)} holding steady in the middle range (11–14 / 25), which means you have a real foundation to build on—it just isn't carrying you into flow yet.</p>`;
             } else {
                 diagnosisHTML += `<p>Right now, friction is hitting you from all sides, which is why everything feels so heavy. You are running on an empty tank.</p>`;
             }
 
+            midCats.forEach(name => {
+                if (midNotes[name]) diagnosisHTML += note(midNotes[name]);
+            });
+
             if (lowCats.length > 0) {
-                diagnosisHTML += `<p>However, the specific "Ugg" you're experiencing is stemming from a drop in <strong>${lowCats.join(' and ')}</strong>.</p>`;
+                const lead = (highCats.length > 0 || midCats.length > 0) ? 'However, the' : 'The';
+                diagnosisHTML += `<p>${lead} specific "Ugg" you're experiencing is stemming from a drop in ${strongList(lowCats)}.</p>`;
                 
-                if (lowCats.includes("Agency")) diagnosisHTML += `<p class="pl-4 border-l-2 border-indigo-200"><em>When Agency is low, the problem drives you, leading to reactive overwhelm.</em></p>`;
-                if (lowCats.includes("Actions")) diagnosisHTML += `<p class="pl-4 border-l-2 border-indigo-200"><em>When Actions drop, the path gets confusing, leading to analysis paralysis.</em></p>`;
-                if (lowCats.includes("Support")) diagnosisHTML += `<p class="pl-4 border-l-2 border-indigo-200"><em>When Support is lacking, you carry the whole burden alone, leading to isolation.</em></p>`;
-                if (lowCats.includes("Tools")) diagnosisHTML += `<p class="pl-4 border-l-2 border-indigo-200"><em>When Tools are low, you're forced to rely on outdated strategies that just don't work anymore.</em></p>`;
+                if (lowCats.includes("Agency")) diagnosisHTML += note("When Agency is low, the problem drives you, leading to reactive overwhelm.");
+                if (lowCats.includes("Actions")) diagnosisHTML += note("When Actions drop, the path gets confusing, leading to analysis paralysis.");
+                if (lowCats.includes("Support")) diagnosisHTML += note("When Support is lacking, you carry the whole burden alone, leading to isolation.");
+                if (lowCats.includes("Tools")) diagnosisHTML += note("When Tools are low, you're forced to rely on outdated strategies that just don't work anymore.");
             }
 
+            const growthAreas = lowCats.length > 0 ? 'low areas' : (midCats.length > 0 ? 'middle-range areas' : 'remaining rough edges');
             diagnosisHTML += `<p class="font-bold mt-2">The Good News:</p>
-            <p>In THRiVE Coaching, we don't try to "fix everything." We take your existing strengths and use them to build up your low areas step-by-step, aiming to reduce this exact friction by 60%.</p>`;
+            <p>In THRiVE Coaching, we don't try to "fix everything." We take your existing strengths and use them to build up your ${growthAreas} step-by-step, aiming to reduce this exact friction by 60%.</p>`;
 
             return diagnosisHTML;
         }
 
+        let isExportingImage = false;
+
         function downloadImage() {
+            if (isExportingImage) return;
+            isExportingImage = true;
+
             window.scrollTo(0, 0);
             const actionButtons = document.getElementById('blueprint-buttons');
             actionButtons.classList.add('hidden');
+
+            // Keep the THRiVE program CTA out of the exported Flow Fingerprint image.
+            const thriveCta = document.getElementById('thrive-cta');
+            const ctaWasHidden = thriveCta.classList.contains('hidden');
+            thriveCta.classList.add('hidden');
 
             const mainContainer = document.getElementById('step-3');
             const surveyContainer = document.getElementById('survey-container');
@@ -1334,28 +1461,36 @@
 
             const restoreLayout = () => {
                 actionButtons.classList.remove('hidden');
+                if (!ctaWasHidden) thriveCta.classList.remove('hidden');
                 mainContainer.className = origMain;
                 surveyContainer.className = origSurvey;
                 visualAnchor.className = origVisual;
+                isExportingImage = false;
             };
 
             setTimeout(() => {
-                html2canvas(mainContainer, {
-                    scale: 2,
-                    useCORS: true, 
-                    scrollY: -window.scrollY,
-                    backgroundColor: '#ffffff'
-                }).then(canvas => {
-                    const imgData = canvas.toDataURL('image/jpeg', 0.95);
-                    const link = document.createElement('a');
-                    link.download = 'My_Flow_Fingerprint.jpg';
-                    link.href = imgData;
-                    link.click();
-                }).catch(err => {
+                try {
+                    html2canvas(mainContainer, {
+                        scale: 2,
+                        useCORS: true, 
+                        scrollY: -window.scrollY,
+                        backgroundColor: '#ffffff'
+                    }).then(canvas => {
+                        const imgData = canvas.toDataURL('image/jpeg', 0.95);
+                        const link = document.createElement('a');
+                        link.download = 'My_Flow_Fingerprint.jpg';
+                        link.href = imgData;
+                        link.click();
+                    }).catch(err => {
+                        console.error('Failed to export image:', err);
+                    }).finally(() => {
+                        restoreLayout();
+                    });
+                } catch (err) {
+                    // e.g. html2canvas CDN failed to load
                     console.error('Failed to export image:', err);
-                }).finally(() => {
                     restoreLayout();
-                });
+                }
             }, 150);
         }
 
@@ -1449,21 +1584,25 @@
                 { 
                     name: "Agency", icon: "🕯️", color: "bg-blue-500", scores: scores.slice(0, 5),
                     lowDesc: "You might feel overwhelmed, highly reactive, or trapped by circumstances. It feels like the problem is driving you.",
+                    midDesc: "You can usually stay steady and hopeful, but stress still pulls you into reacting instead of choosing your response.",
                     highDesc: "You stay calm, centered, and maintain hope. You are confidently in the driver's seat of your own emotional response."
                 },
                 { 
                     name: "Actions", icon: "🗺️", color: "bg-emerald-500", scores: scores.slice(5, 10),
                     lowDesc: "The path forward feels confusing or too big to tackle, leading to paralysis or repeating the same frustrating mistakes.",
+                    midDesc: "You're taking some steps, but they're not always consistent or clearly connected to the bigger goal.",
                     highDesc: "You can easily break the problem down into Simple, Practical, and Fun (SPF) steps and consistently execute them."
                 },
                 { 
                     name: "Support", icon: "🤝", color: "bg-amber-500", scores: scores.slice(10, 15),
                     lowDesc: "You feel isolated, judged, or like you have to carry the entire burden completely on your own.",
+                    midDesc: "You have some people in your corner, but you may not fully lean on them—or feel fully understood—for this specific struggle.",
                     highDesc: "You have a trusted, non-judgmental community or coach to brainstorm with and you feel truly seen and heard."
                 },
                 { 
                     name: "Tools", icon: "⚙️", color: "bg-purple-500", scores: scores.slice(15, 20),
                     lowDesc: "You feel empty-handed or heavily reliant on outdated strategies and reactions that just don't work anymore.",
+                    midDesc: "You have a few strategies that help, but not yet a reliable Plan B or best-practice framework when things stall.",
                     highDesc: "You are equipped with the right 'gear' and best-practice frameworks (like Plan B's and reset moves) for this specific climb."
                 }
             ];
@@ -1474,6 +1613,11 @@
             cats.forEach((c, index) => {
                 const total = c.scores.reduce((a, b) => a + b, 0);
                 const percent = (total / 25) * 100;
+                const tier = getDimensionTier(total);
+                const tierRow = (key, label, desc, extraClass) => {
+                    const isYou = tier === key;
+                    return `<div class="${extraClass} ${isYou ? 'bg-white border border-indigo-200 rounded-lg px-2 py-1.5 -mx-2' : ''}">${isYou ? '<div class="w-fit mb-1 text-[10px] font-extrabold uppercase tracking-wider text-indigo-700 bg-indigo-50 border border-indigo-200 rounded-full px-2 py-0.5">You are here</div>' : ''}<p><span class="font-bold text-slate-900">${label}:</span> ${desc}</p></div>`;
+                };
                 
                 catContainer.innerHTML += `
                     <div class="border border-slate-200 rounded-xl overflow-hidden bg-white shadow-sm">
@@ -1490,8 +1634,9 @@
                             <div class="text-slate-400 text-2xl font-light leading-none w-6 text-center" id="dim-icon-${index}">−</div>
                         </div>
                         <div id="dim-content-${index}" class="p-4 bg-slate-50 border-t border-slate-100 text-sm text-slate-700">
-                            <p class="mb-2"><span class="font-bold text-slate-900">When Low (0-10):</span> ${c.lowDesc}</p>
-                            <p><span class="font-bold text-slate-900">When High (15-25):</span> ${c.highDesc}</p>
+                            ${tierRow('low', 'When Low (0-10)', c.lowDesc, 'mb-2')}
+                            ${tierRow('mid', 'When Steady (11-14)', c.midDesc, 'mb-2')}
+                            ${tierRow('high', 'When High (15-25)', c.highDesc, '')}
                         </div>
                     </div>
                 `;

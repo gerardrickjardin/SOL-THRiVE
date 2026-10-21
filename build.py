@@ -18,8 +18,14 @@ for out_dir in out_dirs:
                 continue
             shutil.copy2(os.path.join(assets_src, asset), os.path.join(assets_dest, asset))
 
-    key = os.environ.get('VITE_ELEVENLABS_API_KEY', os.environ.get('ELEVENLABS_API_KEY', ''))
-    gemini_key = os.environ.get('VITE_GEMINI_API_KEY', os.environ.get('GEMINI_API_KEY', 'AIzaSyDhByu-gVi8PNLtDdl41ETxOmu2JOEVt8A'))
+    revoked_keys = {
+        "AIzaSyDhByu-gVi8PNLtDdl41ETxOmu2JOEVt8A",
+        "sk_d2fc2ac281afdb8a56178f44c8ebca76f21da62f7a256bf8",
+    }
+    raw_el_key = os.environ.get('VITE_ELEVENLABS_API_KEY', os.environ.get('ELEVENLABS_API_KEY', '')).strip()
+    raw_gem_key = os.environ.get('VITE_GEMINI_API_KEY', os.environ.get('GEMINI_API_KEY', '')).strip()
+    key = '' if raw_el_key in revoked_keys else raw_el_key
+    gemini_key = '' if raw_gem_key in revoked_keys else raw_gem_key
 
     for file in ['profile.html', 'survey.html', 'hope-survey.html']:
         file_path = os.path.join(out_dir, file)

@@ -440,21 +440,32 @@ const surveyQuestions = [
 ];
 
 // --- AI & REFLECTION SETTINGS ---
+const REVOKED_API_KEYS = new Set([
+    "AIzaSyDhByu-gVi8PNLtDdl41ETxOmu2JOEVt8A",
+    "sk_d2fc2ac281afdb8a56178f44c8ebca76f21da62f7a256bf8"
+]);
+function sanitizeApiKey(rawKey, storageKey) {
+    const k = String(rawKey || "").trim();
+    if (!k || k.includes("VITE_") || REVOKED_API_KEYS.has(k)) {
+        if (storageKey && REVOKED_API_KEYS.has(k)) {
+            try { localStorage.removeItem(storageKey); } catch (e) {}
+        }
+        return "";
+    }
+    return k;
+}
+
 const injectedGeminiKey = "%VITE_GEMINI_API_KEY%";
-const apiKey = (injectedGeminiKey && !injectedGeminiKey.includes("VITE_GEMINI_API_KEY"))
-    ? injectedGeminiKey
-    : "AIzaSyDhByu-gVi8PNLtDdl41ETxOmu2JOEVt8A";
+const apiKey = sanitizeApiKey(injectedGeminiKey);
 
 const injectedElevenLabsKey = "%VITE_ELEVENLABS_API_KEY%";
-const defaultElevenLabsKey = (injectedElevenLabsKey && !injectedElevenLabsKey.includes("VITE_ELEVENLABS_API_KEY"))
-    ? injectedElevenLabsKey
-    : "sk_d2fc2ac281afdb8a56178f44c8ebca76f21da62f7a256bf8";
+const defaultElevenLabsKey = sanitizeApiKey(injectedElevenLabsKey);
 const defaultElevenLabsVoiceId = "4EfJOraSN0d4Lt6iDXwh";
 
 function getActiveGeminiKey() {
     try {
         const saved = localStorage.getItem('thriveGeminiKey');
-        if (saved !== null) return saved.trim();
+        if (saved !== null) return sanitizeApiKey(saved, 'thriveGeminiKey');
     } catch (e) {}
     return apiKey || "";
 }
@@ -462,7 +473,7 @@ function getActiveGeminiKey() {
 function getActiveElevenLabsKey() {
     try {
         const saved = localStorage.getItem('thriveElevenLabsKey');
-        if (saved !== null) return saved.trim();
+        if (saved !== null) return sanitizeApiKey(saved, 'thriveElevenLabsKey');
     } catch (e) {}
     return defaultElevenLabsKey || "";
 }
@@ -625,10 +636,14 @@ const computeSurveyScores = (answersObj = {}, questionsList = surveyQuestions) =
     }));
 
     let lowestDimension = null;
+    let highestDimension = null;
     dimensions.forEach((d) => {
         if (d.score !== null) {
             if (!lowestDimension || d.score < lowestDimension.score) {
                 lowestDimension = { name: d.name, score: d.score, space: d.space };
+            }
+            if (!highestDimension || d.score > highestDimension.score) {
+                highestDimension = { name: d.name, score: d.score, space: d.space };
             }
         }
     });
@@ -648,7 +663,31 @@ const computeSurveyScores = (answersObj = {}, questionsList = surveyQuestions) =
         flexPssScore,
         dimensions,
         lowestDimension,
+        highestDimension,
         tierText
+    };
+};
+
+const generateLocalHopeSynthesis = (scores) => {
+    if (!scores) return null;
+    const { totalHoPEScore100, opsScore50, irsScore50, lowestDimension, highestDimension, tierText } = scores;
+    const balanceNote = Math.abs(opsScore50 - irsScore50) <= 5
+        ? `Your Outer Physical Space (${opsScore50}/50) and Inner Relational Space (${irsScore50}/50) are closely balanced, giving you a steady foundation to build on.`
+        : opsScore50 > irsScore50
+            ? `Your Outer Physical Space (${opsScore50}/50) is currently stronger than your Inner Relational Space (${irsScore50}/50)—meaning your external environment can help anchor internal recovery and relational trust.`
+            : `Your Inner Relational Space (${irsScore50}/50) outpaces your Outer Physical Space (${opsScore50}/50)—meaning your internal resilience and relationships are carrying you through external environmental friction.`;
+
+    const strengthNote = highestDimension
+        ? `Your strongest anchor is ${highestDimension.name} (${highestDimension.score.toFixed(1)}/5.0), which serves as your primary resilience reservoir.`
+        : '';
+
+    const focusNote = lowestDimension
+        ? `Your highest-leverage growth opportunity is ${lowestDimension.name} (${lowestDimension.score.toFixed(1)}/5.0). Pairing your THRiVE Report strengths with one small, safe-to-try micro-step in ${lowestDimension.name} will create the fastest lift in your overall HoPE capacity.`
+        : '';
+
+    return {
+        headline: `${tierText} CAPACITY PROFILE (${totalHoPEScore100}% Overall)`,
+        summary: [balanceNote, strengthNote, focusNote].filter(Boolean).join(' ')
     };
 };
 
@@ -1334,6 +1373,7 @@ const HopeChart = ({ answers, surveyQuestions, isFinal, onViewDashboard, onRetak
 
 const ResultsScreen = ({ answers, reflections, surveyQuestions, onViewDashboard, onRetake, user, onOpenAuth }) => {
     const scores = computeSurveyScores(answers, surveyQuestions);
+    const clinicalSynthesis = generateLocalHopeSynthesis(scores);
     const reflectionEntries = surveyQuestions
         .map((q) => ({
             question: q,
@@ -1394,6 +1434,22 @@ const ResultsScreen = ({ answers, reflections, surveyQuestions, onViewDashboard,
                             </div>
                         )}
                     </div>
+
+                    {clinicalSynthesis && (
+                        <div className="mb-6 bg-[#031126] border border-cyan-400/30 rounded-2xl p-4 md:p-5 flex flex-col gap-1.5">
+                            <div className="flex items-center justify-between gap-2">
+                                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-cyan-300">
+                                    SOL THRiVE &bull; Clinical &amp; Strengths Synthesis
+                                </span>
+                                <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-200 border border-cyan-400/30">
+                                    {clinicalSynthesis.headline}
+                                </span>
+                            </div>
+                            <p className="text-xs md:text-sm text-slate-200 leading-relaxed">
+                                {clinicalSynthesis.summary}
+                            </p>
+                        </div>
+                    )}
 
                     {/* 6 Core Dimensions Grid */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
