@@ -2358,6 +2358,13 @@ a {
     max-width: 600px;
 }
 
+@media print {
+    .footer,
+    .no-print {
+        display: none !important;
+    }
+}
+
 /* ==========================================
    DROPDOWN MENU STYLES
    ========================================== */

@@ -1,6 +1,26 @@
 const fs = require('fs');
 const path = require('path');
 
+// Archival design files kept in the repo but never referenced by any page.
+// They are skipped during the build (and any stale copies are removed from the output).
+const EXCLUDED_ROOT_FILES = new Set(['minds-eye-white-bg.mp4']);
+const EXCLUDED_ASSETS = new Set([
+  '.DS_Store',
+  'Hero Page.png',
+  'Hero Page (1).png',
+  'THRiVECoaching Hero img.jpeg',
+  'hope_index_visual.png',
+  'map_mockup.png',
+  'sol-meadow-bg.jpg',
+  'avatar-placeholder.png',
+  'Slide1.PNG', 'Slide2.PNG', 'Slide3.PNG', 'Slide4.PNG', 'Slide5.PNG',
+  'Slide6.PNG', 'Slide7.PNG', 'Slide8.PNG', 'Slide9.PNG'
+]);
+
+const removeIfExists = (filePath) => {
+  if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+};
+
 ['dist', 'public'].forEach(outDirName => {
   const outDir = path.join(__dirname, outDirName);
 
@@ -8,13 +28,14 @@ const path = require('path');
     fs.mkdirSync(outDir);
   }
 
-  const files = ['index.html', 'mockup-landing.html', 'results.html', 'profile.html', 'survey.html', 'approach.html', 'how-to-use.html', 'rebuilding-life-challenges.html', 'employment-challenges.html', 'style.css', 'script.js', 'hope-survey.html', 'ai-avatar.png', 'minds-eye-white-bg.mp4', 'minds-eye.png', 'minds-eye-animated.mp4', 'minds-eye-animated.webm'];
+  const files = ['index.html', 'mockup-landing.html', 'results.html', 'profile.html', 'survey.html', 'approach.html', 'how-to-use.html', 'rebuilding-life-challenges.html', 'employment-challenges.html', 'style.css', 'script.js', 'hope-survey.html', 'ai-avatar.png', 'minds-eye.png', 'minds-eye-animated.mp4', 'minds-eye-animated.webm'];
 
   files.forEach(file => {
     if (fs.existsSync(file)) {
       fs.copyFileSync(file, path.join(outDir, file));
     }
   });
+  EXCLUDED_ROOT_FILES.forEach(file => removeIfExists(path.join(outDir, file)));
 
   const assetsDirSrc = path.join(__dirname, 'assets');
   const assetsDirDest = path.join(outDir, 'assets');
@@ -23,9 +44,10 @@ const path = require('path');
       fs.mkdirSync(assetsDirDest);
     }
     fs.readdirSync(assetsDirSrc).forEach(file => {
-      if (file === '.DS_Store') return;
+      if (EXCLUDED_ASSETS.has(file)) return;
       fs.copyFileSync(path.join(assetsDirSrc, file), path.join(assetsDirDest, file));
     });
+    EXCLUDED_ASSETS.forEach(file => removeIfExists(path.join(assetsDirDest, file)));
   }
 
   const REVOKED_KEYS = new Set([
