@@ -3,7 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Take the 20-Dimension HoPE Index to map your Outer Physical Space (OPS), Inner Relational Space (IRS), and Contextual Layering on an interactive coaching dashboard.">
     <title>HoPE Index - SOL THRiVE</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="apple-touch-icon" href="assets/hero-banner.jpg">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="SOL THRiVE Coaching">
+    <meta property="og:title" content="20-Dimension HoPE Index — SOL THRiVE">
+    <meta property="og:description" content="Map your Outer Physical Space (OPS), Inner Relational Space (IRS), and Contextual Layering on the interactive HoPE Wheel.">
+    <meta property="og:url" content="https://sol-th-ri-ve.vercel.app/hope-survey.html">
+    <meta property="og:image" content="https://sol-th-ri-ve.vercel.app/assets/hero-banner.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="20-Dimension HoPE Index — SOL THRiVE">
+    <meta name="twitter:description" content="Map your Outer Physical Space (OPS), Inner Relational Space (IRS), and Contextual Layering on the interactive HoPE Wheel.">
+    <meta name="twitter:image" content="https://sol-th-ri-ve.vercel.app/assets/hero-banner.jpg">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
@@ -471,7 +484,7 @@ const REVOKED_API_KEYS = new Set([
 ]);
 function sanitizeApiKey(rawKey, storageKey) {
     const k = String(rawKey || "").trim();
-    if (!k || k.includes("VITE_") || REVOKED_API_KEYS.has(k)) {
+    if (!k || k.includes("VITE_") || k === "__SERVER_PROXY__" || REVOKED_API_KEYS.has(k)) {
         if (storageKey && REVOKED_API_KEYS.has(k)) {
             try { localStorage.removeItem(storageKey); } catch (e) {}
         }
@@ -481,9 +494,11 @@ function sanitizeApiKey(rawKey, storageKey) {
 }
 
 const injectedGeminiKey = "%VITE_GEMINI_API_KEY%";
+const SERVER_HAS_GEMINI_PROXY = injectedGeminiKey === "__SERVER_PROXY__";
 const apiKey = sanitizeApiKey(injectedGeminiKey);
 
 const injectedElevenLabsKey = "%VITE_ELEVENLABS_API_KEY%";
+const SERVER_HAS_ELEVENLABS_PROXY = injectedElevenLabsKey === "__SERVER_PROXY__";
 const defaultElevenLabsKey = sanitizeApiKey(injectedElevenLabsKey);
 const defaultElevenLabsVoiceId = "4EfJOraSN0d4Lt6iDXwh";
 
@@ -573,7 +588,7 @@ async function speakHopeText(rawText) {
         } catch (e) {}
     };
 
-    if (!elKey) {
+    if (!elKey && !SERVER_HAS_ELEVENLABS_PROXY) {
         fallbackWebSpeech();
         return;
     }
@@ -581,20 +596,35 @@ async function speakHopeText(rawText) {
     const abortController = new AbortController();
     hopeAudioAbort = abortController;
     try {
-        const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
-            method: 'POST',
-            signal: abortController.signal,
-            headers: {
-                'Accept': 'audio/mpeg',
-                'xi-api-key': elKey,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                text,
-                model_id: 'eleven_turbo_v2_5',
-                voice_settings: { stability: 0.5, similarity_boost: 0.75 }
+        const res = elKey
+            ? await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+                method: 'POST',
+                signal: abortController.signal,
+                headers: {
+                    'Accept': 'audio/mpeg',
+                    'xi-api-key': elKey,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    text,
+                    model_id: 'eleven_turbo_v2_5',
+                    voice_settings: { stability: 0.5, similarity_boost: 0.75 }
+                })
             })
-        });
+            : await fetch('/api/tts', {
+                method: 'POST',
+                signal: abortController.signal,
+                headers: {
+                    'Accept': 'audio/mpeg',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    text,
+                    voiceId,
+                    model_id: 'eleven_turbo_v2_5',
+                    voice_settings: { stability: 0.5, similarity_boost: 0.75 }
+                })
+            });
         if (reqId !== hopeRequestId) return;
         if (!res.ok) throw new Error(`ElevenLabs HTTP ${res.status}`);
         const blob = await res.blob();
@@ -759,11 +789,10 @@ function formatLocalBullets(rawText) {
 
 async function cleanTextWithGemini(text) {
     const activeKey = getActiveGeminiKey();
-    if (!activeKey) {
+    if (!activeKey && !SERVER_HAS_GEMINI_PROXY) {
         return formatLocalBullets(text);
     }
 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${activeKey}`;
     const payload = {
         contents: [{ parts: [{ text: `Organize the following dictated text into clear bullet points. Remove conversational filler words (like "ums", "ahs", "OK great", "yeah", "I would say", "basically", etc.) and clean up the phrasing so it reads professionally and directly. Do NOT remove any core details or stories. Format it into a clean, bulleted list for maximum readability. Text:\n\n${text}` }] }],
         systemInstruction: { parts: [{ text: "You are a helpful assistant. Return ONLY the bullet points. Each point must start with a standard bullet character (•). Strip out conversational cruft and ensure the output is polished and direct, preserving the core meaning." }] }
@@ -773,12 +802,23 @@ async function cleanTextWithGemini(text) {
     const timeoutId = setTimeout(() => controller.abort(), 6000);
 
     try {
-        const response = await fetch(url, {
-            method: 'POST',
-            signal: controller.signal,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
+        const response = activeKey
+            ? await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${activeKey}`, {
+                method: 'POST',
+                signal: controller.signal,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            : await fetch('/api/gemini', {
+                method: 'POST',
+                signal: controller.signal,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    model: 'gemini-2.5-flash',
+                    contents: payload.contents,
+                    systemInstruction: payload.systemInstruction
+                })
+            });
         clearTimeout(timeoutId);
         if (!response.ok) throw new Error(`Gemini HTTP ${response.status}`);
         const data = await response.json();
@@ -1382,30 +1422,39 @@ const HopeChart = ({ answers, surveyQuestions, isFinal, onViewDashboard, onRetak
 
                     {/* Clean Action Bar Below Chart on Final Results Screen (Un-blurred & Hidden in Print) */}
                     {isFinal && (
-                        <div className="print:hidden flex flex-wrap items-center justify-center gap-3 mt-6 pt-4 border-t border-cyan-500/20 w-full max-w-[680px]">
-                            <button
-                                type="button"
-                                onClick={() => window.print()}
-                                className="px-6 py-3 bg-[#0a1526] border-2 border-cyan-400/60 text-cyan-300 font-bold rounded-full hover:bg-cyan-500/15 hover:border-cyan-300 transition-all shadow-lg tracking-wide uppercase text-xs flex items-center gap-2"
-                            >
-                                <span>🖨️</span> Export PDF Report
-                            </button>
-                            {onViewDashboard && (
+                        <div className="print:hidden flex flex-col items-center gap-3 mt-6 pt-4 border-t border-cyan-500/20 w-full max-w-[780px]">
+                            <div className="flex flex-wrap items-center justify-center gap-3">
                                 <button
                                     type="button"
-                                    onClick={onViewDashboard}
-                                    className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-black rounded-full hover:from-purple-500 hover:to-pink-500 transition-all shadow-lg tracking-wide uppercase text-xs border border-purple-400/50 flex items-center gap-2"
+                                    className="copy-master-prompt-btn"
                                 >
-                                    <span>📊</span> View Progress Dashboard
+                                    📋 Copy Master AI Coaching Prompt
                                 </button>
-                            )}
-                            <button
-                                type="button"
-                                onClick={onRetake || (() => window.location.reload())}
-                                className="px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-black rounded-full hover:from-cyan-500 hover:to-blue-500 transition-all shadow-lg tracking-wide uppercase text-xs border border-cyan-400/50 flex items-center gap-2"
-                            >
-                                <span>🔄</span> Retake Assessment
-                            </button>
+                                <button
+                                    type="button"
+                                    onClick={() => window.print()}
+                                    className="px-6 py-3 bg-[#0a1526] border-2 border-cyan-400/60 text-cyan-300 font-bold rounded-full hover:bg-cyan-500/15 hover:border-cyan-300 transition-all shadow-lg tracking-wide uppercase text-xs flex items-center gap-2"
+                                >
+                                    <span>🖨️</span> Export PDF Report
+                                </button>
+                                {onViewDashboard && (
+                                    <button
+                                        type="button"
+                                        onClick={onViewDashboard}
+                                        className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-black rounded-full hover:from-purple-500 hover:to-pink-500 transition-all shadow-lg tracking-wide uppercase text-xs border border-purple-400/50 flex items-center gap-2"
+                                    >
+                                        <span>📊</span> View Progress Dashboard
+                                    </button>
+                                )}
+                                <button
+                                    type="button"
+                                    onClick={onRetake || (() => window.location.reload())}
+                                    className="px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-black rounded-full hover:from-cyan-500 hover:to-blue-500 transition-all shadow-lg tracking-wide uppercase text-xs border border-cyan-400/50 flex items-center gap-2"
+                                >
+                                    <span>🔄</span> Retake Assessment
+                                </button>
+                            </div>
+                            <span data-dossier-status className="dossier-status-pill"></span>
                         </div>
                     )}
                 </div>
@@ -1418,6 +1467,27 @@ const HopeChart = ({ answers, surveyQuestions, isFinal, onViewDashboard, onRetak
 const ResultsScreen = ({ answers, reflections, surveyQuestions, onViewDashboard, onRetake, user, onOpenAuth }) => {
     const scores = computeSurveyScores(answers, surveyQuestions);
     const clinicalSynthesis = generateLocalHopeSynthesis(scores);
+
+    useEffect(() => {
+        if (window.ThriveCoachingDossier && scores && scores.answeredCoreCount > 0) {
+            window.ThriveCoachingDossier.saveHopeIndex({
+                totalHoPEScore100: scores.totalHoPEScore100,
+                opsScore50: scores.opsScore50,
+                irsScore50: scores.irsScore50,
+                tierText: scores.tierText,
+                lowestDimension: scores.lowestDimension,
+                highestDimension: scores.highestDimension,
+                flexGasScore: scores.flexGasScore,
+                flexGasLabel: getFlexStatusLabel("flex_gas", scores.flexGasScore),
+                flexPssScore: scores.flexPssScore,
+                flexPssLabel: getFlexStatusLabel("flex_pss", scores.flexPssScore),
+                dimensions: scores.dimensions,
+                reflections: reflections || {}
+            });
+            window.ThriveCoachingDossier.refreshStatusBadges();
+        }
+    }, [answers, reflections]);
+
     const reflectionEntries = surveyQuestions
         .map((q) => ({
             question: q,
@@ -1634,6 +1704,26 @@ const Dashboard = ({ user, history, onRetake, onViewLatestReport, onOpenAuth }) 
     const flexGasLabel = getFlexStatusLabel("flex_gas", flexGasScore);
     const flexPssLabel = getFlexStatusLabel("flex_pss", flexPssScore);
 
+    useEffect(() => {
+        if (window.ThriveCoachingDossier && latestScores && latestScores.answeredCoreCount > 0) {
+            window.ThriveCoachingDossier.saveHopeIndex({
+                totalHoPEScore100: latestScores.totalHoPEScore100,
+                opsScore50: latestScores.opsScore50,
+                irsScore50: latestScores.irsScore50,
+                tierText: latestScores.tierText,
+                lowestDimension,
+                highestDimension: latestScores.highestDimension,
+                flexGasScore,
+                flexGasLabel,
+                flexPssScore,
+                flexPssLabel,
+                dimensions: latestScores.dimensions,
+                reflections: latest.reflections || {}
+            });
+            window.ThriveCoachingDossier.refreshStatusBadges();
+        }
+    }, [history]);
+
     const latestReflections = surveyQuestions
         .map((q) => ({
             question: q,
@@ -1849,24 +1939,33 @@ const Dashboard = ({ user, history, onRetake, onViewLatestReport, onOpenAuth }) 
                     )}
                 </div>
 
-                <div className="flex flex-wrap justify-center gap-4 mt-6">
-                    {onViewLatestReport && (
+                <div className="flex flex-col items-center gap-3 mt-6">
+                    <div className="flex flex-wrap justify-center gap-4">
                         <button
                             type="button"
-                            onClick={onViewLatestReport}
-                            className="bg-white text-slate-800 border-2 border-slate-300 px-7 py-3.5 rounded-full font-bold text-base hover:bg-slate-50 transition-all shadow-sm inline-flex items-center gap-2"
+                            className="copy-master-prompt-btn"
                         >
-                            <span>🎯</span> View Latest HoPE Wheel
+                            📋 Copy Master AI Coaching Prompt
                         </button>
-                    )}
-                    <button 
-                        type="button"
-                        onClick={onRetake}
-                        className="bg-slate-900 text-white px-8 py-3.5 rounded-full font-bold text-base hover:bg-slate-800 hover:-translate-y-0.5 transition-all shadow-xl inline-flex items-center gap-3"
-                    >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                        Retake Assessment
-                    </button>
+                        {onViewLatestReport && (
+                            <button
+                                type="button"
+                                onClick={onViewLatestReport}
+                                className="bg-white text-slate-800 border-2 border-slate-300 px-7 py-3.5 rounded-full font-bold text-base hover:bg-slate-50 transition-all shadow-sm inline-flex items-center gap-2"
+                            >
+                                <span>🎯</span> View Latest HoPE Wheel
+                            </button>
+                        )}
+                        <button 
+                            type="button"
+                            onClick={onRetake}
+                            className="bg-slate-900 text-white px-8 py-3.5 rounded-full font-bold text-base hover:bg-slate-800 hover:-translate-y-0.5 transition-all shadow-xl inline-flex items-center gap-3"
+                        >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                            Retake Assessment
+                        </button>
+                    </div>
+                    <span data-dossier-status className="dossier-status-pill"></span>
                 </div>
             </div>
         </main>
@@ -2057,13 +2156,49 @@ const AISettingsModal = ({ isOpen, onClose }) => {
     );
 };
 
+const HOPE_SURVEY_STATE_KEY = 'thrive_hope_survey_state_v1';
+
+function loadSavedHopeSurveyState() {
+    try {
+        const raw = localStorage.getItem(HOPE_SURVEY_STATE_KEY);
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        if (!parsed || typeof parsed !== 'object') return null;
+        const ans = parsed.answers && typeof parsed.answers === 'object' ? parsed.answers : {};
+        const refl = parsed.reflections && typeof parsed.reflections === 'object' ? parsed.reflections : {};
+        const hist = Array.isArray(parsed.surveyHistory) ? parsed.surveyHistory : [];
+        const hasAnswers = Object.keys(ans).length > 0;
+        const hasReflections = Object.keys(refl).some((k) => String(refl[k] || '').trim().length > 0);
+        const hasSelection = parsed.currentSelection !== null && parsed.currentSelection !== undefined;
+        const hasHistory = hist.length > 0;
+        if (!hasAnswers && !hasReflections && !hasSelection && !hasHistory && (!parsed.step || parsed.step === 'intro')) {
+            return null;
+        }
+        const qIdx = Number.isInteger(parsed.currentQIndex) ? Math.max(0, Math.min(surveyQuestions.length - 1, parsed.currentQIndex)) : 0;
+        const curSel = parsed.currentSelection ?? (ans[surveyQuestions[qIdx]?.id] ?? null);
+        return {
+            step: ['intro', 'survey', 'results', 'dashboard'].includes(parsed.step) ? parsed.step : (hasAnswers ? 'survey' : 'intro'),
+            currentQIndex: qIdx,
+            answers: ans,
+            reflections: refl,
+            currentSelection: curSel,
+            surveyHistory: hist,
+            updatedAt: parsed.updatedAt || null
+        };
+    } catch (e) {
+        return null;
+    }
+}
+
 const App = () => {
-    const [step, setStep] = useState('intro'); // 'intro', 'survey', 'results', 'dashboard'
-    const [currentQIndex, setCurrentQIndex] = useState(0);
-    const [answers, setAnswers] = useState({}); 
-    const [reflections, setReflections] = useState({});
-    const [currentSelection, setCurrentSelection] = useState(null);
-    const [surveyHistory, setSurveyHistory] = useState([]);
+    const savedInitialRef = useRef(loadSavedHopeSurveyState());
+    const [step, setStep] = useState(() => savedInitialRef.current?.step || 'intro'); // 'intro', 'survey', 'results', 'dashboard'
+    const [currentQIndex, setCurrentQIndex] = useState(() => savedInitialRef.current?.currentQIndex || 0);
+    const [answers, setAnswers] = useState(() => savedInitialRef.current?.answers || {}); 
+    const [reflections, setReflections] = useState(() => savedInitialRef.current?.reflections || {});
+    const [currentSelection, setCurrentSelection] = useState(() => savedInitialRef.current?.currentSelection ?? null);
+    const [surveyHistory, setSurveyHistory] = useState(() => savedInitialRef.current?.surveyHistory || []);
+    const [resumeNoticeVisible, setResumeNoticeVisible] = useState(() => Boolean(savedInitialRef.current));
 
     // --- AUTHENTICATION & PROGRESS STATE ---
     const [user, setUser] = useState(null);
@@ -2080,6 +2215,78 @@ const App = () => {
     useEffect(() => { answersRef.current = answers; }, [answers]);
     useEffect(() => { reflectionsRef.current = reflections; }, [reflections]);
     useEffect(() => { stepRef.current = step; }, [step]);
+
+    // Auto-save guest/in-progress HoPE Index state to localStorage
+    useEffect(() => {
+        try {
+            const hasAnswers = Object.keys(answers || {}).length > 0;
+            const hasReflections = Object.keys(reflections || {}).some((k) => String(reflections[k] || '').trim().length > 0);
+            const hasSelection = currentSelection !== null && currentSelection !== undefined;
+            const hasHistory = Array.isArray(surveyHistory) && surveyHistory.length > 0;
+            if (!hasAnswers && !hasReflections && !hasSelection && !hasHistory && step === 'intro') {
+                return;
+            }
+            localStorage.setItem(HOPE_SURVEY_STATE_KEY, JSON.stringify({
+                step,
+                currentQIndex,
+                answers,
+                reflections,
+                currentSelection,
+                surveyHistory,
+                updatedAt: new Date().toISOString()
+            }));
+        } catch (e) {}
+    }, [step, currentQIndex, answers, reflections, currentSelection, surveyHistory]);
+
+    const handleResetSavedHopeProgress = () => {
+        stopHopeAudio();
+        try { localStorage.removeItem(HOPE_SURVEY_STATE_KEY); } catch (e) {}
+        setResumeNoticeVisible(false);
+        setAnswers({});
+        setReflections({});
+        setCurrentQIndex(0);
+        setCurrentSelection(null);
+        setStep('intro');
+    };
+
+    const renderResumeBanner = () => {
+        if (!resumeNoticeVisible) return null;
+        const answeredCount = Object.keys(answers || {}).length + (currentSelection !== null && !(surveyQuestions[currentQIndex]?.id in (answers || {})) ? 1 : 0);
+        const label = step === 'results' || step === 'dashboard'
+            ? 'Completed HoPE Index Restored'
+            : `Question ${currentQIndex + 1} of ${surveyQuestions.length} (${Math.min(surveyQuestions.length, answeredCount)} rated)`;
+        return (
+            <div id="resume-hope-banner" className="resume-progress-banner no-print print:hidden w-full max-w-5xl mx-auto mb-4">
+                <div className="resume-banner-text">
+                    <strong>Saved HoPE Index Progress Restored ({label})</strong>
+                    <span>Your ratings and written reflections are automatically saved on this device. Resume where you left off or start fresh.</span>
+                </div>
+                <div className="resume-banner-actions">
+                    <button
+                        type="button"
+                        id="resume-hope-continue-btn"
+                        className="resume-btn-primary"
+                        onClick={() => {
+                            setResumeNoticeVisible(false);
+                            if (step === 'intro' && (Object.keys(answers || {}).length > 0 || currentSelection !== null)) {
+                                setStep('survey');
+                            }
+                        }}
+                    >
+                        Resume Saved Progress
+                    </button>
+                    <button
+                        type="button"
+                        id="resume-hope-reset-btn"
+                        className="resume-btn-secondary"
+                        onClick={handleResetSavedHopeProgress}
+                    >
+                        Start Fresh
+                    </button>
+                </div>
+            </div>
+        );
+    };
 
     const normalizeAnswersMap = (rawAnswers = {}) => {
         const normalized = {};
@@ -2206,6 +2413,25 @@ const App = () => {
         const newHistoryItem = buildHistoryEntry(finalAnswers, finalReflections);
         const updatedHistory = [...surveyHistory, newHistoryItem];
         setSurveyHistory(updatedHistory);
+        setResumeNoticeVisible(false);
+
+        const scores = computeSurveyScores(finalAnswers, surveyQuestions);
+        if (window.ThriveCoachingDossier && scores && scores.answeredCoreCount > 0) {
+            window.ThriveCoachingDossier.saveHopeIndex({
+                totalHoPEScore100: scores.totalHoPEScore100,
+                opsScore50: scores.opsScore50,
+                irsScore50: scores.irsScore50,
+                tierText: scores.tierText,
+                lowestDimension: scores.lowestDimension,
+                highestDimension: scores.highestDimension,
+                flexGasScore: scores.flexGasScore,
+                flexGasLabel: getFlexStatusLabel("flex_gas", scores.flexGasScore),
+                flexPssScore: scores.flexPssScore,
+                flexPssLabel: getFlexStatusLabel("flex_pss", scores.flexPssScore),
+                dimensions: scores.dimensions,
+                reflections: finalReflections || {}
+            });
+        }
 
         if (!user || !window.firebaseDb) {
             // Preserve all completed guest assessments in memory so logging in on Results/Dashboard/Retake saves them to Firestore
@@ -2228,6 +2454,7 @@ const App = () => {
     const handleNextQ = () => {
         if (currentSelection === null) return;
         stopHopeAudio();
+        setResumeNoticeVisible(false);
         
         const qId = surveyQuestions[currentQIndex].id;
         const newAnswers = { ...answers, [qId]: currentSelection };
@@ -2245,6 +2472,7 @@ const App = () => {
 
     const handlePrevQ = () => {
         stopHopeAudio();
+        setResumeNoticeVisible(false);
         const qId = surveyQuestions[currentQIndex].id;
         const updatedAnswers = currentSelection !== null ? { ...answers, [qId]: currentSelection } : answers;
         if (currentSelection !== null) {
@@ -2261,6 +2489,7 @@ const App = () => {
 
     const handleRetake = () => {
         stopHopeAudio();
+        setResumeNoticeVisible(false);
         setAnswers({});
         setReflections({});
         setCurrentQIndex(0);
@@ -2273,6 +2502,8 @@ const App = () => {
         if (!window.firebaseAuth) return;
         window.signOut(window.firebaseAuth).then(() => {
             pendingGuestHistoryRef.current = [];
+            try { localStorage.removeItem(HOPE_SURVEY_STATE_KEY); } catch (e) {}
+            setResumeNoticeVisible(false);
             setAnswers({});
             setReflections({});
             setSurveyHistory([]);
@@ -2390,6 +2621,7 @@ const App = () => {
                 {renderHeaderPortal()}
                 {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} onLogin={() => {}} />}
                 <AISettingsModal isOpen={showAISettings} onClose={() => setShowAISettings(false)} />
+                <div className="px-4 pt-4">{renderResumeBanner()}</div>
                 <Dashboard 
                     user={user} 
                     history={surveyHistory} 
@@ -2406,10 +2638,11 @@ const App = () => {
         surveyQuestions.forEach((q) => { mockAnswers[q.id] = 5; });
 
         return (
-            <main className="flex-grow flex items-center justify-center p-4 md:p-6 relative" style={{ minHeight: 'calc(100vh - 80px)' }}>
+            <main className="flex-grow flex flex-col items-center justify-center p-4 md:p-6 relative" style={{ minHeight: 'calc(100vh - 80px)' }}>
                 {renderHeaderPortal()}
                 {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} onLogin={() => {}} />}
                 <AISettingsModal isOpen={showAISettings} onClose={() => setShowAISettings(false)} />
+                {renderResumeBanner()}
                 <div className="bg-white max-w-7xl w-full h-auto lg:h-full lg:max-h-[850px] rounded-[2rem] shadow-2xl border border-slate-100 relative overflow-hidden flex flex-col lg:flex-row">
                     
                     {/* Top gradient border */}
@@ -2458,6 +2691,7 @@ const App = () => {
                             {renderAuthWidget("w-full md:w-auto mb-2")}
                             <button type="button" onClick={() => { 
                                 stopHopeAudio();
+                                setResumeNoticeVisible(false);
                                 setStep('survey'); 
                                 setCurrentSelection(getAnswerScore(answers[surveyQuestions[currentQIndex]?.id]) ?? getAnswerScore(answers[surveyQuestions[0].id]) ?? null); 
                             }} className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white px-10 py-4 rounded-full font-bold text-xl transition-all shadow-lg hover:shadow-[0_10px_25px_rgba(59,130,246,0.4)] flex items-center justify-center gap-3 w-full md:w-auto">
@@ -2475,10 +2709,11 @@ const App = () => {
     if (step === 'results') {
         const displayResults = getDisplayResultsData();
         return (
-            <div className="relative">
+            <div className="relative bg-[#02050a]">
                 {renderHeaderPortal()}
                 {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} onLogin={() => {}} />}
                 <AISettingsModal isOpen={showAISettings} onClose={() => setShowAISettings(false)} />
+                <div className="px-4 pt-4">{renderResumeBanner()}</div>
                 <ResultsScreen 
                     answers={displayResults.answers}
                     reflections={displayResults.reflections}
@@ -2500,6 +2735,7 @@ const App = () => {
             {renderHeaderPortal()}
             {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} onLogin={() => {}} />}
             <AISettingsModal isOpen={showAISettings} onClose={() => setShowAISettings(false)} />
+            {renderResumeBanner()}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 flex-grow items-stretch lg:h-full">
                 
                 {/* Left Panel - Survey Form (50%) */}

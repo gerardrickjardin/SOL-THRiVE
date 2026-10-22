@@ -28,7 +28,7 @@ const removeIfExists = (filePath) => {
     fs.mkdirSync(outDir);
   }
 
-  const files = ['index.html', 'mockup-landing.html', 'results.html', 'profile.html', 'survey.html', 'approach.html', 'how-to-use.html', 'rebuilding-life-challenges.html', 'employment-challenges.html', 'style.css', 'script.js', 'hope-survey.html', 'ai-avatar.png', 'minds-eye.png', 'minds-eye-animated.mp4', 'minds-eye-animated.webm'];
+  const files = ['index.html', 'mockup-landing.html', 'results.html', 'profile.html', 'survey.html', 'approach.html', 'how-to-use.html', 'rebuilding-life-challenges.html', 'employment-challenges.html', 'style.css', 'script.js', 'hope-survey.html', 'favicon.svg', 'ai-avatar.png', 'minds-eye.png', 'minds-eye-animated.mp4', 'minds-eye-animated.webm'];
 
   files.forEach(file => {
     if (fs.existsSync(file)) {
@@ -54,20 +54,21 @@ const removeIfExists = (filePath) => {
     "AIzaSyDhByu-gVi8PNLtDdl41ETxOmu2JOEVt8A",
     "sk_d2fc2ac281afdb8a56178f44c8ebca76f21da62f7a256bf8"
   ]);
-  const sanitizeKey = (val) => {
+  const hasActiveServerKey = (val) => {
     const trimmed = String(val || "").trim();
-    return (!trimmed || REVOKED_KEYS.has(trimmed)) ? "" : trimmed;
+    return Boolean(trimmed && !REVOKED_KEYS.has(trimmed));
   };
 
-  const key = sanitizeKey(process.env.VITE_ELEVENLABS_API_KEY || process.env.ELEVENLABS_API_KEY || "");
-  const geminiKey = sanitizeKey(process.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY || "");
+  // Never inject raw secret keys into public HTML; only emit a non-secret proxy token when a valid server key exists.
+  const elevenLabsToken = hasActiveServerKey(process.env.VITE_ELEVENLABS_API_KEY || process.env.ELEVENLABS_API_KEY || "") ? "__SERVER_PROXY__" : "";
+  const geminiToken = hasActiveServerKey(process.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY || "") ? "__SERVER_PROXY__" : "";
 
   ['profile.html', 'survey.html', 'hope-survey.html'].forEach(file => {
     const filePath = path.join(outDir, file);
     if (fs.existsSync(filePath)) {
       let content = fs.readFileSync(filePath, 'utf8');
-      content = content.replace(/%VITE_ELEVENLABS_API_KEY%/g, key);
-      content = content.replace(/%VITE_GEMINI_API_KEY%/g, geminiKey);
+      content = content.replace(/%VITE_ELEVENLABS_API_KEY%/g, elevenLabsToken);
+      content = content.replace(/%VITE_GEMINI_API_KEY%/g, geminiToken);
       fs.writeFileSync(filePath, content);
     }
   });

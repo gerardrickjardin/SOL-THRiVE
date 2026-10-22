@@ -2452,3 +2452,112 @@ a {
     background-color: transparent;
 }
 
+/* ==========================================
+   MASTER AI COACHING DOSSIER & RESUME BANNER
+   ========================================== */
+.copy-master-prompt-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    padding: 0.85rem 1.65rem;
+    border-radius: 999px;
+    font-family: var(--font-heading, 'Nunito', sans-serif);
+    font-size: 0.96rem;
+    font-weight: 800;
+    color: #141824;
+    background: linear-gradient(135deg, #F4E9B8 0%, #F2D675 100%);
+    border: 2px solid var(--ink-border, #1E2430);
+    box-shadow: 4px 4px 0 var(--ink-border, #1E2430);
+    cursor: pointer;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, color 0.18s ease;
+    text-decoration: none;
+    line-height: 1.2;
+}
+
+.copy-master-prompt-btn:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--ink-border, #1E2430);
+    background: linear-gradient(135deg, #FCEEA7 0%, #F5C842 100%);
+}
+
+.copy-master-prompt-btn.is-copied {
+    background: #059669 !important;
+    color: #ffffff !important;
+    border-color: #1E2430 !important;
+}
+
+.dossier-cta-bar {
+    margin-top: 2rem;
+    background-color: #ffffff;
+    border: 2px solid var(--ink-border, #1E2430);
+    border-radius: 20px;
+    padding: 1.35rem 1.75rem;
+    box-shadow: 5px 5px 0 var(--ink-border, #1E2430);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem;
+    text-align: left;
+}
+
+@media (max-width: 768px) {
+    .dossier-cta-bar {
+        flex-direction: column;
+        text-align: center;
+        align-items: center;
+    }
+}
+
+.dossier-cta-info {
+    flex: 1;
+    min-width: 240px;
+}
+
+.dossier-cta-info h4 {
+    font-family: var(--font-heading, 'Nunito', sans-serif);
+    font-size: 1.18rem;
+    font-weight: 900;
+    color: var(--text-color, #141824);
+    margin: 0.25rem 0;
+}
+
+.dossier-cta-info p {
+    font-size: 0.9rem;
+    color: var(--text-muted, #4B5563);
+    margin: 0;
+    line-height: 1.45;
+}
+
+.dossier-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: var(--font-heading, 'Nunito', sans-serif);
+    font-size: 0.74rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    padding: 0.2rem 0.65rem;
+    border-radius: 999px;
+    background-color: #F5EBFD;
+    color: #8B2FC9;
+    border: 1.5px solid #8B2FC9;
+}
+
+.resume-progress-banner {
+    background-color: #FAF8F3;
+    border: 2px solid var(--ink-border, #1E2430);
+    border-radius: 20px;
+    padding: 1rem 1.35rem;
+    box-shadow: 4px 4px 0 var(--ink-border, #1E2430);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+

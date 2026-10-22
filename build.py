@@ -1,7 +1,7 @@
 import os, shutil
 
 out_dirs = ['dist', 'public']
-files = ['index.html', 'mockup-landing.html', 'results.html', 'profile.html', 'survey.html', 'approach.html', 'how-to-use.html', 'rebuilding-life-challenges.html', 'employment-challenges.html', 'style.css', 'script.js', 'hope-survey.html', 'ai-avatar.png', 'minds-eye.png', 'minds-eye-animated.mp4', 'minds-eye-animated.webm']
+files = ['index.html', 'mockup-landing.html', 'results.html', 'profile.html', 'survey.html', 'approach.html', 'how-to-use.html', 'rebuilding-life-challenges.html', 'employment-challenges.html', 'style.css', 'script.js', 'hope-survey.html', 'favicon.svg', 'ai-avatar.png', 'minds-eye.png', 'minds-eye-animated.mp4', 'minds-eye-animated.webm']
 
 # Archival design files kept in the repo but never referenced by any page.
 # They are skipped during the build (and any stale copies are removed from the output).
@@ -50,16 +50,16 @@ for out_dir in out_dirs:
     }
     raw_el_key = os.environ.get('VITE_ELEVENLABS_API_KEY', os.environ.get('ELEVENLABS_API_KEY', '')).strip()
     raw_gem_key = os.environ.get('VITE_GEMINI_API_KEY', os.environ.get('GEMINI_API_KEY', '')).strip()
-    key = '' if raw_el_key in revoked_keys else raw_el_key
-    gemini_key = '' if raw_gem_key in revoked_keys else raw_gem_key
+    el_token = '__SERVER_PROXY__' if (raw_el_key and raw_el_key not in revoked_keys) else ''
+    gem_token = '__SERVER_PROXY__' if (raw_gem_key and raw_gem_key not in revoked_keys) else ''
 
     for file in ['profile.html', 'survey.html', 'hope-survey.html']:
         file_path = os.path.join(out_dir, file)
         if os.path.exists(file_path):
             with open(file_path, 'r', encoding='utf8') as f:
                 content = f.read()
-            content = content.replace('%VITE_ELEVENLABS_API_KEY%', key)
-            content = content.replace('%VITE_GEMINI_API_KEY%', gemini_key)
+            content = content.replace('%VITE_ELEVENLABS_API_KEY%', el_token)
+            content = content.replace('%VITE_GEMINI_API_KEY%', gem_token)
             with open(file_path, 'w', encoding='utf8') as f:
                 f.write(content)
 
