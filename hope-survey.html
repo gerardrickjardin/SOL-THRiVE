@@ -2241,6 +2241,10 @@ const App = () => {
     const handleResetSavedHopeProgress = () => {
         stopHopeAudio();
         try { localStorage.removeItem(HOPE_SURVEY_STATE_KEY); } catch (e) {}
+        pendingGuestHistoryRef.current = [];
+        if (!user) {
+            setSurveyHistory([]);
+        }
         setResumeNoticeVisible(false);
         setAnswers({});
         setReflections({});
@@ -2252,7 +2256,9 @@ const App = () => {
     const renderResumeBanner = () => {
         if (!resumeNoticeVisible) return null;
         const answeredCount = Object.keys(answers || {}).length + (currentSelection !== null && !(surveyQuestions[currentQIndex]?.id in (answers || {})) ? 1 : 0);
-        const label = step === 'results' || step === 'dashboard'
+        const hasCompletedAnswers = Object.keys(answers || {}).length >= surveyQuestions.length;
+        const hasHistory = Array.isArray(surveyHistory) && surveyHistory.length > 0;
+        const label = step === 'results' || step === 'dashboard' || (hasCompletedAnswers && step === 'intro')
             ? 'Completed HoPE Index Restored'
             : `Question ${currentQIndex + 1} of ${surveyQuestions.length} (${Math.min(surveyQuestions.length, answeredCount)} rated)`;
         return (
@@ -2268,8 +2274,14 @@ const App = () => {
                         className="resume-btn-primary"
                         onClick={() => {
                             setResumeNoticeVisible(false);
-                            if (step === 'intro' && (Object.keys(answers || {}).length > 0 || currentSelection !== null)) {
-                                setStep('survey');
+                            if (step === 'intro') {
+                                if (hasCompletedAnswers) {
+                                    setStep('results');
+                                } else if (Object.keys(answers || {}).length > 0 || currentSelection !== null || Object.keys(reflections || {}).some(k => String(reflections[k] || '').trim())) {
+                                    setStep('survey');
+                                } else if (hasHistory) {
+                                    setStep('dashboard');
+                                }
                             }
                         }}
                     >

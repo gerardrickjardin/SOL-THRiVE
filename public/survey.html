@@ -1434,6 +1434,7 @@
             let metaphorText = "None selected";
             let metaphorValue = "";
             let customMetaphor = "";
+            let metaphorDesc = "";
             const selectedRadio = document.querySelector('input[name="metaphor"]:checked');
             const customInput = document.getElementById('custom-metaphor-input');
             if (customInput) customMetaphor = customInput.value.trim();
@@ -1441,13 +1442,16 @@
                 metaphorValue = selectedRadio.value;
                 if (selectedRadio.value === "custom") {
                     metaphorText = customMetaphor || "Custom metaphor";
+                    metaphorDesc = "A custom description of your current friction.";
                 } else {
                     const cardEl = selectedRadio.nextElementSibling;
                     const h3 = cardEl ? cardEl.querySelector('h3') : null;
+                    const p = cardEl ? cardEl.querySelector('p') : null;
                     metaphorText = h3 ? h3.innerText : selectedRadio.value;
+                    metaphorDesc = p ? p.innerText : "";
                 }
             }
-            return { metaphorText, metaphorValue, customMetaphor };
+            return { metaphorText, metaphorValue, customMetaphor, metaphorDesc };
         }
 
         function syncDossierFromFlowSurvey() {
@@ -1456,7 +1460,7 @@
             const gap = 100 - currentTotal;
             const target = Math.round(currentTotal + (0.6 * gap));
             const problemDesc = document.getElementById('problem-description')?.value.trim() || "No specific friction described.";
-            const { metaphorText } = getSelectedMetaphorDetails();
+            const { metaphorText, metaphorDesc } = getSelectedMetaphorDetails();
             const sumSlice = (start, end) => scores.slice(start, end).reduce((a, b) => a + b, 0);
             const dims = [
                 { name: 'Agency', score: sumSlice(0, 5) },
@@ -1467,10 +1471,18 @@
             const sorted = [...dims].sort((a, b) => b.score - a.score);
             if (window.ThriveCoachingDossier && typeof window.ThriveCoachingDossier.saveFlowSurvey === 'function') {
                 window.ThriveCoachingDossier.saveFlowSurvey({
+                    problem: problemDesc,
                     problemStatement: problemDesc,
                     metaphor: metaphorText,
+                    metaphorDesc,
                     currentScore: currentTotal,
                     targetScore: target,
+                    dimensions: {
+                        Agency: dims[0].score,
+                        Actions: dims[1].score,
+                        Support: dims[2].score,
+                        Tools: dims[3].score
+                    },
                     agencyScore: dims[0].score,
                     actionsScore: dims[1].score,
                     supportScore: dims[2].score,
@@ -1843,11 +1855,18 @@
 
                 if (!hasAnyData) return;
 
+                const effectiveStepNum = (currentStepNum === 0 && savedFlowSurveySnapshot && savedFlowSurveySnapshot.stepNum)
+                    ? savedFlowSurveySnapshot.stepNum
+                    : currentStepNum;
+                const effectiveViewMode = (currentStepNum === 0 && savedFlowSurveySnapshot && savedFlowSurveySnapshot.viewMode)
+                    ? savedFlowSurveySnapshot.viewMode
+                    : currentViewMode;
+
                 const payload = {
                     version: 1,
                     updatedAt: new Date().toISOString(),
-                    stepNum: currentStepNum,
-                    viewMode: currentViewMode,
+                    stepNum: effectiveStepNum,
+                    viewMode: effectiveViewMode,
                     problemDescription,
                     metaphorValue,
                     metaphorText,

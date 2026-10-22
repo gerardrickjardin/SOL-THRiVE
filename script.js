@@ -370,18 +370,143 @@ const initThriveUI = () => {
         }
     };
 
+    const HOPE_QUESTION_LABELS = {
+        ops_home: '1.1 Home (Places)',
+        ops_neighborhood: '1.2 Neighborhood (Places)',
+        ops_thirdspaces: '1.3 Third Spaces (Places)',
+        ops_functionality: '2.1 Functionality (Body)',
+        ops_energy: '2.2 Energy & Vitality (Body)',
+        ops_bodyimage: '2.3 Body Image (Body)',
+        ops_finances: '3.1 Finances (Resources)',
+        ops_technology: '3.2 Technology (Resources)',
+        ops_essentials: '3.3 Essentials (Resources)',
+        irs_mindset: '4.1 Mindset (Self)',
+        irs_identity: '4.2 Identity (Self)',
+        irs_goals: '4.3 Goals (Self)',
+        irs_coreconnections: '5.1 Inner Circle (Others)',
+        irs_socialnetwork: '5.2 Social Network (Others)',
+        irs_community: '5.3 Community (Others)',
+        irs_hobbies: '6.1 Hobbies (Life)',
+        irs_habits: '6.2 Habits (Life)',
+        irs_havetos: '6.3 Have-Tos (Life)',
+        flex_gas: 'Q19 Gang Affinity Score (GAS)',
+        flex_pss: 'Q20 Psychological Safety Score (PSS)'
+    };
+
+    const normalizeFlowSurveyPayload = (flowData) => {
+        if (!flowData || typeof flowData !== 'object') return null;
+        const problem = String(flowData.problem || flowData.problemStatement || '').trim();
+        const dims = {
+            Agency: typeof flowData.dimensions?.Agency === 'number' ? flowData.dimensions.Agency : (typeof flowData.agencyScore === 'number' ? flowData.agencyScore : undefined),
+            Actions: typeof flowData.dimensions?.Actions === 'number' ? flowData.dimensions.Actions : (typeof flowData.actionsScore === 'number' ? flowData.actionsScore : undefined),
+            Support: typeof flowData.dimensions?.Support === 'number' ? flowData.dimensions.Support : (typeof flowData.supportScore === 'number' ? flowData.supportScore : undefined),
+            Tools: typeof flowData.dimensions?.Tools === 'number' ? flowData.dimensions.Tools : (typeof flowData.toolsScore === 'number' ? flowData.toolsScore : undefined)
+        };
+        const hasDims = Object.values(dims).some(v => typeof v === 'number');
+        const normalized = {
+            ...flowData,
+            problem,
+            problemStatement: problem
+        };
+        if (hasDims) {
+            normalized.dimensions = dims;
+            if (typeof dims.Agency === 'number') normalized.agencyScore = dims.Agency;
+            if (typeof dims.Actions === 'number') normalized.actionsScore = dims.Actions;
+            if (typeof dims.Support === 'number') normalized.supportScore = dims.Support;
+            if (typeof dims.Tools === 'number') normalized.toolsScore = dims.Tools;
+        }
+        return normalized;
+    };
+
+    const computeHopeIndexFromAnswers = (ansObj, reflObj, completedAt) => {
+        if (!ansObj || typeof ansObj !== 'object') return null;
+        const opsKeys = ['ops_home', 'ops_neighborhood', 'ops_thirdspaces', 'ops_functionality', 'ops_energy', 'ops_bodyimage', 'ops_finances', 'ops_technology', 'ops_essentials'];
+        const irsKeys = ['irs_mindset', 'irs_identity', 'irs_goals', 'irs_coreconnections', 'irs_socialnetwork', 'irs_community', 'irs_hobbies', 'irs_habits', 'irs_havetos'];
+        const parseVal = (v) => {
+            if (v == null) return null;
+            const n = typeof v === 'object' ? parseFloat(v.value ?? v.score ?? v.rating) : parseFloat(v);
+            return Number.isFinite(n) && n > 0 ? n : null;
+        };
+        const coreRatedCount = [...opsKeys, ...irsKeys].filter(k => parseVal(ansObj[k]) !== null).length;
+        if (coreRatedCount < 18) return null;
+
+        const opsSum = opsKeys.reduce((s, k) => s + (parseVal(ansObj[k]) || 0), 0);
+        const irsSum = irsKeys.reduce((s, k) => s + (parseVal(ansObj[k]) || 0), 0);
+        const opsScore50 = Math.round((opsSum / 45) * 50);
+        const irsScore50 = Math.round((irsSum / 45) * 50);
+        const totalHoPEScore100 = opsScore50 + irsScore50;
+        const coreAvg = (opsSum + irsSum) / 18;
+        const tierText = coreAvg >= 4.0 ? 'THRIVING' : coreAvg >= 3.0 ? 'STABILIZING' : coreAvg >= 2.0 ? 'SURVIVING' : 'CRITICAL';
+
+        const dimGroups = [
+            { name: 'Dimension 1: Places', space: 'Outer Physical Space (OPS)', keys: ['ops_home', 'ops_neighborhood', 'ops_thirdspaces'] },
+            { name: 'Dimension 2: Body', space: 'Outer Physical Space (OPS)', keys: ['ops_functionality', 'ops_energy', 'ops_bodyimage'] },
+            { name: 'Dimension 3: Resources', space: 'Outer Physical Space (OPS)', keys: ['ops_finances', 'ops_technology', 'ops_essentials'] },
+            { name: 'Dimension 4: Self', space: 'Inner Relational Space (IRS)', keys: ['irs_mindset', 'irs_identity', 'irs_goals'] },
+            { name: 'Dimension 5: Others', space: 'Inner Relational Space (IRS)', keys: ['irs_coreconnections', 'irs_socialnetwork', 'irs_community'] },
+            { name: 'Dimension 6: Life', space: 'Inner Relational Space (IRS)', keys: ['irs_hobbies', 'irs_habits', 'irs_havetos'] }
+        ];
+        const dimensions = dimGroups.map(g => {
+            const vals = g.keys.map(k => parseVal(ansObj[k])).filter(v => v !== null);
+            return {
+                name: g.name,
+                space: g.space,
+                score: vals.length > 0 ? vals.reduce((a, b) => a + b, 0) / vals.length : null
+            };
+        });
+        let lowestDimension = null;
+        let highestDimension = null;
+        dimensions.forEach(d => {
+            if (d.score !== null) {
+                if (!lowestDimension || d.score < lowestDimension.score) lowestDimension = { name: d.name, score: d.score, space: d.space };
+                if (!highestDimension || d.score > highestDimension.score) highestDimension = { name: d.name, score: d.score, space: d.space };
+            }
+        });
+        const flexGasScore = parseVal(ansObj.flex_gas);
+        const flexPssScore = parseVal(ansObj.flex_pss);
+        const flexGasLabel = flexGasScore == null ? 'Unrated' : (flexGasScore >= 4.0 ? 'Triumphant' : flexGasScore >= 2.5 ? 'Torn' : 'Trapped');
+        const flexPssLabel = flexPssScore == null ? 'Unrated' : (flexPssScore >= 4.0 ? 'Fearless' : flexPssScore >= 2.5 ? 'Free-ish' : 'Fear');
+
+        return {
+            completedAt: completedAt || new Date().toISOString(),
+            totalHoPEScore100,
+            opsScore50,
+            irsScore50,
+            tierText,
+            lowestDimension,
+            highestDimension,
+            flexGasScore,
+            flexGasLabel,
+            flexPssScore,
+            flexPssLabel,
+            dimensions,
+            reflections: reflObj || {}
+        };
+    };
+
     const deriveFromSavedStates = (dossier) => {
         const merged = { ...(dossier || {}) };
 
-        // 1. Derive from thrive_flow_survey_state_v1 if not already present
+        if (merged.flowSurvey) {
+            merged.flowSurvey = normalizeFlowSurveyPayload(merged.flowSurvey);
+        }
+
+        // 1. Derive from thrive_flow_survey_state_v1 if not already present (only when all 20 questions are answered)
         if (!merged.flowSurvey) {
             const flowState = safeParseJSON(typeof localStorage !== 'undefined' ? localStorage.getItem('thrive_flow_survey_state_v1') : null);
-            if (flowState && Array.isArray(flowState.scores) && Array.isArray(flowState.answered) && flowState.answered.some(Boolean)) {
+            if (
+                flowState &&
+                Array.isArray(flowState.scores) &&
+                flowState.scores.length === 20 &&
+                Array.isArray(flowState.answered) &&
+                flowState.answered.length === 20 &&
+                flowState.answered.every(Boolean)
+            ) {
                 const sc = flowState.scores.map(n => Number(n) || 0);
                 const total = sc.reduce((a, b) => a + b, 0);
                 const target = Math.round(total + 0.6 * (100 - total));
-                merged.flowSurvey = {
-                    completedAt: flowState.savedAt || new Date().toISOString(),
+                merged.flowSurvey = normalizeFlowSurveyPayload({
+                    completedAt: flowState.updatedAt || flowState.savedAt || new Date().toISOString(),
                     problem: flowState.problemDescription || '',
                     metaphor: flowState.metaphorText || flowState.metaphorValue || '',
                     metaphorDesc: flowState.metaphorDesc || '',
@@ -393,7 +518,7 @@ const initThriveUI = () => {
                         Support: sc.slice(10, 15).reduce((a, b) => a + b, 0),
                         Tools: sc.slice(15, 20).reduce((a, b) => a + b, 0)
                     }
-                };
+                });
             }
         }
 
@@ -425,13 +550,19 @@ const initThriveUI = () => {
         if (!merged.hopeIndex) {
             const hopeState = safeParseJSON(typeof localStorage !== 'undefined' ? localStorage.getItem('thrive_hope_survey_state_v1') : null);
             if (hopeState) {
-                const latestHist = Array.isArray(hopeState.history) && hopeState.history.length > 0
-                    ? hopeState.history[hopeState.history.length - 1]
-                    : null;
-                const ans = (latestHist && latestHist.answers) || hopeState.answers || {};
-                const ansKeys = Object.keys(ans);
-                if (ansKeys.length > 0 && hopeState.summary) {
+                if (hopeState.summary && typeof hopeState.summary.totalHoPEScore100 === 'number') {
                     merged.hopeIndex = hopeState.summary;
+                } else {
+                    const histList = Array.isArray(hopeState.surveyHistory)
+                        ? hopeState.surveyHistory
+                        : (Array.isArray(hopeState.history) ? hopeState.history : []);
+                    const latestHist = histList.length > 0 ? histList[histList.length - 1] : null;
+                    const ans = (latestHist && latestHist.answers) || hopeState.answers || {};
+                    const refl = (latestHist && latestHist.reflections) || hopeState.reflections || {};
+                    const derivedHope = computeHopeIndexFromAnswers(ans, refl, hopeState.updatedAt);
+                    if (derivedHope) {
+                        merged.hopeIndex = derivedHope;
+                    }
                 }
             }
         }
@@ -465,11 +596,12 @@ const initThriveUI = () => {
     };
 
     const saveFlowSurvey = (flowData) => {
+        const normalized = normalizeFlowSurveyPayload(flowData) || {};
         return writeDossier(prev => ({
             ...prev,
             flowSurvey: {
                 completedAt: new Date().toISOString(),
-                ...flowData
+                ...normalized
             }
         }));
     };
@@ -501,8 +633,8 @@ const initThriveUI = () => {
     };
 
     const getCompletionSummary = (customDossier) => {
-        const d = customDossier || readDossier();
-        const hasFlow = Boolean(d.flowSurvey && (d.flowSurvey.problem || typeof d.flowSurvey.currentScore === 'number'));
+        const d = customDossier ? deriveFromSavedStates(customDossier) : readDossier();
+        const hasFlow = Boolean(d.flowSurvey && (d.flowSurvey.problem || d.flowSurvey.problemStatement || typeof d.flowSurvey.currentScore === 'number'));
         const hasProfile = Boolean(
             d.thriveReport &&
             d.thriveReport.pillars &&
@@ -536,7 +668,7 @@ const initThriveUI = () => {
         lines.push('1. STEP 01 — FLOW SURVEY (FRICTION & FLOW DIAGNOSTIC)');
         lines.push('------------------------------------------------------------');
         if (hasFlow) {
-            const fs = dossier.flowSurvey;
+            const fs = normalizeFlowSurveyPayload(dossier.flowSurvey) || dossier.flowSurvey;
             if (fs.problem) {
                 lines.push(`• Specific Friction ("What Is It?"): "${fs.problem}"`);
             }
@@ -557,6 +689,12 @@ const initThriveUI = () => {
                         lines.push(`  - ${dim}: ${s} / 25 (${getTierLabel(s)})`);
                     }
                 });
+            }
+            if (fs.strongestDimension) {
+                lines.push(`• Strongest Flow Anchor: ${fs.strongestDimension}`);
+            }
+            if (fs.lowestDimension) {
+                lines.push(`• Primary Friction Drop: ${fs.lowestDimension}`);
             }
         } else {
             lines.push('[Not yet completed — User can complete the 3-minute Flow Survey at survey.html to pinpoint their specific friction and Agency/Actions/Support/Tools scores.]');
@@ -628,7 +766,8 @@ const initThriveUI = () => {
                 if (reflKeys.length > 0) {
                     lines.push('• Client Personal Reflections & Notes:');
                     reflKeys.forEach(k => {
-                        lines.push(`  - ${k}: ${String(hi.reflections[k]).trim()}`);
+                        const readableKey = HOPE_QUESTION_LABELS[k] || k;
+                        lines.push(`  - ${readableKey}: ${String(hi.reflections[k]).trim()}`);
                     });
                 }
             }
@@ -709,9 +848,11 @@ const initThriveUI = () => {
         saveThriveReport,
         saveHopeIndex,
         getCompletionSummary,
+        getSummaryStatus: getCompletionSummary,
         buildMasterPrompt,
         copyMasterPrompt,
-        refreshStatusBadges
+        refreshStatusBadges,
+        refreshPageUI: refreshStatusBadges
     };
 
     if (typeof document !== 'undefined') {

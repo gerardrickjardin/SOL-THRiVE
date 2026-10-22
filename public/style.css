@@ -2455,6 +2455,7 @@ a {
 /* ==========================================
    MASTER AI COACHING DOSSIER & RESUME BANNER
    ========================================== */
+button.copy-master-prompt-btn,
 .copy-master-prompt-btn {
     display: inline-flex;
     align-items: center;
@@ -2466,7 +2467,8 @@ a {
     font-size: 0.96rem;
     font-weight: 800;
     color: #141824;
-    background: linear-gradient(135deg, #F4E9B8 0%, #F2D675 100%);
+    background-color: #F2D675;
+    background-image: linear-gradient(135deg, #F4E9B8 0%, #F2D675 100%);
     border: 2px solid var(--ink-border, #1E2430);
     box-shadow: 4px 4px 0 var(--ink-border, #1E2430);
     cursor: pointer;
@@ -2475,14 +2477,19 @@ a {
     line-height: 1.2;
 }
 
+button.copy-master-prompt-btn:hover,
 .copy-master-prompt-btn:hover {
     transform: translate(-2px, -2px);
     box-shadow: 6px 6px 0 var(--ink-border, #1E2430);
-    background: linear-gradient(135deg, #FCEEA7 0%, #F5C842 100%);
+    background-color: #F5C842;
+    background-image: linear-gradient(135deg, #FCEEA7 0%, #F5C842 100%);
 }
 
+button.copy-master-prompt-btn.is-copied,
 .copy-master-prompt-btn.is-copied {
     background: #059669 !important;
+    background-color: #059669 !important;
+    background-image: none !important;
     color: #ffffff !important;
     border-color: #1E2430 !important;
 }
@@ -2561,3 +2568,86 @@ a {
     text-align: left;
 }
 
+.resume-progress-banner.hidden {
+    display: none !important;
+}
+
+.resume-progress-text,
+.resume-banner-text {
+    flex: 1;
+    min-width: 220px;
+    font-size: 0.92rem;
+    color: var(--text-color, #141824);
+    line-height: 1.45;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.resume-progress-text strong,
+.resume-banner-text strong {
+    font-family: var(--font-heading, 'Nunito', sans-serif);
+    font-size: 0.98rem;
+    font-weight: 900;
+    color: var(--text-color, #141824);
+}
+
+.resume-progress-actions,
+.resume-banner-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.65rem;
+    flex-shrink: 0;
+}
+
+button.resume-btn-primary,
+.resume-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.6rem 1.25rem;
+    border-radius: 999px;
+    font-family: var(--font-heading, 'Nunito', sans-serif);
+    font-size: 0.88rem;
+    font-weight: 800;
+    color: #ffffff;
+    background-color: #8B2FC9;
+    background-image: linear-gradient(135deg, var(--accent-magenta, #D81159) 0%, var(--accent-purple, #8B2FC9) 100%);
+    border: 2px solid var(--ink-border, #1E2430);
+    box-shadow: 3px 3px 0 var(--ink-border, #1E2430);
+    cursor: pointer;
+    transition: transform 0.16s ease, box-shadow 0.16s ease, opacity 0.16s ease;
+}
+
+button.resume-btn-primary:hover,
+.resume-btn-primary:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 4px 4px 0 var(--ink-border, #1E2430);
+}
+
+button.resume-btn-secondary,
+.resume-btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.6rem 1.1rem;
+    border-radius: 999px;
+    font-family: var(--font-heading, 'Nunito', sans-serif);
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--text-color, #141824);
+    background-color: #ffffff;
+    border: 2px solid var(--ink-border, #1E2430);
+    box-shadow: 2px 2px 0 var(--ink-border, #1E2430);
+    cursor: pointer;
+    transition: transform 0.16s ease, background-color 0.16s ease;
+}
+
+button.resume-btn-secondary:hover,
+.resume-btn-secondary:hover {
+    background-color: #FEE2E2;
+    color: #991B1B;
+    transform: translate(-1px, -1px);
+}

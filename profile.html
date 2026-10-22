@@ -980,8 +980,9 @@ function App() {
   };
 
   useEffect(() => {
-    persistProfileToLocalStorage(userDetails, reportData, sectionDrafts, step);
-  }, [userDetails, reportData, sectionDrafts, step]);
+    const persistedStep = (step === 0 && resumeBanner && resumeBanner.targetStep) ? resumeBanner.targetStep : step;
+    persistProfileToLocalStorage(userDetails, reportData, sectionDrafts, persistedStep);
+  }, [userDetails, reportData, sectionDrafts, step, resumeBanner]);
 
   const handleResumeProgress = () => {
     stopGlobalAudio();
