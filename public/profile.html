@@ -1734,12 +1734,12 @@ function ChatSection({ section, stepNumber, initialDraft, hasApprovedSection, on
   }, []);
 
   const toggleListen = () => {
-    if (chatState === 'approval') {
-      setChatState('initial');
-    }
     if (!recognitionRef.current) {
       alert("Dictation is not supported in this browser. Please type your answers.");
       return;
+    }
+    if (chatState === 'approval') {
+      setChatState('initial');
     }
     
     if (isListening) {
@@ -1826,27 +1826,27 @@ function ChatSection({ section, stepNumber, initialDraft, hasApprovedSection, on
           {section.icon}
         </div>
         <div id="chat-prompt-card" className="w-full bg-[#FAF8F3] border-2 border-[#1E2430] rounded-2xl sm:rounded-tl-none p-4 md:p-6 text-slate-700 leading-relaxed shadow-[4px_4px_0_#1E2430] flex-1 overflow-hidden">
-          <div className="flex items-center justify-between gap-2 pb-2.5 mb-3 border-b border-slate-200/80">
+          <div className="flex items-center justify-between gap-1.5 sm:gap-2 pb-2.5 mb-3 border-b border-slate-200/80">
             <div className="flex items-center gap-2 min-w-0">
-              <span className="text-xs font-extrabold uppercase tracking-wider text-purple-800 truncate">
-                {section.title} • Guided Prompt
+              <span id="chat-prompt-card-title" className="text-[11px] sm:text-xs font-extrabold uppercase tracking-tight sm:tracking-wider text-purple-800 whitespace-nowrap truncate">
+                {section.title}<span className="hidden sm:inline"> • Guided Prompt</span>
               </span>
             </div>
-            <div className="flex items-center gap-2 shrink-0">
+            <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
               <button 
                 type="button"
                 onClick={handleSpeakPrompt}
-                className={`shrink-0 px-3 py-1.5 rounded-full border-2 border-[#1E2430] transition-all flex items-center gap-1.5 text-xs font-bold ${isSpeaking ? 'bg-purple-100 text-purple-700 animate-pulse' : 'bg-white text-slate-700 hover:text-purple-700 hover:bg-purple-50'}`}
+                className={`shrink-0 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full border-2 border-[#1E2430] transition-all flex items-center gap-1 sm:gap-1.5 text-[11px] sm:text-xs font-bold whitespace-nowrap ${isSpeaking ? 'bg-purple-100 text-purple-700 animate-pulse' : 'bg-white text-slate-700 hover:text-purple-700 hover:bg-purple-50'}`}
                 title={isSpeaking ? "Stop Reading" : "Read Aloud"}
                 aria-label={isSpeaking ? "Stop Reading" : "Read Aloud"}
               >
-                <SpeakerIcon className="w-4 h-4 shrink-0" />
+                <SpeakerIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
                 <span>{isSpeaking ? "Stop" : "Read Aloud"}</span>
               </button>
               <button 
                 type="button"
                 onClick={() => setShowSettings(true)}
-                className="shrink-0 p-2 bg-white text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-full border-2 border-[#1E2430] transition-colors"
+                className="shrink-0 p-1.5 sm:p-2 bg-white text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-full border-2 border-[#1E2430] transition-colors"
                 title="AI & Voice Settings"
                 aria-label="AI & Voice Settings"
               >
@@ -1934,13 +1934,13 @@ function ChatSection({ section, stepNumber, initialDraft, hasApprovedSection, on
           ></textarea>
           
           {/* Dedicated Non-Overlapping Bottom Action Bar */}
-          <div id="chat-input-toolbar" className="flex items-center justify-between gap-2.5 px-3 sm:px-4 py-2.5 bg-[#FAF8F3] border-t border-slate-200">
+          <div id="chat-input-toolbar" className="flex items-center justify-between gap-2 px-3 sm:px-4 py-2.5 bg-[#FAF8F3] border-t border-slate-200">
             <button 
               id="chat-mic-btn"
               type="button"
               onClick={toggleListen}
               disabled={isCleaning}
-              className={`rounded-full px-3.5 py-2 transition-all flex items-center justify-center gap-2 shadow-sm border-2 font-bold text-xs sm:text-sm shrink-0
+              className={`rounded-full px-3 sm:px-3.5 py-1.5 sm:py-2 transition-all flex items-center justify-center gap-1.5 sm:gap-2 shadow-sm border-2 font-bold text-xs sm:text-sm shrink-0 whitespace-nowrap
                 ${isListening 
                   ? 'bg-red-500 text-white border-red-700 animate-pulse' 
                   : (chatState === 'approval' ? 'bg-[#1E2430] text-white border-[#1E2430] hover:bg-slate-800' : 'bg-white text-purple-700 border-[#1E2430] hover:bg-purple-50')
@@ -1949,10 +1949,10 @@ function ChatSection({ section, stepNumber, initialDraft, hasApprovedSection, on
               title={isListening ? "Stop Dictation" : (chatState === 'approval' ? "Dictate / Add More Details" : "Toggle Dictation")}
               aria-label={isListening ? "Stop Dictation" : (chatState === 'approval' ? "Dictate / Add More Details" : "Toggle Dictation")}
             >
-              {isListening ? <StopMicIcon className="w-5 h-5 shrink-0" /> : <MicIcon className="w-5 h-5 shrink-0" />}
+              {isListening ? <StopMicIcon className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" /> : <MicIcon className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />}
               <span>{isListening ? 'Stop Mic' : (chatState === 'approval' ? 'Add Details' : 'Dictate')}</span>
             </button>
-            <span id="chat-mic-status" className={`text-xs sm:text-sm font-semibold text-right leading-tight ${isListening ? 'text-red-600 font-bold animate-pulse' : 'text-slate-500'}`}>
+            <span id="chat-mic-status" className={`text-[11px] sm:text-sm font-semibold text-right leading-tight whitespace-nowrap ${isListening ? 'text-red-600 font-bold animate-pulse' : 'text-slate-500'}`}>
               {isListening ? '🔴 Listening... Speak freely' : 'Tap mic to speak freely'}
             </span>
           </div>

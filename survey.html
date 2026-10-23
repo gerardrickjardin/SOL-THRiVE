@@ -353,12 +353,12 @@
                 <textarea id="problem-description" oninput="clearStep1Error()" class="w-full p-3.5 sm:p-4 min-h-[140px] border-0 outline-none focus:ring-0 transition-all text-slate-800 resize-y block" placeholder="Describe the friction here... (or click Dictate to talk)"></textarea>
                 
                 <!-- Dictation & Clean Up Controls (Dedicated Bottom Footer Toolbar) -->
-                <div id="problem-input-toolbar" class="flex flex-wrap justify-between items-center gap-2 px-3 py-2.5 bg-[#FAF8F3] border-t border-slate-200">
-                    <button type="button" onclick="toggleDictation()" id="dictation-btn" class="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-bold text-slate-700 hover:text-purple-700 px-3 py-2 rounded-lg bg-white border border-slate-200 hover:bg-slate-50 transition-all shadow-sm">
+                <div id="problem-input-toolbar" class="flex flex-wrap justify-between items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-2.5 bg-[#FAF8F3] border-t border-slate-200">
+                    <button type="button" onclick="toggleDictation()" id="dictation-btn" class="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-bold text-slate-700 hover:text-purple-700 px-2.5 sm:px-3 py-2 rounded-lg bg-white border border-slate-200 hover:bg-slate-50 transition-all shadow-sm whitespace-nowrap shrink-0">
                         <span class="text-base sm:text-lg leading-none" id="mic-icon">🎙️</span> <span id="dictation-text">Dictate</span>
                     </button>
                     
-                    <button type="button" onclick="cleanUpText()" id="cleanup-btn" class="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-bold text-purple-700 hover:bg-purple-50 px-3 py-2 rounded-lg border border-purple-200 transition-all bg-white shadow-sm">
+                    <button type="button" onclick="cleanUpText()" id="cleanup-btn" class="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-bold text-purple-700 hover:bg-purple-50 px-2.5 sm:px-3 py-2 rounded-lg border border-purple-200 transition-all bg-white shadow-sm whitespace-nowrap shrink-0">
                         <span class="text-base sm:text-lg leading-none">✨</span> <span>Clean Up Text</span>
                     </button>
                 </div>
@@ -1304,11 +1304,15 @@
             try {
                 recognition.start();
             } catch (e) {
+                isRecording = false;
                 console.warn("Speech recognition start error:", e);
+                return;
             }
-            document.getElementById('dictation-btn').classList.add('text-red-600', 'border-red-300', 'bg-red-50', 'pulse-animation');
+            const dictBtn = document.getElementById('dictation-btn');
+            dictBtn.classList.remove('text-slate-700', 'border-slate-200', 'bg-white', 'hover:text-purple-700', 'hover:bg-slate-50');
+            dictBtn.classList.add('text-red-600', 'border-red-300', 'bg-red-50', 'hover:bg-red-100', 'hover:text-red-700', 'pulse-animation');
             document.getElementById('mic-icon').innerText = '🔴';
-            document.getElementById('dictation-text').innerText = 'Listening... (Click to Stop)';
+            document.getElementById('dictation-text').innerHTML = 'Listening...<span class="hidden sm:inline"> (Click to Stop)</span>';
         }
 
         function stopDictation() {
@@ -1320,7 +1324,9 @@
             try {
                 if (recognition) recognition.stop();
             } catch (e) {}
-            document.getElementById('dictation-btn').classList.remove('text-red-600', 'border-red-300', 'bg-red-50', 'pulse-animation');
+            const dictBtn = document.getElementById('dictation-btn');
+            dictBtn.classList.remove('text-red-600', 'border-red-300', 'bg-red-50', 'hover:bg-red-100', 'hover:text-red-700', 'pulse-animation');
+            dictBtn.classList.add('text-slate-700', 'border-slate-200', 'bg-white', 'hover:text-purple-700', 'hover:bg-slate-50');
             document.getElementById('mic-icon').innerText = '🎙️';
             document.getElementById('dictation-text').innerText = 'Dictate';
         }
@@ -1351,9 +1357,7 @@
             const btn = document.getElementById('cleanup-btn');
 
             if (!rawText) {
-                clearStep1Error();
-                const err = document.getElementById('step-1-error');
-                if (err) err.classList.remove('hidden');
+                showStep1Error();
                 return;
             }
 
@@ -1415,13 +1419,24 @@
         let currentStepNum = 0;
         let currentViewMode = 'question'; // 'question' | 'results' | 'summary'
 
+        function showStep1Error() {
+            const err = document.getElementById('step-1-error');
+            const inputContainer = document.getElementById('problem-input-container');
+            if (err) err.classList.remove('hidden');
+            if (inputContainer) {
+                inputContainer.classList.remove('border-slate-300', 'focus-within:border-purple-600', 'focus-within:ring-purple-100');
+                inputContainer.classList.add('border-rose-500', 'focus-within:border-rose-500', 'ring-4', 'ring-rose-100', 'focus-within:ring-rose-100');
+            }
+        }
+
         function clearStep1Error() {
             const err = document.getElementById('step-1-error');
             const textArea = document.getElementById('problem-description');
             const inputContainer = document.getElementById('problem-input-container');
             if (err) err.classList.add('hidden');
             if (inputContainer) {
-                inputContainer.classList.remove('border-rose-500', 'ring-4', 'ring-rose-100');
+                inputContainer.classList.remove('border-rose-500', 'focus-within:border-rose-500', 'ring-4', 'ring-rose-100', 'focus-within:ring-rose-100');
+                inputContainer.classList.add('border-slate-300', 'focus-within:border-purple-600', 'focus-within:ring-purple-100');
             }
             if (textArea) {
                 textArea.classList.remove('border-rose-500', 'ring-4', 'ring-rose-100');
@@ -1436,15 +1451,9 @@
 
         function validateAndGoToStep2() {
             const textArea = document.getElementById('problem-description');
-            const inputContainer = document.getElementById('problem-input-container');
             const val = textArea.value.trim();
             if (!val) {
-                const err = document.getElementById('step-1-error');
-                err.classList.remove('hidden');
-                if (inputContainer) {
-                    inputContainer.classList.add('border-rose-500', 'ring-4', 'ring-rose-100');
-                }
-                textArea.classList.add('border-rose-500', 'ring-4', 'ring-rose-100');
+                showStep1Error();
                 textArea.focus();
                 return;
             }
@@ -2198,12 +2207,17 @@
 
             const textArea = document.getElementById('problem-description');
             if (textArea) textArea.value = '';
+            clearStep1Error();
             document.querySelectorAll('input[name="metaphor"]').forEach(r => { r.checked = false; });
             const customInput = document.getElementById('custom-metaphor-input');
             if (customInput) {
                 customInput.value = '';
                 customInput.classList.add('hidden');
             }
+            clearStep2Error();
+            try {
+                localStorage.removeItem(FLOW_SURVEY_STATE_KEY);
+            } catch (e) {}
 
             currentQ = 0;
             scores = new Array(20).fill(0);
