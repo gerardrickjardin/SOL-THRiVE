@@ -87,7 +87,7 @@
                 justify-content: space-between;
                 align-items: center;
                 gap: 0.4rem;
-                padding: 0.6rem 0.75rem;
+                padding: 0.45rem 0.75rem;
             }
             .logo {
                 font-size: 1.15rem;
@@ -1176,14 +1176,14 @@ const ReflectionBox = ({ value, onChange }) => {
     };
 
     return (
-        <div className="mt-1.5 md:mt-2 bg-slate-50 border border-slate-200 rounded-2xl p-2.5 md:p-3 shadow-sm animate-in fade-in slide-in-from-top-2 duration-500">
-            <div className="flex justify-between items-center mb-1.5 md:mb-2">
+        <div className="mt-1 sm:mt-1.5 md:mt-2 bg-slate-50 border border-slate-200 rounded-2xl p-2 sm:p-2.5 md:p-3 shadow-sm animate-in fade-in slide-in-from-top-2 duration-500">
+            <div className="flex justify-between items-center mb-1 md:mb-2">
                 <label className="text-[11px] md:text-xs uppercase tracking-widest font-bold text-slate-500">Personal Reflection &amp; Notes</label>
                 <div className="flex gap-2">
                     <button 
                         type="button"
                         onClick={toggleListening}
-                        className={`p-1.5 md:p-2 rounded-full transition-colors flex items-center justify-center ${isListening ? 'bg-red-100 text-red-600 animate-pulse' : 'bg-white border border-slate-200 text-slate-500 hover:text-blue-600 hover:bg-blue-50'}`}
+                        className={`p-1 sm:p-1.5 md:p-2 rounded-full transition-colors flex items-center justify-center ${isListening ? 'bg-red-100 text-red-600 animate-pulse' : 'bg-white border border-slate-200 text-slate-500 hover:text-blue-600 hover:bg-blue-50'}`}
                         title={isListening ? "Stop Recording" : "Voice to Text"}
                     >
                         {isListening ? <StopMicIcon className="w-4 h-4" /> : <MicIcon className="w-4 h-4" />}
@@ -1212,7 +1212,7 @@ const ReflectionBox = ({ value, onChange }) => {
                     onChange(nextVal);
                 }}
                 placeholder="Describe your experience, environment, or reasoning behind your score (optional)..."
-                className="w-full bg-white border border-slate-200 rounded-xl p-2.5 md:p-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-50 transition-all text-slate-700 custom-scrollbar resize-y min-h-[48px] md:min-h-[60px] text-xs sm:text-sm md:text-base"
+                className="w-full bg-white border border-slate-200 rounded-xl p-2 sm:p-2.5 md:p-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-50 transition-all text-slate-700 custom-scrollbar resize-y min-h-[42px] sm:min-h-[48px] md:min-h-[60px] text-xs sm:text-sm md:text-base"
             />
         </div>
     );
@@ -1229,6 +1229,7 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
     // Default unselected ghost position at 3.0 (center) so the slider thumb is always visible and centered before selection
     const safeSelection = currentSelection !== null && currentSelection >= 1.0 ? currentSelection : 3.0;
     const [rawValue, setRawValue] = window.React.useState(safeSelection);
+    const rawValueRef = window.React.useRef(safeSelection);
 
     const getZoneForScore = (scoreVal) => {
         if (scoreVal === null || scoreVal === undefined) return 3;
@@ -1242,7 +1243,9 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
     // Sync rawValue and mobileAnchorTab with currentSelection when not dragging
     window.React.useEffect(() => {
         if (!isDragging) {
-            setRawValue(currentSelection !== null && currentSelection >= 1.0 ? currentSelection : 3.0);
+            const nextRaw = currentSelection !== null && currentSelection >= 1.0 ? currentSelection : 3.0;
+            rawValueRef.current = nextRaw;
+            setRawValue(nextRaw);
             if (currentSelection !== null && currentSelection >= 1.0) {
                 setMobileAnchorTab(getZoneForScore(currentSelection));
             }
@@ -1260,6 +1263,7 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
 
     const handleEmojiClick = (rating) => {
         setIsDragging(false);
+        rawValueRef.current = rating;
         onSelect(rating);
         setRawValue(rating);
         setMobileAnchorTab(getZoneForScore(rating));
@@ -1268,6 +1272,8 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
 
     const handleSliderChange = (e) => {
         const v = parseFloat(e.target.value);
+        if (!Number.isFinite(v)) return;
+        rawValueRef.current = v;
         setRawValue(v);
         const snapped = Math.round(v * 2) / 2;
         setMobileAnchorTab(getZoneForScore(snapped));
@@ -1278,13 +1284,32 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
 
     const handleDragStart = () => setIsDragging(true);
     
-    const handleDragEnd = () => {
+    const handleDragEnd = (e) => {
         setIsDragging(false);
-        const snapped = Math.round(rawValue * 2) / 2;
+        const targetVal = e && e.currentTarget && e.currentTarget.value !== undefined
+            ? parseFloat(e.currentTarget.value)
+            : NaN;
+        const latestVal = Number.isFinite(targetVal) ? targetVal : rawValueRef.current;
+        const snapped = Math.round(latestVal * 2) / 2;
+        rawValueRef.current = snapped;
         setRawValue(snapped);
         setMobileAnchorTab(getZoneForScore(snapped));
         onSelect(snapped);
         triggerBurst(snapped);
+    };
+
+    const handleSliderKeyDown = (e) => {
+        if (e.key === 'ArrowRight' || e.key === 'ArrowUp') {
+            e.preventDefault();
+            const base = currentSelection !== null ? currentSelection : 3.0;
+            const next = Math.min(5.0, Math.round((base + 0.5) * 2) / 2);
+            handleEmojiClick(next);
+        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') {
+            e.preventDefault();
+            const base = currentSelection !== null ? currentSelection : 3.0;
+            const next = Math.max(1.0, Math.round((base - 0.5) * 2) / 2);
+            handleEmojiClick(next);
+        }
     };
 
     const getAnchorData = (key) => {
@@ -1299,6 +1324,13 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
     const shitholeData = getAnchorData("1.0");
     const stableData = getAnchorData("3.0");
     const sanctuaryData = getAnchorData("5.0");
+
+    const cleanTopicName = String(currentQ?.title || '')
+        .replace(/^[^\wA-Za-z]+/u, '')
+        .replace(/^(?:flex\s*\d+\s*:\s*|\d+\.\d+\s*)/i, '')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .toLowerCase();
 
     const emojis = {
         "1.0": ["1f622", "1f44e", "1f61f"], // 😢, 👎, 😟
@@ -1400,7 +1432,7 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
     const activeAnchorZone = mobileAnchorTab || getZoneForScore(hasActiveSelection ? snappedValue : 3.0);
 
     return (
-        <div className="w-full flex flex-col gap-1.5 md:gap-2 bg-white p-3 sm:p-4 rounded-2xl md:rounded-3xl mb-1.5 md:mb-2 shadow-xl border border-slate-200 relative">
+        <div className="w-full flex flex-col gap-1 sm:gap-1.5 md:gap-2 bg-white p-2.5 sm:p-4 rounded-2xl md:rounded-3xl mb-1 md:mb-2 shadow-xl border border-slate-200 relative">
             <style dangerouslySetInnerHTML={{__html: `
                 @keyframes burst1 { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; } 100% { transform: translate(-70px, -140px) scale(1.5) rotate(-45deg); opacity: 0; } }
                 @keyframes burst2 { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; } 100% { transform: translate(-30px, -160px) scale(1.8) rotate(-20deg); opacity: 0; } }
@@ -1420,8 +1452,8 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
             `}} />
 
             <div className="text-center mb-0.5 md:mb-1 relative z-10">
-                <h3 className="text-emerald-700 text-base sm:text-lg md:text-2xl font-bold leading-snug">
-                    "My {currentQ.title.replace(/[\u{1F300}-\u{1F9FF}]|\d\.\d/gu, '').trim().toLowerCase()} experience..."
+                <h3 className="text-emerald-700 text-sm sm:text-lg md:text-2xl font-bold leading-snug">
+                    "My {cleanTopicName} experience..."
                 </h3>
                 <p className="text-[11px] sm:text-xs font-semibold text-slate-500 mt-0.5" data-testid="slider-helper-prompt">
                     {hasActiveSelection
@@ -1433,13 +1465,13 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
             {/* 3 Horizontal Emoji Zones on ALL screen sizes (Left = 1.0-2.0, Middle = 2.5-3.5, Right = 4.0-5.0) */}
             <div className="grid grid-cols-3 gap-1.5 sm:gap-2.5 md:gap-4 relative z-10 items-stretch" data-testid="emoji-zones-grid">
                 {/* 1.0 Zone */}
-                <div className="flex flex-col items-center text-center gap-1 md:gap-3 relative h-full min-w-0">
-                    <div className="hidden md:flex flex-1 items-start justify-center min-h-[80px] mt-1">
-                        <p className={`text-sm leading-relaxed max-w-[200px] transition-colors duration-300 ${hasActiveSelection && snappedValue >= 1.0 && snappedValue <= 2.0 ? "text-blue-700 font-bold" : "text-slate-500 font-medium"}`}>
+                <div className="flex flex-col items-center text-center gap-1 md:gap-2 relative h-full min-w-0">
+                    <div className="hidden md:flex flex-1 items-start justify-center min-h-[64px] mt-0.5">
+                        <p className={`text-xs xl:text-sm leading-snug max-w-[200px] transition-colors duration-300 ${hasActiveSelection && snappedValue >= 1.0 && snappedValue <= 2.0 ? "text-blue-700 font-bold" : "text-slate-500 font-medium"}`}>
                             "...{shitholeData.desc}"
                         </p>
                     </div>
-                    <div className={`flex items-center justify-between sm:justify-evenly md:justify-center md:gap-3 bg-blue-50 border border-blue-200/80 rounded-2xl sm:rounded-full px-1 sm:px-2.5 md:px-4 py-1.5 md:py-2 transition-all duration-300 w-full min-w-0 shrink-0 ${getGlowStyles(1)}`}>
+                    <div className={`flex items-center justify-between sm:justify-evenly md:justify-center md:gap-3 bg-blue-50 border border-blue-200/80 rounded-2xl sm:rounded-full px-1 sm:px-2.5 md:px-4 py-1 sm:py-1.5 md:py-2 transition-all duration-300 w-full min-w-0 shrink-0 ${getGlowStyles(1)}`}>
                         {renderEmoji(1, 0, emojis["1.0"][0], 1.0)}
                         {renderEmoji(1, 1, emojis["1.0"][1], 1.5)}
                         {renderEmoji(1, 2, emojis["1.0"][2], 2.0)}
@@ -1449,7 +1481,7 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
                         onClick={() => setMobileAnchorTab(1)}
                         className={`flex flex-col items-center leading-tight focus:outline-none max-w-full ${getZoneColor(1)}`}
                     >
-                        <span className="text-[11px] sm:text-xs md:text-sm tracking-wider md:tracking-widest truncate max-w-full" style={{ fontFamily: '"Sofia Pro Soft", "Sofia Pro", sans-serif', fontWeight: 700 }}>
+                        <span className="text-[10.5px] sm:text-xs md:text-sm tracking-tight sm:tracking-wider md:tracking-widest whitespace-nowrap max-w-full" style={{ fontFamily: '"Sofia Pro Soft", "Sofia Pro", sans-serif', fontWeight: 700 }}>
                             [{shitholeData.title}]
                         </span>
                         <span className="text-[9px] sm:text-[10px] font-bold opacity-75 md:hidden">1.0 – 2.0</span>
@@ -1457,13 +1489,13 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
                 </div>
 
                 {/* 3.0 Zone */}
-                <div className="flex flex-col items-center text-center gap-1 md:gap-3 relative h-full min-w-0">
-                    <div className="hidden md:flex flex-1 items-start justify-center min-h-[80px] mt-1">
-                        <p className={`text-sm leading-relaxed max-w-[200px] transition-colors duration-300 ${hasActiveSelection && snappedValue >= 2.5 && snappedValue <= 3.5 ? "text-slate-800 font-bold" : "text-slate-500 font-medium"}`}>
+                <div className="flex flex-col items-center text-center gap-1 md:gap-2 relative h-full min-w-0">
+                    <div className="hidden md:flex flex-1 items-start justify-center min-h-[64px] mt-0.5">
+                        <p className={`text-xs xl:text-sm leading-snug max-w-[200px] transition-colors duration-300 ${hasActiveSelection && snappedValue >= 2.5 && snappedValue <= 3.5 ? "text-slate-800 font-bold" : "text-slate-500 font-medium"}`}>
                             "...{stableData.desc}"
                         </p>
                     </div>
-                    <div className={`flex items-center justify-between sm:justify-evenly md:justify-center md:gap-3 bg-slate-100 border border-slate-200/90 rounded-2xl sm:rounded-full px-1 sm:px-2.5 md:px-4 py-1.5 md:py-2 transition-all duration-300 w-full min-w-0 shrink-0 ${getGlowStyles(3)}`}>
+                    <div className={`flex items-center justify-between sm:justify-evenly md:justify-center md:gap-3 bg-slate-100 border border-slate-200/90 rounded-2xl sm:rounded-full px-1 sm:px-2.5 md:px-4 py-1 sm:py-1.5 md:py-2 transition-all duration-300 w-full min-w-0 shrink-0 ${getGlowStyles(3)}`}>
                         {renderEmoji(3, 0, emojis["3.0"][0], 2.5)}
                         {renderEmoji(3, 1, emojis["3.0"][1], 3.0)}
                         {renderEmoji(3, 2, emojis["3.0"][2], 3.5)}
@@ -1473,7 +1505,7 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
                         onClick={() => setMobileAnchorTab(3)}
                         className={`flex flex-col items-center leading-tight focus:outline-none max-w-full ${getZoneColor(3)}`}
                     >
-                        <span className="text-[11px] sm:text-xs md:text-sm tracking-wider md:tracking-widest truncate max-w-full" style={{ fontFamily: '"Sofia Pro Soft", "Sofia Pro", sans-serif', fontWeight: 700 }}>
+                        <span className="text-[10.5px] sm:text-xs md:text-sm tracking-tight sm:tracking-wider md:tracking-widest whitespace-nowrap max-w-full" style={{ fontFamily: '"Sofia Pro Soft", "Sofia Pro", sans-serif', fontWeight: 700 }}>
                             [{stableData.title}]
                         </span>
                         <span className="text-[9px] sm:text-[10px] font-bold opacity-75 md:hidden">2.5 – 3.5</span>
@@ -1481,13 +1513,13 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
                 </div>
 
                 {/* 5.0 Zone */}
-                <div className="flex flex-col items-center text-center gap-1 md:gap-3 relative h-full min-w-0">
-                    <div className="hidden md:flex flex-1 items-start justify-center min-h-[80px] mt-1">
-                        <p className={`text-sm leading-relaxed max-w-[200px] transition-colors duration-300 ${hasActiveSelection && snappedValue >= 4.0 && snappedValue <= 5.0 ? "text-purple-700 font-bold" : "text-slate-500 font-medium"}`}>
+                <div className="flex flex-col items-center text-center gap-1 md:gap-2 relative h-full min-w-0">
+                    <div className="hidden md:flex flex-1 items-start justify-center min-h-[64px] mt-0.5">
+                        <p className={`text-xs xl:text-sm leading-snug max-w-[200px] transition-colors duration-300 ${hasActiveSelection && snappedValue >= 4.0 && snappedValue <= 5.0 ? "text-purple-700 font-bold" : "text-slate-500 font-medium"}`}>
                             "...{sanctuaryData.desc}"
                         </p>
                     </div>
-                    <div className={`flex items-center justify-between sm:justify-evenly md:justify-center md:gap-3 bg-purple-50 border border-purple-200/80 rounded-2xl sm:rounded-full px-1 sm:px-2.5 md:px-4 py-1.5 md:py-2 transition-all duration-300 w-full min-w-0 shrink-0 ${getGlowStyles(5)}`}>
+                    <div className={`flex items-center justify-between sm:justify-evenly md:justify-center md:gap-3 bg-purple-50 border border-purple-200/80 rounded-2xl sm:rounded-full px-1 sm:px-2.5 md:px-4 py-1 sm:py-1.5 md:py-2 transition-all duration-300 w-full min-w-0 shrink-0 ${getGlowStyles(5)}`}>
                         {renderEmoji(5, 0, emojis["5.0"][0], 4.0)}
                         {renderEmoji(5, 1, emojis["5.0"][1], 4.5)}
                         {renderEmoji(5, 2, emojis["5.0"][2], 5.0)}
@@ -1497,7 +1529,7 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
                         onClick={() => setMobileAnchorTab(5)}
                         className={`flex flex-col items-center leading-tight focus:outline-none max-w-full ${getZoneColor(5)}`}
                     >
-                        <span className="text-[11px] sm:text-xs md:text-sm tracking-wider md:tracking-widest truncate max-w-full" style={{ fontFamily: '"Sofia Pro Soft", "Sofia Pro", sans-serif', fontWeight: 700 }}>
+                        <span className="text-[10.5px] sm:text-xs md:text-sm tracking-tight sm:tracking-wider md:tracking-widest whitespace-nowrap max-w-full" style={{ fontFamily: '"Sofia Pro Soft", "Sofia Pro", sans-serif', fontWeight: 700 }}>
                             [{sanctuaryData.title}]
                         </span>
                         <span className="text-[9px] sm:text-[10px] font-bold opacity-75 md:hidden">4.0 – 5.0</span>
@@ -1506,14 +1538,14 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
             </div>
 
             {/* Range Slider + Always-Visible Thumb + Scale Markers */}
-            <div className="mt-1 md:mt-5 mb-0.5 px-1.5 sm:px-2 w-full relative z-10">
-                <div className="relative w-full h-9 md:h-10 flex items-center">
+            <div className="mt-0.5 sm:mt-1 md:mt-2 mb-0 px-1 sm:px-2 w-full relative z-10">
+                <div className="relative w-full h-8 sm:h-9 md:h-10 flex items-center">
                     
                     {/* The Track */}
                     <div className="absolute w-full h-2 bg-gradient-to-r from-blue-600 via-slate-500 to-purple-600 rounded-full pointer-events-none z-10 shadow-inner" style={{ top: '50%', marginTop: '-4px' }}></div>
 
-                    {/* Track Scale Tick Dots */}
-                    <div className="absolute inset-x-0 flex justify-between items-center px-1 pointer-events-none z-10" style={{ top: '50%', marginTop: '-3px' }}>
+                    {/* Track Scale Tick Dots (Aligned to 18px thumb centers) */}
+                    <div className="absolute inset-x-0 flex justify-between items-center px-[15px] pointer-events-none z-10" style={{ top: '50%', marginTop: '-3px' }}>
                         {[1, 2, 3, 4, 5].map((t) => (
                             <span key={t} className="w-1.5 h-1.5 rounded-full bg-white/80 shadow-sm" />
                         ))}
@@ -1533,6 +1565,9 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
                         onMouseUp={handleDragEnd}
                         onTouchStart={handleDragStart}
                         onTouchEnd={handleDragEnd}
+                        onTouchCancel={handleDragEnd}
+                        onBlur={() => setIsDragging(false)}
+                        onKeyDown={handleSliderKeyDown}
                         className="absolute w-full h-full opacity-0 cursor-pointer z-30"
                         style={{ top: 0, left: 0, touchAction: 'none' }}
                     />
@@ -1584,14 +1619,14 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
             </div>
 
             {/* Compact Mobile Anchor Meaning Card / Tabs (< 768px) */}
-            <div className="md:hidden mt-0.5 rounded-2xl border border-slate-200 bg-slate-50/95 p-2.5 text-left shadow-inner" data-testid="mobile-anchor-card">
-                <div className="grid grid-cols-3 gap-1 mb-1.5 bg-slate-200/75 p-1 rounded-xl" role="tablist" aria-label="Anchor Descriptions">
+            <div className="md:hidden mt-0.5 rounded-2xl border border-slate-200 bg-slate-50/95 p-2 sm:p-2.5 text-left shadow-inner" data-testid="mobile-anchor-card">
+                <div className="grid grid-cols-3 gap-0.5 sm:gap-1 mb-1 sm:mb-1.5 bg-slate-200/75 p-0.5 sm:p-1 rounded-xl" role="tablist" aria-label="Anchor Descriptions">
                     <button
                         type="button"
                         role="tab"
                         aria-selected={activeAnchorZone === 1}
                         onClick={() => setMobileAnchorTab(1)}
-                        className={`py-1 px-1 rounded-lg text-[10px] sm:text-[11px] font-extrabold transition-all truncate ${
+                        className={`py-1 px-0.5 rounded-lg text-[9.5px] sm:text-[11px] tracking-tight font-extrabold transition-all whitespace-nowrap ${
                             activeAnchorZone === 1
                                 ? 'bg-blue-600 text-white shadow-sm'
                                 : 'text-blue-700 hover:bg-white/60'
@@ -1604,7 +1639,7 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
                         role="tab"
                         aria-selected={activeAnchorZone === 3}
                         onClick={() => setMobileAnchorTab(3)}
-                        className={`py-1 px-1 rounded-lg text-[10px] sm:text-[11px] font-extrabold transition-all truncate ${
+                        className={`py-1 px-0.5 rounded-lg text-[9.5px] sm:text-[11px] tracking-tight font-extrabold transition-all whitespace-nowrap ${
                             activeAnchorZone === 3
                                 ? 'bg-slate-700 text-white shadow-sm'
                                 : 'text-slate-700 hover:bg-white/60'
@@ -1617,7 +1652,7 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
                         role="tab"
                         aria-selected={activeAnchorZone === 5}
                         onClick={() => setMobileAnchorTab(5)}
-                        className={`py-1 px-1 rounded-lg text-[10px] sm:text-[11px] font-extrabold transition-all truncate ${
+                        className={`py-1 px-0.5 rounded-lg text-[9.5px] sm:text-[11px] tracking-tight font-extrabold transition-all whitespace-nowrap ${
                             activeAnchorZone === 5
                                 ? 'bg-purple-600 text-white shadow-sm'
                                 : 'text-purple-700 hover:bg-white/60'
@@ -1627,7 +1662,7 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
                     </button>
                 </div>
                 <p
-                    className={`text-xs leading-snug px-1 font-medium ${
+                    className={`text-[11px] sm:text-xs leading-snug px-1 font-medium ${
                         activeAnchorZone === 1
                             ? 'text-blue-950'
                             : activeAnchorZone === 5
@@ -3195,20 +3230,20 @@ const App = () => {
     const livePreviewScores = computeSurveyScores(livePreviewAnswers, surveyQuestions);
 
     return (
-        <main className="flex-grow w-full max-w-[1800px] mx-auto p-2.5 sm:p-4 md:p-6 flex flex-col relative overflow-x-hidden lg:overflow-hidden" style={{ minHeight: 'calc(100vh - 80px)' }}>
+        <main className="flex-grow w-full max-w-[1800px] mx-auto p-2 sm:p-4 md:py-3 md:px-6 flex flex-col relative overflow-x-hidden lg:overflow-hidden" style={{ minHeight: 'calc(100vh - 80px)' }}>
             {renderHeaderPortal()}
             {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} onLogin={() => {}} />}
             <AISettingsModal isOpen={showAISettings} onClose={() => setShowAISettings(false)} />
             {renderResumeBanner()}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 md:gap-6 flex-grow items-stretch lg:h-full">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-2.5 sm:gap-4 md:gap-6 flex-grow items-stretch lg:h-full">
                 
                 {/* Left Panel - Survey Form (50%) */}
                 <div className="flex flex-col bg-white rounded-3xl md:rounded-[2rem] shadow-2xl border border-slate-100 relative overflow-hidden lg:h-full lg:min-h-0" style={{ transform: 'translateZ(0)' }}>
-                    <div className="p-3.5 sm:p-5 md:p-6 pt-3.5 sm:pt-4 md:pt-5 flex-grow flex flex-col lg:h-full">
+                    <div className="p-3 sm:p-5 md:p-5 pt-2.5 sm:pt-4 md:pt-4 flex-grow flex flex-col lg:h-full">
                         
                         {/* Visible Question X of 20 Progress Header & Bar */}
-                        <div className="mb-2 md:mb-3 shrink-0">
-                            <div className="flex flex-wrap justify-between items-center gap-1.5 mb-1.5">
+                        <div className="mb-1.5 sm:mb-2 md:mb-3 shrink-0">
+                            <div className="flex flex-wrap justify-between items-center gap-1.5 mb-1">
                                 <div className="inline-block bg-blue-50 text-blue-700 px-2.5 py-0.5 rounded-lg font-bold uppercase tracking-widest text-[10px] border border-blue-100">
                                     {q.space}
                                 </div>
@@ -3234,11 +3269,11 @@ const App = () => {
                         </div>
 
                         {/* Title & Concept */}
-                        <div className="mb-1.5 md:mb-2 shrink-0 w-full flex items-start justify-between gap-2.5">
+                        <div className="mb-1 sm:mb-1.5 md:mb-2 shrink-0 w-full flex items-start justify-between gap-2">
                             <div className="min-w-0">
-                                <div className="text-slate-400 font-bold text-xs md:text-sm tracking-wide mb-0.5">{q.dimension}</div>
-                                <h2 className="font-black text-slate-900 text-xl sm:text-2xl md:text-3xl tracking-tight leading-tight mb-0.5">{q.title}</h2>
-                                {q.subtitle && <p className="text-slate-500 font-medium text-xs sm:text-sm leading-snug mb-1">{q.subtitle}</p>}
+                                <div className="text-slate-400 font-bold text-[11px] sm:text-xs md:text-sm tracking-wide mb-0.5">{q.dimension}</div>
+                                <h2 className="font-black text-slate-900 text-lg sm:text-2xl md:text-3xl tracking-tight leading-tight mb-0.5">{q.title}</h2>
+                                {q.subtitle && <p className="text-slate-500 font-medium text-xs sm:text-sm leading-snug mb-0.5">{q.subtitle}</p>}
                             </div>
                             <button
                                 type="button"
@@ -3272,11 +3307,11 @@ const App = () => {
                         </HopeEmojiSlider>
 
                         {/* Navigation Footer */}
-                        <div className="flex justify-between items-center mt-auto pt-2 md:pt-3 border-t border-slate-100 shrink-0">
+                        <div className="flex justify-between items-center mt-auto pt-1.5 sm:pt-2 md:pt-3 border-t border-slate-100 shrink-0">
                             <button 
                                 type="button"
                                 onClick={handlePrevQ}
-                                className="text-slate-500 font-bold hover:text-slate-800 px-4 sm:px-6 py-2 transition-colors flex items-center gap-2 text-sm"
+                                className="text-slate-500 font-bold hover:text-slate-800 px-4 sm:px-6 py-1.5 sm:py-2 transition-colors flex items-center gap-2 text-sm"
                             >
                                 <span>←</span> {currentQIndex === 0 ? 'Intro' : 'Back'}
                             </button>
@@ -3284,7 +3319,7 @@ const App = () => {
                                 type="button"
                                 onClick={handleNextQ}
                                 disabled={currentSelection === null}
-                                className={`px-6 py-2.5 rounded-full font-bold text-sm transition-all flex items-center gap-2 ${currentSelection === null ? 'bg-slate-100 text-slate-400 cursor-not-allowed' : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:-translate-y-0.5 shadow-md hover:shadow-lg'}`}
+                                className={`px-6 py-2 sm:py-2.5 rounded-full font-bold text-sm transition-all flex items-center gap-2 ${currentSelection === null ? 'bg-slate-100 text-slate-400 cursor-not-allowed' : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:-translate-y-0.5 shadow-md hover:shadow-lg'}`}
                             >
                                 {currentQIndex === surveyQuestions.length - 1 ? 'Submit' : 'Next'} <span>→</span>
                             </button>
