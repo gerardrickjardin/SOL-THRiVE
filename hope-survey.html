@@ -99,9 +99,13 @@
                 gap: 0.35rem;
             }
         }
+        html, body {
+            overflow-x: hidden;
+            max-width: 100vw;
+        }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900 font-sans min-h-screen relative">
+<body class="bg-slate-50 text-slate-900 font-sans min-h-screen relative overflow-x-hidden">
     
     <!-- THRiVE Global Header -->
     <header class="header print:hidden">
@@ -1172,14 +1176,14 @@ const ReflectionBox = ({ value, onChange }) => {
     };
 
     return (
-        <div className="mt-2 bg-slate-50 border border-slate-200 rounded-2xl p-3 shadow-sm animate-in fade-in slide-in-from-top-2 duration-500">
-            <div className="flex justify-between items-center mb-2">
-                <label className="text-xs uppercase tracking-widest font-bold text-slate-500">Personal Reflection &amp; Notes</label>
+        <div className="mt-1.5 md:mt-2 bg-slate-50 border border-slate-200 rounded-2xl p-2.5 md:p-3 shadow-sm animate-in fade-in slide-in-from-top-2 duration-500">
+            <div className="flex justify-between items-center mb-1.5 md:mb-2">
+                <label className="text-[11px] md:text-xs uppercase tracking-widest font-bold text-slate-500">Personal Reflection &amp; Notes</label>
                 <div className="flex gap-2">
                     <button 
                         type="button"
                         onClick={toggleListening}
-                        className={`p-2 rounded-full transition-colors flex items-center justify-center ${isListening ? 'bg-red-100 text-red-600 animate-pulse' : 'bg-white border border-slate-200 text-slate-500 hover:text-blue-600 hover:bg-blue-50'}`}
+                        className={`p-1.5 md:p-2 rounded-full transition-colors flex items-center justify-center ${isListening ? 'bg-red-100 text-red-600 animate-pulse' : 'bg-white border border-slate-200 text-slate-500 hover:text-blue-600 hover:bg-blue-50'}`}
                         title={isListening ? "Stop Recording" : "Voice to Text"}
                     >
                         {isListening ? <StopMicIcon className="w-4 h-4" /> : <MicIcon className="w-4 h-4" />}
@@ -1208,7 +1212,7 @@ const ReflectionBox = ({ value, onChange }) => {
                     onChange(nextVal);
                 }}
                 placeholder="Describe your experience, environment, or reasoning behind your score (optional)..."
-                className="w-full bg-white border border-slate-200 rounded-xl p-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-50 transition-all text-slate-700 custom-scrollbar resize-y min-h-[60px] text-sm md:text-base"
+                className="w-full bg-white border border-slate-200 rounded-xl p-2.5 md:p-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-50 transition-all text-slate-700 custom-scrollbar resize-y min-h-[48px] md:min-h-[60px] text-xs sm:text-sm md:text-base"
             />
         </div>
     );
@@ -1222,14 +1226,26 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
     // Pro Slider State
     const [isDragging, setIsDragging] = window.React.useState(false);
     
-    // Clamp the initial value to 1.0 minimum so the slider thumb never flies off-screen
-    const safeSelection = currentSelection !== null && currentSelection >= 1.0 ? currentSelection : 1.0;
+    // Default unselected ghost position at 3.0 (center) so the slider thumb is always visible and centered before selection
+    const safeSelection = currentSelection !== null && currentSelection >= 1.0 ? currentSelection : 3.0;
     const [rawValue, setRawValue] = window.React.useState(safeSelection);
 
-    // Sync rawValue with safeSelection when not dragging
+    const getZoneForScore = (scoreVal) => {
+        if (scoreVal === null || scoreVal === undefined) return 3;
+        if (scoreVal <= 2.0) return 1;
+        if (scoreVal >= 4.0) return 5;
+        return 3;
+    };
+
+    const [mobileAnchorTab, setMobileAnchorTab] = window.React.useState(() => getZoneForScore(currentSelection));
+
+    // Sync rawValue and mobileAnchorTab with currentSelection when not dragging
     window.React.useEffect(() => {
         if (!isDragging) {
-            setRawValue(currentSelection !== null && currentSelection >= 1.0 ? currentSelection : 1.0);
+            setRawValue(currentSelection !== null && currentSelection >= 1.0 ? currentSelection : 3.0);
+            if (currentSelection !== null && currentSelection >= 1.0) {
+                setMobileAnchorTab(getZoneForScore(currentSelection));
+            }
         }
     }, [currentSelection, isDragging]);
 
@@ -1246,6 +1262,7 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
         setIsDragging(false);
         onSelect(rating);
         setRawValue(rating);
+        setMobileAnchorTab(getZoneForScore(rating));
         triggerBurst(rating);
     };
 
@@ -1253,6 +1270,7 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
         const v = parseFloat(e.target.value);
         setRawValue(v);
         const snapped = Math.round(v * 2) / 2;
+        setMobileAnchorTab(getZoneForScore(snapped));
         if (snapped !== currentSelection) {
             onSelect(snapped);
         }
@@ -1264,6 +1282,7 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
         setIsDragging(false);
         const snapped = Math.round(rawValue * 2) / 2;
         setRawValue(snapped);
+        setMobileAnchorTab(getZoneForScore(snapped));
         onSelect(snapped);
         triggerBurst(snapped);
     };
@@ -1289,63 +1308,67 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
     
     const getAppleEmojiUrl = (hex) => `https://unpkg.com/emoji-datasource-apple@15.0.1/img/apple/64/${hex}.png`;
 
+    const hasActiveSelection = currentSelection !== null || isDragging;
+
     const getGlowStyles = (zone) => {
-        // Only light up the zone if an emoji is actually selected (or actively dragging)
-        if (currentSelection === null && !isDragging) return "opacity-75 border-transparent";
+        if (!hasActiveSelection) return "opacity-90 border-transparent";
         
         const isZoneSelected = 
             (zone === 1 && snappedValue >= 1.0 && snappedValue <= 2.0) ||
             (zone === 3 && snappedValue >= 2.5 && snappedValue <= 3.5) ||
             (zone === 5 && snappedValue >= 4.0 && snappedValue <= 5.0);
             
-        return isZoneSelected ? "opacity-100 border-transparent" : "opacity-75 border-transparent";
+        if (!isZoneSelected) return "opacity-75 border-transparent";
+        if (zone === 1) return "opacity-100 ring-2 ring-blue-300/80 shadow-sm";
+        if (zone === 3) return "opacity-100 ring-2 ring-slate-300/90 shadow-sm";
+        return "opacity-100 ring-2 ring-purple-300/80 shadow-sm";
     };
     
     const getZoneColor = (zone) => {
         if (zone === 1) return "text-blue-600";
-        if (zone === 3) return "text-slate-500";
+        if (zone === 3) return "text-slate-600";
         if (zone === 5) return "text-purple-600";
         return "text-slate-500";
-    }
+    };
 
     const renderEmoji = (zone, index, emojiStr, valueToSelect) => {
         const isHovered = hoverEmoji === `${zone}-${index}`;
-        // Only treat as selected if an actual selection was made or the user is dragging
-        const isSelected = (currentSelection !== null || isDragging) && (snappedValue === valueToSelect);
+        const isSelected = hasActiveSelection && (snappedValue === valueToSelect);
         const isBursting = burstValue === valueToSelect;
         
         let scaleClass = "scale-100 translate-y-0";
         let ringClass = "";
-        let colorClass = "grayscale opacity-50"; // Default: gray and slightly faded
+        let colorClass = hasActiveSelection ? "grayscale opacity-45" : "grayscale-[20%] opacity-85";
         
-        // We only want ONE emoji visually active at a time.
-        // If the user is actively hovering ANY emoji, the selected emoji temporarily fades out.
         const isActiveSelection = isSelected && !hoverEmoji;
         
         if (isHovered) {
-            scaleClass = "scale-150 -translate-y-2 z-30 brightness-125";
-            colorClass = "grayscale-0 opacity-100"; // Full color on hover!
+            scaleClass = "scale-125 md:scale-150 -translate-y-1 md:-translate-y-2 z-30 brightness-125";
+            colorClass = "grayscale-0 opacity-100";
         } else if (isActiveSelection) {
-             scaleClass = "scale-125 z-20";
-             colorClass = "grayscale-0 opacity-100"; // Full color when selected!
+            scaleClass = "scale-125 z-20";
+            colorClass = "grayscale-0 opacity-100";
         }
         
-        // Apply the glowing circle to the emoji if it is hovered OR it is the active selection
         if (isHovered || isActiveSelection) {
-             ringClass = zone === 1 ? "ring-2 ring-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.8)]" : 
-                         zone === 3 ? "ring-2 ring-slate-400 shadow-[0_0_15px_rgba(148,163,184,0.8)]" : 
-                         "ring-2 ring-purple-500 shadow-[0_0_15px_rgba(168,85,247,0.8)]";
+            ringClass = zone === 1 ? "ring-2 ring-blue-500 bg-white shadow-[0_0_14px_rgba(59,130,246,0.75)]" : 
+                        zone === 3 ? "ring-2 ring-slate-500 bg-white shadow-[0_0_14px_rgba(100,116,139,0.75)]" : 
+                        "ring-2 ring-purple-500 bg-white shadow-[0_0_14px_rgba(168,85,247,0.75)]";
         }
 
         return (
-            <div 
-                className={`relative rounded-full p-2 md:p-3 transition-all duration-300 ease-out cursor-pointer ${scaleClass} ${ringClass} ${colorClass} flex items-center justify-center`}
+            <button
+                type="button"
+                aria-label={`Rate ${valueToSelect.toFixed(1)} out of 5.0`}
+                aria-pressed={isSelected}
+                data-score={valueToSelect.toFixed(1)}
+                className={`relative rounded-full p-1 sm:p-1.5 md:p-2.5 transition-all duration-300 ease-out cursor-pointer focus:outline-none ${scaleClass} ${ringClass} ${colorClass} flex items-center justify-center shrink-0`}
                 onMouseEnter={() => setHoverEmoji(`${zone}-${index}`)}
                 onMouseLeave={() => setHoverEmoji(null)}
                 onClick={() => handleEmojiClick(valueToSelect)}
             >
                 <div 
-                    className="w-8 h-8 md:w-10 md:h-10 drop-shadow-lg relative z-10 pointer-events-none select-none bg-contain bg-center bg-no-repeat"
+                    className="w-6 h-6 sm:w-7 sm:h-7 md:w-10 md:h-10 drop-shadow-md relative z-10 pointer-events-none select-none bg-contain bg-center bg-no-repeat"
                     style={{ backgroundImage: `url(${getAppleEmojiUrl(emojiStr)})` }}
                 />
                 {isBursting && (
@@ -1362,15 +1385,22 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
                         ))}
                     </div>
                 )}
-            </div>
+            </button>
         );
     };
 
-    const thumbBgColor = snappedValue > 3 ? '#a855f7' : snappedValue < 3 ? '#3b82f6' : '#64748b';
-    const hasActiveSelection = currentSelection !== null || isDragging;
+    const thumbBgColor = !hasActiveSelection
+        ? '#475569'
+        : snappedValue > 3
+            ? '#a855f7'
+            : snappedValue < 3
+                ? '#3b82f6'
+                : '#64748b';
+
+    const activeAnchorZone = mobileAnchorTab || getZoneForScore(hasActiveSelection ? snappedValue : 3.0);
 
     return (
-        <div className="w-full flex flex-col gap-2 bg-white p-4 rounded-3xl mb-2 shadow-xl border border-slate-200 relative">
+        <div className="w-full flex flex-col gap-1.5 md:gap-2 bg-white p-3 sm:p-4 rounded-2xl md:rounded-3xl mb-1.5 md:mb-2 shadow-xl border border-slate-200 relative">
             <style dangerouslySetInnerHTML={{__html: `
                 @keyframes burst1 { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; } 100% { transform: translate(-70px, -140px) scale(1.5) rotate(-45deg); opacity: 0; } }
                 @keyframes burst2 { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; } 100% { transform: translate(-30px, -160px) scale(1.8) rotate(-20deg); opacity: 0; } }
@@ -1389,63 +1419,105 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
                 @keyframes burst15 { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; } 100% { transform: translate(80px, -10px) scale(0.9) rotate(120deg); opacity: 0; } }
             `}} />
 
-            <h3 className="text-emerald-700 text-xl md:text-2xl font-bold text-center mb-2 relative z-10">
-                "My {currentQ.title.replace(/[\u{1F300}-\u{1F9FF}]|\d\.\d/gu, '').trim().toLowerCase()} experience..."
-            </h3>
+            <div className="text-center mb-0.5 md:mb-1 relative z-10">
+                <h3 className="text-emerald-700 text-base sm:text-lg md:text-2xl font-bold leading-snug">
+                    "My {currentQ.title.replace(/[\u{1F300}-\u{1F9FF}]|\d\.\d/gu, '').trim().toLowerCase()} experience..."
+                </h3>
+                <p className="text-[11px] sm:text-xs font-semibold text-slate-500 mt-0.5" data-testid="slider-helper-prompt">
+                    {hasActiveSelection
+                        ? `Score: ${snappedValue.toFixed(1)} / 5.0 — Tap emoji or slide to adjust`
+                        : 'Tap any emoji or drag the slider (1.0 – 5.0)'}
+                </p>
+            </div>
             
-            <div className="flex flex-col md:grid md:grid-cols-3 gap-12 md:gap-4 relative z-10 mb-4 md:mb-0">
+            {/* 3 Horizontal Emoji Zones on ALL screen sizes (Left = 1.0-2.0, Middle = 2.5-3.5, Right = 4.0-5.0) */}
+            <div className="grid grid-cols-3 gap-1.5 sm:gap-2.5 md:gap-4 relative z-10 items-stretch" data-testid="emoji-zones-grid">
                 {/* 1.0 Zone */}
-                <div className="flex flex-col items-center text-center gap-3 md:gap-4 relative h-full">
-                    <div className="order-3 md:order-1 flex-1 flex items-start justify-center min-h-[40px] md:min-h-[80px] mt-1 md:mt-2">
-                        <p className={`text-[12px] md:text-sm leading-relaxed max-w-[200px] transition-colors duration-300 ${hasActiveSelection && snappedValue >= 1.0 && snappedValue <= 2.0 ? "text-blue-700 font-bold" : "text-slate-500 font-medium"}`}>
+                <div className="flex flex-col items-center text-center gap-1 md:gap-3 relative h-full min-w-0">
+                    <div className="hidden md:flex flex-1 items-start justify-center min-h-[80px] mt-1">
+                        <p className={`text-sm leading-relaxed max-w-[200px] transition-colors duration-300 ${hasActiveSelection && snappedValue >= 1.0 && snappedValue <= 2.0 ? "text-blue-700 font-bold" : "text-slate-500 font-medium"}`}>
                             "...{shitholeData.desc}"
                         </p>
                     </div>
-                    <div className={`order-1 md:order-2 flex items-center justify-evenly md:justify-center md:gap-4 bg-blue-50 border border-blue-100 rounded-full px-4 py-2 transition-all duration-500 w-full shrink-0 ${getGlowStyles(1)}`}>
+                    <div className={`flex items-center justify-between sm:justify-evenly md:justify-center md:gap-3 bg-blue-50 border border-blue-200/80 rounded-2xl sm:rounded-full px-1 sm:px-2.5 md:px-4 py-1.5 md:py-2 transition-all duration-300 w-full min-w-0 shrink-0 ${getGlowStyles(1)}`}>
                         {renderEmoji(1, 0, emojis["1.0"][0], 1.0)}
                         {renderEmoji(1, 1, emojis["1.0"][1], 1.5)}
                         {renderEmoji(1, 2, emojis["1.0"][2], 2.0)}
                     </div>
-                    <span className={`order-2 md:order-3 text-sm tracking-widest ${getZoneColor(1)}`} style={{ fontFamily: '"Sofia Pro Soft", "Sofia Pro", sans-serif', fontWeight: 600 }}>[{shitholeData.title}]</span>
+                    <button
+                        type="button"
+                        onClick={() => setMobileAnchorTab(1)}
+                        className={`flex flex-col items-center leading-tight focus:outline-none max-w-full ${getZoneColor(1)}`}
+                    >
+                        <span className="text-[11px] sm:text-xs md:text-sm tracking-wider md:tracking-widest truncate max-w-full" style={{ fontFamily: '"Sofia Pro Soft", "Sofia Pro", sans-serif', fontWeight: 700 }}>
+                            [{shitholeData.title}]
+                        </span>
+                        <span className="text-[9px] sm:text-[10px] font-bold opacity-75 md:hidden">1.0 – 2.0</span>
+                    </button>
                 </div>
 
                 {/* 3.0 Zone */}
-                <div className="flex flex-col items-center text-center gap-3 md:gap-4 relative h-full">
-                    <div className="order-3 md:order-1 flex-1 flex items-start justify-center min-h-[40px] md:min-h-[80px] mt-1 md:mt-2">
-                        <p className={`text-[12px] md:text-sm leading-relaxed max-w-[200px] transition-colors duration-300 ${hasActiveSelection && snappedValue >= 2.5 && snappedValue <= 3.5 ? "text-slate-800 font-bold" : "text-slate-500 font-medium"}`}>
+                <div className="flex flex-col items-center text-center gap-1 md:gap-3 relative h-full min-w-0">
+                    <div className="hidden md:flex flex-1 items-start justify-center min-h-[80px] mt-1">
+                        <p className={`text-sm leading-relaxed max-w-[200px] transition-colors duration-300 ${hasActiveSelection && snappedValue >= 2.5 && snappedValue <= 3.5 ? "text-slate-800 font-bold" : "text-slate-500 font-medium"}`}>
                             "...{stableData.desc}"
                         </p>
                     </div>
-                    <div className={`order-1 md:order-2 flex items-center justify-evenly md:justify-center md:gap-4 bg-slate-100 border border-slate-200 rounded-full px-4 py-2 transition-all duration-500 w-full shrink-0 ${getGlowStyles(3)}`}>
+                    <div className={`flex items-center justify-between sm:justify-evenly md:justify-center md:gap-3 bg-slate-100 border border-slate-200/90 rounded-2xl sm:rounded-full px-1 sm:px-2.5 md:px-4 py-1.5 md:py-2 transition-all duration-300 w-full min-w-0 shrink-0 ${getGlowStyles(3)}`}>
                         {renderEmoji(3, 0, emojis["3.0"][0], 2.5)}
                         {renderEmoji(3, 1, emojis["3.0"][1], 3.0)}
                         {renderEmoji(3, 2, emojis["3.0"][2], 3.5)}
                     </div>
-                    <span className={`order-2 md:order-3 text-sm tracking-widest ${getZoneColor(3)}`} style={{ fontFamily: '"Sofia Pro Soft", "Sofia Pro", sans-serif', fontWeight: 600 }}>[{stableData.title}]</span>
+                    <button
+                        type="button"
+                        onClick={() => setMobileAnchorTab(3)}
+                        className={`flex flex-col items-center leading-tight focus:outline-none max-w-full ${getZoneColor(3)}`}
+                    >
+                        <span className="text-[11px] sm:text-xs md:text-sm tracking-wider md:tracking-widest truncate max-w-full" style={{ fontFamily: '"Sofia Pro Soft", "Sofia Pro", sans-serif', fontWeight: 700 }}>
+                            [{stableData.title}]
+                        </span>
+                        <span className="text-[9px] sm:text-[10px] font-bold opacity-75 md:hidden">2.5 – 3.5</span>
+                    </button>
                 </div>
 
                 {/* 5.0 Zone */}
-                <div className="flex flex-col items-center text-center gap-3 md:gap-4 relative h-full">
-                    <div className="order-3 md:order-1 flex-1 flex items-start justify-center min-h-[40px] md:min-h-[80px] mt-1 md:mt-2">
-                        <p className={`text-[12px] md:text-sm leading-relaxed max-w-[200px] transition-colors duration-300 ${hasActiveSelection && snappedValue >= 4.0 && snappedValue <= 5.0 ? "text-purple-700 font-bold" : "text-slate-500 font-medium"}`}>
+                <div className="flex flex-col items-center text-center gap-1 md:gap-3 relative h-full min-w-0">
+                    <div className="hidden md:flex flex-1 items-start justify-center min-h-[80px] mt-1">
+                        <p className={`text-sm leading-relaxed max-w-[200px] transition-colors duration-300 ${hasActiveSelection && snappedValue >= 4.0 && snappedValue <= 5.0 ? "text-purple-700 font-bold" : "text-slate-500 font-medium"}`}>
                             "...{sanctuaryData.desc}"
                         </p>
                     </div>
-                    <div className={`order-1 md:order-2 flex items-center justify-evenly md:justify-center md:gap-4 bg-purple-50 border border-purple-100 rounded-full px-4 py-2 transition-all duration-500 w-full shrink-0 ${getGlowStyles(5)}`}>
+                    <div className={`flex items-center justify-between sm:justify-evenly md:justify-center md:gap-3 bg-purple-50 border border-purple-200/80 rounded-2xl sm:rounded-full px-1 sm:px-2.5 md:px-4 py-1.5 md:py-2 transition-all duration-300 w-full min-w-0 shrink-0 ${getGlowStyles(5)}`}>
                         {renderEmoji(5, 0, emojis["5.0"][0], 4.0)}
                         {renderEmoji(5, 1, emojis["5.0"][1], 4.5)}
                         {renderEmoji(5, 2, emojis["5.0"][2], 5.0)}
                     </div>
-                    <span className={`order-2 md:order-3 text-sm tracking-widest ${getZoneColor(5)}`} style={{ fontFamily: '"Sofia Pro Soft", "Sofia Pro", sans-serif', fontWeight: 600 }}>[{sanctuaryData.title}]</span>
+                    <button
+                        type="button"
+                        onClick={() => setMobileAnchorTab(5)}
+                        className={`flex flex-col items-center leading-tight focus:outline-none max-w-full ${getZoneColor(5)}`}
+                    >
+                        <span className="text-[11px] sm:text-xs md:text-sm tracking-wider md:tracking-widest truncate max-w-full" style={{ fontFamily: '"Sofia Pro Soft", "Sofia Pro", sans-serif', fontWeight: 700 }}>
+                            [{sanctuaryData.title}]
+                        </span>
+                        <span className="text-[9px] sm:text-[10px] font-bold opacity-75 md:hidden">4.0 – 5.0</span>
+                    </button>
                 </div>
             </div>
 
-            {/* Range Slider */}
-            <div className="mt-10 mb-2 px-2 w-full relative z-10">
-                <div className="relative w-full h-12">
+            {/* Range Slider + Always-Visible Thumb + Scale Markers */}
+            <div className="mt-1 md:mt-5 mb-0.5 px-1.5 sm:px-2 w-full relative z-10">
+                <div className="relative w-full h-9 md:h-10 flex items-center">
                     
                     {/* The Track */}
-                    <div className="absolute w-full h-1.5 bg-gradient-to-r from-blue-600 via-slate-500 to-purple-600 rounded-lg pointer-events-none z-10" style={{ top: '50%', marginTop: '-3px' }}></div>
+                    <div className="absolute w-full h-2 bg-gradient-to-r from-blue-600 via-slate-500 to-purple-600 rounded-full pointer-events-none z-10 shadow-inner" style={{ top: '50%', marginTop: '-4px' }}></div>
+
+                    {/* Track Scale Tick Dots */}
+                    <div className="absolute inset-x-0 flex justify-between items-center px-1 pointer-events-none z-10" style={{ top: '50%', marginTop: '-3px' }}>
+                        {[1, 2, 3, 4, 5].map((t) => (
+                            <span key={t} className="w-1.5 h-1.5 rounded-full bg-white/80 shadow-sm" />
+                        ))}
+                    </div>
                     
                     {/* The Native Invisible Slider */}
                     <input 
@@ -1454,6 +1526,7 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
                         max="5" 
                         step="0.01" 
                         value={displayValue}
+                        aria-label="Score slider from 1.0 to 5.0"
                         onChange={handleSliderChange}
                         onInput={handleSliderChange}
                         onMouseDown={handleDragStart}
@@ -1464,23 +1537,112 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
                         style={{ top: 0, left: 0, touchAction: 'none' }}
                     />
                     
-                    {/* The Gliding Thumb Overlay */}
+                    {/* The Gliding Thumb Overlay (Always visible: ghost indicator at 3.0 before selection, real score once selected) */}
                     <div 
-                        className={`absolute w-9 h-9 rounded-full border-[3px] border-white flex items-center justify-center text-white text-[12px] font-bold pointer-events-none z-20 ${isDragging ? '' : 'transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)]'}`}
+                        data-testid="slider-thumb-overlay"
+                        className={`absolute w-9 h-9 rounded-full border-[3px] border-white flex items-center justify-center text-white text-[11px] font-extrabold pointer-events-none z-20 ${isDragging ? '' : 'transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)]'} ${!hasActiveSelection ? 'animate-pulse' : ''}`}
                         style={{ 
                             top: '50%',
                             marginTop: '-18px',
                             left: `calc(${((displayValue - 1) / 4) * 100}% - ${((displayValue - 1) / 4) * 36}px)`,
                             backgroundColor: thumbBgColor,
-                            boxShadow: `0 0 20px ${thumbBgColor}`,
+                            boxShadow: hasActiveSelection ? `0 0 18px ${thumbBgColor}` : '0 2px 10px rgba(15,23,42,0.35)',
                             transform: isDragging ? 'scale(1.15)' : 'scale(1)',
-                            opacity: (currentSelection === null && !isDragging) ? 0 : 1
+                            opacity: 1
                         }}
                     >
-                        {snappedValue.toFixed(1)}
+                        {hasActiveSelection ? snappedValue.toFixed(1) : '↔'}
                     </div>
                 </div>
+
+                {/* Scale Tick Labels (1.0 · 2.0 · 3.0 · 4.0 · 5.0) */}
+                <div className="flex justify-between items-center w-full px-0.5 -mt-0.5 select-none" data-testid="slider-scale-ticks">
+                    {[
+                        { val: 1.0, label: '1.0', color: 'text-blue-600' },
+                        { val: 2.0, label: '2.0', color: 'text-blue-500' },
+                        { val: 3.0, label: '3.0', color: 'text-slate-600' },
+                        { val: 4.0, label: '4.0', color: 'text-purple-500' },
+                        { val: 5.0, label: '5.0', color: 'text-purple-600' }
+                    ].map((tick) => {
+                        const isTickActive = hasActiveSelection && Math.abs(snappedValue - tick.val) < 0.01;
+                        return (
+                            <button
+                                key={tick.label}
+                                type="button"
+                                onClick={() => handleEmojiClick(tick.val)}
+                                className={`text-[11px] sm:text-xs font-extrabold transition-all px-1 py-0.5 rounded focus:outline-none ${
+                                    isTickActive
+                                        ? `${tick.color} scale-110 underline decoration-2 underline-offset-2`
+                                        : 'text-slate-400 hover:text-slate-700'
+                                }`}
+                            >
+                                {tick.label}
+                            </button>
+                        );
+                    })}
+                </div>
             </div>
+
+            {/* Compact Mobile Anchor Meaning Card / Tabs (< 768px) */}
+            <div className="md:hidden mt-0.5 rounded-2xl border border-slate-200 bg-slate-50/95 p-2.5 text-left shadow-inner" data-testid="mobile-anchor-card">
+                <div className="grid grid-cols-3 gap-1 mb-1.5 bg-slate-200/75 p-1 rounded-xl" role="tablist" aria-label="Anchor Descriptions">
+                    <button
+                        type="button"
+                        role="tab"
+                        aria-selected={activeAnchorZone === 1}
+                        onClick={() => setMobileAnchorTab(1)}
+                        className={`py-1 px-1 rounded-lg text-[10px] sm:text-[11px] font-extrabold transition-all truncate ${
+                            activeAnchorZone === 1
+                                ? 'bg-blue-600 text-white shadow-sm'
+                                : 'text-blue-700 hover:bg-white/60'
+                        }`}
+                    >
+                        1★ [{shitholeData.title}]
+                    </button>
+                    <button
+                        type="button"
+                        role="tab"
+                        aria-selected={activeAnchorZone === 3}
+                        onClick={() => setMobileAnchorTab(3)}
+                        className={`py-1 px-1 rounded-lg text-[10px] sm:text-[11px] font-extrabold transition-all truncate ${
+                            activeAnchorZone === 3
+                                ? 'bg-slate-700 text-white shadow-sm'
+                                : 'text-slate-700 hover:bg-white/60'
+                        }`}
+                    >
+                        3★ [{stableData.title}]
+                    </button>
+                    <button
+                        type="button"
+                        role="tab"
+                        aria-selected={activeAnchorZone === 5}
+                        onClick={() => setMobileAnchorTab(5)}
+                        className={`py-1 px-1 rounded-lg text-[10px] sm:text-[11px] font-extrabold transition-all truncate ${
+                            activeAnchorZone === 5
+                                ? 'bg-purple-600 text-white shadow-sm'
+                                : 'text-purple-700 hover:bg-white/60'
+                        }`}
+                    >
+                        5★ [{sanctuaryData.title}]
+                    </button>
+                </div>
+                <p
+                    className={`text-xs leading-snug px-1 font-medium ${
+                        activeAnchorZone === 1
+                            ? 'text-blue-950'
+                            : activeAnchorZone === 5
+                                ? 'text-purple-950'
+                                : 'text-slate-800'
+                    }`}
+                    data-testid="mobile-anchor-description"
+                >
+                    <strong className="font-extrabold">
+                        {activeAnchorZone === 1 ? `1★ (${shitholeData.title}): ` : activeAnchorZone === 5 ? `5★ (${sanctuaryData.title}): ` : `3★ (${stableData.title}): `}
+                    </strong>
+                    "...{activeAnchorZone === 1 ? shitholeData.desc : activeAnchorZone === 5 ? sanctuaryData.desc : stableData.desc}"
+                </p>
+            </div>
+
             {children}
         </div>
     );
@@ -1557,7 +1719,7 @@ const HopeChart = ({ answers, surveyQuestions, isFinal, onViewDashboard, onRetak
 
             <div className="relative w-full flex flex-col items-center justify-start z-10 pt-2" style={{ minHeight: 0 }}>
                 {/* SVG Gauge */}
-                <div className={`w-full relative ${isBanner ? 'h-[400px]' : 'h-[290px] md:h-[320px]'}`}>
+                <div className={`w-full relative ${isBanner ? 'h-[240px] sm:h-[320px] lg:h-[400px]' : 'h-[250px] sm:h-[290px] md:h-[320px]'}`}>
                     <svg viewBox="0 0 1000 480" className="w-full h-full drop-shadow-2xl overflow-visible absolute top-0 left-0">
                         <defs>
                             <filter id="glow-soft" x="-20%" y="-20%" width="140%" height="140%">
@@ -2475,6 +2637,17 @@ const App = () => {
     const [authLoading, setAuthLoading] = useState(true);
     const [showAuthModal, setShowAuthModal] = useState(false);
     const [showAISettings, setShowAISettings] = useState(false);
+    const [showMobileWheel, setShowMobileWheel] = useState(false);
+
+    const scrollQuestionIntoView = () => {
+        if (typeof window !== 'undefined' && typeof window.scrollTo === 'function') {
+            try {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } catch (e) {
+                window.scrollTo(0, 0);
+            }
+        }
+    };
 
     // Refs to preserve in-memory guest progress/results when logging in
     const answersRef = useRef(answers);
@@ -2532,7 +2705,7 @@ const App = () => {
             ? 'Completed HoPE Index Restored'
             : `Question ${currentQIndex + 1} of ${surveyQuestions.length} (${Math.min(surveyQuestions.length, answeredCount)} rated)`;
         return (
-            <div id="resume-hope-banner" className="resume-progress-banner no-print print:hidden w-full max-w-5xl mx-auto mb-4">
+            <div id="resume-hope-banner" className="resume-progress-banner no-print print:hidden w-full max-w-5xl mx-auto mb-3">
                 <div className="resume-banner-text">
                     <strong>Saved HoPE Index Progress Restored ({label})</strong>
                     <span>Your ratings and written reflections are automatically saved on this device. Resume where you left off or start fresh.</span>
@@ -2553,6 +2726,7 @@ const App = () => {
                                     setStep('dashboard');
                                 }
                             }
+                            scrollQuestionIntoView();
                         }}
                     >
                         Resume Saved Progress
@@ -2751,6 +2925,7 @@ const App = () => {
             finishSurvey(newAnswers, latestReflections);
             setStep('results');
         }
+        scrollQuestionIntoView();
     };
 
     const handlePrevQ = () => {
@@ -2769,6 +2944,7 @@ const App = () => {
         } else {
             setStep('intro');
         }
+        scrollQuestionIntoView();
     };
 
     const handleRetake = () => {
@@ -2779,6 +2955,7 @@ const App = () => {
         setCurrentQIndex(0);
         setCurrentSelection(null);
         setStep('intro');
+        scrollQuestionIntoView();
     };
 
     const handleSignOut = () => {
@@ -2922,7 +3099,7 @@ const App = () => {
         surveyQuestions.forEach((q) => { mockAnswers[q.id] = 5; });
 
         return (
-            <main className="flex-grow flex flex-col items-center justify-center p-4 md:p-6 relative" style={{ minHeight: 'calc(100vh - 80px)' }}>
+            <main className="flex-grow flex flex-col items-center justify-center p-3 sm:p-4 md:p-6 relative" style={{ minHeight: 'calc(100vh - 80px)' }}>
                 {renderHeaderPortal()}
                 {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} onLogin={() => {}} />}
                 <AISettingsModal isOpen={showAISettings} onClose={() => setShowAISettings(false)} />
@@ -2933,18 +3110,18 @@ const App = () => {
                     <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-emerald-500 via-blue-500 to-purple-500 z-50"></div>
                     
                     {/* Left Side: Dark Dashboard */}
-                    <div className="w-full lg:w-[55%] lg:h-full bg-[#02050a] flex items-center justify-center relative min-h-[400px] lg:min-h-0 overflow-hidden">
+                    <div className="w-full lg:w-[55%] lg:h-full bg-[#02050a] flex items-center justify-center relative min-h-[260px] sm:min-h-[340px] lg:min-h-0 overflow-hidden">
                         <div className="hidden lg:block absolute top-0 right-0 w-[1px] h-full bg-cyan-500/20 z-50"></div>
-                        <div className="w-full h-full absolute inset-0 flex items-center justify-center p-4">
+                        <div className="w-full h-full absolute inset-0 flex items-center justify-center p-2 sm:p-4">
                             <HopeChart answers={mockAnswers} surveyQuestions={surveyQuestions} isBanner={true} />
                         </div>
                     </div>
                     
                     {/* Right Side: Welcome Text and Actions */}
-                    <div className="w-full lg:w-[45%] lg:h-full p-8 lg:p-12 flex flex-col justify-center lg:overflow-y-auto">
-                        <div className="text-left space-y-4 lg:space-y-6 text-slate-800 text-base lg:text-lg leading-relaxed">
+                    <div className="w-full lg:w-[45%] lg:h-full p-5 sm:p-8 lg:p-12 flex flex-col justify-center lg:overflow-y-auto">
+                        <div className="text-left space-y-3 sm:space-y-4 lg:space-y-6 text-slate-800 text-sm sm:text-base lg:text-lg leading-relaxed">
                             <div className="flex items-center justify-center gap-3">
-                                <h2 className="text-2xl lg:text-3xl text-center font-bold text-slate-900 tracking-tight">Welcome to the HoPE Index!</h2>
+                                <h2 className="text-xl sm:text-2xl lg:text-3xl text-center font-bold text-slate-900 tracking-tight">Welcome to the HoPE Index!</h2>
                                 <button
                                     type="button"
                                     onClick={() => speakHopeText("Welcome to the HoPE Index! Think of this as a visual dashboard that shows the fuel levels of your daily experience. Rate the level, not the player. Use the emojis to tell us how well your daily environments and spaces are supporting you today.")}
@@ -2957,28 +3134,29 @@ const App = () => {
                             </div>
                             <p>Think of this as a visual dashboard that shows the fuel levels of your daily experience. It is a creative workspace designed to show you where your daily routine has plenty of energy, and where energy is a little bit low, so you can find ways to get more fuel, together with your coach.</p>
                             
-                            <div className="space-y-4 pt-4 lg:pt-6 mt-4 lg:mt-6 border-t border-slate-100">
-                                <div className="text-center mb-4 lg:mb-5">
-                                    <h3 className="text-lg lg:text-xl font-bold text-slate-900 mb-1 lg:mb-2">
+                            <div className="space-y-3 sm:space-y-4 pt-3 sm:pt-4 lg:pt-6 mt-3 sm:mt-4 lg:mt-6 border-t border-slate-100">
+                                <div className="text-center mb-2 sm:mb-4 lg:mb-5">
+                                    <h3 className="text-base sm:text-lg lg:text-xl font-bold text-slate-900 mb-1 lg:mb-2">
                                         How to Complete this Survey
                                     </h3>
-                                    <h4 className="text-base lg:text-lg font-bold text-slate-800 flex items-center justify-center">
+                                    <h4 className="text-sm sm:text-base lg:text-lg font-bold text-slate-800 flex items-center justify-center">
                                         <span className="mr-2">🎮</span>Rate the Level, Not the Player!
                                     </h4>
                                 </div>
-                                <p className="text-base text-slate-700 opacity-90">Imagine you're playing a video game as a hero like Black Panther or Harry Potter. If your character gets stuck in a difficult level with broken equipment, you wouldn't blame them for struggling. You would simply understand that's the level that they're at.</p>
-                                <p className="text-base text-slate-700 opacity-90">In this survey, we want you to look at your spaces, resources, and relationships as if they were the levels and gear in a game. You are not rating your personal worth as a human. Instead, use the emojis to tell us how well your daily environments and spaces are supporting you today.</p>
+                                <p className="text-sm sm:text-base text-slate-700 opacity-90">Imagine you're playing a video game as a hero like Black Panther or Harry Potter. If your character gets stuck in a difficult level with broken equipment, you wouldn't blame them for struggling. You would simply understand that's the level that they're at.</p>
+                                <p className="text-sm sm:text-base text-slate-700 opacity-90">In this survey, we want you to look at your spaces, resources, and relationships as if they were the levels and gear in a game. You are not rating your personal worth as a human. Instead, use the emojis to tell us how well your daily environments and spaces are supporting you today.</p>
                             </div>
                         </div>
                         
-                        <div className="flex flex-col items-center justify-center gap-4 mt-10">
-                            {renderAuthWidget("w-full md:w-auto mb-2")}
+                        <div className="flex flex-col items-center justify-center gap-3 sm:gap-4 mt-6 sm:mt-10">
+                            {renderAuthWidget("w-full md:w-auto mb-1")}
                             <button type="button" onClick={() => { 
                                 stopHopeAudio();
                                 setResumeNoticeVisible(false);
                                 setStep('survey'); 
                                 setCurrentSelection(getAnswerScore(answers[surveyQuestions[currentQIndex]?.id]) ?? getAnswerScore(answers[surveyQuestions[0].id]) ?? null); 
-                            }} className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white px-10 py-4 rounded-full font-bold text-xl transition-all shadow-lg hover:shadow-[0_10px_25px_rgba(59,130,246,0.4)] flex items-center justify-center gap-3 w-full md:w-auto">
+                                scrollQuestionIntoView();
+                            }} className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white px-8 sm:px-10 py-3.5 sm:py-4 rounded-full font-bold text-lg sm:text-xl transition-all shadow-lg hover:shadow-[0_10px_25px_rgba(59,130,246,0.4)] flex items-center justify-center gap-3 w-full md:w-auto">
                                 Let's Begin 
                                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                             </button>
@@ -3013,35 +3191,37 @@ const App = () => {
 
     const q = surveyQuestions[currentQIndex];
     const progress = ((currentQIndex + 1) / surveyQuestions.length) * 100;
+    const livePreviewAnswers = { ...answers, [q.id]: currentSelection !== null ? currentSelection : (answers[q.id] ?? 0.0) };
+    const livePreviewScores = computeSurveyScores(livePreviewAnswers, surveyQuestions);
 
     return (
-        <main className="flex-grow w-full max-w-[1800px] mx-auto p-4 md:p-6 flex flex-col relative lg:overflow-hidden" style={{ minHeight: 'calc(100vh - 80px)' }}>
+        <main className="flex-grow w-full max-w-[1800px] mx-auto p-2.5 sm:p-4 md:p-6 flex flex-col relative overflow-x-hidden lg:overflow-hidden" style={{ minHeight: 'calc(100vh - 80px)' }}>
             {renderHeaderPortal()}
             {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} onLogin={() => {}} />}
             <AISettingsModal isOpen={showAISettings} onClose={() => setShowAISettings(false)} />
             {renderResumeBanner()}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 flex-grow items-stretch lg:h-full">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 md:gap-6 flex-grow items-stretch lg:h-full">
                 
                 {/* Left Panel - Survey Form (50%) */}
-                <div className="flex flex-col bg-white rounded-[2rem] shadow-2xl border border-slate-100 relative lg:h-full lg:min-h-0" style={{ transform: 'translateZ(0)' }}>
-                    <div className="p-4 md:p-6 pt-5 flex-grow flex flex-col lg:h-full">
+                <div className="flex flex-col bg-white rounded-3xl md:rounded-[2rem] shadow-2xl border border-slate-100 relative overflow-hidden lg:h-full lg:min-h-0" style={{ transform: 'translateZ(0)' }}>
+                    <div className="p-3.5 sm:p-5 md:p-6 pt-3.5 sm:pt-4 md:pt-5 flex-grow flex flex-col lg:h-full">
                         
                         {/* Visible Question X of 20 Progress Header & Bar */}
-                        <div className="mb-3 shrink-0">
-                            <div className="flex flex-wrap justify-between items-center gap-2 mb-2">
-                                <div className="inline-block bg-blue-50 text-blue-700 px-3 py-1 rounded-lg font-bold uppercase tracking-widest text-[10px] border border-blue-100">
+                        <div className="mb-2 md:mb-3 shrink-0">
+                            <div className="flex flex-wrap justify-between items-center gap-1.5 mb-1.5">
+                                <div className="inline-block bg-blue-50 text-blue-700 px-2.5 py-0.5 rounded-lg font-bold uppercase tracking-widest text-[10px] border border-blue-100">
                                     {q.space}
                                 </div>
-                                <div className="flex items-center gap-2">
-                                    <span className="text-xs font-extrabold text-slate-600 uppercase tracking-wider" data-testid="question-progress-label">
+                                <div className="flex items-center gap-1.5">
+                                    <span className="text-[11px] sm:text-xs font-extrabold text-slate-600 uppercase tracking-wider" data-testid="question-progress-label">
                                         Question {currentQIndex + 1} of {surveyQuestions.length}
                                     </span>
-                                    <span className="text-xs font-black text-blue-600 bg-blue-50 border border-blue-100 px-2.5 py-0.5 rounded-full">
+                                    <span className="text-[11px] sm:text-xs font-black text-blue-600 bg-blue-50 border border-blue-100 px-2 py-0.5 rounded-full">
                                         {Math.round(progress)}%
                                     </span>
                                 </div>
                             </div>
-                            <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden shadow-inner">
+                            <div className="w-full bg-slate-100 h-1.5 md:h-2 rounded-full overflow-hidden shadow-inner">
                                 <div
                                     className="bg-gradient-to-r from-emerald-400 via-blue-500 to-purple-600 h-full transition-all duration-500 ease-out rounded-full"
                                     style={{ width: `${progress}%` }}
@@ -3054,11 +3234,11 @@ const App = () => {
                         </div>
 
                         {/* Title & Concept */}
-                        <div className="mb-2 shrink-0 w-full flex items-start justify-between gap-3">
-                            <div>
-                                <div className="text-slate-400 font-bold text-sm tracking-wide mb-1">{q.dimension}</div>
-                                <h2 className="font-black text-slate-900 text-2xl md:text-3xl tracking-tight leading-tight mb-1">{q.title}</h2>
-                                {q.subtitle && <p className="text-slate-500 font-medium text-sm mb-2">{q.subtitle}</p>}
+                        <div className="mb-1.5 md:mb-2 shrink-0 w-full flex items-start justify-between gap-2.5">
+                            <div className="min-w-0">
+                                <div className="text-slate-400 font-bold text-xs md:text-sm tracking-wide mb-0.5">{q.dimension}</div>
+                                <h2 className="font-black text-slate-900 text-xl sm:text-2xl md:text-3xl tracking-tight leading-tight mb-0.5">{q.title}</h2>
+                                {q.subtitle && <p className="text-slate-500 font-medium text-xs sm:text-sm leading-snug mb-1">{q.subtitle}</p>}
                             </div>
                             <button
                                 type="button"
@@ -3092,11 +3272,11 @@ const App = () => {
                         </HopeEmojiSlider>
 
                         {/* Navigation Footer */}
-                        <div className="flex justify-between items-center mt-auto pt-3 border-t border-slate-100 shrink-0">
+                        <div className="flex justify-between items-center mt-auto pt-2 md:pt-3 border-t border-slate-100 shrink-0">
                             <button 
                                 type="button"
                                 onClick={handlePrevQ}
-                                className="text-slate-500 font-bold hover:text-slate-800 px-6 py-2 transition-colors flex items-center gap-2"
+                                className="text-slate-500 font-bold hover:text-slate-800 px-4 sm:px-6 py-2 transition-colors flex items-center gap-2 text-sm"
                             >
                                 <span>←</span> {currentQIndex === 0 ? 'Intro' : 'Back'}
                             </button>
@@ -3104,7 +3284,7 @@ const App = () => {
                                 type="button"
                                 onClick={handleNextQ}
                                 disabled={currentSelection === null}
-                                className={`px-6 py-2 rounded-full font-bold text-sm transition-all flex items-center gap-2 ${currentSelection === null ? 'bg-slate-100 text-slate-400 cursor-not-allowed' : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:-translate-y-1 shadow-md hover:shadow-lg'}`}
+                                className={`px-6 py-2.5 rounded-full font-bold text-sm transition-all flex items-center gap-2 ${currentSelection === null ? 'bg-slate-100 text-slate-400 cursor-not-allowed' : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:-translate-y-0.5 shadow-md hover:shadow-lg'}`}
                             >
                                 {currentQIndex === surveyQuestions.length - 1 ? 'Submit' : 'Next'} <span>→</span>
                             </button>
@@ -3112,14 +3292,40 @@ const App = () => {
                     </div>
                 </div>
 
-                {/* Right Panel - Live Visualization (50%) */}
-                <div className="flex flex-col w-full h-full relative rounded-[2rem] shadow-2xl overflow-hidden bg-[#02050a] border border-cyan-500/20 lg:min-h-0 min-h-[500px]">
+                {/* Mobile Collapsible Live Wheel Toggle Bar (< 1024px) */}
+                <div className="lg:hidden w-full">
+                    <button
+                        type="button"
+                        onClick={() => setShowMobileWheel(prev => !prev)}
+                        data-testid="mobile-wheel-toggle"
+                        aria-expanded={showMobileWheel}
+                        className="w-full bg-[#02050a] border border-cyan-500/30 rounded-2xl px-4 py-3 flex items-center justify-between text-left shadow-lg transition-all hover:border-cyan-400/60"
+                    >
+                        <div className="flex items-center gap-2.5 min-w-0">
+                            <span className="text-base shrink-0">🎯</span>
+                            <div className="min-w-0">
+                                <div className="text-cyan-300 font-extrabold text-[10px] uppercase tracking-widest">
+                                    Live HoPE Wheel &bull; {livePreviewScores.totalHoPEScore100}% Capacity
+                                </div>
+                                <div className="text-slate-300 text-xs font-semibold truncate">
+                                    OPS: {livePreviewScores.opsScore50}/50 &bull; IRS: {livePreviewScores.irsScore50}/50 &bull; {livePreviewScores.tierText}
+                                </div>
+                            </div>
+                        </div>
+                        <span className="shrink-0 ml-2 text-xs font-extrabold text-cyan-300 bg-cyan-500/15 border border-cyan-400/30 px-3 py-1.5 rounded-full">
+                            {showMobileWheel ? 'Hide Wheel ▲' : 'View Wheel ▼'}
+                        </span>
+                    </button>
+                </div>
+
+                {/* Right Panel - Live Visualization (50% on Desktop, Collapsible on Mobile) */}
+                <div className={`${showMobileWheel ? 'flex' : 'hidden'} lg:flex flex-col w-full h-full relative rounded-3xl md:rounded-[2rem] shadow-2xl overflow-hidden bg-[#02050a] border border-cyan-500/20 lg:min-h-0 min-h-[460px]`}>
                     <div className="absolute inset-0 pointer-events-none" style={{
                         backgroundImage: 'radial-gradient(circle at 50% 50%, rgba(0, 229, 255, 0.08) 0%, transparent 60%), linear-gradient(rgba(0, 229, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 229, 255, 0.03) 1px, transparent 1px)',
                         backgroundSize: '100% 100%, 30px 30px, 30px 30px',
                         backgroundPosition: 'center center'
                     }}></div>
-                    <HopeChart answers={{...answers, [q.id]: currentSelection !== null ? currentSelection : 0.0}} surveyQuestions={surveyQuestions} isFinal={false} />
+                    <HopeChart answers={livePreviewAnswers} surveyQuestions={surveyQuestions} isFinal={false} />
                 </div>
             </div>
         </main>
