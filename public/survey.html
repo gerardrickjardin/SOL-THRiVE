@@ -2262,7 +2262,10 @@
             document.getElementById('detailed-summary-card')?.classList.add('hidden');
             document.getElementById('thrive-cta')?.classList.add('hidden');
             document.getElementById('visual-title')?.classList.add('hidden');
+            document.getElementById('visual-anchor')?.classList.add('sticky', 'top-24');
+            document.getElementById('return-to-results-row')?.classList.add('hidden');
             document.getElementById('question-card')?.classList.remove('hidden');
+            renderQuestion();
 
             if (goToIntro) {
                 goToStep(0);

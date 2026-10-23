@@ -2647,7 +2647,7 @@ function loadSavedHopeSurveyState() {
         const hasReflections = Object.keys(refl).some((k) => String(refl[k] || '').trim().length > 0);
         const hasSelection = parsed.currentSelection !== null && parsed.currentSelection !== undefined;
         const hasHistory = hist.length > 0;
-        if (!hasAnswers && !hasReflections && !hasSelection && !hasHistory && (!parsed.step || parsed.step === 'intro')) {
+        if (!hasAnswers && !hasReflections && !hasSelection && !hasHistory) {
             return null;
         }
         const qIdx = Number.isInteger(parsed.currentQIndex) ? Math.max(0, Math.min(surveyQuestions.length - 1, parsed.currentQIndex)) : 0;
@@ -2709,7 +2709,8 @@ const App = () => {
             const hasAnswers = Object.keys(answers || {}).length > 0;
             const hasReflections = Object.keys(reflections || {}).some((k) => String(reflections[k] || '').trim().length > 0);
             const hasSelection = currentSelection !== null && currentSelection !== undefined;
-            if (!hasAnswers && !hasReflections && !hasSelection && step === 'intro') {
+            const hasHistory = Array.isArray(surveyHistory) && surveyHistory.length > 0;
+            if (!hasAnswers && !hasReflections && !hasSelection && !(hasHistory && (step === 'results' || step === 'dashboard'))) {
                 return;
             }
             localStorage.setItem(HOPE_SURVEY_STATE_KEY, JSON.stringify({
