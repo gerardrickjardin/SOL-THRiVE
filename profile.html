@@ -1416,7 +1416,8 @@ function normalizeSpeechSegment(text) {
   return String(text || '')
     .trim()
     .toLowerCase()
-    .replace(/[.,!?;:]+$/g, '')
+    .replace(/['’`]/g, "'")
+    .replace(/[.,!?;:]+/g, '')
     .replace(/\s+/g, ' ')
     .trim();
 }
@@ -1435,29 +1436,62 @@ function mergeTwoSpeechSegments(prev, next) {
   if (normPrev === normNext) {
     return nextTrimmed.length >= prevTrimmed.length ? nextTrimmed : prevTrimmed;
   }
-  if (normNext.startsWith(normPrev + ' ')) {
+  if (normNext.startsWith(normPrev + ' ') || normNext.startsWith(normPrev + "'")) {
     return nextTrimmed;
   }
-  if (normPrev.startsWith(normNext + ' ') || normPrev.endsWith(' ' + normNext)) {
+  if (normPrev.startsWith(normNext + ' ') || normPrev.startsWith(normNext + "'") || normPrev.endsWith(' ' + normNext)) {
     return prevTrimmed;
   }
 
   const prevWords = prevTrimmed.split(/\s+/);
   const nextWords = nextTrimmed.split(/\s+/);
+
+  let commonPrefix = 0;
+  const minLen = Math.min(prevWords.length, nextWords.length);
+  while (commonPrefix < minLen) {
+    const pw = normalizeSpeechSegment(prevWords[commonPrefix]);
+    const nw = normalizeSpeechSegment(nextWords[commonPrefix]);
+    if (pw && nw && (pw === nw || nw.startsWith(pw + "'") || pw.startsWith(nw + "'"))) {
+      commonPrefix++;
+    } else {
+      break;
+    }
+  }
+  if (commonPrefix > 0 && commonPrefix >= prevWords.length - 1 && nextWords.length >= prevWords.length) {
+    if (commonPrefix >= 2) {
+      return nextTrimmed;
+    }
+    const lastPw = normalizeSpeechSegment(prevWords[prevWords.length - 1]);
+    const corrNw = normalizeSpeechSegment(nextWords[commonPrefix]);
+    if (lastPw && corrNw && lastPw.length >= 3 && corrNw.length >= 3 && (corrNw.startsWith(lastPw) || lastPw.startsWith(corrNw))) {
+      return nextTrimmed;
+    }
+  }
+
   const maxOverlap = Math.min(prevWords.length, nextWords.length);
   for (let len = maxOverlap; len >= 1; len--) {
-    if (len === 1 && /[.!?]$/.test(prevTrimmed)) continue;
     let matches = true;
     for (let i = 0; i < len; i++) {
       const pw = normalizeSpeechSegment(prevWords[prevWords.length - len + i]);
       const nw = normalizeSpeechSegment(nextWords[i]);
-      if (!pw || pw !== nw) {
+      const isLastOverlapWord = i === len - 1;
+      const wordMatch = pw && nw && (
+        pw === nw ||
+        (isLastOverlapWord && (
+          nw.startsWith(pw + "'") ||
+          ((len >= 2 || pw.length >= 4) && pw.length >= 3 && nw.length >= 3 && nw.startsWith(pw))
+        ))
+      );
+      if (!wordMatch) {
         matches = false;
         break;
       }
     }
     if (matches) {
-      return prevWords.concat(nextWords.slice(len)).join(' ');
+      if (nextWords.length === len) {
+        return prevTrimmed;
+      }
+      return prevWords.slice(0, prevWords.length - len).concat(nextWords).join(' ');
     }
   }
 
@@ -1494,12 +1528,12 @@ function buildDeduplicatedTranscript(results) {
         handledBySuffix = true;
         break;
       }
-      if (normSeg.startsWith(normTail + ' ')) {
+      if (normSeg.startsWith(normTail + ' ') || normSeg.startsWith(normTail + "'")) {
         kept.splice(k, kept.length - k, seg);
         handledBySuffix = true;
         break;
       }
-      if (normTail.startsWith(normSeg + ' ') || normTail.endsWith(' ' + normSeg)) {
+      if (normTail.startsWith(normSeg + ' ') || normTail.startsWith(normSeg + "'") || normTail.endsWith(' ' + normSeg)) {
         handledBySuffix = true;
         break;
       }
@@ -1511,11 +1545,51 @@ function buildDeduplicatedTranscript(results) {
     const merged = mergeTwoSpeechSegments(prev, seg);
     if (merged !== prev + ' ' + seg) {
       kept[kept.length - 1] = merged;
+    } else if (kept.length > 1) {
+      const fullPrev = kept.join(' ');
+      const fullMerged = mergeTwoSpeechSegments(fullPrev, seg);
+      if (fullMerged !== fullPrev + ' ' + seg) {
+        kept.splice(0, kept.length, fullMerged);
+      } else {
+        kept.push(seg);
+      }
     } else {
       kept.push(seg);
     }
   }
   return kept.join(' ').replace(/\s+/g, ' ').trim();
+}
+
+function stripConsumedSpeechPrefix(rawTranscript, consumedPrefix) {
+  const rawTrimmed = String(rawTranscript || '').trim();
+  const prefTrimmed = String(consumedPrefix || '').trim();
+  if (!rawTrimmed || !prefTrimmed) return rawTrimmed;
+
+  const normRaw = normalizeSpeechSegment(rawTrimmed);
+  const normPref = normalizeSpeechSegment(prefTrimmed);
+  if (!normPref) return rawTrimmed;
+  if (normRaw === normPref || normPref.startsWith(normRaw + ' ')) return '';
+
+  const rawWords = rawTrimmed.split(/\s+/);
+  const prefWords = prefTrimmed.split(/\s+/);
+  let matchCount = 0;
+  const maxCheck = Math.min(rawWords.length, prefWords.length);
+  while (matchCount < maxCheck) {
+    const rw = normalizeSpeechSegment(rawWords[matchCount]);
+    const pw = normalizeSpeechSegment(prefWords[matchCount]);
+    if (rw && pw && (rw === pw || rw.startsWith(pw + "'") || pw.startsWith(rw + "'"))) {
+      matchCount++;
+    } else {
+      break;
+    }
+  }
+  if (matchCount >= prefWords.length) {
+    return rawWords.slice(prefWords.length).join(' ').trim();
+  }
+  if (matchCount > 0 && matchCount >= prefWords.length - 1 && rawWords.length > prefWords.length) {
+    return rawWords.slice(prefWords.length).join(' ').trim();
+  }
+  return rawTrimmed;
 }
 
 function combineDictationText(baseText, sessionTranscript) {
@@ -1546,6 +1620,8 @@ function ChatSection({ section, stepNumber, initialDraft, hasApprovedSection, on
   const onDraftChangeRef = useRef(onDraftChange);
   const sessionBaseTextRef = useRef((initialDraft || '').replace(/[ \t]+$/, ''));
   const latestSessionTranscriptRef = useRef('');
+  const lastRawSessionTranscriptRef = useRef('');
+  const sessionConsumedPrefixRef = useRef('');
   const isListeningRef = useRef(false);
 
   useEffect(() => {
@@ -1564,12 +1640,20 @@ function ChatSection({ section, stepNumber, initialDraft, hasApprovedSection, on
     draftRef.current = nextInitial;
     sessionBaseTextRef.current = nextInitial.replace(/[ \t]+$/, '');
     latestSessionTranscriptRef.current = '';
+    lastRawSessionTranscriptRef.current = '';
+    sessionConsumedPrefixRef.current = '';
     setChatState(hasApprovedSection ? 'approval' : 'initial'); 
     isListeningRef.current = false;
     setIsListening(false);
     setIsSpeaking(false);
     if (recognitionRef.current) {
-      try { recognitionRef.current.stop(); } catch (e) {}
+      try {
+        if (typeof recognitionRef.current.abort === 'function') {
+          recognitionRef.current.abort();
+        } else {
+          recognitionRef.current.stop();
+        }
+      } catch (e) {}
     }
   }, [section.key]);
 
@@ -1589,9 +1673,13 @@ function ChatSection({ section, stepNumber, initialDraft, hasApprovedSection, on
       recognition.interimResults = true;
       
       recognition.onresult = (event) => {
-        const sessionTranscript = buildDeduplicatedTranscript(event.results);
+        if (!isListeningRef.current) return;
+        const rawTranscript = buildDeduplicatedTranscript(event.results);
+        lastRawSessionTranscriptRef.current = rawTranscript;
+        const sessionTranscript = stripConsumedSpeechPrefix(rawTranscript, sessionConsumedPrefixRef.current);
+        const prevTranscript = latestSessionTranscriptRef.current;
         latestSessionTranscriptRef.current = sessionTranscript;
-        if (sessionTranscript) {
+        if (sessionTranscript || prevTranscript) {
           const nextText = combineDictationText(sessionBaseTextRef.current, sessionTranscript);
           updateDraftValue(nextText);
         }
@@ -1600,22 +1688,29 @@ function ChatSection({ section, stepNumber, initialDraft, hasApprovedSection, on
       recognition.onerror = (e) => {
         console.error("Speech Recognition Error", e);
         isListeningRef.current = false;
+        latestSessionTranscriptRef.current = '';
+        lastRawSessionTranscriptRef.current = '';
+        sessionConsumedPrefixRef.current = '';
         setIsListening(false);
       };
 
       recognition.onend = () => {
+        if (!isListeningRef.current) {
+          setIsListening(false);
+          return;
+        }
         const committed = latestSessionTranscriptRef.current
           ? combineDictationText(sessionBaseTextRef.current, latestSessionTranscriptRef.current)
           : (draftRef.current || '');
         draftRef.current = committed;
         sessionBaseTextRef.current = committed.replace(/[ \t]+$/, '');
         latestSessionTranscriptRef.current = '';
-        if (isListeningRef.current) {
-          try {
-            recognition.start();
-            return;
-          } catch (e) {}
-        }
+        lastRawSessionTranscriptRef.current = '';
+        sessionConsumedPrefixRef.current = '';
+        try {
+          recognition.start();
+          return;
+        } catch (e) {}
         isListeningRef.current = false;
         setIsListening(false);
       };
@@ -1626,7 +1721,13 @@ function ChatSection({ section, stepNumber, initialDraft, hasApprovedSection, on
     return () => {
       isListeningRef.current = false;
       if (recognitionRef.current) {
-        try { recognitionRef.current.stop(); } catch (e) {}
+        try {
+          if (typeof recognitionRef.current.abort === 'function') {
+            recognitionRef.current.abort();
+          } else {
+            recognitionRef.current.stop();
+          }
+        } catch (e) {}
       }
       stopGlobalAudio();
     };
@@ -1644,6 +1745,8 @@ function ChatSection({ section, stepNumber, initialDraft, hasApprovedSection, on
     if (isListening) {
       isListeningRef.current = false;
       latestSessionTranscriptRef.current = '';
+      lastRawSessionTranscriptRef.current = '';
+      sessionConsumedPrefixRef.current = '';
       try { recognitionRef.current.stop(); } catch (e) {}
       setIsListening(false);
     } else {
@@ -1651,6 +1754,8 @@ function ChatSection({ section, stepNumber, initialDraft, hasApprovedSection, on
       setIsSpeaking(false);
       sessionBaseTextRef.current = (draftRef.current || '').replace(/[ \t]+$/, '');
       latestSessionTranscriptRef.current = '';
+      lastRawSessionTranscriptRef.current = '';
+      sessionConsumedPrefixRef.current = '';
       if (textAreaRef.current) textAreaRef.current.blur();
       try {
         isListeningRef.current = true;
@@ -1679,6 +1784,8 @@ function ChatSection({ section, stepNumber, initialDraft, hasApprovedSection, on
     if (isListening && recognitionRef.current) {
       isListeningRef.current = false;
       latestSessionTranscriptRef.current = '';
+      lastRawSessionTranscriptRef.current = '';
+      sessionConsumedPrefixRef.current = '';
       try { recognitionRef.current.stop(); } catch (e) {}
       setIsListening(false);
     }
@@ -1686,6 +1793,8 @@ function ChatSection({ section, stepNumber, initialDraft, hasApprovedSection, on
     const cleaned = await cleanTextWithGemini(draft, geminiKey);
     sessionBaseTextRef.current = String(cleaned || '').replace(/[ \t]+$/, '');
     latestSessionTranscriptRef.current = '';
+    lastRawSessionTranscriptRef.current = '';
+    sessionConsumedPrefixRef.current = '';
     updateDraftValue(cleaned);
     setChatState('approval');
   };
@@ -1799,6 +1908,7 @@ function ChatSection({ section, stepNumber, initialDraft, hasApprovedSection, on
           onChange={(e) => {
             const nextVal = e.target.value;
             sessionBaseTextRef.current = nextVal.replace(/[ \t]+$/, '');
+            sessionConsumedPrefixRef.current = lastRawSessionTranscriptRef.current;
             latestSessionTranscriptRef.current = '';
             updateDraftValue(nextVal);
           }}

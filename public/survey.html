@@ -1026,13 +1026,16 @@
         let isRecording = false;
         let dictationSessionBaseText = '';
         let latestSessionTranscript = '';
+        let lastRawSessionTranscript = '';
+        let dictationConsumedPrefix = '';
         let isUpdatingFromSpeech = false;
 
         function normalizeSpeechSegment(text) {
             return String(text || '')
                 .trim()
                 .toLowerCase()
-                .replace(/[.,!?;:]+$/g, '')
+                .replace(/['’`]/g, "'")
+                .replace(/[.,!?;:]+/g, '')
                 .replace(/\s+/g, ' ')
                 .trim();
         }
@@ -1051,29 +1054,62 @@
             if (normPrev === normNext) {
                 return nextTrimmed.length >= prevTrimmed.length ? nextTrimmed : prevTrimmed;
             }
-            if (normNext.startsWith(normPrev + ' ')) {
+            if (normNext.startsWith(normPrev + ' ') || normNext.startsWith(normPrev + "'")) {
                 return nextTrimmed;
             }
-            if (normPrev.startsWith(normNext + ' ') || normPrev.endsWith(' ' + normNext)) {
+            if (normPrev.startsWith(normNext + ' ') || normPrev.startsWith(normNext + "'") || normPrev.endsWith(' ' + normNext)) {
                 return prevTrimmed;
             }
 
             const prevWords = prevTrimmed.split(/\s+/);
             const nextWords = nextTrimmed.split(/\s+/);
+
+            let commonPrefix = 0;
+            const minLen = Math.min(prevWords.length, nextWords.length);
+            while (commonPrefix < minLen) {
+                const pw = normalizeSpeechSegment(prevWords[commonPrefix]);
+                const nw = normalizeSpeechSegment(nextWords[commonPrefix]);
+                if (pw && nw && (pw === nw || nw.startsWith(pw + "'") || pw.startsWith(nw + "'"))) {
+                    commonPrefix++;
+                } else {
+                    break;
+                }
+            }
+            if (commonPrefix > 0 && commonPrefix >= prevWords.length - 1 && nextWords.length >= prevWords.length) {
+                if (commonPrefix >= 2) {
+                    return nextTrimmed;
+                }
+                const lastPw = normalizeSpeechSegment(prevWords[prevWords.length - 1]);
+                const corrNw = normalizeSpeechSegment(nextWords[commonPrefix]);
+                if (lastPw && corrNw && lastPw.length >= 3 && corrNw.length >= 3 && (corrNw.startsWith(lastPw) || lastPw.startsWith(corrNw))) {
+                    return nextTrimmed;
+                }
+            }
+
             const maxOverlap = Math.min(prevWords.length, nextWords.length);
             for (let len = maxOverlap; len >= 1; len--) {
-                if (len === 1 && /[.!?]$/.test(prevTrimmed)) continue;
                 let matches = true;
                 for (let i = 0; i < len; i++) {
                     const pw = normalizeSpeechSegment(prevWords[prevWords.length - len + i]);
                     const nw = normalizeSpeechSegment(nextWords[i]);
-                    if (!pw || pw !== nw) {
+                    const isLastOverlapWord = i === len - 1;
+                    const wordMatch = pw && nw && (
+                        pw === nw ||
+                        (isLastOverlapWord && (
+                            nw.startsWith(pw + "'") ||
+                            ((len >= 2 || pw.length >= 4) && pw.length >= 3 && nw.length >= 3 && nw.startsWith(pw))
+                        ))
+                    );
+                    if (!wordMatch) {
                         matches = false;
                         break;
                     }
                 }
                 if (matches) {
-                    return prevWords.concat(nextWords.slice(len)).join(' ');
+                    if (nextWords.length === len) {
+                        return prevTrimmed;
+                    }
+                    return prevWords.slice(0, prevWords.length - len).concat(nextWords).join(' ');
                 }
             }
 
@@ -1110,12 +1146,12 @@
                         handledBySuffix = true;
                         break;
                     }
-                    if (normSeg.startsWith(normTail + ' ')) {
+                    if (normSeg.startsWith(normTail + ' ') || normSeg.startsWith(normTail + "'")) {
                         kept.splice(k, kept.length - k, seg);
                         handledBySuffix = true;
                         break;
                     }
-                    if (normTail.startsWith(normSeg + ' ') || normTail.endsWith(' ' + normSeg)) {
+                    if (normTail.startsWith(normSeg + ' ') || normTail.startsWith(normSeg + "'") || normTail.endsWith(' ' + normSeg)) {
                         handledBySuffix = true;
                         break;
                     }
@@ -1127,11 +1163,51 @@
                 const merged = mergeTwoSpeechSegments(prev, seg);
                 if (merged !== prev + ' ' + seg) {
                     kept[kept.length - 1] = merged;
+                } else if (kept.length > 1) {
+                    const fullPrev = kept.join(' ');
+                    const fullMerged = mergeTwoSpeechSegments(fullPrev, seg);
+                    if (fullMerged !== fullPrev + ' ' + seg) {
+                        kept.splice(0, kept.length, fullMerged);
+                    } else {
+                        kept.push(seg);
+                    }
                 } else {
                     kept.push(seg);
                 }
             }
             return kept.join(' ').replace(/\s+/g, ' ').trim();
+        }
+
+        function stripConsumedSpeechPrefix(rawTranscript, consumedPrefix) {
+            const rawTrimmed = String(rawTranscript || '').trim();
+            const prefTrimmed = String(consumedPrefix || '').trim();
+            if (!rawTrimmed || !prefTrimmed) return rawTrimmed;
+
+            const normRaw = normalizeSpeechSegment(rawTrimmed);
+            const normPref = normalizeSpeechSegment(prefTrimmed);
+            if (!normPref) return rawTrimmed;
+            if (normRaw === normPref || normPref.startsWith(normRaw + ' ')) return '';
+
+            const rawWords = rawTrimmed.split(/\s+/);
+            const prefWords = prefTrimmed.split(/\s+/);
+            let matchCount = 0;
+            const maxCheck = Math.min(rawWords.length, prefWords.length);
+            while (matchCount < maxCheck) {
+                const rw = normalizeSpeechSegment(rawWords[matchCount]);
+                const pw = normalizeSpeechSegment(prefWords[matchCount]);
+                if (rw && pw && (rw === pw || rw.startsWith(pw + "'") || pw.startsWith(rw + "'"))) {
+                    matchCount++;
+                } else {
+                    break;
+                }
+            }
+            if (matchCount >= prefWords.length) {
+                return rawWords.slice(prefWords.length).join(' ').trim();
+            }
+            if (matchCount > 0 && matchCount >= prefWords.length - 1 && rawWords.length > prefWords.length) {
+                return rawWords.slice(prefWords.length).join(' ').trim();
+            }
+            return rawTrimmed;
         }
 
         function combineDictationText(baseText, sessionTranscript) {
@@ -1165,11 +1241,15 @@
                 recognition.interimResults = true;
 
                 recognition.onresult = (event) => {
+                    if (!isRecording) return;
                     const activeTextArea = document.getElementById('problem-description') || textArea;
                     if (!activeTextArea) return;
-                    const sessionTranscript = buildDeduplicatedTranscript(event.results);
+                    const rawTranscript = buildDeduplicatedTranscript(event.results);
+                    lastRawSessionTranscript = rawTranscript;
+                    const sessionTranscript = stripConsumedSpeechPrefix(rawTranscript, dictationConsumedPrefix);
+                    const prevTranscript = latestSessionTranscript;
                     latestSessionTranscript = sessionTranscript;
-                    if (sessionTranscript) {
+                    if (sessionTranscript || prevTranscript) {
                         isUpdatingFromSpeech = true;
                         activeTextArea.value = combineDictationText(dictationSessionBaseText, sessionTranscript);
                         clearStep1Error();
@@ -1190,6 +1270,8 @@
                             ? activeTextArea.value.replace(/[ \t]+$/, '')
                             : combineDictationText(dictationSessionBaseText, latestSessionTranscript);
                         latestSessionTranscript = '';
+                        lastRawSessionTranscript = '';
+                        dictationConsumedPrefix = '';
                         try {
                             recognition.start();
                         } catch (e) {
@@ -1215,6 +1297,8 @@
                 dictationSessionBaseText = '';
             }
             latestSessionTranscript = '';
+            lastRawSessionTranscript = '';
+            dictationConsumedPrefix = '';
             stopCurrentAudio();
             isRecording = true;
             try {
@@ -1231,6 +1315,8 @@
             if (!isRecording) return;
             isRecording = false;
             latestSessionTranscript = '';
+            lastRawSessionTranscript = '';
+            dictationConsumedPrefix = '';
             try {
                 if (recognition) recognition.stop();
             } catch (e) {}
@@ -1337,6 +1423,7 @@
                 textArea.classList.remove('border-rose-500', 'ring-4', 'ring-rose-100');
                 if (!isUpdatingFromSpeech) {
                     dictationSessionBaseText = textArea.value.replace(/[ \t]+$/, '');
+                    dictationConsumedPrefix = lastRawSessionTranscript;
                     latestSessionTranscript = '';
                 }
             }
