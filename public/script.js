@@ -805,41 +805,126 @@ const initThriveUI = () => {
         });
     };
 
+    const isShareAbortError = (err) => {
+        if (!err) return false;
+        const name = String(err.name || '');
+        const msg = String(err.message || '').toLowerCase();
+        return name === 'AbortError' || msg.includes('aborterror') || msg.includes('cancel') || msg.includes('aborted');
+    };
+
+    const canNativeShare = (sharePayload) => {
+        if (typeof navigator === 'undefined' || typeof navigator.share !== 'function') {
+            return false;
+        }
+        if (typeof navigator.canShare === 'function' && sharePayload) {
+            try {
+                return Boolean(navigator.canShare(sharePayload));
+            } catch (_) {
+                return true;
+            }
+        }
+        return true;
+    };
+
+    const setDossierBtnFeedback = (triggerBtn, feedbackText, fallbackDefaultLabel) => {
+        if (!triggerBtn || typeof triggerBtn !== 'object' || !('textContent' in triggerBtn)) return;
+        const labelEl = typeof triggerBtn.querySelector === 'function'
+            ? (triggerBtn.querySelector('.master-prompt-btn-label') || triggerBtn.querySelector('.share-btn-label'))
+            : null;
+        if (!triggerBtn.dataset) triggerBtn.dataset = {};
+        if (!triggerBtn.dataset.defaultLabel) {
+            triggerBtn.dataset.defaultLabel = labelEl ? labelEl.textContent : String(triggerBtn.textContent || '').trim();
+        }
+        if (triggerBtn.classList && typeof triggerBtn.classList.add === 'function') {
+            triggerBtn.classList.add('is-copied');
+        }
+        if (labelEl) {
+            labelEl.textContent = feedbackText;
+        } else {
+            triggerBtn.textContent = feedbackText;
+        }
+
+        if (triggerBtn._dossierTimeout) {
+            clearTimeout(triggerBtn._dossierTimeout);
+        }
+        triggerBtn._dossierTimeout = setTimeout(() => {
+            if (triggerBtn.classList && typeof triggerBtn.classList.remove === 'function') {
+                triggerBtn.classList.remove('is-copied');
+            }
+            const orig = triggerBtn.dataset.defaultLabel || fallbackDefaultLabel;
+            if (labelEl) {
+                labelEl.textContent = orig;
+            } else {
+                triggerBtn.textContent = orig;
+            }
+        }, 2500);
+    };
+
     const copyMasterPrompt = async (triggerBtn, customDossier) => {
         const promptText = buildMasterPrompt(customDossier);
         const ok = await copyTextWithFallback(promptText);
+        setDossierBtnFeedback(
+            triggerBtn,
+            ok ? 'Copied ✓' : 'Copied to Clipboard ✓',
+            '📋 Copy Master AI Coaching Prompt'
+        );
+        return { ok, method: 'clipboard', shared: false, copied: ok, canceled: false, promptText };
+    };
 
-        if (triggerBtn && typeof triggerBtn === 'object' && 'textContent' in triggerBtn) {
-            const labelEl = typeof triggerBtn.querySelector === 'function' ? triggerBtn.querySelector('.master-prompt-btn-label') : null;
-            if (!triggerBtn.dataset) triggerBtn.dataset = {};
-            if (!triggerBtn.dataset.defaultLabel) {
-                triggerBtn.dataset.defaultLabel = labelEl ? labelEl.textContent : String(triggerBtn.textContent || '').trim();
-            }
-            if (triggerBtn.classList && typeof triggerBtn.classList.add === 'function') {
-                triggerBtn.classList.add('is-copied');
-            }
-            const copiedText = ok ? 'Copied ✓' : 'Copied to Clipboard ✓';
-            if (labelEl) {
-                labelEl.textContent = copiedText;
-            } else {
-                triggerBtn.textContent = copiedText;
-            }
+    const shareWithFallback = async (sharePayload = {}, triggerBtn = null, options = {}) => {
+        const cleanPayload = {};
+        if (sharePayload.title) cleanPayload.title = String(sharePayload.title);
+        if (sharePayload.text) cleanPayload.text = String(sharePayload.text);
+        if (sharePayload.url) cleanPayload.url = String(sharePayload.url);
 
-            if (triggerBtn._dossierTimeout) {
-                clearTimeout(triggerBtn._dossierTimeout);
-            }
-            triggerBtn._dossierTimeout = setTimeout(() => {
-                triggerBtn.classList.remove('is-copied');
-                const orig = triggerBtn.dataset.defaultLabel || '📋 Copy Master AI Coaching Prompt';
-                if (labelEl) {
-                    labelEl.textContent = orig;
-                } else {
-                    triggerBtn.textContent = orig;
-                }
-            }, 2500);
+        const fallbackText = options.fallbackText != null
+            ? String(options.fallbackText)
+            : [cleanPayload.text, cleanPayload.url].filter(Boolean).join('\n');
+        const defaultLabel = options.defaultLabel || '📤 Share Dossier';
+        const sharedLabel = options.sharedLabel || 'Shared ✓';
+        const copiedLabel = options.copiedLabel || 'Copied ✓';
+
+        if (triggerBtn && triggerBtn._isSharing) {
+            return { ok: false, method: 'share', shared: false, copied: false, canceled: true, text: fallbackText };
         }
 
-        return { ok, promptText };
+        if (canNativeShare(cleanPayload)) {
+            if (triggerBtn) triggerBtn._isSharing = true;
+            try {
+                await navigator.share(cleanPayload);
+                setDossierBtnFeedback(triggerBtn, sharedLabel, defaultLabel);
+                return { ok: true, method: 'share', shared: true, copied: false, canceled: false, text: fallbackText };
+            } catch (err) {
+                if (isShareAbortError(err)) {
+                    return { ok: false, method: 'share', shared: false, copied: false, canceled: true, text: fallbackText };
+                }
+                // Non-AbortError falls through to clipboard fallback
+            } finally {
+                if (triggerBtn) triggerBtn._isSharing = false;
+            }
+        }
+
+        const ok = await copyTextWithFallback(fallbackText);
+        setDossierBtnFeedback(triggerBtn, ok ? copiedLabel : 'Copied to Clipboard ✓', defaultLabel);
+        return { ok, method: 'clipboard', shared: false, copied: ok, canceled: false, text: fallbackText };
+    };
+
+    const shareMasterPrompt = async (triggerBtn, customDossier) => {
+        const promptText = buildMasterPrompt(customDossier);
+        const res = await shareWithFallback(
+            {
+                title: 'SOL THRiVE • Master AI Coaching Dossier',
+                text: promptText
+            },
+            triggerBtn,
+            {
+                fallbackText: promptText,
+                defaultLabel: '📤 Share Dossier',
+                sharedLabel: 'Shared ✓',
+                copiedLabel: 'Copied ✓'
+            }
+        );
+        return { ...res, promptText };
     };
 
     window.ThriveCoachingDossier = {
@@ -851,12 +936,25 @@ const initThriveUI = () => {
         getSummaryStatus: getCompletionSummary,
         buildMasterPrompt,
         copyMasterPrompt,
+        shareMasterPrompt,
+        shareWithFallback,
+        canNativeShare,
+        copyTextWithFallback,
         refreshStatusBadges,
         refreshPageUI: refreshStatusBadges
     };
 
     if (typeof document !== 'undefined') {
         document.addEventListener('click', (e) => {
+            const shareBtn = e.target && typeof e.target.closest === 'function'
+                ? e.target.closest('.share-master-prompt-btn, [data-share-master-prompt]')
+                : null;
+            if (shareBtn && !shareBtn.hasAttribute('data-react-handled')) {
+                e.preventDefault();
+                shareMasterPrompt(shareBtn);
+                return;
+            }
+
             const btn = e.target && typeof e.target.closest === 'function'
                 ? e.target.closest('.copy-master-prompt-btn')
                 : null;

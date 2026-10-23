@@ -1906,6 +1906,14 @@ const HopeChart = ({ answers, surveyQuestions, isFinal, onViewDashboard, onRetak
                                 </button>
                                 <button
                                     type="button"
+                                    id="results-share-dossier-btn"
+                                    data-share-master-prompt="true"
+                                    className="share-master-prompt-btn"
+                                >
+                                    📤 Share Dossier
+                                </button>
+                                <button
+                                    type="button"
                                     onClick={() => window.print()}
                                     className="px-6 py-3 bg-[#0a1526] border-2 border-cyan-400/60 text-cyan-300 font-bold rounded-full hover:bg-cyan-500/15 hover:border-cyan-300 transition-all shadow-lg tracking-wide uppercase text-xs flex items-center gap-2"
                                 >
@@ -2421,6 +2429,14 @@ const Dashboard = ({ user, history, onRetake, onViewLatestReport, onOpenAuth }) 
                             className="copy-master-prompt-btn"
                         >
                             📋 Copy Master AI Coaching Prompt
+                        </button>
+                        <button
+                            type="button"
+                            id="dashboard-share-dossier-btn"
+                            data-share-master-prompt="true"
+                            className="share-master-prompt-btn"
+                        >
+                            📤 Share Dossier
                         </button>
                         {onViewLatestReport && (
                             <button

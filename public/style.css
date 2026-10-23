@@ -2486,12 +2486,50 @@ button.copy-master-prompt-btn:hover,
 }
 
 button.copy-master-prompt-btn.is-copied,
-.copy-master-prompt-btn.is-copied {
+.copy-master-prompt-btn.is-copied,
+button.share-master-prompt-btn.is-copied,
+.share-master-prompt-btn.is-copied {
     background: #059669 !important;
     background-color: #059669 !important;
     background-image: none !important;
     color: #ffffff !important;
     border-color: #1E2430 !important;
+}
+
+button.share-master-prompt-btn,
+.share-master-prompt-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.85rem 1.45rem;
+    border-radius: 999px;
+    font-family: var(--font-heading, 'Nunito', sans-serif);
+    font-size: 0.94rem;
+    font-weight: 800;
+    color: var(--ink-border, #1E2430);
+    background-color: #FAF8F3;
+    border: 2px solid var(--ink-border, #1E2430);
+    box-shadow: 4px 4px 0 var(--ink-border, #1E2430);
+    cursor: pointer;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, color 0.18s ease;
+    text-decoration: none;
+    line-height: 1.2;
+}
+
+button.share-master-prompt-btn:hover,
+.share-master-prompt-btn:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--ink-border, #1E2430);
+    background-color: #F2ECE1;
+}
+
+.dossier-cta-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
 }
 
 .dossier-cta-bar {
@@ -2514,6 +2552,9 @@ button.copy-master-prompt-btn.is-copied,
         flex-direction: column;
         text-align: center;
         align-items: center;
+    }
+    .dossier-cta-actions {
+        width: 100%;
     }
 }
 

@@ -2060,6 +2060,9 @@ function FinalReport({ data, userDetails, onCopy, copied, onBack, onReset, onUpd
   const [editingSectionKey, setEditingSectionKey] = useState(null);
   const [editDraft, setEditDraft] = useState('');
   const [savedSectionKey, setSavedSectionKey] = useState(null);
+  const [shareReportStatus, setShareReportStatus] = useState(null);
+  const isSharingReportRef = useRef(false);
+  const shareReportTimerRef = useRef(null);
 
   useEffect(() => {
     if (window.ThriveCoachingDossier && typeof window.ThriveCoachingDossier.saveThriveReport === 'function') {
@@ -2069,6 +2072,78 @@ function FinalReport({ data, userDetails, onCopy, copied, onBack, onReset, onUpd
       });
     }
   }, [data, userDetails]);
+
+  useEffect(() => {
+    return () => {
+      if (shareReportTimerRef.current) clearTimeout(shareReportTimerRef.current);
+    };
+  }, []);
+
+  const buildFormattedReportText = () => {
+    const headerTitle = userDetails?.interviewee ? `${userDetails.interviewee.toUpperCase()}'S THRIVE REPORT` : "MY THRiVE REPORT";
+    const interviewerInfo = userDetails?.interviewer ? ` • Interviewed by ${userDetails.interviewer}` : "";
+    let reportText = `${headerTitle}\nCreated by Dr. Steve Huff • Based on the Strengths Model • Powered by Gemini${interviewerInfo}\n\n`;
+    SECTIONS.forEach(sec => {
+      reportText += `${sec.title}\n${data[sec.key] || 'No data provided.'}\n\n`;
+    });
+    return { headerTitle, reportText: reportText.trim() };
+  };
+
+  const handleShareReport = async () => {
+    if (isSharingReportRef.current) return;
+    const { headerTitle, reportText } = buildFormattedReportText();
+    const sharePayload = { title: headerTitle, text: reportText };
+    const canShareNative = (() => {
+      if (typeof navigator === 'undefined' || typeof navigator.share !== 'function') return false;
+      if (typeof navigator.canShare === 'function') {
+        try { return Boolean(navigator.canShare(sharePayload)); } catch (_) { return true; }
+      }
+      return true;
+    })();
+
+    if (canShareNative) {
+      isSharingReportRef.current = true;
+      try {
+        await navigator.share(sharePayload);
+        setShareReportStatus('shared');
+        if (shareReportTimerRef.current) clearTimeout(shareReportTimerRef.current);
+        shareReportTimerRef.current = setTimeout(() => setShareReportStatus(null), 3000);
+        return;
+      } catch (err) {
+        const name = String(err?.name || '');
+        const msg = String(err?.message || '').toLowerCase();
+        if (name === 'AbortError' || msg.includes('aborterror') || msg.includes('cancel') || msg.includes('aborted')) {
+          return;
+        }
+        // Non-AbortError falls through to clipboard fallback
+      } finally {
+        isSharingReportRef.current = false;
+      }
+    }
+
+    let copiedOk = false;
+    if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+      try {
+        await navigator.clipboard.writeText(reportText);
+        copiedOk = true;
+      } catch (_) {}
+    }
+    if (!copiedOk) {
+      const el = document.createElement('textarea');
+      el.value = reportText;
+      el.setAttribute('readonly', '');
+      el.style.position = 'fixed';
+      el.style.top = '-9999px';
+      el.style.opacity = '0';
+      document.body.appendChild(el);
+      el.select();
+      try { document.execCommand('copy'); } catch (_) {}
+      document.body.removeChild(el);
+    }
+    setShareReportStatus('copied');
+    if (shareReportTimerRef.current) clearTimeout(shareReportTimerRef.current);
+    shareReportTimerRef.current = setTimeout(() => setShareReportStatus(null), 3000);
+  };
 
   const handleSaveCloud = () => {
     if (onPersistReport) onPersistReport();
@@ -2220,17 +2295,35 @@ function FinalReport({ data, userDetails, onCopy, copied, onBack, onReset, onUpd
           >
             {copied ? <><CheckIcon className="w-6 h-6" /> Copied!</> : <><CopyIcon className="w-6 h-6" /> Copy Text</>}
           </button>
+
+          <button 
+            type="button"
+            id="share-thrive-report-btn"
+            onClick={handleShareReport}
+            className={`w-full sm:w-auto rounded-full font-bold transition-all px-8 py-4 shadow-lg hover:shadow-xl flex items-center justify-center gap-3 text-lg
+              ${shareReportStatus ? 'bg-emerald-600 text-white ring-4 ring-emerald-100' : 'bg-teal-700 hover:bg-teal-800 text-white'}
+            `}
+          >
+            {shareReportStatus === 'shared'
+              ? <><CheckIcon className="w-6 h-6" /> Shared ✓</>
+              : shareReportStatus === 'copied'
+                ? <><CheckIcon className="w-6 h-6" /> Copied ✓</>
+                : <><span>📤</span> Share Report</>}
+          </button>
         </div>
 
         {/* Connected 3-Step Coaching Dossier Bar */}
-        <div className="bg-[#FAF8F3] border-2 border-[#1E2430] rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-[4px_4px_0_#1E2430]">
-          <div className="flex flex-col sm:flex-row items-center gap-3 text-center sm:text-left">
-            <button type="button" className="copy-master-prompt-btn">
+        <div className="bg-[#FAF8F3] border-2 border-[#1E2430] rounded-2xl p-5 flex flex-col lg:flex-row items-center justify-between gap-4 shadow-[4px_4px_0_#1E2430]">
+          <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center lg:justify-start gap-3 text-center sm:text-left w-full lg:w-auto">
+            <button type="button" className="copy-master-prompt-btn w-full sm:w-auto justify-center">
               📋 Copy Master AI Coaching Prompt
+            </button>
+            <button type="button" id="profile-share-dossier-btn" data-share-master-prompt="true" className="share-master-prompt-btn w-full sm:w-auto justify-center">
+              📤 Share Dossier
             </button>
             <span className="dossier-status-pill" data-dossier-status>2/3 Tools Saved in Coaching Dossier</span>
           </div>
-          <a href="hope-survey.html" className="cta-button primary text-sm px-6 py-3">
+          <a href="hope-survey.html" className="cta-button primary text-sm px-6 py-3 w-full sm:w-auto text-center">
             Continue to Step 3: HoPE Index &rarr;
           </a>
         </div>

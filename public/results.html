@@ -120,9 +120,14 @@ h1,h2,h3{font-family:'Kalam',cursive;font-weight:700}
 .vote .cta.primary:hover{background:var(--slate-d)}
 .vote .cta[disabled]{background:var(--sage);color:var(--ink);cursor:default}
 
-.share .link{display:flex;gap:8px;margin-top:6px}
-.share input{flex:1;font:inherit;font-size:.95rem;padding:6px 10px;border:1.5px solid rgba(43,43,48,.7);border-radius:8px;background:#fffdf7;min-width:0}
-.share button{font:inherit;font-size:.9rem;letter-spacing:1px;padding:0 14px;border:1.5px solid var(--ink);border-radius:8px;background:var(--pale);cursor:pointer}
+.share .link{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.share input{flex:1 1 180px;font:inherit;font-size:.95rem;padding:6px 10px;border:1.5px solid rgba(43,43,48,.7);border-radius:8px;background:#fffdf7;min-width:0}
+.share button{font:inherit;font-size:.9rem;letter-spacing:1px;padding:6px 12px;border:1.5px solid var(--ink);border-radius:8px;background:var(--pale);cursor:pointer;white-space:nowrap}
+.share button#share-native{background:var(--gold);font-weight:700}
+@media(max-width:520px){
+  .share input{flex:1 1 100%}
+  .share button{flex:1 1 calc(50% - 4px);text-align:center}
+}
 .socials{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
 .socials a{text-align:center;padding:5px 0;border:1.5px solid var(--ink);border-radius:8px;color:#fff;text-decoration:none;font-size:.95rem;cursor:pointer;transition:transform .12s,opacity .15s}
 .socials a:hover{transform:translateY(-1px);opacity:.92}
@@ -223,7 +228,7 @@ h1,h2,h3{font-family:'Kalam',cursive;font-weight:700}
 
       <div class="box share">
         <span class="tag">📣 Share to network</span>
-        <div class="link"><input id="lnk" readonly value="https://sol-th-ri-ve.vercel.app/mockup-landing.html" aria-label="Shareable Campaign Link"><button type="button" id="copy">COPY LINK</button></div>
+        <div class="link"><input id="lnk" readonly value="https://sol-th-ri-ve.vercel.app/mockup-landing.html" aria-label="Shareable Campaign Link"><button type="button" id="copy">COPY LINK</button><button type="button" id="share-native">📤 SHARE</button></div>
         <div class="socials">
           <a class="s1" id="share-fb" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fsol-th-ri-ve.vercel.app%2Fmockup-landing.html" target="_blank" rel="noopener noreferrer">Facebook</a>
           <a class="s2" id="share-ig" href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">Instagram</a>
@@ -533,14 +538,28 @@ function showShareFeedback(msg){
 
 async function copyCampaignLink(customText){
   const textToCopy = customText || (lnkEl ? lnkEl.value : liveCampaignUrl);
-  if (lnkEl) lnkEl.select();
+  if (lnkEl && !customText) lnkEl.select();
   try {
     if (navigator.clipboard && navigator.clipboard.writeText) {
       await navigator.clipboard.writeText(textToCopy);
-    } else {
-      document.execCommand('copy');
+      return true;
     }
   } catch (_) {}
+  try {
+    const ta = document.createElement('textarea');
+    ta.value = textToCopy;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.top = '-9999px';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    const ok = Boolean(document.execCommand && document.execCommand('copy'));
+    document.body.removeChild(ta);
+    return ok;
+  } catch (_) {
+    return false;
+  }
 }
 
 document.getElementById('copy').onclick = function(){
@@ -551,28 +570,130 @@ document.getElementById('copy').onclick = function(){
   });
 };
 
-const shareText = `Help grow $2,500,000+ in community mental health & family coaching funds with SOL THRiVE: ${liveCampaignUrl}`;
+const shareTitle = 'SOL THRiVE – Practice Readiness & Community Blueprint';
+const shareCaption = 'Help grow $2,500,000+ in community mental health & family coaching funds with SOL THRiVE:';
+const shareText = `${shareCaption} ${liveCampaignUrl}`;
+const nativeSharePayload = {
+  title: shareTitle,
+  text: shareCaption,
+  url: liveCampaignUrl
+};
+
+function isShareAbortError(err){
+  if (!err) return false;
+  const name = String(err.name || '');
+  const msg = String(err.message || '').toLowerCase();
+  return name === 'AbortError' || msg.includes('aborterror') || msg.includes('cancel') || msg.includes('aborted');
+}
+
+function canUseNativeShare(payload){
+  if (typeof navigator === 'undefined' || typeof navigator.share !== 'function') return false;
+  if (typeof navigator.canShare === 'function' && payload) {
+    try {
+      return Boolean(navigator.canShare(payload));
+    } catch (_) {
+      return true;
+    }
+  }
+  return true;
+}
+
+let isNativeSharing = false;
+async function triggerNativeOrFallbackShare(options = {}){
+  if (isNativeSharing) return { shared: false, copied: false, canceled: true };
+  const fallbackCopyPayload = options.fallbackText || shareText;
+  const fallbackFeedback = options.fallbackFeedback || '✓ Campaign link & caption copied to clipboard!';
+  const sharedFeedback = options.sharedFeedback || '✓ Shared Community Blueprint!';
+
+  if (canUseNativeShare(nativeSharePayload)) {
+    isNativeSharing = true;
+    try {
+      await navigator.share(nativeSharePayload);
+      showShareFeedback(sharedFeedback);
+      return { shared: true, copied: false, canceled: false };
+    } catch (err) {
+      if (isShareAbortError(err)) {
+        return { shared: false, copied: false, canceled: true };
+      }
+      // Non-AbortError falls through to clipboard fallback
+    } finally {
+      isNativeSharing = false;
+    }
+  }
+
+  await copyCampaignLink(fallbackCopyPayload);
+  showShareFeedback(fallbackFeedback);
+  return { shared: false, copied: true, canceled: false };
+}
+
+const nativeShareBtn = document.getElementById('share-native');
+if (nativeShareBtn) {
+  nativeShareBtn.addEventListener('click', async function(){
+    const res = await triggerNativeOrFallbackShare({
+      fallbackText: shareText,
+      fallbackFeedback: '✓ Campaign link & caption copied to clipboard!',
+      sharedFeedback: '✓ Shared Community Blueprint!'
+    });
+    if (res.shared) {
+      this.textContent = 'SHARED ✓';
+      clearTimeout(this._resetTimer);
+      this._resetTimer = setTimeout(() => { this.textContent = '📤 SHARE'; }, 2000);
+    } else if (res.copied) {
+      this.textContent = 'COPIED ✓';
+      clearTimeout(this._resetTimer);
+      this._resetTimer = setTimeout(() => { this.textContent = '📤 SHARE'; }, 2000);
+    }
+  });
+}
+
 const fbBtn = document.getElementById('share-fb');
 const igBtn = document.getElementById('share-ig');
 const ttBtn = document.getElementById('share-tt');
 
 if (fbBtn) {
   fbBtn.href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(liveCampaignUrl)}&quote=${encodeURIComponent(shareText)}`;
-  fbBtn.addEventListener('click', () => {
+  fbBtn.addEventListener('click', async (e) => {
+    if (canUseNativeShare(nativeSharePayload)) {
+      e.preventDefault();
+      await triggerNativeOrFallbackShare({
+        fallbackText: liveCampaignUrl,
+        fallbackFeedback: '✓ Opening Facebook Share & copied link!',
+        sharedFeedback: '✓ Shared Community Blueprint!'
+      });
+      return;
+    }
     copyCampaignLink(liveCampaignUrl);
     showShareFeedback('✓ Opening Facebook Share & copied link!');
   });
 }
 
 if (igBtn) {
-  igBtn.addEventListener('click', () => {
+  igBtn.addEventListener('click', async (e) => {
+    if (canUseNativeShare(nativeSharePayload)) {
+      e.preventDefault();
+      await triggerNativeOrFallbackShare({
+        fallbackText: shareText,
+        fallbackFeedback: '✓ Campaign link & caption copied for Instagram!',
+        sharedFeedback: '✓ Shared Community Blueprint!'
+      });
+      return;
+    }
     copyCampaignLink(shareText);
     showShareFeedback('✓ Campaign link & caption copied for Instagram!');
   });
 }
 
 if (ttBtn) {
-  ttBtn.addEventListener('click', () => {
+  ttBtn.addEventListener('click', async (e) => {
+    if (canUseNativeShare(nativeSharePayload)) {
+      e.preventDefault();
+      await triggerNativeOrFallbackShare({
+        fallbackText: shareText,
+        fallbackFeedback: '✓ Campaign link & caption copied for TikTok!',
+        sharedFeedback: '✓ Shared Community Blueprint!'
+      });
+      return;
+    }
     copyCampaignLink(shareText);
     showShareFeedback('✓ Campaign link & caption copied for TikTok!');
   });

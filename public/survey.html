@@ -618,9 +618,14 @@
                         <button type="button" onclick="showDetailedSummary()" class="cta-button primary w-full">
                             <span class="text-xl">📊</span> View Detailed Interpretation
                         </button>
-                        <button type="button" class="copy-master-prompt-btn w-full justify-center">
-                            📋 Copy Master AI Coaching Prompt
-                        </button>
+                        <div class="flex flex-col sm:flex-row gap-2.5 w-full">
+                            <button type="button" class="copy-master-prompt-btn flex-1 justify-center">
+                                📋 Copy Master AI Coaching Prompt
+                            </button>
+                            <button type="button" id="results-share-dossier-btn" data-share-master-prompt class="share-master-prompt-btn justify-center">
+                                📤 Share Dossier
+                            </button>
+                        </div>
                         <span class="dossier-status-pill mx-auto" data-dossier-status>0/3 Tools Saved in Coaching Dossier</span>
                         <button type="button" id="results-start-over-btn" onclick="resetFlowSurveyProgress(true)" class="cta-button secondary-outline w-full">Start Over</button>
                         <button type="button" id="edit-responses-btn" onclick="editResponses()" class="text-slate-500 font-bold hover:text-slate-900 transition-all text-center mt-2">&larr; Edit Responses</button>
@@ -701,9 +706,14 @@
                         <button type="button" onclick="downloadImage()" class="cta-button primary w-full">
                             <span class="text-xl">📸</span> Save as Image (JPG)
                         </button>
-                        <button type="button" class="copy-master-prompt-btn w-full justify-center">
-                            📋 Copy Master AI Coaching Prompt
-                        </button>
+                        <div class="flex flex-col sm:flex-row gap-2.5 w-full">
+                            <button type="button" class="copy-master-prompt-btn flex-1 justify-center">
+                                📋 Copy Master AI Coaching Prompt
+                            </button>
+                            <button type="button" id="summary-share-dossier-btn" data-share-master-prompt class="share-master-prompt-btn justify-center">
+                                📤 Share Dossier
+                            </button>
+                        </div>
                         <span class="dossier-status-pill mx-auto" data-dossier-status>0/3 Tools Saved in Coaching Dossier</span>
                         <button type="button" id="summary-retake-survey-btn" onclick="resetFlowSurveyProgress(true)" class="cta-button secondary-outline w-full">
                             <span class="text-xl">🔄</span> Take Another Survey
