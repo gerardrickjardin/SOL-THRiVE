@@ -1024,6 +1024,131 @@
         // ==========================================
         let recognition = null;
         let isRecording = false;
+        let dictationSessionBaseText = '';
+        let latestSessionTranscript = '';
+        let isUpdatingFromSpeech = false;
+
+        function normalizeSpeechSegment(text) {
+            return String(text || '')
+                .trim()
+                .toLowerCase()
+                .replace(/[.,!?;:]+$/g, '')
+                .replace(/\s+/g, ' ')
+                .trim();
+        }
+
+        function mergeTwoSpeechSegments(prev, next) {
+            const prevTrimmed = String(prev || '').trim();
+            const nextTrimmed = String(next || '').trim();
+            if (!prevTrimmed) return nextTrimmed;
+            if (!nextTrimmed) return prevTrimmed;
+
+            const normPrev = normalizeSpeechSegment(prevTrimmed);
+            const normNext = normalizeSpeechSegment(nextTrimmed);
+            if (!normPrev) return nextTrimmed;
+            if (!normNext) return prevTrimmed;
+
+            if (normPrev === normNext) {
+                return nextTrimmed.length >= prevTrimmed.length ? nextTrimmed : prevTrimmed;
+            }
+            if (normNext.startsWith(normPrev + ' ')) {
+                return nextTrimmed;
+            }
+            if (normPrev.startsWith(normNext + ' ') || normPrev.endsWith(' ' + normNext)) {
+                return prevTrimmed;
+            }
+
+            const prevWords = prevTrimmed.split(/\s+/);
+            const nextWords = nextTrimmed.split(/\s+/);
+            const maxOverlap = Math.min(prevWords.length, nextWords.length);
+            for (let len = maxOverlap; len >= 1; len--) {
+                if (len === 1 && /[.!?]$/.test(prevTrimmed)) continue;
+                let matches = true;
+                for (let i = 0; i < len; i++) {
+                    const pw = normalizeSpeechSegment(prevWords[prevWords.length - len + i]);
+                    const nw = normalizeSpeechSegment(nextWords[i]);
+                    if (!pw || pw !== nw) {
+                        matches = false;
+                        break;
+                    }
+                }
+                if (matches) {
+                    return prevWords.concat(nextWords.slice(len)).join(' ');
+                }
+            }
+
+            return prevTrimmed + ' ' + nextTrimmed;
+        }
+
+        function buildDeduplicatedTranscript(results) {
+            if (!results || !results.length) return '';
+            const kept = [];
+            for (let i = 0; i < results.length; i++) {
+                const res = results[i];
+                const raw = res && res[0] && typeof res[0].transcript === 'string' ? res[0].transcript : '';
+                const seg = raw.replace(/\s+/g, ' ').trim();
+                if (!seg) continue;
+
+                if (kept.length === 0) {
+                    kept.push(seg);
+                    continue;
+                }
+
+                const normSeg = normalizeSpeechSegment(seg);
+                if (!normSeg) continue;
+
+                let handledBySuffix = false;
+                for (let k = 0; k < kept.length; k++) {
+                    const tailText = kept.slice(k).join(' ');
+                    const normTail = normalizeSpeechSegment(tailText);
+                    if (!normTail) continue;
+
+                    if (normSeg === normTail) {
+                        if (seg.length >= tailText.length) {
+                            kept.splice(k, kept.length - k, seg);
+                        }
+                        handledBySuffix = true;
+                        break;
+                    }
+                    if (normSeg.startsWith(normTail + ' ')) {
+                        kept.splice(k, kept.length - k, seg);
+                        handledBySuffix = true;
+                        break;
+                    }
+                    if (normTail.startsWith(normSeg + ' ') || normTail.endsWith(' ' + normSeg)) {
+                        handledBySuffix = true;
+                        break;
+                    }
+                }
+
+                if (handledBySuffix) continue;
+
+                const prev = kept[kept.length - 1];
+                const merged = mergeTwoSpeechSegments(prev, seg);
+                if (merged !== prev + ' ' + seg) {
+                    kept[kept.length - 1] = merged;
+                } else {
+                    kept.push(seg);
+                }
+            }
+            return kept.join(' ').replace(/\s+/g, ' ').trim();
+        }
+
+        function combineDictationText(baseText, sessionTranscript) {
+            const base = String(baseText || '').replace(/[ \t]+$/, '');
+            const spoken = String(sessionTranscript || '').trim();
+            if (!spoken) return base;
+            if (!base) return spoken;
+            if (base.endsWith('\n')) return base + spoken;
+
+            const lastNewlineIdx = base.lastIndexOf('\n');
+            if (lastNewlineIdx !== -1) {
+                const prefixLines = base.slice(0, lastNewlineIdx + 1);
+                const lastLine = base.slice(lastNewlineIdx + 1).trim();
+                return prefixLines + (lastLine ? mergeTwoSpeechSegments(lastLine, spoken) : spoken);
+            }
+            return mergeTwoSpeechSegments(base, spoken);
+        }
 
         function toggleDictation() {
             const textArea = document.getElementById('problem-description');
@@ -1040,17 +1165,16 @@
                 recognition.interimResults = true;
 
                 recognition.onresult = (event) => {
-                    let finalTranscript = '';
-
-                    for (let i = event.resultIndex; i < event.results.length; ++i) {
-                        if (event.results[i].isFinal) {
-                            finalTranscript += event.results[i][0].transcript;
-                        }
-                    }
-                    if (finalTranscript) {
-                        textArea.value += (textArea.value ? ' ' : '') + finalTranscript;
+                    const activeTextArea = document.getElementById('problem-description') || textArea;
+                    if (!activeTextArea) return;
+                    const sessionTranscript = buildDeduplicatedTranscript(event.results);
+                    latestSessionTranscript = sessionTranscript;
+                    if (sessionTranscript) {
+                        isUpdatingFromSpeech = true;
+                        activeTextArea.value = combineDictationText(dictationSessionBaseText, sessionTranscript);
                         clearStep1Error();
                         saveFlowSurveyState();
+                        isUpdatingFromSpeech = false;
                     }
                 };
 
@@ -1060,7 +1184,18 @@
                 };
                 
                 recognition.onend = () => {
-                    if (isRecording) recognition.start();
+                    if (isRecording) {
+                        const activeTextArea = document.getElementById('problem-description') || textArea;
+                        dictationSessionBaseText = activeTextArea
+                            ? activeTextArea.value.replace(/[ \t]+$/, '')
+                            : combineDictationText(dictationSessionBaseText, latestSessionTranscript);
+                        latestSessionTranscript = '';
+                        try {
+                            recognition.start();
+                        } catch (e) {
+                            stopDictation();
+                        }
+                    }
                 };
             }
 
@@ -1072,9 +1207,21 @@
         }
 
         function startDictation() {
+            const textArea = document.getElementById('problem-description');
+            if (textArea) {
+                dictationSessionBaseText = textArea.value.replace(/[ \t]+$/, '');
+                textArea.blur();
+            } else {
+                dictationSessionBaseText = '';
+            }
+            latestSessionTranscript = '';
             stopCurrentAudio();
             isRecording = true;
-            recognition.start();
+            try {
+                recognition.start();
+            } catch (e) {
+                console.warn("Speech recognition start error:", e);
+            }
             document.getElementById('dictation-btn').classList.add('text-red-600', 'pulse-animation');
             document.getElementById('mic-icon').innerText = '🔴';
             document.getElementById('dictation-text').innerText = 'Listening... (Click to Stop)';
@@ -1083,6 +1230,7 @@
         function stopDictation() {
             if (!isRecording) return;
             isRecording = false;
+            latestSessionTranscript = '';
             try {
                 if (recognition) recognition.stop();
             } catch (e) {}
@@ -1111,6 +1259,7 @@
         }
 
         async function cleanUpText() {
+            if (isRecording) stopDictation();
             const textArea = document.getElementById('problem-description');
             const rawText = textArea.value.trim();
             const btn = document.getElementById('cleanup-btn');
@@ -1184,7 +1333,13 @@
             const err = document.getElementById('step-1-error');
             const textArea = document.getElementById('problem-description');
             if (err) err.classList.add('hidden');
-            if (textArea) textArea.classList.remove('border-rose-500', 'ring-4', 'ring-rose-100');
+            if (textArea) {
+                textArea.classList.remove('border-rose-500', 'ring-4', 'ring-rose-100');
+                if (!isUpdatingFromSpeech) {
+                    dictationSessionBaseText = textArea.value.replace(/[ \t]+$/, '');
+                    latestSessionTranscript = '';
+                }
+            }
             saveFlowSurveyState();
         }
 

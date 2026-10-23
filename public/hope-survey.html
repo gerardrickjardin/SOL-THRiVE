@@ -837,16 +837,146 @@ const StopMicIcon = ({ className }) => <svg className={className} fill="none" st
 const SparkleIcon = ({ className }) => <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>;
 
 // --- REFLECTION COMPONENT ---
+function normalizeSpeechSegment(text) {
+    return String(text || '')
+        .trim()
+        .toLowerCase()
+        .replace(/[.,!?;:]+$/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+}
+
+function mergeTwoSpeechSegments(prev, next) {
+    const prevTrimmed = String(prev || '').trim();
+    const nextTrimmed = String(next || '').trim();
+    if (!prevTrimmed) return nextTrimmed;
+    if (!nextTrimmed) return prevTrimmed;
+
+    const normPrev = normalizeSpeechSegment(prevTrimmed);
+    const normNext = normalizeSpeechSegment(nextTrimmed);
+    if (!normPrev) return nextTrimmed;
+    if (!normNext) return prevTrimmed;
+
+    if (normPrev === normNext) {
+        return nextTrimmed.length >= prevTrimmed.length ? nextTrimmed : prevTrimmed;
+    }
+    if (normNext.startsWith(normPrev + ' ')) {
+        return nextTrimmed;
+    }
+    if (normPrev.startsWith(normNext + ' ') || normPrev.endsWith(' ' + normNext)) {
+        return prevTrimmed;
+    }
+
+    const prevWords = prevTrimmed.split(/\s+/);
+    const nextWords = nextTrimmed.split(/\s+/);
+    const maxOverlap = Math.min(prevWords.length, nextWords.length);
+    for (let len = maxOverlap; len >= 1; len--) {
+        if (len === 1 && /[.!?]$/.test(prevTrimmed)) continue;
+        let matches = true;
+        for (let i = 0; i < len; i++) {
+            const pw = normalizeSpeechSegment(prevWords[prevWords.length - len + i]);
+            const nw = normalizeSpeechSegment(nextWords[i]);
+            if (!pw || pw !== nw) {
+                matches = false;
+                break;
+            }
+        }
+        if (matches) {
+            return prevWords.concat(nextWords.slice(len)).join(' ');
+        }
+    }
+
+    return prevTrimmed + ' ' + nextTrimmed;
+}
+
+function buildDeduplicatedTranscript(results) {
+    if (!results || !results.length) return '';
+    const kept = [];
+    for (let i = 0; i < results.length; i++) {
+        const res = results[i];
+        const raw = res && res[0] && typeof res[0].transcript === 'string' ? res[0].transcript : '';
+        const seg = raw.replace(/\s+/g, ' ').trim();
+        if (!seg) continue;
+
+        if (kept.length === 0) {
+            kept.push(seg);
+            continue;
+        }
+
+        const normSeg = normalizeSpeechSegment(seg);
+        if (!normSeg) continue;
+
+        let handledBySuffix = false;
+        for (let k = 0; k < kept.length; k++) {
+            const tailText = kept.slice(k).join(' ');
+            const normTail = normalizeSpeechSegment(tailText);
+            if (!normTail) continue;
+
+            if (normSeg === normTail) {
+                if (seg.length >= tailText.length) {
+                    kept.splice(k, kept.length - k, seg);
+                }
+                handledBySuffix = true;
+                break;
+            }
+            if (normSeg.startsWith(normTail + ' ')) {
+                kept.splice(k, kept.length - k, seg);
+                handledBySuffix = true;
+                break;
+            }
+            if (normTail.startsWith(normSeg + ' ') || normTail.endsWith(' ' + normSeg)) {
+                handledBySuffix = true;
+                break;
+            }
+        }
+
+        if (handledBySuffix) continue;
+
+        const prev = kept[kept.length - 1];
+        const merged = mergeTwoSpeechSegments(prev, seg);
+        if (merged !== prev + ' ' + seg) {
+            kept[kept.length - 1] = merged;
+        } else {
+            kept.push(seg);
+        }
+    }
+    return kept.join(' ').replace(/\s+/g, ' ').trim();
+}
+
+function combineDictationText(baseText, sessionTranscript) {
+    const base = String(baseText || '').replace(/[ \t]+$/, '');
+    const spoken = String(sessionTranscript || '').trim();
+    if (!spoken) return base;
+    if (!base) return spoken;
+    if (base.endsWith('\n')) return base + spoken;
+
+    const lastNewlineIdx = base.lastIndexOf('\n');
+    if (lastNewlineIdx !== -1) {
+        const prefixLines = base.slice(0, lastNewlineIdx + 1);
+        const lastLine = base.slice(lastNewlineIdx + 1).trim();
+        return prefixLines + (lastLine ? mergeTwoSpeechSegments(lastLine, spoken) : spoken);
+    }
+    return mergeTwoSpeechSegments(base, spoken);
+}
+
 const ReflectionBox = ({ value, onChange }) => {
     const [isListening, setIsListening] = window.React.useState(false);
     const [isCleaning, setIsCleaning] = window.React.useState(false);
     const recognitionRef = window.React.useRef(null);
     const textAreaRef = window.React.useRef(null);
-    const valueRef = window.React.useRef(value);
+    const valueRef = window.React.useRef(value || '');
+    const onChangeRef = window.React.useRef(onChange);
+    const sessionBaseTextRef = window.React.useRef((value || '').replace(/[ \t]+$/, ''));
+    const latestSessionTranscriptRef = window.React.useRef('');
+    const isListeningRef = window.React.useRef(false);
 
     window.React.useEffect(() => {
-        valueRef.current = value;
+        valueRef.current = value || '';
     }, [value]);
+
+    window.React.useEffect(() => {
+        onChangeRef.current = onChange;
+    }, [onChange]);
 
     window.React.useEffect(() => {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -856,32 +986,44 @@ const ReflectionBox = ({ value, onChange }) => {
             recognition.interimResults = true;
             
             recognition.onresult = (event) => {
-                let currentTranscript = '';
-                for (let i = event.resultIndex; i < event.results.length; ++i) {
-                    if (event.results[i].isFinal) {
-                        currentTranscript += event.results[i][0].transcript + ' ';
-                    }
-                }
-                if (currentTranscript.trim()) {
-                    const prev = valueRef.current || "";
-                    onChange(prev ? prev + ' ' + currentTranscript.trim() : currentTranscript.trim());
+                const sessionTranscript = buildDeduplicatedTranscript(event.results);
+                latestSessionTranscriptRef.current = sessionTranscript;
+                if (sessionTranscript) {
+                    const nextText = combineDictationText(sessionBaseTextRef.current, sessionTranscript);
+                    valueRef.current = nextText;
+                    if (onChangeRef.current) onChangeRef.current(nextText);
                 }
             };
             
             recognition.onend = () => {
+                const committed = latestSessionTranscriptRef.current
+                    ? combineDictationText(sessionBaseTextRef.current, latestSessionTranscriptRef.current)
+                    : (valueRef.current || '');
+                valueRef.current = committed;
+                sessionBaseTextRef.current = committed.replace(/[ \t]+$/, '');
+                latestSessionTranscriptRef.current = '';
+                if (isListeningRef.current) {
+                    try {
+                        recognition.start();
+                        return;
+                    } catch (e) {}
+                }
+                isListeningRef.current = false;
                 setIsListening(false);
             };
             
             recognition.onerror = (event) => {
                 console.error("Speech recognition error", event.error);
+                isListeningRef.current = false;
                 setIsListening(false);
             };
             
             recognitionRef.current = recognition;
         }
         return () => {
+            isListeningRef.current = false;
             if (recognitionRef.current) {
-                recognitionRef.current.stop();
+                try { recognitionRef.current.stop(); } catch (e) {}
             }
         };
     }, []);
@@ -892,18 +1034,38 @@ const ReflectionBox = ({ value, onChange }) => {
             return;
         }
         if (isListening) {
-            recognitionRef.current.stop();
+            isListeningRef.current = false;
+            latestSessionTranscriptRef.current = '';
+            try { recognitionRef.current.stop(); } catch (e) {}
             setIsListening(false);
         } else {
-            recognitionRef.current.start();
-            setIsListening(true);
+            sessionBaseTextRef.current = (valueRef.current || '').replace(/[ \t]+$/, '');
+            latestSessionTranscriptRef.current = '';
+            if (textAreaRef.current) textAreaRef.current.blur();
+            try {
+                isListeningRef.current = true;
+                recognitionRef.current.start();
+                setIsListening(true);
+            } catch (e) {
+                isListeningRef.current = false;
+                console.warn("Speech recognition start error:", e);
+            }
         }
     };
 
     const handleCleanUp = async () => {
         if (!value || !value.trim()) return;
+        if (isListening && recognitionRef.current) {
+            isListeningRef.current = false;
+            latestSessionTranscriptRef.current = '';
+            try { recognitionRef.current.stop(); } catch (e) {}
+            setIsListening(false);
+        }
         setIsCleaning(true);
         const cleaned = await cleanTextWithGemini(value);
+        sessionBaseTextRef.current = String(cleaned || '').replace(/[ \t]+$/, '');
+        latestSessionTranscriptRef.current = '';
+        valueRef.current = cleaned;
         onChange(cleaned);
         setIsCleaning(false);
     };
@@ -936,7 +1098,13 @@ const ReflectionBox = ({ value, onChange }) => {
             <textarea
                 ref={textAreaRef}
                 value={value || ""}
-                onChange={(e) => onChange(e.target.value)}
+                onChange={(e) => {
+                    const nextVal = e.target.value;
+                    valueRef.current = nextVal;
+                    sessionBaseTextRef.current = nextVal.replace(/[ \t]+$/, '');
+                    latestSessionTranscriptRef.current = '';
+                    onChange(nextVal);
+                }}
                 placeholder="Describe your experience, environment, or reasoning behind your score (optional)..."
                 className="w-full bg-white border border-slate-200 rounded-xl p-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-50 transition-all text-slate-700 custom-scrollbar resize-y min-h-[60px] text-sm md:text-base"
             />

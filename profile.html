@@ -1412,6 +1412,128 @@ function IntroScreen({ onStart, geminiKey, setGeminiKey, elevenLabsKey, setEleve
   );
 }
 
+function normalizeSpeechSegment(text) {
+  return String(text || '')
+    .trim()
+    .toLowerCase()
+    .replace(/[.,!?;:]+$/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function mergeTwoSpeechSegments(prev, next) {
+  const prevTrimmed = String(prev || '').trim();
+  const nextTrimmed = String(next || '').trim();
+  if (!prevTrimmed) return nextTrimmed;
+  if (!nextTrimmed) return prevTrimmed;
+
+  const normPrev = normalizeSpeechSegment(prevTrimmed);
+  const normNext = normalizeSpeechSegment(nextTrimmed);
+  if (!normPrev) return nextTrimmed;
+  if (!normNext) return prevTrimmed;
+
+  if (normPrev === normNext) {
+    return nextTrimmed.length >= prevTrimmed.length ? nextTrimmed : prevTrimmed;
+  }
+  if (normNext.startsWith(normPrev + ' ')) {
+    return nextTrimmed;
+  }
+  if (normPrev.startsWith(normNext + ' ') || normPrev.endsWith(' ' + normNext)) {
+    return prevTrimmed;
+  }
+
+  const prevWords = prevTrimmed.split(/\s+/);
+  const nextWords = nextTrimmed.split(/\s+/);
+  const maxOverlap = Math.min(prevWords.length, nextWords.length);
+  for (let len = maxOverlap; len >= 1; len--) {
+    if (len === 1 && /[.!?]$/.test(prevTrimmed)) continue;
+    let matches = true;
+    for (let i = 0; i < len; i++) {
+      const pw = normalizeSpeechSegment(prevWords[prevWords.length - len + i]);
+      const nw = normalizeSpeechSegment(nextWords[i]);
+      if (!pw || pw !== nw) {
+        matches = false;
+        break;
+      }
+    }
+    if (matches) {
+      return prevWords.concat(nextWords.slice(len)).join(' ');
+    }
+  }
+
+  return prevTrimmed + ' ' + nextTrimmed;
+}
+
+function buildDeduplicatedTranscript(results) {
+  if (!results || !results.length) return '';
+  const kept = [];
+  for (let i = 0; i < results.length; i++) {
+    const res = results[i];
+    const raw = res && res[0] && typeof res[0].transcript === 'string' ? res[0].transcript : '';
+    const seg = raw.replace(/\s+/g, ' ').trim();
+    if (!seg) continue;
+
+    if (kept.length === 0) {
+      kept.push(seg);
+      continue;
+    }
+
+    const normSeg = normalizeSpeechSegment(seg);
+    if (!normSeg) continue;
+
+    let handledBySuffix = false;
+    for (let k = 0; k < kept.length; k++) {
+      const tailText = kept.slice(k).join(' ');
+      const normTail = normalizeSpeechSegment(tailText);
+      if (!normTail) continue;
+
+      if (normSeg === normTail) {
+        if (seg.length >= tailText.length) {
+          kept.splice(k, kept.length - k, seg);
+        }
+        handledBySuffix = true;
+        break;
+      }
+      if (normSeg.startsWith(normTail + ' ')) {
+        kept.splice(k, kept.length - k, seg);
+        handledBySuffix = true;
+        break;
+      }
+      if (normTail.startsWith(normSeg + ' ') || normTail.endsWith(' ' + normSeg)) {
+        handledBySuffix = true;
+        break;
+      }
+    }
+
+    if (handledBySuffix) continue;
+
+    const prev = kept[kept.length - 1];
+    const merged = mergeTwoSpeechSegments(prev, seg);
+    if (merged !== prev + ' ' + seg) {
+      kept[kept.length - 1] = merged;
+    } else {
+      kept.push(seg);
+    }
+  }
+  return kept.join(' ').replace(/\s+/g, ' ').trim();
+}
+
+function combineDictationText(baseText, sessionTranscript) {
+  const base = String(baseText || '').replace(/[ \t]+$/, '');
+  const spoken = String(sessionTranscript || '').trim();
+  if (!spoken) return base;
+  if (!base) return spoken;
+  if (base.endsWith('\n')) return base + spoken;
+
+  const lastNewlineIdx = base.lastIndexOf('\n');
+  if (lastNewlineIdx !== -1) {
+    const prefixLines = base.slice(0, lastNewlineIdx + 1);
+    const lastLine = base.slice(lastNewlineIdx + 1).trim();
+    return prefixLines + (lastLine ? mergeTwoSpeechSegments(lastLine, spoken) : spoken);
+  }
+  return mergeTwoSpeechSegments(base, spoken);
+}
+
 function ChatSection({ section, stepNumber, initialDraft, hasApprovedSection, onDraftChange, geminiKey, setGeminiKey, elevenLabsKey, setElevenLabsKey, elevenLabsVoiceId, setElevenLabsVoiceId, onComplete, onBack }) {
   const [draft, setDraft] = useState(initialDraft || '');
   const [chatState, setChatState] = useState(hasApprovedSection ? 'approval' : 'initial'); // 'initial', 'digging', 'cleaning', 'approval'
@@ -1420,12 +1542,30 @@ function ChatSection({ section, stepNumber, initialDraft, hasApprovedSection, on
   const [showSettings, setShowSettings] = useState(false);
   const recognitionRef = useRef(null);
   const textAreaRef = useRef(null);
+  const draftRef = useRef(initialDraft || '');
+  const onDraftChangeRef = useRef(onDraftChange);
+  const sessionBaseTextRef = useRef((initialDraft || '').replace(/[ \t]+$/, ''));
+  const latestSessionTranscriptRef = useRef('');
+  const isListeningRef = useRef(false);
+
+  useEffect(() => {
+    draftRef.current = draft;
+  }, [draft]);
+
+  useEffect(() => {
+    onDraftChangeRef.current = onDraftChange;
+  }, [onDraftChange]);
 
   // Reset state when section changes or populate if going backward
   useEffect(() => {
     stopGlobalAudio();
-    setDraft(initialDraft || '');
+    const nextInitial = initialDraft || '';
+    setDraft(nextInitial);
+    draftRef.current = nextInitial;
+    sessionBaseTextRef.current = nextInitial.replace(/[ \t]+$/, '');
+    latestSessionTranscriptRef.current = '';
     setChatState(hasApprovedSection ? 'approval' : 'initial'); 
+    isListeningRef.current = false;
     setIsListening(false);
     setIsSpeaking(false);
     if (recognitionRef.current) {
@@ -1434,11 +1574,10 @@ function ChatSection({ section, stepNumber, initialDraft, hasApprovedSection, on
   }, [section.key]);
 
   const updateDraftValue = (valOrFn) => {
-    setDraft(prev => {
-      const next = typeof valOrFn === 'function' ? valOrFn(prev) : valOrFn;
-      if (onDraftChange) onDraftChange(next);
-      return next;
-    });
+    const next = typeof valOrFn === 'function' ? valOrFn(draftRef.current) : valOrFn;
+    draftRef.current = next;
+    setDraft(next);
+    if (onDraftChangeRef.current) onDraftChangeRef.current(next);
   };
 
   // Speech Recognition Setup
@@ -1450,23 +1589,34 @@ function ChatSection({ section, stepNumber, initialDraft, hasApprovedSection, on
       recognition.interimResults = true;
       
       recognition.onresult = (event) => {
-        let finalTranscript = '';
-        for (let i = event.resultIndex; i < event.results.length; ++i) {
-          if (event.results[i].isFinal) {
-            finalTranscript += event.results[i][0].transcript + ' ';
-          }
-        }
-        if (finalTranscript) {
-          updateDraftValue(prev => (prev + ' ' + finalTranscript).trim());
+        const sessionTranscript = buildDeduplicatedTranscript(event.results);
+        latestSessionTranscriptRef.current = sessionTranscript;
+        if (sessionTranscript) {
+          const nextText = combineDictationText(sessionBaseTextRef.current, sessionTranscript);
+          updateDraftValue(nextText);
         }
       };
 
       recognition.onerror = (e) => {
         console.error("Speech Recognition Error", e);
+        isListeningRef.current = false;
         setIsListening(false);
       };
 
       recognition.onend = () => {
+        const committed = latestSessionTranscriptRef.current
+          ? combineDictationText(sessionBaseTextRef.current, latestSessionTranscriptRef.current)
+          : (draftRef.current || '');
+        draftRef.current = committed;
+        sessionBaseTextRef.current = committed.replace(/[ \t]+$/, '');
+        latestSessionTranscriptRef.current = '';
+        if (isListeningRef.current) {
+          try {
+            recognition.start();
+            return;
+          } catch (e) {}
+        }
+        isListeningRef.current = false;
         setIsListening(false);
       };
 
@@ -1474,6 +1624,7 @@ function ChatSection({ section, stepNumber, initialDraft, hasApprovedSection, on
     }
     
     return () => {
+      isListeningRef.current = false;
       if (recognitionRef.current) {
         try { recognitionRef.current.stop(); } catch (e) {}
       }
@@ -1491,17 +1642,24 @@ function ChatSection({ section, stepNumber, initialDraft, hasApprovedSection, on
     }
     
     if (isListening) {
-      recognitionRef.current.stop();
+      isListeningRef.current = false;
+      latestSessionTranscriptRef.current = '';
+      try { recognitionRef.current.stop(); } catch (e) {}
+      setIsListening(false);
     } else {
       stopGlobalAudio();
       setIsSpeaking(false);
+      sessionBaseTextRef.current = (draftRef.current || '').replace(/[ \t]+$/, '');
+      latestSessionTranscriptRef.current = '';
+      if (textAreaRef.current) textAreaRef.current.blur();
       try {
+        isListeningRef.current = true;
         recognitionRef.current.start();
         setIsListening(true);
       } catch (e) {
+        isListeningRef.current = false;
         console.warn("Speech recognition start error:", e);
       }
-      if (textAreaRef.current) textAreaRef.current.focus();
     }
   };
 
@@ -1519,11 +1677,15 @@ function ChatSection({ section, stepNumber, initialDraft, hasApprovedSection, on
   const handleCleanUp = async () => {
     if (draft.trim().length === 0) return;
     if (isListening && recognitionRef.current) {
+      isListeningRef.current = false;
+      latestSessionTranscriptRef.current = '';
       try { recognitionRef.current.stop(); } catch (e) {}
       setIsListening(false);
     }
     setChatState('cleaning');
     const cleaned = await cleanTextWithGemini(draft, geminiKey);
+    sessionBaseTextRef.current = String(cleaned || '').replace(/[ \t]+$/, '');
+    latestSessionTranscriptRef.current = '';
     updateDraftValue(cleaned);
     setChatState('approval');
   };
@@ -1634,7 +1796,12 @@ function ChatSection({ section, stepNumber, initialDraft, hasApprovedSection, on
           `}
           placeholder={chatState === 'approval' ? "Feel free to manually edit this text..." : "Tap the microphone icon to start talking or start typing here..."}
           value={draft}
-          onChange={(e) => updateDraftValue(e.target.value)}
+          onChange={(e) => {
+            const nextVal = e.target.value;
+            sessionBaseTextRef.current = nextVal.replace(/[ \t]+$/, '');
+            latestSessionTranscriptRef.current = '';
+            updateDraftValue(nextVal);
+          }}
         ></textarea>
         
         {/* Floating Dictation Button */}
