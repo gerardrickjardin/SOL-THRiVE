@@ -332,7 +332,7 @@
         </div>
 
         <!-- ================= STEP 1: WHAT IS IT? ================= -->
-        <div id="step-1" class="hidden survey-card p-6 md:p-10 max-w-2xl mx-auto">
+        <div id="step-1" class="hidden survey-card p-5 sm:p-6 md:p-10 max-w-2xl mx-auto">
             <div class="flex justify-between items-start mb-2">
                 <div>
                     <div class="mb-1 text-xs font-extrabold text-purple-700 uppercase tracking-widest">Section 1 of 3</div>
@@ -349,17 +349,17 @@
                 <span class="text-slate-700 text-sm block mt-1">Instead of saying "Parenting," say "I am having difficulty helping my 10-year-old son complete his homework on time without a fight."</span>
             </div>
 
-            <div class="relative mb-4">
-                <textarea id="problem-description" oninput="clearStep1Error()" class="w-full border-2 border-slate-300 rounded-xl p-4 pb-16 min-h-[170px] focus:border-purple-600 focus:ring-4 focus:ring-purple-100 outline-none transition-all text-slate-800" placeholder="Describe the friction here... (or click Dictate to talk)"></textarea>
+            <div id="problem-input-container" class="mb-4 border-2 border-slate-300 rounded-xl bg-white overflow-hidden focus-within:border-purple-600 focus-within:ring-4 focus-within:ring-purple-100 transition-all">
+                <textarea id="problem-description" oninput="clearStep1Error()" class="w-full p-3.5 sm:p-4 min-h-[140px] border-0 outline-none focus:ring-0 transition-all text-slate-800 resize-y block" placeholder="Describe the friction here... (or click Dictate to talk)"></textarea>
                 
-                <!-- Dictation & Clean Up Controls -->
-                <div class="absolute bottom-3 left-3 right-3 flex justify-between items-center bg-white pt-2 border-t border-slate-100">
-                    <button type="button" onclick="toggleDictation()" id="dictation-btn" class="flex items-center gap-2 text-sm font-bold text-slate-700 hover:text-purple-700 px-3 py-2 rounded-lg hover:bg-slate-50 transition-all">
-                        <span class="text-xl" id="mic-icon">🎙️</span> <span id="dictation-text">Dictate</span>
+                <!-- Dictation & Clean Up Controls (Dedicated Bottom Footer Toolbar) -->
+                <div id="problem-input-toolbar" class="flex flex-wrap justify-between items-center gap-2 px-3 py-2.5 bg-[#FAF8F3] border-t border-slate-200">
+                    <button type="button" onclick="toggleDictation()" id="dictation-btn" class="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-bold text-slate-700 hover:text-purple-700 px-3 py-2 rounded-lg bg-white border border-slate-200 hover:bg-slate-50 transition-all shadow-sm">
+                        <span class="text-base sm:text-lg leading-none" id="mic-icon">🎙️</span> <span id="dictation-text">Dictate</span>
                     </button>
                     
-                    <button type="button" onclick="cleanUpText()" id="cleanup-btn" class="flex items-center gap-2 text-sm font-bold text-purple-700 hover:bg-purple-50 px-3 py-2 rounded-lg border border-purple-200 transition-all bg-white shadow-sm">
-                        <span class="text-lg">✨</span> Clean Up Text
+                    <button type="button" onclick="cleanUpText()" id="cleanup-btn" class="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-bold text-purple-700 hover:bg-purple-50 px-3 py-2 rounded-lg border border-purple-200 transition-all bg-white shadow-sm">
+                        <span class="text-base sm:text-lg leading-none">✨</span> <span>Clean Up Text</span>
                     </button>
                 </div>
             </div>
@@ -549,7 +549,7 @@
         <div id="step-3" class="hidden grid grid-cols-1 lg:grid-cols-2 gap-8 items-start relative">
             
             <!-- Left Side: The Survey UI / Results -->
-            <div id="survey-container" class="survey-card p-6 md:p-8">
+            <div id="survey-container" class="survey-card p-5 sm:p-6 md:p-8">
                 <!-- Question Card -->
                 <div id="question-card">
                     <div class="flex items-center gap-2 mb-2 text-purple-700">
@@ -563,17 +563,17 @@
                     <p class="text-lg mb-6 text-slate-700" id="question-text">feel a sense of hope that this situation can be resolved?</p>
 
                     <!-- Score Buttons Grid -->
-                    <div class="grid grid-cols-6 gap-2 mb-1.5" id="score-buttons" role="group" aria-label="Choose how often">
-                        <button type="button" onclick="recordScore(0)" data-score="0" aria-pressed="false" class="score-btn p-3 rounded-xl border-2 border-slate-200 font-bold text-slate-800 hover:border-purple-600 hover:bg-purple-50 transition-all text-center">0</button>
-                        <button type="button" onclick="recordScore(1)" data-score="1" aria-pressed="false" class="score-btn p-3 rounded-xl border-2 border-slate-200 font-bold text-slate-800 hover:border-purple-600 hover:bg-purple-50 transition-all text-center">1</button>
-                        <button type="button" onclick="recordScore(2)" data-score="2" aria-pressed="false" class="score-btn p-3 rounded-xl border-2 border-slate-200 font-bold text-slate-800 hover:border-purple-600 hover:bg-purple-50 transition-all text-center">2</button>
-                        <button type="button" onclick="recordScore(3)" data-score="3" aria-pressed="false" class="score-btn p-3 rounded-xl border-2 border-slate-200 font-bold text-slate-800 hover:border-purple-600 hover:bg-purple-50 transition-all text-center">3</button>
-                        <button type="button" onclick="recordScore(4)" data-score="4" aria-pressed="false" class="score-btn p-3 rounded-xl border-2 border-slate-200 font-bold text-slate-800 hover:border-purple-600 hover:bg-purple-50 transition-all text-center">4</button>
-                        <button type="button" onclick="recordScore(5)" data-score="5" aria-pressed="false" class="score-btn p-3 rounded-xl border-2 border-slate-200 font-bold text-slate-800 hover:border-purple-600 hover:bg-purple-50 transition-all text-center">5</button>
+                    <div class="grid grid-cols-6 gap-1.5 sm:gap-2 mb-1.5" id="score-buttons" role="group" aria-label="Choose how often">
+                        <button type="button" onclick="recordScore(0)" data-score="0" aria-pressed="false" class="score-btn p-2.5 sm:p-3 rounded-xl border-2 border-slate-200 font-bold text-slate-800 hover:border-purple-600 hover:bg-purple-50 transition-all text-center">0</button>
+                        <button type="button" onclick="recordScore(1)" data-score="1" aria-pressed="false" class="score-btn p-2.5 sm:p-3 rounded-xl border-2 border-slate-200 font-bold text-slate-800 hover:border-purple-600 hover:bg-purple-50 transition-all text-center">1</button>
+                        <button type="button" onclick="recordScore(2)" data-score="2" aria-pressed="false" class="score-btn p-2.5 sm:p-3 rounded-xl border-2 border-slate-200 font-bold text-slate-800 hover:border-purple-600 hover:bg-purple-50 transition-all text-center">2</button>
+                        <button type="button" onclick="recordScore(3)" data-score="3" aria-pressed="false" class="score-btn p-2.5 sm:p-3 rounded-xl border-2 border-slate-200 font-bold text-slate-800 hover:border-purple-600 hover:bg-purple-50 transition-all text-center">3</button>
+                        <button type="button" onclick="recordScore(4)" data-score="4" aria-pressed="false" class="score-btn p-2.5 sm:p-3 rounded-xl border-2 border-slate-200 font-bold text-slate-800 hover:border-purple-600 hover:bg-purple-50 transition-all text-center">4</button>
+                        <button type="button" onclick="recordScore(5)" data-score="5" aria-pressed="false" class="score-btn p-2.5 sm:p-3 rounded-xl border-2 border-slate-200 font-bold text-slate-800 hover:border-purple-600 hover:bg-purple-50 transition-all text-center">5</button>
                     </div>
 
                     <!-- Labels -->
-                    <div class="grid grid-cols-6 gap-2 text-[10px] leading-tight text-slate-500 font-semibold uppercase tracking-tighter">
+                    <div class="grid grid-cols-6 gap-1 sm:gap-2 text-[9px] sm:text-[10px] leading-tight text-slate-500 font-semibold uppercase tracking-tighter">
                         <div class="text-center">Never</div>
                         <div class="text-center">Rarely</div>
                         <div class="text-center">Sometimes</div>
@@ -1306,7 +1306,7 @@
             } catch (e) {
                 console.warn("Speech recognition start error:", e);
             }
-            document.getElementById('dictation-btn').classList.add('text-red-600', 'pulse-animation');
+            document.getElementById('dictation-btn').classList.add('text-red-600', 'border-red-300', 'bg-red-50', 'pulse-animation');
             document.getElementById('mic-icon').innerText = '🔴';
             document.getElementById('dictation-text').innerText = 'Listening... (Click to Stop)';
         }
@@ -1320,7 +1320,7 @@
             try {
                 if (recognition) recognition.stop();
             } catch (e) {}
-            document.getElementById('dictation-btn').classList.remove('text-red-600', 'pulse-animation');
+            document.getElementById('dictation-btn').classList.remove('text-red-600', 'border-red-300', 'bg-red-50', 'pulse-animation');
             document.getElementById('mic-icon').innerText = '🎙️';
             document.getElementById('dictation-text').innerText = 'Dictate';
         }
@@ -1357,7 +1357,7 @@
                 return;
             }
 
-            btn.innerHTML = '<span class="text-lg animate-spin">⏳</span> Cleaning...';
+            btn.innerHTML = '<span class="text-base sm:text-lg leading-none animate-spin">⏳</span> <span>Cleaning...</span>';
             btn.disabled = true;
 
             const activeKey = getActiveGeminiKey();
@@ -1403,7 +1403,7 @@
                 clearStep1Error();
             } finally {
                 saveFlowSurveyState();
-                btn.innerHTML = '<span class="text-lg">✨</span> Clean Up Text';
+                btn.innerHTML = '<span class="text-base sm:text-lg leading-none">✨</span> <span>Clean Up Text</span>';
                 btn.disabled = false;
             }
         }
@@ -1418,7 +1418,11 @@
         function clearStep1Error() {
             const err = document.getElementById('step-1-error');
             const textArea = document.getElementById('problem-description');
+            const inputContainer = document.getElementById('problem-input-container');
             if (err) err.classList.add('hidden');
+            if (inputContainer) {
+                inputContainer.classList.remove('border-rose-500', 'ring-4', 'ring-rose-100');
+            }
             if (textArea) {
                 textArea.classList.remove('border-rose-500', 'ring-4', 'ring-rose-100');
                 if (!isUpdatingFromSpeech) {
@@ -1432,10 +1436,14 @@
 
         function validateAndGoToStep2() {
             const textArea = document.getElementById('problem-description');
+            const inputContainer = document.getElementById('problem-input-container');
             const val = textArea.value.trim();
             if (!val) {
                 const err = document.getElementById('step-1-error');
                 err.classList.remove('hidden');
+                if (inputContainer) {
+                    inputContainer.classList.add('border-rose-500', 'ring-4', 'ring-rose-100');
+                }
                 textArea.classList.add('border-rose-500', 'ring-4', 'ring-rose-100');
                 textArea.focus();
                 return;
