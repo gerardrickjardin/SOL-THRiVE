@@ -622,7 +622,7 @@
                             📋 Copy Master AI Coaching Prompt
                         </button>
                         <span class="dossier-status-pill mx-auto" data-dossier-status>0/3 Tools Saved in Coaching Dossier</span>
-                        <button type="button" onclick="resetFlowSurveyProgress(true)" class="cta-button secondary-outline w-full">Start Over</button>
+                        <button type="button" id="results-start-over-btn" onclick="resetFlowSurveyProgress(true)" class="cta-button secondary-outline w-full">Start Over</button>
                         <button type="button" id="edit-responses-btn" onclick="editResponses()" class="text-slate-500 font-bold hover:text-slate-900 transition-all text-center mt-2">&larr; Edit Responses</button>
                     </div>
                 </div>
@@ -705,7 +705,7 @@
                             📋 Copy Master AI Coaching Prompt
                         </button>
                         <span class="dossier-status-pill mx-auto" data-dossier-status>0/3 Tools Saved in Coaching Dossier</span>
-                        <button type="button" onclick="resetFlowSurveyProgress(true)" class="cta-button secondary-outline w-full">
+                        <button type="button" id="summary-retake-survey-btn" onclick="resetFlowSurveyProgress(true)" class="cta-button secondary-outline w-full">
                             <span class="text-xl">🔄</span> Take Another Survey
                         </button>
                         <button type="button" onclick="hideDetailedSummary()" class="text-slate-500 font-bold hover:text-slate-900 transition-all text-center mt-2">&larr; Back</button>
@@ -2194,10 +2194,43 @@
             }
         }
 
-        function resetFlowSurveyProgress(goToIntro) {
+        function hasFlowSurveyProgressToConfirm() {
+            const problemDescription = document.getElementById('problem-description')?.value || "";
+            const { metaphorValue, customMetaphor } = getSelectedMetaphorDetails();
+            let hasStoredState = false;
+            try {
+                hasStoredState = Boolean(localStorage.getItem(FLOW_SURVEY_STATE_KEY));
+            } catch (e) {}
+            return (
+                hasStoredState ||
+                Boolean(savedFlowSurveySnapshot) ||
+                Boolean(problemDescription.trim()) ||
+                Boolean(metaphorValue) ||
+                Boolean(customMetaphor) ||
+                (Array.isArray(answered) && answered.some(Boolean)) ||
+                (Array.isArray(scores) && scores.some(s => Number(s) > 0))
+            );
+        }
+
+        function resetFlowSurveyProgress(goToIntro = true, skipConfirm = false) {
+            if (!skipConfirm && hasFlowSurveyProgressToConfirm()) {
+                const confirmed = (typeof window !== 'undefined' && typeof window.confirm === 'function')
+                    ? window.confirm('Start fresh and clear your saved Flow Survey progress on this device? This action cannot be undone.')
+                    : true;
+                if (!confirmed) {
+                    return false;
+                }
+            }
+
             stopCurrentAudio();
             if (isRecording) stopDictation();
             savedFlowSurveySnapshot = null;
+            currentQ = 0;
+            scores = new Array(20).fill(0);
+            answered = new Array(20).fill(false);
+            currentViewMode = 'question';
+            currentStepNum = 0;
+
             try {
                 localStorage.removeItem(FLOW_SURVEY_STATE_KEY);
             } catch (e) {}
@@ -2215,14 +2248,7 @@
                 customInput.classList.add('hidden');
             }
             clearStep2Error();
-            try {
-                localStorage.removeItem(FLOW_SURVEY_STATE_KEY);
-            } catch (e) {}
 
-            currentQ = 0;
-            scores = new Array(20).fill(0);
-            answered = new Array(20).fill(false);
-            currentViewMode = 'question';
             if (targetGroup) targetGroup.innerHTML = '';
             if (visualInitialized) {
                 for (let i = 0; i < 20; i++) {
@@ -2241,6 +2267,10 @@
             if (goToIntro) {
                 goToStep(0);
             }
+            try {
+                localStorage.removeItem(FLOW_SURVEY_STATE_KEY);
+            } catch (e) {}
+            return true;
         }
 
         function loadFlowSurveyStateOnBoot() {

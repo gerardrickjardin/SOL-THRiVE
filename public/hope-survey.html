@@ -1922,6 +1922,7 @@ const HopeChart = ({ answers, surveyQuestions, isFinal, onViewDashboard, onRetak
                                 )}
                                 <button
                                     type="button"
+                                    id="results-hope-retake-btn"
                                     onClick={onRetake || (() => window.location.reload())}
                                     className="px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-black rounded-full hover:from-cyan-500 hover:to-blue-500 transition-all shadow-lg tracking-wide uppercase text-xs border border-cyan-400/50 flex items-center gap-2"
                                 >
@@ -2432,6 +2433,7 @@ const Dashboard = ({ user, history, onRetake, onViewLatestReport, onOpenAuth }) 
                         )}
                         <button 
                             type="button"
+                            id="dashboard-hope-retake-btn"
                             onClick={onRetake}
                             className="bg-slate-900 text-white px-8 py-3.5 rounded-full font-bold text-base hover:bg-slate-800 hover:-translate-y-0.5 transition-all shadow-xl inline-flex items-center gap-3"
                         >
@@ -2707,8 +2709,7 @@ const App = () => {
             const hasAnswers = Object.keys(answers || {}).length > 0;
             const hasReflections = Object.keys(reflections || {}).some((k) => String(reflections[k] || '').trim().length > 0);
             const hasSelection = currentSelection !== null && currentSelection !== undefined;
-            const hasHistory = Array.isArray(surveyHistory) && surveyHistory.length > 0;
-            if (!hasAnswers && !hasReflections && !hasSelection && !hasHistory && step === 'intro') {
+            if (!hasAnswers && !hasReflections && !hasSelection && step === 'intro') {
                 return;
             }
             localStorage.setItem(HOPE_SURVEY_STATE_KEY, JSON.stringify({
@@ -2723,7 +2724,29 @@ const App = () => {
         } catch (e) {}
     }, [step, currentQIndex, answers, reflections, currentSelection, surveyHistory]);
 
+    const hasHopeProgressToConfirm = () => {
+        let hasStored = false;
+        try {
+            hasStored = Boolean(localStorage.getItem(HOPE_SURVEY_STATE_KEY));
+        } catch (e) {}
+        const hasAnswers = Object.keys(answers || {}).length > 0;
+        const hasReflections = Object.keys(reflections || {}).some(
+            (k) => String(reflections[k] || '').trim().length > 0
+        );
+        const hasSelection = currentSelection !== null && currentSelection !== undefined;
+        const hasHistory = Array.isArray(surveyHistory) && surveyHistory.length > 0;
+        return Boolean(resumeNoticeVisible) || hasStored || hasAnswers || hasReflections || hasSelection || hasHistory;
+    };
+
     const handleResetSavedHopeProgress = () => {
+        if (hasHopeProgressToConfirm()) {
+            const confirmed = (typeof window !== 'undefined' && typeof window.confirm === 'function')
+                ? window.confirm('Start fresh and clear your saved HoPE Index progress on this device? This action cannot be undone.')
+                : true;
+            if (!confirmed) {
+                return false;
+            }
+        }
         stopHopeAudio();
         try { localStorage.removeItem(HOPE_SURVEY_STATE_KEY); } catch (e) {}
         pendingGuestHistoryRef.current = [];
@@ -2736,6 +2759,8 @@ const App = () => {
         setCurrentQIndex(0);
         setCurrentSelection(null);
         setStep('intro');
+        scrollQuestionIntoView();
+        return true;
     };
 
     const renderResumeBanner = () => {
@@ -2990,7 +3015,16 @@ const App = () => {
     };
 
     const handleRetake = () => {
+        if (hasHopeProgressToConfirm()) {
+            const confirmed = (typeof window !== 'undefined' && typeof window.confirm === 'function')
+                ? window.confirm('Start a new HoPE Index assessment and clear your current responses? This action cannot be undone.')
+                : true;
+            if (!confirmed) {
+                return false;
+            }
+        }
         stopHopeAudio();
+        try { localStorage.removeItem(HOPE_SURVEY_STATE_KEY); } catch (e) {}
         setResumeNoticeVisible(false);
         setAnswers({});
         setReflections({});
@@ -2998,6 +3032,7 @@ const App = () => {
         setCurrentSelection(null);
         setStep('intro');
         scrollQuestionIntoView();
+        return true;
     };
 
     const handleSignOut = () => {
