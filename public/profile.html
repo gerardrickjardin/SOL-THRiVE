@@ -1064,6 +1064,22 @@ function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const copyTimerRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+    };
+  }, []);
+
+  const clearCopiedState = () => {
+    if (copyTimerRef.current) {
+      clearTimeout(copyTimerRef.current);
+      copyTimerRef.current = null;
+    }
+    setCopied(false);
+  };
+
   const copyToClipboard = async () => {
     const headerTitle = userDetails.interviewee ? `${userDetails.interviewee.toUpperCase()}'S THRIVE REPORT` : "MY THRiVE REPORT";
     const interviewerInfo = userDetails.interviewer ? ` • Interviewed by ${userDetails.interviewer}` : "";
@@ -1100,7 +1116,11 @@ function App() {
     }
     
     setCopied(true);
-    setTimeout(() => setCopied(false), 3000);
+    if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+    copyTimerRef.current = setTimeout(() => {
+      copyTimerRef.current = null;
+      setCopied(false);
+    }, 3000);
   };
 
   const stepLabels = [
@@ -1197,6 +1217,7 @@ function App() {
               data={reportData} 
               userDetails={userDetails}
               onCopy={copyToClipboard} 
+              onClearCopied={clearCopiedState}
               copied={copied} 
               onBack={handleBack}
               onReset={handleResetProgress}
@@ -2055,7 +2076,7 @@ function ChatSection({ section, stepNumber, initialDraft, hasApprovedSection, on
   );
 }
 
-function FinalReport({ data, userDetails, onCopy, copied, onBack, onReset, onUpdateSection, onPersistReport }) {
+function FinalReport({ data, userDetails, onCopy, onClearCopied, copied, onBack, onReset, onUpdateSection, onPersistReport }) {
   const [isSavingCloud, setIsSavingCloud] = useState(false);
   const [editingSectionKey, setEditingSectionKey] = useState(null);
   const [editDraft, setEditDraft] = useState('');
@@ -2079,6 +2100,19 @@ function FinalReport({ data, userDetails, onCopy, copied, onBack, onReset, onUpd
     };
   }, []);
 
+  const clearShareReportStatus = () => {
+    if (shareReportTimerRef.current) {
+      clearTimeout(shareReportTimerRef.current);
+      shareReportTimerRef.current = null;
+    }
+    setShareReportStatus(null);
+  };
+
+  const handleCopyReportClick = async () => {
+    clearShareReportStatus();
+    if (onCopy) await onCopy();
+  };
+
   const buildFormattedReportText = () => {
     const headerTitle = userDetails?.interviewee ? `${userDetails.interviewee.toUpperCase()}'S THRIVE REPORT` : "MY THRiVE REPORT";
     const interviewerInfo = userDetails?.interviewer ? ` • Interviewed by ${userDetails.interviewer}` : "";
@@ -2090,9 +2124,33 @@ function FinalReport({ data, userDetails, onCopy, copied, onBack, onReset, onUpd
   };
 
   const handleShareReport = async () => {
-    if (isSharingReportRef.current) return;
+    const globalSharing = Boolean(
+      window.ThriveCoachingDossier &&
+      typeof window.ThriveCoachingDossier.isSharing === 'function' &&
+      window.ThriveCoachingDossier.isSharing()
+    );
+    if (isSharingReportRef.current || globalSharing) return;
+
     const { headerTitle, reportText } = buildFormattedReportText();
     const sharePayload = { title: headerTitle, text: reportText };
+
+    if (window.ThriveCoachingDossier && typeof window.ThriveCoachingDossier.shareWithFallback === 'function') {
+      isSharingReportRef.current = true;
+      try {
+        const res = await window.ThriveCoachingDossier.shareWithFallback(sharePayload, null, {
+          fallbackText: reportText
+        });
+        if (res.canceled) return;
+        if (onClearCopied) onClearCopied();
+        setShareReportStatus(res.shared ? 'shared' : 'copied');
+        if (shareReportTimerRef.current) clearTimeout(shareReportTimerRef.current);
+        shareReportTimerRef.current = setTimeout(() => setShareReportStatus(null), 3000);
+        return;
+      } finally {
+        isSharingReportRef.current = false;
+      }
+    }
+
     const canShareNative = (() => {
       if (typeof navigator === 'undefined' || typeof navigator.share !== 'function') return false;
       if (typeof navigator.canShare === 'function') {
@@ -2105,6 +2163,7 @@ function FinalReport({ data, userDetails, onCopy, copied, onBack, onReset, onUpd
       isSharingReportRef.current = true;
       try {
         await navigator.share(sharePayload);
+        if (onClearCopied) onClearCopied();
         setShareReportStatus('shared');
         if (shareReportTimerRef.current) clearTimeout(shareReportTimerRef.current);
         shareReportTimerRef.current = setTimeout(() => setShareReportStatus(null), 3000);
@@ -2112,7 +2171,15 @@ function FinalReport({ data, userDetails, onCopy, copied, onBack, onReset, onUpd
       } catch (err) {
         const name = String(err?.name || '');
         const msg = String(err?.message || '').toLowerCase();
-        if (name === 'AbortError' || msg.includes('aborterror') || msg.includes('cancel') || msg.includes('aborted')) {
+        if (
+          name === 'AbortError' ||
+          name === 'InvalidStateError' ||
+          msg.includes('aborterror') ||
+          msg.includes('invalidstateerror') ||
+          msg.includes('earlier share') ||
+          msg.includes('cancel') ||
+          msg.includes('aborted')
+        ) {
           return;
         }
         // Non-AbortError falls through to clipboard fallback
@@ -2140,6 +2207,7 @@ function FinalReport({ data, userDetails, onCopy, copied, onBack, onReset, onUpd
       try { document.execCommand('copy'); } catch (_) {}
       document.body.removeChild(el);
     }
+    if (onClearCopied) onClearCopied();
     setShareReportStatus('copied');
     if (shareReportTimerRef.current) clearTimeout(shareReportTimerRef.current);
     shareReportTimerRef.current = setTimeout(() => setShareReportStatus(null), 3000);
@@ -2288,7 +2356,8 @@ function FinalReport({ data, userDetails, onCopy, copied, onBack, onReset, onUpd
 
           <button 
             type="button"
-            onClick={onCopy}
+            id="copy-thrive-report-btn"
+            onClick={handleCopyReportClick}
             className={`w-full sm:w-auto rounded-full font-bold transition-all px-8 py-4 shadow-lg hover:shadow-xl flex items-center justify-center gap-3 text-lg
               ${copied ? 'bg-emerald-600 text-white ring-4 ring-emerald-100' : 'bg-blue-600 hover:bg-blue-700 text-white'}
             `}

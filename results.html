@@ -566,7 +566,8 @@ document.getElementById('copy').onclick = function(){
   copyCampaignLink().finally(() => {
     this.textContent = 'COPIED!';
     showShareFeedback('✓ Campaign link copied to clipboard!');
-    setTimeout(() => { this.textContent = 'COPY LINK'; }, 1500);
+    clearTimeout(this._resetTimer);
+    this._resetTimer = setTimeout(() => { this.textContent = 'COPY LINK'; }, 1500);
   });
 };
 
@@ -583,7 +584,15 @@ function isShareAbortError(err){
   if (!err) return false;
   const name = String(err.name || '');
   const msg = String(err.message || '').toLowerCase();
-  return name === 'AbortError' || msg.includes('aborterror') || msg.includes('cancel') || msg.includes('aborted');
+  return (
+    name === 'AbortError' ||
+    name === 'InvalidStateError' ||
+    msg.includes('aborterror') ||
+    msg.includes('invalidstateerror') ||
+    msg.includes('earlier share') ||
+    msg.includes('cancel') ||
+    msg.includes('aborted')
+  );
 }
 
 function canUseNativeShare(payload){
@@ -657,7 +666,7 @@ if (fbBtn) {
       e.preventDefault();
       await triggerNativeOrFallbackShare({
         fallbackText: liveCampaignUrl,
-        fallbackFeedback: '✓ Opening Facebook Share & copied link!',
+        fallbackFeedback: '✓ Campaign link copied for Facebook!',
         sharedFeedback: '✓ Shared Community Blueprint!'
       });
       return;

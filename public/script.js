@@ -805,11 +805,21 @@ const initThriveUI = () => {
         });
     };
 
+    let isGlobalSharing = false;
+
     const isShareAbortError = (err) => {
         if (!err) return false;
         const name = String(err.name || '');
         const msg = String(err.message || '').toLowerCase();
-        return name === 'AbortError' || msg.includes('aborterror') || msg.includes('cancel') || msg.includes('aborted');
+        return (
+            name === 'AbortError' ||
+            name === 'InvalidStateError' ||
+            msg.includes('aborterror') ||
+            msg.includes('invalidstateerror') ||
+            msg.includes('earlier share') ||
+            msg.includes('cancel') ||
+            msg.includes('aborted')
+        );
     };
 
     const canNativeShare = (sharePayload) => {
@@ -833,7 +843,9 @@ const initThriveUI = () => {
             : null;
         if (!triggerBtn.dataset) triggerBtn.dataset = {};
         if (!triggerBtn.dataset.defaultLabel) {
-            triggerBtn.dataset.defaultLabel = labelEl ? labelEl.textContent : String(triggerBtn.textContent || '').trim();
+            triggerBtn.dataset.defaultLabel = labelEl
+                ? String(labelEl.textContent || '').trim()
+                : String(triggerBtn.textContent || '').trim();
         }
         if (triggerBtn.classList && typeof triggerBtn.classList.add === 'function') {
             triggerBtn.classList.add('is-copied');
@@ -884,11 +896,12 @@ const initThriveUI = () => {
         const sharedLabel = options.sharedLabel || 'Shared ✓';
         const copiedLabel = options.copiedLabel || 'Copied ✓';
 
-        if (triggerBtn && triggerBtn._isSharing) {
+        if (isGlobalSharing || (triggerBtn && triggerBtn._isSharing)) {
             return { ok: false, method: 'share', shared: false, copied: false, canceled: true, text: fallbackText };
         }
 
         if (canNativeShare(cleanPayload)) {
+            isGlobalSharing = true;
             if (triggerBtn) triggerBtn._isSharing = true;
             try {
                 await navigator.share(cleanPayload);
@@ -900,6 +913,7 @@ const initThriveUI = () => {
                 }
                 // Non-AbortError falls through to clipboard fallback
             } finally {
+                isGlobalSharing = false;
                 if (triggerBtn) triggerBtn._isSharing = false;
             }
         }
@@ -939,6 +953,7 @@ const initThriveUI = () => {
         shareMasterPrompt,
         shareWithFallback,
         canNativeShare,
+        isSharing: () => isGlobalSharing,
         copyTextWithFallback,
         refreshStatusBadges,
         refreshPageUI: refreshStatusBadges

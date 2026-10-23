@@ -2360,7 +2360,12 @@ a {
 
 @media print {
     .footer,
-    .no-print {
+    .no-print,
+    .copy-master-prompt-btn,
+    .share-master-prompt-btn,
+    .dossier-cta-bar,
+    .dossier-status-pill,
+    .resume-progress-banner {
         display: none !important;
     }
 }
