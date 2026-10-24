@@ -126,59 +126,65 @@ main{max-width:1240px;margin:auto;padding:36px 28px 80px}
 .back{background:none;border:0;color:var(--violet);cursor:pointer;font-size:.88rem;margin-bottom:12px;font-family:'Inter'}
 @media(max-width:900px){.grid{grid-template-columns:1fr}.row2{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-/* ===== One-screen layout (desktop): no page scroll, equal-height columns ===== */
+/* ===== One-screen layout (desktop): content-sized, centered, equal-height columns ===== */
 @media(min-width:901px) and (min-height:620px){
   html,body{height:100%}
   body{display:flex;flex-direction:column;overflow:hidden;min-height:0}
   nav{flex:none}
   .nav-in{padding:10px 28px}
-  main{flex:1;min-height:0;display:flex;flex-direction:column;padding:clamp(8px,1.6vh,18px) 28px clamp(10px,2vh,22px);width:100%}
-  .stepper{margin-bottom:clamp(6px,1.4vh,14px);flex:none}
+  main{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:flex-start;padding:clamp(14px,3vh,32px) 28px clamp(12px,2.4vh,28px);width:100%}
+  .stepper{flex:none;margin-bottom:clamp(8px,1.6vh,16px)}
   .stepper div{padding:4px 12px}
-  .view.active{display:flex;flex-direction:column;flex:1;min-height:0}
-  .hero{flex:none;margin-bottom:clamp(8px,1.8vh,18px)}
+  .view.active{display:flex;flex-direction:column;flex:0 1 auto;min-height:0}
+  .hero{flex:none;margin-bottom:clamp(10px,2vh,20px)}
   .hero .eyebrow,.hero p{display:none}
   .hero h1{font-size:clamp(1.4rem,3.4vh + .6rem,2.3rem);margin-bottom:0}
-  .hero p{font-size:clamp(.82rem,1.5vh + .3rem,1rem)}
-  .grid{flex:1;min-height:0;align-items:stretch;gap:24px}
+  /* Equal-height columns sized by their content */
+  .grid{flex:0 1 auto;min-height:0;align-items:stretch;gap:24px}
   .grid>.card,.grid>div{min-height:0}
   .grid>div{display:flex;flex-direction:column}
   .grid>div>.card{flex:1;min-height:0}
-  .card{padding:clamp(12px,2vh,24px);display:flex;flex-direction:column;overflow:auto}
+  .card{padding:clamp(16px,2.6vh,28px);display:flex;flex-direction:column;overflow:auto}
   .card h2{font-size:clamp(1.15rem,2.2vh + .4rem,1.5rem)}
-  .card .sub{margin-bottom:clamp(8px,1.6vh,18px);font-size:.9rem}
-  /* Intro: video fills left card, audit fills right card */
-  #v-intro .grid>.card:first-child .video{flex:1;aspect-ratio:auto;min-height:0}
-  .vcap{flex:none;margin-top:clamp(8px,1.4vh,14px);font-size:.85rem}
+  .card .sub{margin-bottom:clamp(10px,1.8vh,18px);font-size:.9rem}
+  /* Intro: audit sets the height, video fills the left card */
   .grid>.card:first-child .eyebrow{align-self:flex-start;flex:none}
+  #v-intro .grid>.card:first-child .video{flex:1 1 0;min-height:200px;aspect-ratio:auto}
+  .vcap{flex:none;margin-top:clamp(10px,1.6vh,16px);font-size:.85rem}
   #right-col{overflow:auto}
-  #audit,#lead{flex:1;min-height:0;flex-direction:column}
-  #audit{display:flex}
-  #audit .q{flex:1 0 auto;margin-bottom:0;display:flex;flex-direction:column;justify-content:center}
-  #audit .q p{font-size:clamp(.78rem,1.3vh + .22rem,.92rem);line-height:1.35;margin:2px 0 clamp(3px,.8vh,8px)}
-  #audit .q .lab{font-size:.68rem}
-  #audit .rate{gap:6px}
-  #audit .card-opt{padding:clamp(4px,.9vh,10px) 0;font-size:.95rem}
-  #audit .ends{font-size:.68rem;margin-top:3px}
+  #audit{display:flex;flex-direction:column;gap:clamp(12px,2.4vh,26px)}
+  #audit h2{margin-bottom:0}
   #audit-sub{display:none}
-  #audit>.btn{flex:none;margin-top:clamp(6px,1.2vh,14px);padding:clamp(9px,1.4vh,14px) 20px}
-  #lead{justify-content:center}
-  .field{margin-bottom:clamp(8px,1.4vh,14px)}
-  .field input{padding:clamp(8px,1.3vh,12px) 14px}
-  /* Consensus */
-  .bar-row{margin-bottom:clamp(8px,1.8vh,18px)}
-  .vote{padding:clamp(8px,1.6vh,16px);margin-bottom:clamp(6px,1.2vh,12px)}
-  .vote .ic{width:clamp(38px,5vh,52px);height:clamp(38px,5vh,52px)}
-  .hint{margin:6px 0 clamp(6px,1.2vh,14px)}
+  #audit .q{margin:0}
+  #audit .q .lab{font-size:.7rem}
+  #audit .q p{font-size:clamp(.84rem,1.2vh + .3rem,.98rem);line-height:1.4;margin:3px 0 clamp(6px,1.1vh,10px)}
+  #audit .rate{gap:8px}
+  #audit .card-opt{padding:clamp(6px,1.2vh,12px) 0;font-size:.98rem}
+  #audit .ends{font-size:.7rem;margin-top:4px}
+  #audit>.btn{flex:none;margin-top:2px;padding:clamp(10px,1.6vh,14px) 20px}
+  /* Lead form */
+  #lead{display:flex;flex-direction:column}
+  #lead .eyebrow{align-self:flex-start}
+  .field{margin-bottom:clamp(10px,1.6vh,16px)}
+  .field input{padding:clamp(9px,1.4vh,13px) 14px}
+  /* Consensus: bars spread evenly to match the vote card */
+  #bars{flex:1;display:flex;flex-direction:column;justify-content:space-between;padding-top:6px}
+  .track{height:clamp(12px,1.7vh,16px)}
+  .bar-top{font-size:.92rem;margin-bottom:8px}
+  .bar-row{margin:0}
+  .vote{padding:clamp(10px,1.8vh,16px);margin-bottom:clamp(8px,1.4vh,12px)}
+  .vote .ic{width:clamp(40px,5.4vh,52px);height:clamp(40px,5.4vh,52px)}
+  .hint{margin:4px 0 clamp(8px,1.4vh,14px)}
   /* Calendar */
-  .days{flex:0 1 auto;min-height:0;grid-auto-rows:clamp(30px,6.2vh,54px);gap:clamp(4px,.9vh,8px)}
-  .day{aspect-ratio:auto;min-height:0}
-  .slots{margin:clamp(6px,1.2vh,12px) 0;gap:clamp(6px,1vh,10px)}
-  .slot{padding:clamp(7px,1.2vh,12px)}
-  .summary{padding:clamp(8px,1.4vh,16px);margin-bottom:clamp(8px,1.4vh,16px)}
-  .course{margin-bottom:clamp(8px,1.4vh,18px)}
+  .days{flex:1;min-height:0;grid-auto-rows:minmax(34px,1fr);gap:clamp(5px,.9vh,8px)}
+  .day{aspect-ratio:auto;min-height:0;height:clamp(36px,5.4vh,48px);align-self:center}
+  .slots{margin:clamp(8px,1.4vh,14px) 0;gap:clamp(8px,1.2vh,10px)}
+  .slot{padding:clamp(8px,1.3vh,12px)}
+  .summary{padding:clamp(10px,1.6vh,16px);margin-bottom:clamp(10px,1.6vh,16px)}
+  .course{margin-bottom:clamp(10px,1.6vh,18px)}
   .course svg{width:48px;height:48px}
   /* Checkout */
+  .line.total{margin-top:auto}
   #v-pay #payment-element{overflow:auto}
   .success{margin:auto}
 }
