@@ -2,6 +2,7 @@
   "name": "SOL THRiVE • THRiVE Coaching",
   "short_name": "THRiVE",
   "description": "Go Unstuck Yourself. Evidence-based, AI-powered personal coaching tools including the Flow Survey, THRiVE Report, and 20-Dimension HoPE Index.",
+  "id": "/",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
