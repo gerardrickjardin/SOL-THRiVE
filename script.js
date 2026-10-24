@@ -29,6 +29,125 @@ const initThriveUI = () => {
         });
     }
 
+    // Active Page & Section Highlighting in Desktop Navbar & Mobile Drawer
+    const normalizePageSlug = (rawPath) => {
+        const cleaned = String(rawPath || '')
+            .split('?')[0]
+            .split('#')[0]
+            .replace(/\/+$/, '');
+        const lastSegment = cleaned.split('/').pop() || '';
+        const slug = lastSegment.replace(/\.html?$/i, '').trim().toLowerCase();
+        return slug || 'index';
+    };
+
+    const parseNavLinkHref = (rawHref, currentSlug) => {
+        const trimmed = String(rawHref || '').trim();
+        if (!trimmed || /^(javascript:|mailto:|tel:)/i.test(trimmed)) {
+            return null;
+        }
+        if (/^https?:\/\//i.test(trimmed)) {
+            try {
+                const u = new URL(trimmed, window.location.origin);
+                if (window.location.origin && window.location.origin !== 'null' && u.origin !== window.location.origin) {
+                    return null;
+                }
+                return {
+                    slug: normalizePageSlug(u.pathname),
+                    hash: String(u.hash || '').toLowerCase()
+                };
+            } catch (_) {
+                return null;
+            }
+        }
+        if (trimmed.startsWith('#')) {
+            return {
+                slug: currentSlug,
+                hash: trimmed.toLowerCase()
+            };
+        }
+        const hashIdx = trimmed.indexOf('#');
+        const pathPart = hashIdx >= 0 ? trimmed.slice(0, hashIdx) : trimmed;
+        const hashPart = hashIdx >= 0 ? trimmed.slice(hashIdx).toLowerCase() : '';
+        return {
+            slug: pathPart ? normalizePageSlug(pathPart) : currentSlug,
+            hash: hashPart
+        };
+    };
+
+    const updateActiveNavLinks = (customPathname, customHash) => {
+        const pathname = typeof customPathname === 'string' ? customPathname : (window.location.pathname || '');
+        const rawHash = typeof customHash === 'string' ? customHash : (window.location.hash || '');
+        const currentSlug = normalizePageSlug(pathname);
+        const currentHash = String(rawHash || '').trim().toLowerCase();
+        const effectiveNavSlug = currentSlug === 'results' ? 'mockup-landing' : currentSlug;
+
+        const allNavLinks = Array.from(document.querySelectorAll(
+            '.desktop-menu a, .nav-menu a, .nav-links a, .mobile-drawer a, .top-nav a, .challenge-switcher a'
+        ));
+
+        let hasMatchingHashNav = false;
+        if (currentHash) {
+            hasMatchingHashNav = allNavLinks.some(link => {
+                if (link.closest('.challenge-switcher')) return false;
+                const parsed = parseNavLinkHref(link.getAttribute('href'), currentSlug);
+                return Boolean(parsed && parsed.hash && parsed.slug === effectiveNavSlug && parsed.hash === currentHash);
+            });
+        }
+
+        allNavLinks.forEach(link => {
+            const parsed = parseNavLinkHref(link.getAttribute('href'), currentSlug);
+            if (!parsed) {
+                link.classList.remove('active');
+                link.removeAttribute('aria-current');
+                return;
+            }
+
+            let isMatch = false;
+            if (link.closest('.challenge-switcher')) {
+                isMatch = !parsed.hash && parsed.slug === currentSlug;
+            } else if (parsed.hash) {
+                isMatch = parsed.slug === effectiveNavSlug && Boolean(currentHash) && parsed.hash === currentHash;
+            } else if (parsed.slug === 'index') {
+                isMatch = effectiveNavSlug === 'index' && !hasMatchingHashNav;
+            } else {
+                isMatch = parsed.slug === effectiveNavSlug || parsed.slug === currentSlug;
+            }
+
+            if (isMatch) {
+                link.classList.add('active');
+                link.setAttribute('aria-current', 'page');
+            } else {
+                link.classList.remove('active');
+                link.removeAttribute('aria-current');
+            }
+        });
+
+        document.querySelectorAll('.desktop-menu .dropdown, .nav-menu .dropdown, .nav-links .dropdown, .mobile-drawer .dropdown').forEach(dropdown => {
+            const trigger = dropdown.querySelector(':scope > a');
+            const activeChild = dropdown.querySelector('.dropdown-content a.active, .dropdown-content a[aria-current="page"]');
+            if (trigger) {
+                trigger.classList.toggle('active-parent', Boolean(activeChild && !trigger.classList.contains('active')));
+            }
+        });
+
+        document.querySelectorAll('.brand-logo-link').forEach(brandLink => {
+            const parsed = parseNavLinkHref(brandLink.getAttribute('href'), currentSlug);
+            const isHomeMatch = Boolean(parsed && !parsed.hash && parsed.slug === 'index' && effectiveNavSlug === 'index' && !hasMatchingHashNav);
+            if (isHomeMatch) {
+                brandLink.classList.add('active');
+                brandLink.setAttribute('aria-current', 'page');
+            } else {
+                brandLink.classList.remove('active');
+                brandLink.removeAttribute('aria-current');
+            }
+        });
+    };
+
+    updateActiveNavLinks();
+    window.updateActiveNavLinks = updateActiveNavLinks;
+    window.addEventListener('hashchange', () => updateActiveNavLinks());
+    window.addEventListener('popstate', () => updateActiveNavLinks());
+
     // Video Placeholder Interactive Walkthrough + Local Video Player
     const videoCard = document.getElementById('video-player-card');
     if (videoCard) {
