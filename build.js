@@ -35,6 +35,9 @@ const removeIfExists = (filePath) => {
       fs.copyFileSync(file, path.join(outDir, file));
     }
   });
+  if (fs.existsSync('funnel.html')) {
+    fs.copyFileSync('funnel.html', path.join(outDir, 'landingpage.html'));
+  }
   EXCLUDED_ROOT_FILES.forEach(file => removeIfExists(path.join(outDir, file)));
 
   const assetsDirSrc = path.join(__dirname, 'assets');
