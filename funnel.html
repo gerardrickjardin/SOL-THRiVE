@@ -211,21 +211,15 @@ main{max-width:1240px;margin:auto;padding:36px 28px 80px}
     <header class="hero">
       <span class="eyebrow">Blueprint &amp; Community Consensus</span>
       <h1 id="greet">Welcome</h1>
-      <p>Here is how your practice compares with the community, and a short briefing on the Blueprint.</p>
+      <p>Here is how your practice compares with the community. Next, cast your vote.</p>
     </header>
     <div class="grid">
       <div>
-        <div class="card" style="margin-bottom:28px">
+        <div class="card">
           <h2>You vs. the community</h2>
           <p class="sub">Percentage of community members who rated 4 or 5.</p>
           <div class="legend"><span><i style="background:var(--violet)"></i>You</span><span><i style="background:var(--ink)"></i>Community</span></div>
           <div id="bars"></div>
-        </div>
-        <div class="card">
-          <h2>The Blueprint Documentary</h2>
-          <p class="sub">5:30 briefing. Watch before you vote.</p>
-          <div class="video"><video id="blueprint" src="minds-eye-white-bg.mp4" poster="assets/sol-meadow-bg.jpg" controls playsinline preload="metadata"></video></div>
-          <div class="vprog"><div id="vp"></div></div>
         </div>
       </div>
       <div class="card">
@@ -234,7 +228,7 @@ main{max-width:1240px;margin:auto;padding:36px 28px 80px}
         <button class="vote" data-v="spaces" type="button"><span class="ic"><svg width="30" height="30" viewBox="0 0 32 32" fill="none" stroke="#18181B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 28V14l8-6 8 6v14M4 28h24M20 28V18h8v10M10 28v-8h4v8"/></svg></span><span><b>Transform Community Spaces</b><small>Safe, welcoming places to gather and grow.</small></span><span class="chk">✓</span></button>
         <button class="vote" data-v="mentors" type="button"><span class="ic"><svg width="30" height="30" viewBox="0 0 32 32" fill="none" stroke="#18181B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="9" r="4"/><circle cx="23" cy="14" r="3"/><path d="M4 28c0-6 3-10 7-10s7 4 7 10M19 28c0-4 2-7 4-7s5 3 5 7"/></svg></span><span><b>Empower Mentors</b><small>Equip guides who walk beside our youth.</small></span><span class="chk">✓</span></button>
         <button class="vote" data-v="neighborhoods" type="button"><span class="ic"><svg width="30" height="30" viewBox="0 0 32 32" fill="none" stroke="#18181B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 28S4 20 4 11a6 6 0 0 1 12-2 6 6 0 0 1 12 2c0 9-12 17-12 17z"/></svg></span><span><b>Heal Our Neighborhoods</b><small>Restore trust and support block by block.</small></span><span class="chk">✓</span></button>
-        <p class="hint" id="vote-hint">Watch the Blueprint briefing, then submit your vote.</p>
+        <p class="hint" id="vote-hint">Choose a priority to continue.</p>
         <button class="btn btn-primary btn-block" id="vote-submit" type="button" disabled>Submit my vote &amp; book my class →</button>
       </div>
     </div>
@@ -361,21 +355,14 @@ main{max-width:1240px;margin:auto;padding:36px 28px 80px}
       <div class="track"><div class="fill com" data-w="${community[i]}"></div></div></div>`).join('');
   }
 
-  // Blueprint video progress & voting
-  let watched=false;
-  const bp=$('#blueprint');
+  // Voting
   function updVote(){
-    $('#vote-submit').disabled=!(state.vote&&watched);
-    $('#vote-hint').textContent=!watched?'Watch the Blueprint briefing (or at least most of it) to unlock your vote.':(!state.vote?'Choose a priority to continue.':'Ready when you are.');
+    $('#vote-submit').disabled=!state.vote;
+    $('#vote-hint').textContent=state.vote?'Ready when you are.':'Choose a priority to continue.';
   }
-  bp.addEventListener('timeupdate',()=>{
-    const p=bp.duration?bp.currentTime/bp.duration:0;$('#vp').style.width=(p*100)+'%';
-    if(p>.85&&!watched){watched=true;updVote()}
-  });
-  bp.addEventListener('ended',()=>{watched=true;updVote()});
   $$('.vote').forEach(b=>b.onclick=()=>{state.vote=b.dataset.v;$$('.vote').forEach(x=>x.classList.toggle('sel',x===b));updVote()});
   updVote();
-  $('#vote-submit').onclick=()=>{track('vote',{vote:state.vote});bp.pause();initBooking();go(4)};
+  $('#vote-submit').onclick=()=>{track('vote',{vote:state.vote});initBooking();go(4)};
 
   // Calendar
   const today=new Date();today.setHours(0,0,0,0);
