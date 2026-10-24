@@ -1917,10 +1917,16 @@
             const mainContainer = document.getElementById('step-3');
             const surveyContainer = document.getElementById('survey-container');
             const visualAnchor = document.getElementById('visual-anchor');
+            const summaryImgEl = document.getElementById('summary-metaphor-img');
             
             const origMain = mainContainer.className;
             const origSurvey = surveyContainer.className;
             const origVisual = visualAnchor.className;
+
+            if (summaryImgEl && !summaryImgEl.classList.contains('hidden') && summaryImgEl.getAttribute('src')) {
+                summaryImgEl.loading = 'eager';
+                summaryImgEl.decoding = 'sync';
+            }
 
             mainContainer.className = 'flex flex-col w-[768px] max-w-[768px] mx-auto bg-white rounded-3xl border-2 border-[#1E2430] p-8';
             surveyContainer.className = 'w-full';
@@ -1929,35 +1935,71 @@
             const restoreLayout = () => {
                 actionButtons.classList.remove('hidden');
                 if (!ctaWasHidden) thriveCta.classList.remove('hidden');
+                if (summaryImgEl) {
+                    summaryImgEl.setAttribute('loading', 'lazy');
+                    summaryImgEl.setAttribute('decoding', 'async');
+                }
                 mainContainer.className = origMain;
                 surveyContainer.className = origSurvey;
                 visualAnchor.className = origVisual;
                 isExportingImage = false;
             };
 
-            setTimeout(() => {
-                try {
-                    html2canvas(mainContainer, {
-                        scale: 2,
-                        useCORS: true, 
-                        scrollY: -window.scrollY,
-                        backgroundColor: '#ffffff'
-                    }).then(canvas => {
-                        const imgData = canvas.toDataURL('image/jpeg', 0.95);
-                        const link = document.createElement('a');
-                        link.download = 'My_Flow_Fingerprint.jpg';
-                        link.href = imgData;
-                        link.click();
-                    }).catch(err => {
-                        console.error('Failed to export image:', err);
-                    }).finally(() => {
-                        restoreLayout();
-                    });
-                } catch (err) {
-                    // e.g. html2canvas CDN failed to load
-                    console.error('Failed to export image:', err);
-                    restoreLayout();
+            const waitForSummaryImage = () => {
+                if (!summaryImgEl || summaryImgEl.classList.contains('hidden') || !summaryImgEl.getAttribute('src')) {
+                    return Promise.resolve();
                 }
+                if (summaryImgEl.complete && summaryImgEl.naturalWidth > 0) {
+                    return typeof summaryImgEl.decode === 'function'
+                        ? summaryImgEl.decode().catch(() => {})
+                        : Promise.resolve();
+                }
+                return new Promise(resolve => {
+                    let settled = false;
+                    const done = () => {
+                        if (settled) return;
+                        settled = true;
+                        clearTimeout(timer);
+                        resolve();
+                    };
+                    const timer = setTimeout(done, 2500);
+                    summaryImgEl.addEventListener('load', done, { once: true });
+                    summaryImgEl.addEventListener('error', done, { once: true });
+                });
+            };
+
+            setTimeout(() => {
+                waitForSummaryImage().then(() => {
+                    try {
+                        html2canvas(mainContainer, {
+                            scale: 2,
+                            useCORS: true, 
+                            scrollY: -window.scrollY,
+                            backgroundColor: '#ffffff',
+                            ignoreElements: (el) => el && (el.id === 'step-0' || el.id === 'step-1' || el.id === 'step-2'),
+                            onclone: (clonedDoc) => {
+                                clonedDoc.querySelectorAll('#step-3 img').forEach(img => {
+                                    img.loading = 'eager';
+                                    img.decoding = 'sync';
+                                });
+                            }
+                        }).then(canvas => {
+                            const imgData = canvas.toDataURL('image/jpeg', 0.95);
+                            const link = document.createElement('a');
+                            link.download = 'My_Flow_Fingerprint.jpg';
+                            link.href = imgData;
+                            link.click();
+                        }).catch(err => {
+                            console.error('Failed to export image:', err);
+                        }).finally(() => {
+                            restoreLayout();
+                        });
+                    } catch (err) {
+                        // e.g. html2canvas CDN failed to load
+                        console.error('Failed to export image:', err);
+                        restoreLayout();
+                    }
+                });
             }, 150);
         }
 

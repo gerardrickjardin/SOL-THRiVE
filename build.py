@@ -58,11 +58,11 @@ for out_dir in out_dirs:
     for file in ['profile.html', 'survey.html', 'hope-survey.html']:
         file_path = os.path.join(out_dir, file)
         if os.path.exists(file_path):
-            with open(file_path, 'r', encoding='utf8') as f:
+            with open(file_path, 'r', encoding='utf8', newline='') as f:
                 content = f.read()
             content = content.replace('%VITE_ELEVENLABS_API_KEY%', el_token)
             content = content.replace('%VITE_GEMINI_API_KEY%', gem_token)
-            with open(file_path, 'w', encoding='utf8') as f:
+            with open(file_path, 'w', encoding='utf8', newline='') as f:
                 f.write(content)
 
 print("Build complete.")
