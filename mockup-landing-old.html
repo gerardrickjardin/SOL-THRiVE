@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SOL THRiVE – Community Blueprint &amp; Clinical Practice Audit</title>
+<meta name="description" content="SOL THRiVE Community Blueprint &amp; Clinical Practice Audit: watch the story, share your voice, and help our community unlock $2,500,000+ in family coaching and resilience funds.">
+<meta name="theme-color" content="#F7F4EB">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="THRiVE Coaching">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="SOL THRiVE Coaching">
+<meta property="og:title" content="SOL THRiVE – Community Blueprint &amp; Clinical Practice Audit">
+<meta property="og:description" content="SOL THRiVE Community Blueprint &amp; Clinical Practice Audit: watch the story, share your voice, and help our community unlock $2,500,000+ in family coaching and resilience funds.">
+<meta property="og:url" content="https://sol-th-ri-ve.vercel.app/mockup-landing.html">
+<meta property="og:image" content="https://sol-th-ri-ve.vercel.app/assets/hero-banner.jpg">
+<meta property="og:image:width" content="3840">
+<meta property="og:image:height" content="2141">
+<meta property="og:image:alt" content="SOL THRiVE Coaching — From Tangled Friction to Blooming Flow">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="SOL THRiVE – Community Blueprint &amp; Clinical Practice Audit">
+<meta name="twitter:description" content="SOL THRiVE Community Blueprint &amp; Clinical Practice Audit: watch the story, share your voice, and help our community unlock $2,500,000+ in family coaching and resilience funds.">
+<meta name="twitter:image" content="https://sol-th-ri-ve.vercel.app/assets/hero-banner.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@700&family=Patrick+Hand&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#F8F3E4; --slate:#5B79A6; --slate-d:#4A6590; --sage:#9DB68C; --sage-d:#7E9C6E; --earth:#8A5A3B;
+  --pale:#CFDFF2; --gray:#6F6F75; --ink:#2B2B30;
+  --r:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{
+  font-family:'Patrick Hand',cursive; color:var(--ink); font-size:17px; line-height:1.3;
+  background-color:#F3EEE0;
+  background-image:
+    radial-gradient(ellipse 55% 60% at 0% 0%,rgba(91,121,166,.28),transparent 65%),
+    radial-gradient(ellipse 50% 55% at 100% 100%,rgba(126,156,110,.30),transparent 65%),
+    radial-gradient(ellipse 40% 45% at 100% 0%,rgba(207,223,242,.75),transparent 65%),
+    radial-gradient(ellipse 35% 40% at 0% 100%,rgba(138,90,59,.12),transparent 65%),
+    radial-gradient(rgba(43,43,48,.08) 1px,transparent 1.3px);
+  background-size:auto,auto,auto,auto,22px 22px;background-repeat:no-repeat,no-repeat,no-repeat,no-repeat,repeat;
+  background-attachment:fixed;
+  overflow-x:hidden;
+  overflow-y:auto;
+}
+h1,h2,h3{font-family:'Kalam',cursive;font-weight:700}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px 18px;min-height:100vh;height:auto;display:flex;flex-direction:column}
+
+/* top bar */
+.top{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:12px 0 4px;gap:12px}
+.brand{font-family:'Kalam',cursive;font-weight:700;font-size:1.6rem;display:flex;align-items:center;gap:10px;letter-spacing:1px;text-decoration:none;color:var(--ink)}
+.brand b{color:var(--slate)}
+.center{text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px}
+.pill{border:1.5px solid var(--ink);border-radius:10px;padding:2px 18px;background:var(--pale);font-size:.9rem;text-transform:uppercase;letter-spacing:1px}
+.pill2{background:#F4E9B8;border-radius:10px;padding:0 14px;font-size:.78rem;text-transform:uppercase;letter-spacing:.8px;color:#5a5130}
+.top-nav{justify-self:end;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.btn-sm{justify-self:end;white-space:nowrap;border:1.5px solid var(--ink);border-radius:10px;padding:5px 14px;background:#fffdf6;font:inherit;cursor:pointer;box-shadow:0 2px 0 rgba(43,43,48,.25);transition:.15s;color:var(--ink);text-decoration:none}
+.btn-sm:hover{transform:translateY(1px);box-shadow:none}
+.btn-sm:focus-visible,.brand:focus-visible{outline:3px solid var(--slate);outline-offset:3px;border-radius:10px}
+.btn-sm.active,.btn-sm[aria-current="page"]{background:#FFFBEB;background-image:linear-gradient(135deg,#FFFBEB 0%,#F5C84C 100%);color:#1E2430;border-color:#1E2430;font-weight:700;box-shadow:2px 2px 0 #1E2430}
+
+/* hero */
+.hero{text-align:center;padding:2px 0 12px;position:relative}
+.hero h1{font-size:clamp(1.1rem,2.6vh + .4vw,1.9rem);line-height:1.15;letter-spacing:.3px}
+.hl{background:rgba(157,182,140,.6);border-radius:6px;padding:0 8px}
+.hl2{color:var(--slate)}
+.hero p{font-size:.98rem;color:#4a4a52;max-width:760px;margin:4px auto 0}
+.note{display:inline-block;background:#fffdf6;border:1.5px dashed var(--earth);border-radius:10px;padding:0 10px;font-size:.78rem;color:var(--earth);margin-bottom:2px}
+.star{display:none;position:absolute;color:var(--slate);font-size:1.5rem;animation:tw 3s ease-in-out infinite}
+.star.y{color:#E3B23C}
+@keyframes tw{50%{transform:scale(1.3) rotate(20deg);opacity:.55}}
+
+/* main card */
+.card{
+  flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:22px;
+  border:1.5px solid rgba(43,43,48,.75);border-radius:18px;
+  background:rgba(251,247,236,.82);backdrop-filter:blur(3px);
+  box-shadow:0 8px 24px rgba(74,101,144,.18);padding:16px 20px;
+}
+.panel{display:flex;flex-direction:column;min-height:0}
+.panel + .panel{border-left:1.5px dashed rgba(111,111,117,.55);padding-left:22px;margin-left:-11px}
+.label{display:flex;align-items:center;gap:8px;text-transform:uppercase;letter-spacing:1.5px;color:var(--slate-d);font-size:.95rem;margin-bottom:8px}
+.sub{display:none}
+
+/* video */
+.video{
+  position:relative;flex:1;min-height:190px;border:1.5px solid var(--ink);border-radius:12px;overflow:hidden;
+  background:#dbe9d0 url('assets/sol-meadow-scene.jpg') center/cover no-repeat;
+}
+.video-el{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .35s ease;pointer-events:none;
+}
+.video.is-playing .video-el{opacity:1}
+.sticker{position:absolute;background:#F4E9B8;border:1.5px solid var(--ink);border-radius:8px;padding:1px 10px;font-size:.85rem;text-transform:uppercase;letter-spacing:.5px;z-index:2}
+.caption{position:absolute;left:12px;right:12px;bottom:10px;background:rgba(43,43,48,.88);color:#fff;padding:4px 12px;border-radius:8px;font-size:.9rem;z-index:2;text-align:left}
+.play{position:absolute;inset:0;width:100%;height:100%;background:transparent;border:0;cursor:pointer;transition:.2s;display:grid;place-items:center;z-index:1}
+.play:hover{background:rgba(255,255,255,.12)}
+.play-badge{
+  width:56px;height:56px;border-radius:50%;background:rgba(248,243,228,.92);border:2px solid var(--ink);
+  box-shadow:0 4px 12px rgba(43,43,48,.35);display:grid;place-items:center;font-size:1.35rem;color:var(--ink);transition:transform .2s,opacity .25s;
+}
+.play:hover .play-badge{transform:scale(1.08)}
+.video.is-playing .play-badge{opacity:0;transform:scale(.85)}
+.video.is-playing:hover .play-badge{opacity:.9;transform:scale(1)}
+.cta{
+  width:100%;margin-top:8px;padding:6px;border:1.5px solid var(--ink);border-radius:10px;
+  background:var(--sage);font:inherit;font-size:1rem;text-transform:uppercase;letter-spacing:1.5px;cursor:pointer;box-shadow:0 2px 0 rgba(43,43,48,.3);transition:.15s
+}
+.cta:hover{transform:translateY(1px);box-shadow:none;background:#abc49b}
+.quote{margin-top:8px;border:1.5px solid rgba(43,43,48,.7);border-radius:10px;padding:5px 12px 5px 38px;background:#F8F0D6;font-size:.95rem;position:relative}
+.quote::before{content:"“";position:absolute;left:10px;top:-2px;font-family:'Kalam';font-size:2.6rem;color:var(--earth)}
+.quote small{display:block;color:var(--earth);text-transform:uppercase;letter-spacing:1px;font-size:.78rem;text-align:right}
+.count{margin-top:8px;display:flex;align-items:center;gap:10px;font-size:.95rem}
+.count b{background:rgba(157,182,140,.55);border-radius:6px;padding:0 6px;font-weight:400}
+.dots{display:flex}
+.dots i{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--ink);margin-left:-7px;display:grid;place-items:center;font-style:normal;font-size:.62rem}
+.dots i:first-child{margin-left:0}
+
+/* survey */
+#form{flex:1;min-height:0;display:flex;flex-direction:column;gap:8px}
+.q{flex:1;min-height:0;border:1.5px solid rgba(43,43,48,.7);border-radius:10px;background:#fffdf7;padding:8px 14px;display:flex;flex-direction:column;justify-content:center}
+.tag{display:block;background:var(--pale);border-radius:6px;padding:1px 10px;margin:0 -4px 6px;font-size:.85rem;text-transform:uppercase;letter-spacing:1px;line-height:1.35;color:#3a4a66}
+.q p{margin-bottom:8px;font-size:1.05rem;line-height:1.2}
+.scale{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.scale button{font:inherit;font-size:1.1rem;padding:5px 0;border:1.5px solid rgba(43,43,48,.7);border-radius:8px;background:#F3EAD0;cursor:pointer;transition:.12s}
+.scale button:hover{background:var(--pale);transform:translateY(-1px)}
+.scale button.on{background:var(--sage);border-color:var(--ink);box-shadow:0 2px 0 rgba(43,43,48,.3)}
+.ends{display:flex;justify-content:space-between;font-size:.8rem;line-height:1;color:var(--gray);margin-top:5px}
+#submit{margin-top:0;background:var(--slate);color:#fff;border-radius:10px}
+#submit:hover{background:var(--slate-d)}
+.thanks{display:none;flex:1;text-align:center;padding:30px 10px}
+.thanks h3{font-size:2rem;color:var(--sage-d)}
+.thanks svg{width:110px;height:110px}
+
+/* post-vote lead form */
+.lead{display:none;flex:1;flex-direction:column;justify-content:center;gap:10px;text-align:center}
+.lead h3{font-size:1.5rem;line-height:1.2}
+.lead h3 span{display:block;color:var(--earth);font-size:1.15rem}
+.lead .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.lead input{width:100%;font:inherit;font-size:1.05rem;padding:9px 12px;border:1.5px solid rgba(43,43,48,.75);border-radius:10px;background:#fffdf7;color:var(--ink);outline:none;transition:.15s}
+.lead input::placeholder{color:#8a8a90}
+.lead input:focus{border-color:var(--slate);box-shadow:0 0 0 3px rgba(91,121,166,.25)}
+.lead .full{grid-column:1/-1}
+.lead .cta{margin-top:4px;padding:10px;background:var(--sage)}
+.lead .privacy{font-size:.85rem;color:var(--gray)}
+
+/* below-the-fold sections (hidden on the one-screen layout) */
+.pillars,.band,footer{display:none}
+.rough{filter:url(#rough)}
+
+/* phones / narrow: stack & allow scroll */
+@media(max-width:860px){
+  body{overflow:auto}
+  .wrap{height:auto;min-height:100vh}
+  .top{grid-template-columns:1fr;justify-items:center;text-align:center}
+  .btn-sm{justify-self:center}
+  .top-nav{justify-self:center;justify-content:center}
+  .card{grid-template-columns:1fr;gap:16px}
+  .panel + .panel{border-left:0;margin-left:0;padding-left:0;border-top:1.5px dashed rgba(111,111,117,.55);padding-top:14px}
+  .video{flex:none;aspect-ratio:16/10}
+  #form{flex:none}
+  .q{padding:10px 12px}
+  .star{display:none}
+}
+/* one-screen aesthetic on tall desktop viewports while allowing vertical scroll on shorter laptop screens */
+@media(min-width:861px){
+  html,body{overflow-x:hidden;overflow-y:auto}
+}
+@media(min-width:861px) and (min-height:860px){
+  .wrap{height:100vh}
+}
+</style>
+<script src="script.js" defer></script>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute"><filter id="rough"><feTurbulence type="fractalNoise" baseFrequency=".035" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="2.5"/></filter></svg>
+
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="index.html">
+      <svg width="40" height="40" viewBox="0 0 60 60" class="rough"><g fill="none" stroke="#2B2B30" stroke-width="3" stroke-linecap="round"><circle cx="30" cy="30" r="11" fill="#F2D675"/><path d="M30 6v8M30 46v8M6 30h8M46 30h8M13 13l6 6M41 41l6 6M47 13l-6 6M19 41l-6 6"/></g></svg>
+      <span>SOL <b>THRiVE</b></span>
+    </a>
+    <div class="center"></div>
+    <nav class="top-nav nav-links" aria-label="Site Navigation">
+      <a class="btn-sm active" href="mockup-landing.html" aria-current="page">SOL THRiVE</a>
+      <a class="btn-sm" href="index.html">Enter Full Homepage →</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <span class="star y" style="left:3%;top:36px">★</span>
+    <span class="star" style="right:4%;top:20px;animation-delay:1s">★</span>
+    <h1>Help Grow <span class="hl">$2,500,000+</span> in Community Funds<br>to Help Every Family <span class="hl2">THRiVE</span> by 50%</h1>
+    <p>Evidence-based psychology meets ethical, human-centered AI coaching—uniting clinicians, mentors, and families to close the between-session support gap.</p>
+  </section>
+
+  <main class="card">
+    <section class="panel">
+      <div class="label">🖼️ The SOL THRiVE Story</div>
+      <div class="video" id="story-video-box">
+        <video id="story-video" class="video-el" poster="assets/sol-meadow-scene.jpg" playsinline loop muted preload="metadata">
+          <source src="minds-eye-animated.webm" type="video/webm">
+          <source src="minds-eye-animated.mp4" type="video/mp4">
+        </video>
+        <span class="sticker" id="story-sticker" style="left:12px;top:14px">Every voice counts</span>
+        <button type="button" class="play" id="play-story-btn" aria-label="Play video"><span class="play-badge" id="play-badge-icon">▶</span></button>
+        <div class="caption" id="story-caption">“When our community comes together, every family gains a corner coach…”</div>
+      </div>
+      <button type="button" class="cta" id="restart-story-btn">↻ Click to Restart &amp; Unmute</button>
+      <div class="quote">We don’t need more promises. We need a plan we can build together.
+        <small>— Dr. Steve Huff, Founder &amp; Project Director</small></div>
+      <div class="count"><span class="dots"><i style="background:var(--pale)">JM</i><i style="background:var(--sage)">KF</i><i style="background:#e6c9a8">+</i></span>
+        <span><b id="community-count">47+</b> community members have shared their input so far.</span></div>
+    </section>
+
+    <section class="panel" id="survey">
+      <div class="label">📋 Clinical Practice Audit</div>
+      <div id="form">
+        <div class="q"><span class="tag">Q1. Between-Session Engagement</span><p>How often do your clients actively practice tools or reflections between sessions without you having to prompt them?</p>
+          <div class="scale"><button type="button">1</button><button type="button">2</button><button type="button">3</button><button type="button">4</button><button type="button">5</button></div>
+          <div class="ends"><span>1 = Rarely / Never</span><span>5 = Consistently</span></div></div>
+        <div class="q"><span class="tag">Q2. Client AI Reality</span><p>How often do your clients mention turning to ChatGPT, social media, or search engines to unpack emotional stress on their own?</p>
+          <div class="scale"><button type="button">1</button><button type="button">2</button><button type="button">3</button><button type="button">4</button><button type="button">5</button></div>
+          <div class="ends"><span>1 = Never</span><span>5 = Constantly</span></div></div>
+        <div class="q"><span class="tag">Q3. The Ethical Co-Pilot</span><p>How valuable would a strictly guardrailed, HIPAA-compliant AI be if it acted purely as your co-pilot—empowering the relationship rather than replacing it?</p>
+          <div class="scale"><button type="button">1</button><button type="button">2</button><button type="button">3</button><button type="button">4</button><button type="button">5</button></div>
+          <div class="ends"><span>1 = Not valuable</span><span>5 = Essential</span></div></div>
+        <button type="button" class="cta" id="submit">Submit &amp; View Your Practice Readiness Profile →</button>
+      </div>
+      <form class="lead" id="lead">
+        <h3>See how your input compares —<span>enter your info to unlock community results.</span></h3>
+        <div class="grid">
+          <input type="text" id="lead-first" name="first" placeholder="First Name" aria-label="First Name" required>
+          <input type="text" id="lead-last" name="last" placeholder="Last Name" aria-label="Last Name" required>
+          <input type="text" id="lead-org" name="organization" placeholder="Organization (Optional)" aria-label="Organization">
+          <input type="email" id="lead-email" name="email" placeholder="Email Address" aria-label="Email Address" required>
+          <input class="full" type="tel" id="lead-phone" name="phone" placeholder="Phone Number (Optional)" aria-label="Phone Number">
+        </div>
+        <button class="cta" type="submit">Show me how my input compares →</button>
+        <p class="privacy">🔒 Community data is protected. Your input directly impacts funding applications.</p>
+      </form>
+      <div class="thanks" id="thanks">
+        <svg viewBox="0 0 110 110"><g class="rough" fill="#fff" stroke="#2B2B30" stroke-width="4" stroke-linecap="round"><circle cx="55" cy="35" r="20"/><path d="M55 55v32M55 65l-24-18M55 65l24-18M55 87l-14 20M55 87l14 20" fill="none"/><circle cx="48" cy="32" r="2.5" fill="#2B2B30"/><circle cx="62" cy="32" r="2.5" fill="#2B2B30"/><path d="M46 42q9 8 18 0" fill="none"/></g></svg>
+        <h3>Thank you!</h3><p>Your voice helps shape what comes next.</p>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+const FIRESTORE_PROJECT_ID = "sol-thrive";
+function isFirestoreSyncEnabled(){
+  try {
+    return Boolean(window.SOL_ENABLE_FIRESTORE_SYNC || localStorage.getItem('solEnableFirestoreSync') === 'true');
+  } catch (_) {
+    return false;
+  }
+}
+
+// Story Video Player & Caption/Narration Controller
+(function initStoryVideo(){
+  const videoBox = document.getElementById('story-video-box');
+  const videoEl = document.getElementById('story-video');
+  const playBtn = document.getElementById('play-story-btn');
+  const badgeIcon = document.getElementById('play-badge-icon');
+  const restartBtn = document.getElementById('restart-story-btn');
+  const captionEl = document.getElementById('story-caption');
+  const stickerEl = document.getElementById('story-sticker');
+
+  const captions = [
+    "“When our community comes together, every family gains a corner coach…”",
+    "“Clinicians and mentors bridge the 167 hours between weekly sessions…”",
+    "“Guardrailed Personos AI + the Strengths Model turn friction into flow.”",
+    "“Your verified audit helps unlock $2.5M+ in local family resilience funding.”"
+  ];
+  let captionIdx = 0;
+  let captionTimer = null;
+
+  function startCaptions(){
+    stopCaptions();
+    captionTimer = setInterval(()=>{
+      captionIdx = (captionIdx + 1) % captions.length;
+      if (captionEl) captionEl.textContent = captions[captionIdx];
+    }, 3800);
+  }
+
+  function stopCaptions(){
+    if (captionTimer) { clearInterval(captionTimer); captionTimer = null; }
+  }
+
+  let storyUtterance = null;
+
+  function narrateStory(unmuted){
+    if (storyUtterance) {
+      storyUtterance.onend = null;
+      storyUtterance.onerror = null;
+      storyUtterance = null;
+    }
+    if (!window.speechSynthesis) return;
+    try {
+      window.speechSynthesis.cancel();
+      if (!unmuted) return;
+      const u = new SpeechSynthesisUtterance(
+        "When our community comes together, every family gains a corner coach. By combining Dr. Steve Huff's Strengths Model with guardrailed Personos AI, clinicians and mentors bridge the gap between sessions and help unlock over 2.5 million dollars in community mental health funding."
+      );
+      u.rate = 1.0;
+      storyUtterance = u;
+      u.onend = () => { if (storyUtterance === u) storyUtterance = null; };
+      u.onerror = () => { if (storyUtterance === u) storyUtterance = null; };
+      window.speechSynthesis.speak(u);
+    } catch (_) {}
+  }
+
+  function updateUI(){
+    if (!videoEl || !videoBox) return;
+    const playing = !videoEl.paused;
+    videoBox.classList.toggle('is-playing', playing);
+    if (badgeIcon) badgeIcon.textContent = playing ? '⏸' : '▶';
+    if (playBtn) playBtn.setAttribute('aria-label', playing ? 'Pause video' : 'Play video');
+    if (stickerEl) {
+      stickerEl.textContent = playing
+        ? (videoEl.muted ? 'Playing (Muted)' : '🔊 Playing with Audio')
+        : 'Every voice counts';
+    }
+    if (restartBtn) {
+      restartBtn.textContent = (playing && !videoEl.muted)
+        ? '🔊 Playing Story (Click to Restart)'
+        : '↻ Click to Restart & Unmute';
+    }
+  }
+
+  function handlePlayFailure(){
+    if (videoEl && videoEl.paused) {
+      stopCaptions();
+      narrateStory(false);
+    }
+    updateUI();
+  }
+
+  if (playBtn && videoEl) {
+    playBtn.addEventListener('click', ()=>{
+      if (videoEl.paused) {
+        const p = videoEl.play();
+        updateUI();
+        if (p && typeof p.then === 'function') p.then(updateUI).catch(handlePlayFailure);
+        startCaptions();
+        if (!videoEl.muted) narrateStory(true);
+      } else {
+        videoEl.pause();
+        stopCaptions();
+        narrateStory(false);
+        updateUI();
+      }
+    });
+  }
+
+  if (restartBtn && videoEl) {
+    restartBtn.addEventListener('click', ()=>{
+      videoEl.muted = false;
+      videoEl.currentTime = 0;
+      captionIdx = 0;
+      if (captionEl) captionEl.textContent = captions[0];
+      const p = videoEl.play();
+      updateUI();
+      if (p && typeof p.then === 'function') p.then(updateUI).catch(handlePlayFailure);
+      startCaptions();
+      narrateStory(true);
+      restartBtn.textContent = '🔊 Playing Story (Click to Restart)';
+    });
+  }
+
+  function cleanupStoryAudio(){
+    stopCaptions();
+    narrateStory(false);
+    if (videoEl && !videoEl.paused) {
+      try { videoEl.pause(); } catch (_) {}
+    }
+    updateUI();
+  }
+  window.cleanupStoryAudio = cleanupStoryAudio;
+  window.addEventListener('pagehide', cleanupStoryAudio);
+  window.addEventListener('beforeunload', cleanupStoryAudio);
+  window.addEventListener('pageshow', (e)=>{ if (e && e.persisted) cleanupStoryAudio(); });
+})();
+
+// Restore community count if user already submitted a lead
+try {
+  const existingLead = JSON.parse(localStorage.getItem('solThriveLead') || localStorage.getItem('solThrive') || 'null');
+  if (existingLead && existingLead.first) {
+    const cntEl = document.getElementById('community-count');
+    if (cntEl) cntEl.textContent = '48+';
+  }
+} catch (_) {}
+
+document.querySelectorAll('.scale').forEach(s=>{
+  s.addEventListener('click',e=>{
+    if(e.target.tagName!=='BUTTON')return;
+    s.querySelectorAll('button').forEach(b=>b.classList.remove('on'));
+    e.target.classList.add('on');
+  });
+});
+
+document.getElementById('submit').onclick=function(){
+  const missing=[...document.querySelectorAll('.scale')].filter(s=>!s.querySelector('.on'));
+  if(missing.length){
+    missing.forEach(s=>{
+      const qEl = s.closest('.q');
+      if (qEl && typeof qEl.animate === 'function') {
+        qEl.animate([{transform:'translateX(-4px)'},{transform:'translateX(4px)'},{transform:'none'}],{duration:250});
+      }
+    });
+    this.textContent='Please answer all 3 questions ↑';
+    setTimeout(()=>this.innerHTML='Submit &amp; View Your Practice Readiness Profile →',1800);
+    return;
+  }
+  document.getElementById('form').style.display='none';
+  document.getElementById('lead').style.display='flex';
+};
+
+async function saveLeadToFirestore(payload){
+  if (!isFirestoreSyncEnabled()) return false;
+  const url = `https://firestore.googleapis.com/v1/projects/${FIRESTORE_PROJECT_ID}/databases/(default)/documents/sol_thrive_leads`;
+  const body = {
+    fields: {
+      first: { stringValue: String(payload.first || '') },
+      last: { stringValue: String(payload.last || '') },
+      organization: { stringValue: String(payload.organization || '') },
+      email: { stringValue: String(payload.email || '') },
+      phone: { stringValue: String(payload.phone || '') },
+      ratings: {
+        arrayValue: {
+          values: (payload.ratings || []).map(r => ({ integerValue: String(r || 0) }))
+        }
+      },
+      timestamp: { stringValue: String(payload.timestamp || new Date().toISOString()) }
+    }
+  };
+  try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 900);
+    await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+      keepalive: true,
+      signal: controller.signal
+    });
+    clearTimeout(timer);
+  } catch (_) {
+    // Graceful offline/permission fallback: lead is safely persisted in localStorage
+  }
+}
+
+let isSubmittingLead = false;
+document.getElementById('lead').addEventListener('submit', async e=>{
+  e.preventDefault();
+  if (isSubmittingLead) return;
+  isSubmittingLead = true;
+  if (typeof window.cleanupStoryAudio === 'function') window.cleanupStoryAudio();
+  const submitBtn = e.target.querySelector('button[type="submit"]');
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Saving your input…';
+  }
+  const ratings=[...document.querySelectorAll('.scale')].map(s=>{
+    const b=[...s.querySelectorAll('button')];return b.findIndex(x=>x.classList.contains('on'))+1||null;
+  });
+  const first = (document.getElementById('lead-first')?.value || '').trim();
+  const last = (document.getElementById('lead-last')?.value || '').trim();
+  const organization = (document.getElementById('lead-org')?.value || '').trim();
+  const email = (document.getElementById('lead-email')?.value || '').trim();
+  const phone = (document.getElementById('lead-phone')?.value || '').trim();
+  const timestamp = new Date().toISOString();
+
+  const leadData = { first, last, organization, email, phone, ratings, timestamp };
+
+  try {
+    sessionStorage.setItem('solThrive', JSON.stringify(leadData));
+    localStorage.setItem('solThrive', JSON.stringify(leadData));
+    localStorage.setItem('solThriveLead', JSON.stringify(leadData));
+    const history = JSON.parse(localStorage.getItem('solThriveLeads') || '[]');
+    history.push(leadData);
+    localStorage.setItem('solThriveLeads', JSON.stringify(history));
+  } catch (err) {}
+
+  await saveLeadToFirestore(leadData);
+  location.href='results.html';
+});
+</script>
+</body>
+</html>
