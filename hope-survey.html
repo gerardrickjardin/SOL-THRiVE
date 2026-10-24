@@ -83,6 +83,10 @@
             .desktop-menu a {
                 font-size: 0.78rem;
             }
+            .desktop-menu ul > li > a.active:not(.nav-cta-pill),
+            .desktop-menu ul > li > a[aria-current="page"]:not(.nav-cta-pill) {
+                padding: 0.18rem 0.45rem;
+            }
             .nav-cta-pill {
                 padding: 0.35rem 0.75rem;
                 font-size: 0.78rem !important;
@@ -154,6 +158,7 @@
         <div class="nav-menu mobile-drawer">
             <div class="menu-title">FIND YOUR FLOW</div>
             <ul>
+                <li><a href="index.html">Home</a></li>
                 <li><a href="survey.html">Flow Survey</a></li>
                 <li><a href="profile.html">THRiVE Report</a></li>
                 <li><a href="hope-survey.html" class="active" aria-current="page">HoPE Index</a></li>

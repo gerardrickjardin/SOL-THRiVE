@@ -67,9 +67,10 @@ const initThriveUI = () => {
         }
         const hashIdx = trimmed.indexOf('#');
         const pathPart = hashIdx >= 0 ? trimmed.slice(0, hashIdx) : trimmed;
+        const cleanPath = pathPart.split('?')[0].trim();
         const hashPart = hashIdx >= 0 ? trimmed.slice(hashIdx).toLowerCase() : '';
         return {
-            slug: pathPart ? normalizePageSlug(pathPart) : currentSlug,
+            slug: cleanPath ? normalizePageSlug(cleanPath) : currentSlug,
             hash: hashPart
         };
     };
@@ -142,6 +143,39 @@ const initThriveUI = () => {
             }
         });
     };
+
+    document.querySelectorAll('.desktop-menu a, .nav-menu a, .nav-links a, .mobile-drawer a, .brand-logo-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+            if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+            const currentSlug = normalizePageSlug(window.location.pathname || '');
+            const parsed = parseNavLinkHref(link.getAttribute('href'), currentSlug);
+            if (!parsed || parsed.slug !== currentSlug) return;
+
+            if (parsed.hash) {
+                let targetEl = null;
+                try { targetEl = document.querySelector(parsed.hash); } catch (_) {}
+                if (targetEl) {
+                    e.preventDefault();
+                    if (window.history && typeof window.history.pushState === 'function') {
+                        window.history.pushState(null, '', parsed.hash);
+                    } else {
+                        window.location.hash = parsed.hash;
+                    }
+                    targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    updateActiveNavLinks();
+                }
+            } else if (window.location.hash) {
+                e.preventDefault();
+                if (window.history && typeof window.history.pushState === 'function') {
+                    window.history.pushState(null, '', (window.location.pathname || '/') + (window.location.search || ''));
+                } else {
+                    window.location.hash = '';
+                }
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                updateActiveNavLinks();
+            }
+        });
+    });
 
     updateActiveNavLinks();
     window.updateActiveNavLinks = updateActiveNavLinks;
