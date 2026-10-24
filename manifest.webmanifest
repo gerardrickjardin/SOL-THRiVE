@@ -1,0 +1,72 @@
+{
+  "name": "SOL THRiVE • THRiVE Coaching",
+  "short_name": "THRiVE",
+  "description": "Go Unstuck Yourself. Evidence-based, AI-powered personal coaching tools including the Flow Survey, THRiVE Report, and 20-Dimension HoPE Index.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#F7F4EB",
+  "theme_color": "#F7F4EB",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "The Flow Survey",
+      "short_name": "Flow Survey",
+      "description": "Pinpoint friction and measure your Flow Score across Agency, Actions, Support, and Tools.",
+      "url": "/survey",
+      "icons": [
+        {
+          "src": "icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "The THRiVE Report",
+      "short_name": "THRiVE Report",
+      "description": "Uncover your strengths across Traits, Hobbies, Relationships, Interests, Values, and Experiences.",
+      "url": "/profile",
+      "icons": [
+        {
+          "src": "icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "20-Dimension HoPE Index",
+      "short_name": "HoPE Index",
+      "description": "Map your Outer Physical Space, Inner Relational Space, and Contextual Layering.",
+      "url": "/hope-survey",
+      "icons": [
+        {
+          "src": "icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
+  ]
+}
