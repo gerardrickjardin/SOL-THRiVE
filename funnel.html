@@ -325,25 +325,12 @@ main{max-width:1240px;margin:auto;padding:36px 28px 80px}
       <h1>Pick a date and time.</h1>
       <p>Thanks for voting. Choose the session that fits your schedule.</p>
     </header>
-    <div class="grid">
-      <div class="card">
-        <div class="cal-head"><button class="nbtn" id="prev" type="button" aria-label="Previous month">‹</button><h3 id="month"></h3><button class="nbtn" id="next" type="button" aria-label="Next month">›</button></div>
-        <div class="dow"><span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span></div>
-        <div class="days" id="days"></div>
+    <div class="card" style="max-width:860px;margin:0 auto;width:100%">
+      <div class="summary" style="margin-bottom:14px">
+        <b id="sum-name"></b> · <span id="sum-email"></span> · <span id="sum-phone"></span> · <span id="sum-org"></span>
       </div>
-      <div class="card">
-        <div class="course">
-          <svg width="64" height="64" viewBox="0 0 64 64" fill="none" stroke="#18181B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="32" r="9"/><path d="M32 8v8M32 48v8M8 32h8M48 32h8M15 15l6 6M43 43l6 6M49 15l-6 6M21 43l-6 6"/></svg>
-          <div><h2 style="font-size:1.3rem">THRIVE Coaching Course</h2><p>Live cohort class · 90 minutes · Online</p></div>
-        </div>
-        <h3 style="font-size:1.05rem" id="slot-title">Select a date first</h3>
-        <div class="slots" id="slots"></div>
-        <div class="summary">
-          <b id="sum-name"></b><br><span id="sum-email"></span> · <span id="sum-phone"></span><br><span id="sum-org"></span>
-          <div style="margin-top:8px"><b id="sum-when">No time selected</b></div>
-        </div>
-        <button class="btn btn-primary btn-block" id="book-submit" type="button" disabled>Confirm &amp; continue to checkout →</button>
-      </div>
+      <iframe id="mvETPUFRSVMa4iLXevIC" src="https://link.visioncontrol.io/widget/booking/mvETPUFRSVMa4iLXevIC" allow="payment" title="Steve's Calendar" style="width:100%;min-height:640px;border:none;overflow:hidden" scrolling="no"></iframe>
+      <button class="btn btn-primary btn-block" id="book-submit" type="button" style="margin-top:14px">I've booked my time &amp; continue to checkout →</button>
     </div>
   </section>
 
@@ -448,44 +435,18 @@ main{max-width:1240px;margin:auto;padding:36px 28px 80px}
   updVote();
   $('#vote-submit').onclick=()=>{track('vote',{vote:state.vote});initBooking();go(4)};
 
-  // Calendar
-  const today=new Date();today.setHours(0,0,0,0);
-  let view=new Date(today.getFullYear(),today.getMonth(),1);
-  const times=['9:00 AM','11:00 AM','1:00 PM','3:30 PM','5:00 PM','7:00 PM'];
+  // Calendar (Steve's Calendar embed)
   const fmt=d=>d.toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'});
   function initBooking(){
     const L=state.lead;
     $('#sum-name').textContent=L.fn+' '+L.ln;$('#sum-email').textContent=L.em;$('#sum-phone').textContent=L.ph;$('#sum-org').textContent=L.org;
-    drawCal();
+    const fr=$('#mvETPUFRSVMa4iLXevIC'),base='https://link.visioncontrol.io/widget/booking/mvETPUFRSVMa4iLXevIC';
+    const q=new URLSearchParams({first_name:L.fn,last_name:L.ln,email:L.em,phone:L.ph});
+    if(!fr.dataset.loaded){fr.src=base+'?'+q;fr.dataset.loaded='1'}
   }
-  function drawCal(){
-    $('#month').textContent=view.toLocaleDateString(undefined,{month:'long',year:'numeric'});
-    const first=view.getDay(),n=new Date(view.getFullYear(),view.getMonth()+1,0).getDate();
-    let h='';for(let i=0;i<first;i++)h+='<span></span>';
-    for(let d=1;d<=n;d++){
-      const dt=new Date(view.getFullYear(),view.getMonth(),d),off=dt<=today||dt.getDay()===0||dt.getDay()===6;
-      const sel=state.date&&+state.date===+dt;
-      h+=`<button type="button" class="day${sel?' sel':''}" data-t="${+dt}" ${off?'disabled':''}>${d}</button>`;
-    }
-    $('#days').innerHTML=h;
-    $$('.day:not(:disabled)').forEach(b=>b.onclick=()=>{state.date=new Date(+b.dataset.t);state.time=null;drawCal();drawSlots()});
-    $('#prev').disabled=view<=new Date(today.getFullYear(),today.getMonth(),1);
-  }
-  function drawSlots(){
-    if(!state.date){return}
-    $('#slot-title').textContent='Available on '+fmt(state.date);
-    const seed=state.date.getDate();
-    $('#slots').innerHTML=times.map((t,i)=>`<button type="button" class="btn btn-white slot${state.time===t?' sel':''}" data-t="${t}" ${(seed+i)%5===0?'disabled':''}>${t}</button>`).join('');
-    $$('.slot:not(:disabled)').forEach(b=>b.onclick=()=>{state.time=b.dataset.t;drawSlots()});
-    $('#sum-when').textContent=state.time?fmt(state.date)+' · '+state.time:'No time selected';
-    $('#book-submit').disabled=!state.time;
-  }
-  $('#prev').onclick=()=>{view=new Date(view.getFullYear(),view.getMonth()-1,1);drawCal()};
-  $('#next').onclick=()=>{view=new Date(view.getFullYear(),view.getMonth()+1,1);drawCal()};
   $('#book-submit').onclick=()=>{
-    const when=fmt(state.date)+' · '+state.time;
-    $('#pay-when').textContent=when;$('#pay-who').textContent=state.lead.fn+' '+state.lead.ln;
-    track('booking',{date:state.date.toISOString(),time:state.time,label:when,vote:state.vote});
+    $('#pay-when').textContent='Booked via Steve’s Calendar';$('#pay-who').textContent=state.lead.fn+' '+state.lead.ln;
+    track('booking',{label:'Steve’s Calendar',vote:state.vote});
     go(5);
     initStripe();
   };
@@ -499,7 +460,7 @@ main{max-width:1240px;margin:auto;padding:36px 28px 80px}
       const cfg=await (await fetch('/api/config')).json();
       if(!cfg.publishableKey)throw new Error('Payments are not configured yet.');
       stripe=Stripe(cfg.publishableKey);
-      const r=await fetch('/api/create-payment-intent',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({lead:state.lead,booking:{date:state.date.toISOString(),time:state.time}})});
+      const r=await fetch('/api/create-payment-intent',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({lead:state.lead,booking:{calendar:'Steves Calendar'}})});
       const j=await r.json();
       if(!j.clientSecret)throw new Error(j.error||'Could not start checkout.');
       elements=stripe.elements({clientSecret:j.clientSecret,appearance:{theme:'stripe',variables:{colorPrimary:'#7C2AE8',colorText:'#18181B',colorBackground:'#FFFFFF',fontFamily:'Inter, sans-serif',borderRadius:'12px'}}});
@@ -514,11 +475,12 @@ main{max-width:1240px;margin:auto;padding:36px 28px 80px}
     const {error,paymentIntent}=await stripe.confirmPayment({elements,redirect:'if_required',confirmParams:{return_url:location.origin+location.pathname,receipt_email:state.lead.em}});
     if(error){$('#pay-err').textContent=error.message;btn.disabled=false;btn.textContent='Pay $297.00 & enroll';return}
     $('#pay-grid').style.display='none';$('#success').style.display='block';$('#success').classList.add('col-swap');
-    $('#ok-msg').textContent='A confirmation for '+fmt(state.date)+' at '+state.time+' is on its way to '+state.lead.em+'.';
+    $('#ok-msg').textContent='A confirmation is on its way to '+state.lead.em+'.';
     window.scrollTo({top:0,behavior:'smooth'});
   });
 })();
 </script>
+<script src="https://link.visioncontrol.io/js/form_embed.js" type="text/javascript"></script>
 <script src="https://js.stripe.com/v3/"></script>
 </body>
 </html>
