@@ -18,7 +18,23 @@ module.exports = async (req, res) => {
   if (!['lead', 'vote', 'booking'].includes(type)) return res.status(400).json({ error: 'Bad event type' });
   // 'payment' is intentionally NOT accepted from the browser; see stripe-webhook.js
   try {
-    await forward({ source: 'thrive-funnel', type, data, lead, ts });
+    const l = lead || {};
+    const r = (data && data.ratings) || [];
+    await forward({
+      source: 'thrive-funnel', type, ts,
+      first_name: l.fn || '',
+      last_name: l.ln || '',
+      full_name: [l.fn, l.ln].filter(Boolean).join(' '),
+      company_name: l.org || '',
+      email: l.em || '',
+      phone: l.ph || '',
+      rating_between_session_engagement: r[0] ?? '',
+      rating_client_ai_reality: r[1] ?? '',
+      rating_ethical_ai_copilot: r[2] ?? '',
+      vote: (data && data.vote) || '',
+      booking_label: (data && data.label) || '',
+      data, lead,
+    });
     res.status(200).json({ ok: true });
   } catch (e) {
     console.error(e);
