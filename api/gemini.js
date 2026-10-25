@@ -26,11 +26,15 @@ module.exports = async function handler(req, res) {
 
   let body = req.body;
   if (typeof body === "string") {
-    try {
-      body = JSON.parse(body);
-    } catch (_) {
-      res.status(400).json({ error: "Invalid JSON payload" });
-      return;
+    if (!body.trim()) {
+      body = {};
+    } else {
+      try {
+        body = JSON.parse(body);
+      } catch (_) {
+        res.status(400).json({ error: "Invalid JSON payload" });
+        return;
+      }
     }
   }
   body = body || {};
