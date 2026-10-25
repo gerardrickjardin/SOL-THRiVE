@@ -326,9 +326,6 @@ main{max-width:1240px;margin:auto;padding:36px 28px 80px}
       <p>Thanks for voting. Choose the session that fits your schedule.</p>
     </header>
     <div class="card" style="max-width:860px;margin:0 auto;width:100%">
-      <div class="summary" style="margin-bottom:14px">
-        <b id="sum-name"></b> · <span id="sum-email"></span> · <span id="sum-phone"></span> · <span id="sum-org"></span>
-      </div>
       <iframe id="qiNYlb85QHIu0foCh24A" src="https://link.visioncontrol.io/widget/booking/qiNYlb85QHIu0foCh24A" allow="payment" title="Booking Calendar" style="width:100%;min-height:640px;border:none;overflow:hidden" scrolling="no"></iframe>
       <button class="btn btn-primary btn-block" id="book-submit" type="button" style="margin-top:14px">I've booked my time &amp; continue to checkout →</button>
     </div>
@@ -439,7 +436,6 @@ main{max-width:1240px;margin:auto;padding:36px 28px 80px}
   const fmt=d=>d.toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'});
   function initBooking(){
     const L=state.lead;
-    $('#sum-name').textContent=L.fn+' '+L.ln;$('#sum-email').textContent=L.em;$('#sum-phone').textContent=L.ph;$('#sum-org').textContent=L.org;
     const fr=$('#qiNYlb85QHIu0foCh24A'),base='https://link.visioncontrol.io/widget/booking/qiNYlb85QHIu0foCh24A';
     const q=new URLSearchParams({first_name:L.fn,last_name:L.ln,email:L.em,phone:L.ph});
     if(!fr.dataset.loaded){fr.src=base+'?'+q;fr.dataset.loaded='1'}
