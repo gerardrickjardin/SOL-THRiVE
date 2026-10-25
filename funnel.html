@@ -329,7 +329,7 @@ main{max-width:1240px;margin:auto;padding:36px 28px 80px}
       <div class="summary" style="margin-bottom:14px">
         <b id="sum-name"></b> · <span id="sum-email"></span> · <span id="sum-phone"></span> · <span id="sum-org"></span>
       </div>
-      <iframe id="mvETPUFRSVMa4iLXevIC" src="https://link.visioncontrol.io/widget/booking/mvETPUFRSVMa4iLXevIC" allow="payment" title="Steve's Calendar" style="width:100%;min-height:640px;border:none;overflow:hidden" scrolling="no"></iframe>
+      <iframe id="qiNYlb85QHIu0foCh24A" src="https://link.visioncontrol.io/widget/booking/qiNYlb85QHIu0foCh24A" allow="payment" title="Booking Calendar" style="width:100%;min-height:640px;border:none;overflow:hidden" scrolling="no"></iframe>
       <button class="btn btn-primary btn-block" id="book-submit" type="button" style="margin-top:14px">I've booked my time &amp; continue to checkout →</button>
     </div>
   </section>
@@ -435,18 +435,18 @@ main{max-width:1240px;margin:auto;padding:36px 28px 80px}
   updVote();
   $('#vote-submit').onclick=()=>{track('vote',{vote:state.vote});initBooking();go(4)};
 
-  // Calendar (Steve's Calendar embed)
+  // Calendar (Booking Calendar embed)
   const fmt=d=>d.toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'});
   function initBooking(){
     const L=state.lead;
     $('#sum-name').textContent=L.fn+' '+L.ln;$('#sum-email').textContent=L.em;$('#sum-phone').textContent=L.ph;$('#sum-org').textContent=L.org;
-    const fr=$('#mvETPUFRSVMa4iLXevIC'),base='https://link.visioncontrol.io/widget/booking/mvETPUFRSVMa4iLXevIC';
+    const fr=$('#qiNYlb85QHIu0foCh24A'),base='https://link.visioncontrol.io/widget/booking/qiNYlb85QHIu0foCh24A';
     const q=new URLSearchParams({first_name:L.fn,last_name:L.ln,email:L.em,phone:L.ph});
     if(!fr.dataset.loaded){fr.src=base+'?'+q;fr.dataset.loaded='1'}
   }
   $('#book-submit').onclick=()=>{
-    $('#pay-when').textContent='Booked via Steve’s Calendar';$('#pay-who').textContent=state.lead.fn+' '+state.lead.ln;
-    track('booking',{label:'Steve’s Calendar',vote:state.vote});
+    $('#pay-when').textContent='Booked via Booking Calendar';$('#pay-who').textContent=state.lead.fn+' '+state.lead.ln;
+    track('booking',{label:'Booking Calendar',vote:state.vote});
     go(5);
     initStripe();
   };
@@ -460,7 +460,7 @@ main{max-width:1240px;margin:auto;padding:36px 28px 80px}
       const cfg=await (await fetch('/api/config')).json();
       if(!cfg.publishableKey)throw new Error('Payments are not configured yet.');
       stripe=Stripe(cfg.publishableKey);
-      const r=await fetch('/api/create-payment-intent',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({lead:state.lead,booking:{calendar:'Steves Calendar'}})});
+      const r=await fetch('/api/create-payment-intent',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({lead:state.lead,booking:{calendar:'Booking Calendar'}})});
       const j=await r.json();
       if(!j.clientSecret)throw new Error(j.error||'Could not start checkout.');
       elements=stripe.elements({clientSecret:j.clientSecret,appearance:{theme:'stripe',variables:{colorPrimary:'#7C2AE8',colorText:'#18181B',colorBackground:'#FFFFFF',fontFamily:'Inter, sans-serif',borderRadius:'12px'}}});
