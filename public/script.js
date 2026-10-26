@@ -51,23 +51,29 @@ const initThriveUI = () => {
             .split('#')[0]
             .replace(/\/+$/, '');
         const lastSegment = cleaned.split('/').pop() || '';
-        const slug = lastSegment.replace(/\.html?$/i, '').trim().toLowerCase();
+        const slug = lastSegment.replace(/\.html$/i, '').trim().toLowerCase();
         return slug || 'index';
     };
 
     const resolveCurrentPageSlug = (rawPathname, isCustomPathname = false) => {
+        const rawStr = String(rawPathname || '').trim();
+        const pathBeforeQueryHash = rawStr.split('?')[0].split('#')[0];
+        const hasExplicitPath = Boolean(pathBeforeQueryHash);
         if (
-            !isCustomPathname &&
+            (!isCustomPathname || !hasExplicitPath) &&
             typeof document !== 'undefined' &&
             document.body &&
             (document.body.getAttribute('data-page') === '404' || document.body.classList.contains('error-404-page'))
         ) {
             return '404';
         }
-        const cleaned = String(rawPathname || '')
-            .split('?')[0]
-            .split('#')[0]
-            .replace(/\/+$/, '');
+        const effectivePath = hasExplicitPath
+            ? pathBeforeQueryHash
+            : (typeof window !== 'undefined' ? String(window.location?.pathname || '').split('?')[0].split('#')[0] : '');
+        if (/\.html\/+/i.test(effectivePath)) {
+            return '404';
+        }
+        const cleaned = effectivePath.replace(/\/+$/, '');
         if (!cleaned) {
             return 'index';
         }
@@ -121,10 +127,20 @@ const initThriveUI = () => {
     const updateActiveNavLinks = (customPathname, customHash) => {
         const isCustomPathname = typeof customPathname === 'string';
         const pathname = isCustomPathname ? customPathname : (window.location.pathname || '');
-        const rawHash = typeof customHash === 'string' ? customHash : (window.location.hash || '');
+        let rawHash = '';
+        if (typeof customHash === 'string') {
+            rawHash = customHash;
+        } else if (isCustomPathname) {
+            const hashIdx = customPathname.indexOf('#');
+            rawHash = hashIdx >= 0 ? customPathname.slice(hashIdx) : '';
+        } else {
+            rawHash = window.location.hash || '';
+        }
         const currentSlug = resolveCurrentPageSlug(pathname, isCustomPathname);
         const currentHash = String(rawHash || '').trim().toLowerCase();
-        const effectiveNavSlug = currentSlug === 'results' ? 'mockup-landing' : currentSlug;
+        const effectiveNavSlug = (currentSlug === 'results' || currentSlug === 'funnel' || currentSlug === 'landingpage')
+            ? 'mockup-landing'
+            : currentSlug;
         const is404Route = currentSlug === '404' || effectiveNavSlug === '404';
 
         const allNavLinks = Array.from(document.querySelectorAll(
