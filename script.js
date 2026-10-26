@@ -30,6 +30,21 @@ const initThriveUI = () => {
     }
 
     // Active Page & Section Highlighting in Desktop Navbar & Mobile Drawer
+    const KNOWN_PAGE_SLUGS = new Set([
+        'index',
+        'survey',
+        'profile',
+        'hope-survey',
+        'approach',
+        'how-to-use',
+        'rebuilding-life-challenges',
+        'employment-challenges',
+        'mockup-landing',
+        'funnel',
+        'landingpage',
+        'results'
+    ]);
+
     const normalizePageSlug = (rawPath) => {
         const cleaned = String(rawPath || '')
             .split('?')[0]
@@ -38,6 +53,34 @@ const initThriveUI = () => {
         const lastSegment = cleaned.split('/').pop() || '';
         const slug = lastSegment.replace(/\.html?$/i, '').trim().toLowerCase();
         return slug || 'index';
+    };
+
+    const resolveCurrentPageSlug = (rawPathname, isCustomPathname = false) => {
+        if (
+            !isCustomPathname &&
+            typeof document !== 'undefined' &&
+            document.body &&
+            (document.body.getAttribute('data-page') === '404' || document.body.classList.contains('error-404-page'))
+        ) {
+            return '404';
+        }
+        const cleaned = String(rawPathname || '')
+            .split('?')[0]
+            .split('#')[0]
+            .replace(/\/+$/, '');
+        if (!cleaned) {
+            return 'index';
+        }
+        const segments = cleaned.replace(/^\/+/, '').split('/').filter(Boolean);
+        const isHttpOrigin = typeof window !== 'undefined' && /^https?:$/i.test(window.location?.protocol || '');
+        if ((isHttpOrigin || isCustomPathname) && segments.length > 1) {
+            return '404';
+        }
+        const slug = normalizePageSlug(cleaned);
+        if (slug === '404' || !KNOWN_PAGE_SLUGS.has(slug)) {
+            return '404';
+        }
+        return slug;
     };
 
     const parseNavLinkHref = (rawHref, currentSlug) => {
@@ -76,18 +119,20 @@ const initThriveUI = () => {
     };
 
     const updateActiveNavLinks = (customPathname, customHash) => {
-        const pathname = typeof customPathname === 'string' ? customPathname : (window.location.pathname || '');
+        const isCustomPathname = typeof customPathname === 'string';
+        const pathname = isCustomPathname ? customPathname : (window.location.pathname || '');
         const rawHash = typeof customHash === 'string' ? customHash : (window.location.hash || '');
-        const currentSlug = normalizePageSlug(pathname);
+        const currentSlug = resolveCurrentPageSlug(pathname, isCustomPathname);
         const currentHash = String(rawHash || '').trim().toLowerCase();
         const effectiveNavSlug = currentSlug === 'results' ? 'mockup-landing' : currentSlug;
+        const is404Route = currentSlug === '404' || effectiveNavSlug === '404';
 
         const allNavLinks = Array.from(document.querySelectorAll(
             '.desktop-menu a, .nav-menu a, .nav-links a, .mobile-drawer a, .top-nav a, .challenge-switcher a'
         ));
 
         let hasMatchingHashNav = false;
-        if (currentHash) {
+        if (!is404Route && currentHash) {
             hasMatchingHashNav = allNavLinks.some(link => {
                 if (link.closest('.challenge-switcher')) return false;
                 const parsed = parseNavLinkHref(link.getAttribute('href'), currentSlug);
@@ -97,7 +142,7 @@ const initThriveUI = () => {
 
         allNavLinks.forEach(link => {
             const parsed = parseNavLinkHref(link.getAttribute('href'), currentSlug);
-            if (!parsed) {
+            if (!parsed || is404Route) {
                 link.classList.remove('active');
                 link.removeAttribute('aria-current');
                 return;
@@ -127,13 +172,13 @@ const initThriveUI = () => {
             const trigger = dropdown.querySelector(':scope > a');
             const activeChild = dropdown.querySelector('.dropdown-content a.active, .dropdown-content a[aria-current="page"]');
             if (trigger) {
-                trigger.classList.toggle('active-parent', Boolean(activeChild && !trigger.classList.contains('active')));
+                trigger.classList.toggle('active-parent', Boolean(!is404Route && activeChild && !trigger.classList.contains('active')));
             }
         });
 
         document.querySelectorAll('.brand-logo-link').forEach(brandLink => {
             const parsed = parseNavLinkHref(brandLink.getAttribute('href'), currentSlug);
-            const isHomeMatch = Boolean(parsed && !parsed.hash && parsed.slug === 'index' && effectiveNavSlug === 'index' && !hasMatchingHashNav);
+            const isHomeMatch = Boolean(!is404Route && parsed && !parsed.hash && parsed.slug === 'index' && effectiveNavSlug === 'index' && !hasMatchingHashNav);
             if (isHomeMatch) {
                 brandLink.classList.add('active');
                 brandLink.setAttribute('aria-current', 'page');
@@ -147,7 +192,8 @@ const initThriveUI = () => {
     document.querySelectorAll('.desktop-menu a, .nav-menu a, .nav-links a, .mobile-drawer a, .brand-logo-link').forEach(link => {
         link.addEventListener('click', (e) => {
             if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-            const currentSlug = normalizePageSlug(window.location.pathname || '');
+            const currentSlug = resolveCurrentPageSlug(window.location.pathname || '', false);
+            if (currentSlug === '404') return;
             const parsed = parseNavLinkHref(link.getAttribute('href'), currentSlug);
             if (!parsed || parsed.slug !== currentSlug) return;
 
