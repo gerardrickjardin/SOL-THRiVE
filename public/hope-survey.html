@@ -261,7 +261,15 @@ function triggerThriveHaptic(durationOrPattern = 15) {
             return false;
         }
         if (typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function') {
-            const pattern = durationOrPattern == null ? 15 : durationOrPattern;
+            let pattern = 15;
+            if (typeof durationOrPattern === 'number' && Number.isFinite(durationOrPattern) && durationOrPattern >= 0) {
+                pattern = durationOrPattern;
+            } else if (typeof durationOrPattern === 'string' && durationOrPattern.trim() !== '' && Number.isFinite(Number(durationOrPattern)) && Number(durationOrPattern) >= 0) {
+                pattern = Number(durationOrPattern);
+            } else if (Array.isArray(durationOrPattern)) {
+                const valid = durationOrPattern.filter(n => typeof n === 'number' && Number.isFinite(n) && n >= 0);
+                if (valid.length > 0) pattern = valid;
+            }
             const res = navigator.vibrate(pattern);
             return res !== false;
         }
@@ -1147,7 +1155,7 @@ const ReflectionBox = ({ value, onChange }) => {
             };
             
             recognition.onerror = (event) => {
-                console.error("Speech recognition error", event.error);
+                console.warn("Speech recognition error", event.error);
                 isListeningRef.current = false;
                 latestSessionTranscriptRef.current = '';
                 lastRawSessionTranscriptRef.current = '';
@@ -1282,6 +1290,8 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
     
     // Pro Slider State
     const [isDragging, setIsDragging] = window.React.useState(false);
+    const isDraggingRef = window.React.useRef(false);
+    const dragCanceledByEmojiRef = window.React.useRef(false);
     
     // Default unselected ghost position at 3.0 (center) so the slider thumb is always visible and centered before selection
     const safeSelection = currentSelection !== null && currentSelection >= 1.0 ? currentSelection : 3.0;
@@ -1302,14 +1312,19 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
 
     // Sync rawValue and mobileAnchorTab with currentSelection when not dragging
     window.React.useEffect(() => {
-        if (!isDragging) {
-            const nextRaw = currentSelection !== null && currentSelection >= 1.0 ? currentSelection : 3.0;
-            rawValueRef.current = nextRaw;
-            setRawValue(nextRaw);
-            lastSnappedRef.current = currentSelection !== null && currentSelection >= 1.0
-                ? Math.round(currentSelection * 2) / 2
-                : null;
-            if (currentSelection !== null && currentSelection >= 1.0) {
+        if (!isDragging && !isDraggingRef.current) {
+            if (currentSelection === null || currentSelection < 1.0) {
+                rawValueRef.current = 3.0;
+                setRawValue(3.0);
+                lastSnappedRef.current = null;
+            } else {
+                const targetSnapped = Math.round(currentSelection * 2) / 2;
+                const currentSnapped = Math.round(rawValueRef.current * 2) / 2;
+                if (currentSnapped !== targetSnapped) {
+                    rawValueRef.current = currentSelection;
+                    setRawValue(currentSelection);
+                }
+                lastSnappedRef.current = targetSnapped;
                 setMobileAnchorTab(getZoneForScore(currentSelection));
             }
         }
@@ -1331,6 +1346,10 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
 
     const handleEmojiClick = (rating) => {
         fireThriveHaptic(15);
+        if (isDraggingRef.current || isDragging) {
+            dragCanceledByEmojiRef.current = true;
+        }
+        isDraggingRef.current = false;
         setIsDragging(false);
         rawValueRef.current = rating;
         lastSnappedRef.current = rating;
@@ -1341,6 +1360,7 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
     };
 
     const handleSliderChange = (e) => {
+        dragCanceledByEmojiRef.current = false;
         const v = parseFloat(e.target.value);
         if (!Number.isFinite(v)) return;
         rawValueRef.current = v;
@@ -1357,9 +1377,20 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
     };
     const handleSliderMove = handleSliderChange;
 
-    const handleDragStart = () => setIsDragging(true);
+    const handleDragStart = () => {
+        isDraggingRef.current = true;
+        dragCanceledByEmojiRef.current = false;
+        setIsDragging(true);
+    };
     
     const handleDragEnd = (e) => {
+        if (dragCanceledByEmojiRef.current) {
+            dragCanceledByEmojiRef.current = false;
+            isDraggingRef.current = false;
+            setIsDragging(false);
+            return;
+        }
+        isDraggingRef.current = false;
         setIsDragging(false);
         const targetVal = e && e.currentTarget && e.currentTarget.value !== undefined
             ? parseFloat(e.currentTarget.value)

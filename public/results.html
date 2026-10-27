@@ -574,10 +574,47 @@ async function copyCampaignLink(customText){
   }
 }
 
-document.getElementById('copy').onclick = function(){
-  if (typeof window !== 'undefined' && typeof window.triggerThriveHaptic === 'function') {
-    window.triggerThriveHaptic(15);
+function triggerThriveHaptic(durationOrPattern = 15) {
+  try {
+    if (
+      typeof window !== 'undefined' &&
+      typeof window.matchMedia === 'function' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    ) {
+      return false;
+    }
+    if (typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function') {
+      let pattern = 15;
+      if (typeof durationOrPattern === 'number' && Number.isFinite(durationOrPattern) && durationOrPattern >= 0) {
+        pattern = durationOrPattern;
+      } else if (typeof durationOrPattern === 'string' && durationOrPattern.trim() !== '' && Number.isFinite(Number(durationOrPattern)) && Number(durationOrPattern) >= 0) {
+        pattern = Number(durationOrPattern);
+      } else if (Array.isArray(durationOrPattern)) {
+        const valid = durationOrPattern.filter(n => typeof n === 'number' && Number.isFinite(n) && n >= 0);
+        if (valid.length > 0) pattern = valid;
+      }
+      const res = navigator.vibrate(pattern);
+      return res !== false;
+    }
+  } catch (_) {}
+  return false;
+}
+if (typeof window !== 'undefined' && typeof window.triggerThriveHaptic !== 'function') {
+  window.triggerThriveHaptic = triggerThriveHaptic;
+}
+function fireThriveHaptic(durationOrPattern = 15) {
+  try {
+    if (typeof window !== 'undefined' && typeof window.triggerThriveHaptic === 'function') {
+      return window.triggerThriveHaptic(durationOrPattern);
+    }
+    return triggerThriveHaptic(durationOrPattern);
+  } catch (_) {
+    return false;
   }
+}
+
+document.getElementById('copy').onclick = function(){
+  fireThriveHaptic(15);
   copyCampaignLink().finally(() => {
     this.textContent = 'COPIED!';
     showShareFeedback('✓ Campaign link copied to clipboard!');
@@ -624,9 +661,7 @@ function canUseNativeShare(payload){
 
 let isNativeSharing = false;
 async function triggerNativeOrFallbackShare(options = {}){
-  if (typeof window !== 'undefined' && typeof window.triggerThriveHaptic === 'function') {
-    window.triggerThriveHaptic(15);
-  }
+  fireThriveHaptic(15);
   if (isNativeSharing) return { shared: false, copied: false, canceled: true };
   const fallbackCopyPayload = options.fallbackText || shareText;
   const fallbackFeedback = options.fallbackFeedback || '✓ Campaign link & caption copied to clipboard!';
@@ -689,6 +724,7 @@ if (fbBtn) {
       });
       return;
     }
+    fireThriveHaptic(15);
     copyCampaignLink(liveCampaignUrl);
     showShareFeedback('✓ Opening Facebook Share & copied link!');
   });
@@ -705,6 +741,7 @@ if (igBtn) {
       });
       return;
     }
+    fireThriveHaptic(15);
     copyCampaignLink(shareText);
     showShareFeedback('✓ Campaign link & caption copied for Instagram!');
   });
@@ -721,6 +758,7 @@ if (ttBtn) {
       });
       return;
     }
+    fireThriveHaptic(15);
     copyCampaignLink(shareText);
     showShareFeedback('✓ Campaign link & caption copied for TikTok!');
   });

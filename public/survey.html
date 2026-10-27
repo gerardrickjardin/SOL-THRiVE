@@ -839,7 +839,15 @@
                     return false;
                 }
                 if (typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function') {
-                    const pattern = durationOrPattern == null ? 15 : durationOrPattern;
+                    let pattern = 15;
+                    if (typeof durationOrPattern === 'number' && Number.isFinite(durationOrPattern) && durationOrPattern >= 0) {
+                        pattern = durationOrPattern;
+                    } else if (typeof durationOrPattern === 'string' && durationOrPattern.trim() !== '' && Number.isFinite(Number(durationOrPattern)) && Number(durationOrPattern) >= 0) {
+                        pattern = Number(durationOrPattern);
+                    } else if (Array.isArray(durationOrPattern)) {
+                        const valid = durationOrPattern.filter(n => typeof n === 'number' && Number.isFinite(n) && n >= 0);
+                        if (valid.length > 0) pattern = valid;
+                    }
                     const res = navigator.vibrate(pattern);
                     return res !== false;
                 }
@@ -1312,7 +1320,7 @@
                 };
 
                 recognition.onerror = (e) => {
-                    console.error("Speech error", e);
+                    console.warn("Speech error", e);
                     stopDictation();
                 };
                 

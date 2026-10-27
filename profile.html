@@ -202,7 +202,15 @@ function triggerThriveHaptic(durationOrPattern = 15) {
       return false;
     }
     if (typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function') {
-      const pattern = durationOrPattern == null ? 15 : durationOrPattern;
+      let pattern = 15;
+      if (typeof durationOrPattern === 'number' && Number.isFinite(durationOrPattern) && durationOrPattern >= 0) {
+        pattern = durationOrPattern;
+      } else if (typeof durationOrPattern === 'string' && durationOrPattern.trim() !== '' && Number.isFinite(Number(durationOrPattern)) && Number(durationOrPattern) >= 0) {
+        pattern = Number(durationOrPattern);
+      } else if (Array.isArray(durationOrPattern)) {
+        const valid = durationOrPattern.filter(n => typeof n === 'number' && Number.isFinite(n) && n >= 0);
+        if (valid.length > 0) pattern = valid;
+      }
       const res = navigator.vibrate(pattern);
       return res !== false;
     }
@@ -1778,7 +1786,7 @@ function ChatSection({ section, stepNumber, initialDraft, hasApprovedSection, on
       };
 
       recognition.onerror = (e) => {
-        console.error("Speech Recognition Error", e);
+        console.warn("Speech Recognition Error", e);
         isListeningRef.current = false;
         latestSessionTranscriptRef.current = '';
         lastRawSessionTranscriptRef.current = '';
@@ -2195,6 +2203,8 @@ function FinalReport({ data, userDetails, onCopy, onClearCopied, copied, onBack,
         isSharingReportRef.current = false;
       }
     }
+
+    fireThriveHaptic(15);
 
     const canShareNative = (() => {
       if (typeof navigator === 'undefined' || typeof navigator.share !== 'function') return false;
