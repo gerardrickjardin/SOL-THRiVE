@@ -782,16 +782,25 @@ const initThriveUI = () => {
         }
 
         // 2. Derive from thrive_profile_state_v1 if not already present
+        const profState = safeParseJSON(typeof localStorage !== 'undefined' ? localStorage.getItem('thrive_profile_state_v1') : null);
         if (!merged.thriveReport) {
-            const profState = safeParseJSON(typeof localStorage !== 'undefined' ? localStorage.getItem('thrive_profile_state_v1') : null);
             if (profState && profState.reportData && typeof profState.reportData === 'object') {
                 const rd = profState.reportData;
                 const hasAny = ['traits', 'hobbies', 'relationships', 'interests', 'values', 'experiences'].some(k => rd[k] && String(rd[k]).trim());
                 if (hasAny) {
+                    const interviewee = String(profState.userDetails?.interviewee || '').trim();
+                    const interviewer = String(profState.userDetails?.interviewer || '').trim();
+                    const email = String(profState.userDetails?.email || '').trim();
                     merged.thriveReport = {
                         completedAt: profState.savedAt || new Date().toISOString(),
-                        interviewee: profState.userDetails?.interviewee || '',
-                        interviewer: profState.userDetails?.interviewer || '',
+                        interviewee,
+                        interviewer,
+                        email,
+                        userDetails: {
+                            interviewee,
+                            interviewer,
+                            email
+                        },
                         pillars: {
                             traits: rd.traits || '',
                             hobbies: rd.hobbies || '',
@@ -803,6 +812,23 @@ const initThriveUI = () => {
                     };
                 }
             }
+        } else if (merged.thriveReport && typeof merged.thriveReport === 'object') {
+            const tr = merged.thriveReport;
+            const interviewee = String(tr.interviewee ?? tr.userDetails?.interviewee ?? profState?.userDetails?.interviewee ?? '').trim();
+            const interviewer = String(tr.interviewer ?? tr.userDetails?.interviewer ?? profState?.userDetails?.interviewer ?? '').trim();
+            const email = String(tr.email ?? tr.userDetails?.email ?? profState?.userDetails?.email ?? '').trim();
+            merged.thriveReport = {
+                ...tr,
+                interviewee,
+                interviewer,
+                email,
+                userDetails: {
+                    ...(tr.userDetails || {}),
+                    interviewee,
+                    interviewer,
+                    email
+                }
+            };
         }
 
         // 3. Derive from thrive_hope_survey_state_v1 if not already present
@@ -867,15 +893,23 @@ const initThriveUI = () => {
 
     const saveThriveReport = (reportPayload = {}) => {
         const pillars = reportPayload.pillars || reportPayload.reportData || {};
-        const interviewee = reportPayload.interviewee || reportPayload.userDetails?.interviewee || '';
-        const interviewer = reportPayload.interviewer || reportPayload.userDetails?.interviewer || '';
+        const interviewee = String(reportPayload.interviewee ?? reportPayload.userDetails?.interviewee ?? '').trim();
+        const interviewer = String(reportPayload.interviewer ?? reportPayload.userDetails?.interviewer ?? '').trim();
+        const email = String(reportPayload.email ?? reportPayload.userDetails?.email ?? '').trim();
+        const userDetails = {
+            interviewee,
+            interviewer,
+            email
+        };
         return writeDossier(prev => ({
             ...prev,
             thriveReport: {
-                completedAt: new Date().toISOString(),
+                completedAt: reportPayload.completedAt || prev.thriveReport?.completedAt || new Date().toISOString(),
                 ...reportPayload,
                 interviewee,
                 interviewer,
+                email,
+                userDetails,
                 pillars
             }
         }));
@@ -966,8 +1000,11 @@ const initThriveUI = () => {
         lines.push('------------------------------------------------------------');
         if (hasProfile) {
             const tr = dossier.thriveReport;
-            if (tr.interviewee) {
-                lines.push(`• Client / Interviewee: ${tr.interviewee}${tr.interviewer ? ` (Interviewed by ${tr.interviewer})` : ''}`);
+            if (tr.interviewee || tr.interviewer) {
+                lines.push(`• Client / Interviewee: ${tr.interviewee || 'Unspecified'}${tr.interviewer ? ` (Interviewed by ${tr.interviewer})` : ''}`);
+            }
+            if (tr.email) {
+                lines.push(`• Contact Email: ${tr.email}`);
             }
             const pillarLabels = [
                 ['traits', 'Traits (T) — Core Qualities & Superpowers'],

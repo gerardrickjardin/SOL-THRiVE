@@ -1022,6 +1022,9 @@ function App() {
       const hasCompletedSection = Object.keys(sections || {}).some(k => sections[k] && String(sections[k]).trim());
       if (hasCompletedSection && window.ThriveCoachingDossier && typeof window.ThriveCoachingDossier.saveThriveReport === 'function') {
         window.ThriveCoachingDossier.saveThriveReport({
+          interviewee: details?.interviewee || '',
+          interviewer: details?.interviewer || '',
+          email: details?.email || '',
           userDetails: details,
           reportData: sections
         });
@@ -1108,6 +1111,21 @@ function App() {
     });
   };
 
+  const handleUpdateUserDetails = (updatedDetailsOrUpdater) => {
+    setUserDetails(prev => {
+      const nextRaw = typeof updatedDetailsOrUpdater === 'function'
+        ? updatedDetailsOrUpdater(prev)
+        : { ...prev, ...(updatedDetailsOrUpdater || {}) };
+      const next = {
+        interviewee: String(nextRaw.interviewee ?? ''),
+        interviewer: String(nextRaw.interviewer ?? ''),
+        email: String(nextRaw.email ?? '')
+      };
+      persistProfileToLocalStorage(next, reportData, sectionDrafts, step);
+      return next;
+    });
+  };
+
   const handleBack = () => {
     stopGlobalAudio();
     setStep(prev => Math.max(0, prev - 1));
@@ -1130,12 +1148,17 @@ function App() {
     setCopied(false);
   };
 
-  const copyToClipboard = async () => {
+  const copyToClipboard = async (customDetails) => {
     fireThriveHaptic(15);
-    const headerTitle = userDetails.interviewee ? `${userDetails.interviewee.toUpperCase()}'S THRIVE REPORT` : "MY THRiVE REPORT";
-    const interviewerInfo = userDetails.interviewer ? ` • Interviewed by ${userDetails.interviewer}` : "";
+    const activeDetails = customDetails && typeof customDetails === 'object' ? customDetails : userDetails;
+    const intervieweeName = String(activeDetails?.interviewee || '').trim();
+    const interviewerName = String(activeDetails?.interviewer || '').trim();
+    const recipientEmail = String(activeDetails?.email || '').trim();
+    const headerTitle = intervieweeName ? `${intervieweeName.toUpperCase()}'S THRIVE REPORT` : "MY THRiVE REPORT";
+    const interviewerInfo = interviewerName ? ` • Interviewed by ${interviewerName}` : "";
+    const emailInfo = recipientEmail ? ` • Email: ${recipientEmail}` : "";
 
-    let reportText = `${headerTitle}\nCreated by Dr. Steve Huff • Based on the Strengths Model • Powered by Gemini${interviewerInfo}\n\n`;
+    let reportText = `${headerTitle}\nCreated by Dr. Steve Huff • Based on the Strengths Model • Powered by Gemini${interviewerInfo}${emailInfo}\n\n`;
     SECTIONS.forEach(sec => {
       reportText += `${sec.title}\n${reportData[sec.key] || 'No data provided.'}\n\n`;
     });
@@ -1267,6 +1290,7 @@ function App() {
             <FinalReport 
               data={reportData} 
               userDetails={userDetails}
+              onUpdateUserDetails={handleUpdateUserDetails}
               onCopy={copyToClipboard} 
               onClearCopied={clearCopiedState}
               copied={copied} 
@@ -2129,18 +2153,43 @@ function ChatSection({ section, stepNumber, initialDraft, hasApprovedSection, on
   );
 }
 
-function FinalReport({ data, userDetails, onCopy, onClearCopied, copied, onBack, onReset, onUpdateSection, onPersistReport }) {
+function FinalReport({ data, userDetails, onUpdateUserDetails, onCopy, onClearCopied, copied, onBack, onReset, onUpdateSection, onPersistReport }) {
   const [isSavingCloud, setIsSavingCloud] = useState(false);
   const [editingSectionKey, setEditingSectionKey] = useState(null);
   const [editDraft, setEditDraft] = useState('');
   const [savedSectionKey, setSavedSectionKey] = useState(null);
   const [shareReportStatus, setShareReportStatus] = useState(null);
+  const [emailReportStatus, setEmailReportStatus] = useState(null);
+  const [isEditingDetails, setIsEditingDetails] = useState(false);
+  const [detailsDraft, setDetailsDraft] = useState(() => ({
+    interviewee: userDetails?.interviewee || '',
+    interviewer: userDetails?.interviewer || '',
+    email: userDetails?.email || ''
+  }));
+  const [quickEmailDraft, setQuickEmailDraft] = useState(userDetails?.email || '');
+  const [savedDetailsFeedback, setSavedDetailsFeedback] = useState(false);
   const isSharingReportRef = useRef(false);
   const shareReportTimerRef = useRef(null);
+  const emailReportTimerRef = useRef(null);
+  const savedDetailsTimerRef = useRef(null);
+
+  useEffect(() => {
+    if (!isEditingDetails) {
+      setDetailsDraft({
+        interviewee: userDetails?.interviewee || '',
+        interviewer: userDetails?.interviewer || '',
+        email: userDetails?.email || ''
+      });
+    }
+    setQuickEmailDraft(userDetails?.email || '');
+  }, [userDetails?.interviewee, userDetails?.interviewer, userDetails?.email, isEditingDetails]);
 
   useEffect(() => {
     if (window.ThriveCoachingDossier && typeof window.ThriveCoachingDossier.saveThriveReport === 'function') {
       window.ThriveCoachingDossier.saveThriveReport({
+        interviewee: userDetails?.interviewee || '',
+        interviewer: userDetails?.interviewer || '',
+        email: userDetails?.email || '',
         userDetails,
         reportData: data
       });
@@ -2150,6 +2199,8 @@ function FinalReport({ data, userDetails, onCopy, onClearCopied, copied, onBack,
   useEffect(() => {
     return () => {
       if (shareReportTimerRef.current) clearTimeout(shareReportTimerRef.current);
+      if (emailReportTimerRef.current) clearTimeout(emailReportTimerRef.current);
+      if (savedDetailsTimerRef.current) clearTimeout(savedDetailsTimerRef.current);
     };
   }, []);
 
@@ -2161,19 +2212,245 @@ function FinalReport({ data, userDetails, onCopy, onClearCopied, copied, onBack,
     setShareReportStatus(null);
   };
 
-  const handleCopyReportClick = async () => {
-    clearShareReportStatus();
-    if (onCopy) await onCopy();
+  const clearEmailReportStatus = () => {
+    if (emailReportTimerRef.current) {
+      clearTimeout(emailReportTimerRef.current);
+      emailReportTimerRef.current = null;
+    }
+    setEmailReportStatus(null);
   };
 
-  const buildFormattedReportText = () => {
-    const headerTitle = userDetails?.interviewee ? `${userDetails.interviewee.toUpperCase()}'S THRIVE REPORT` : "MY THRiVE REPORT";
-    const interviewerInfo = userDetails?.interviewer ? ` • Interviewed by ${userDetails.interviewer}` : "";
-    let reportText = `${headerTitle}\nCreated by Dr. Steve Huff • Based on the Strengths Model • Powered by Gemini${interviewerInfo}\n\n`;
+  const getEffectiveDetails = (overrideDetails) => {
+    if (overrideDetails && typeof overrideDetails === 'object') {
+      return {
+        interviewee: String(overrideDetails.interviewee ?? '').trim(),
+        interviewer: String(overrideDetails.interviewer ?? '').trim(),
+        email: String(overrideDetails.email ?? '').trim()
+      };
+    }
+    if (isEditingDetails) {
+      return {
+        interviewee: String(detailsDraft.interviewee ?? '').trim(),
+        interviewer: String(detailsDraft.interviewer ?? '').trim(),
+        email: String(detailsDraft.email ?? '').trim()
+      };
+    }
+    return {
+      interviewee: String(userDetails?.interviewee ?? '').trim(),
+      interviewer: String(userDetails?.interviewer ?? '').trim(),
+      email: String(userDetails?.email || quickEmailDraft || '').trim()
+    };
+  };
+
+  const handleStartEditDetails = () => {
+    setDetailsDraft({
+      interviewee: userDetails?.interviewee || '',
+      interviewer: userDetails?.interviewer || '',
+      email: (userDetails?.email || quickEmailDraft || '').trim()
+    });
+    setIsEditingDetails(true);
+  };
+
+  const handleSaveDetails = (e) => {
+    if (e && typeof e.preventDefault === 'function') e.preventDefault();
+    const cleaned = {
+      interviewee: String(detailsDraft.interviewee || '').trim(),
+      interviewer: String(detailsDraft.interviewer || '').trim(),
+      email: String(detailsDraft.email || '').trim()
+    };
+    setQuickEmailDraft(cleaned.email);
+    if (onUpdateUserDetails) {
+      onUpdateUserDetails(cleaned);
+    }
+    setIsEditingDetails(false);
+    setSavedDetailsFeedback(true);
+    if (savedDetailsTimerRef.current) clearTimeout(savedDetailsTimerRef.current);
+    savedDetailsTimerRef.current = setTimeout(() => {
+      savedDetailsTimerRef.current = null;
+      setSavedDetailsFeedback(false);
+    }, 2500);
+  };
+
+  const handleSaveQuickEmail = (e) => {
+    if (e && typeof e.preventDefault === 'function') e.preventDefault();
+    const cleanedEmail = String(quickEmailDraft || '').trim();
+    const nextDetails = {
+      interviewee: String(userDetails?.interviewee || '').trim(),
+      interviewer: String(userDetails?.interviewer || '').trim(),
+      email: cleanedEmail
+    };
+    setDetailsDraft(nextDetails);
+    if (onUpdateUserDetails) {
+      onUpdateUserDetails(nextDetails);
+    }
+    setSavedDetailsFeedback(true);
+    if (savedDetailsTimerRef.current) clearTimeout(savedDetailsTimerRef.current);
+    savedDetailsTimerRef.current = setTimeout(() => {
+      savedDetailsTimerRef.current = null;
+      setSavedDetailsFeedback(false);
+    }, 2500);
+  };
+
+  const buildFormattedReportText = (customDetails) => {
+    const active = getEffectiveDetails(customDetails);
+    const headerTitle = active.interviewee ? `${active.interviewee.toUpperCase()}'S THRIVE REPORT` : "MY THRiVE REPORT";
+    const interviewerInfo = active.interviewer ? ` • Interviewed by ${active.interviewer}` : "";
+    const emailInfo = active.email ? ` • Email: ${active.email}` : "";
+    let reportText = `${headerTitle}\nCreated by Dr. Steve Huff • Based on the Strengths Model • Powered by Gemini${interviewerInfo}${emailInfo}\n\n`;
     SECTIONS.forEach(sec => {
       reportText += `${sec.title}\n${data[sec.key] || 'No data provided.'}\n\n`;
     });
-    return { headerTitle, reportText: reportText.trim() };
+    return { headerTitle, reportText: reportText.trim(), activeDetails: active };
+  };
+
+  const buildEmailReportMailto = (customDetails) => {
+    const { headerTitle, reportText, activeDetails } = buildFormattedReportText(customDetails);
+    const recipientEmail = activeDetails.email;
+    const subject = activeDetails.interviewee
+      ? `THRiVE Strengths Report — ${activeDetails.interviewee}`
+      : 'THRiVE Strengths Report';
+    const dateStr = new Date().toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+
+    const safeRecipient = recipientEmail
+      ? encodeURIComponent(recipientEmail).replace(/%40/g, '@')
+      : '';
+
+    const composeBody = (maxCharsPerPillar) => {
+      const lines = [];
+      lines.push(headerTitle);
+      lines.push(`Date: ${dateStr}${activeDetails.interviewer ? ` • Interviewed by: ${activeDetails.interviewer}` : ''}${recipientEmail ? ` • Email: ${recipientEmail}` : ''}`);
+      lines.push('Created by Dr. Steve Huff • Based on the Strengths Model');
+      lines.push('');
+
+      SECTIONS.forEach(sec => {
+        const rawPillar = String(data[sec.key] || 'No response provided.').trim().replace(/\r\n/g, '\n');
+        let pillarText = rawPillar;
+        if (maxCharsPerPillar && pillarText.length > maxCharsPerPillar) {
+          pillarText = pillarText.slice(0, Math.max(24, maxCharsPerPillar - 3)).trimEnd() + '...';
+        }
+        lines.push(`${sec.title}:`);
+        lines.push(pillarText);
+        lines.push('');
+      });
+
+      lines.push('KEY TAKEAWAYS & NEXT STEPS:');
+      lines.push('• Full Report Backup: Your complete 6-pillar THRiVE Report has also been copied to your clipboard.');
+      lines.push('• Connected Coaching Dossier: Combine this THRiVE Report with your Flow Survey and HoPE Index at https://www.thrivecoaching.ai');
+      return lines.join('\n').trim();
+    };
+
+    const maxUrlLength = 1880;
+    const candidateLimits = [null, 240, 180, 140, 105, 80, 55];
+    let chosenBody = '';
+    let chosenUrl = '';
+
+    for (let i = 0; i < candidateLimits.length; i++) {
+      const candidateBody = composeBody(candidateLimits[i]);
+      const candidateUrl = `mailto:${safeRecipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(candidateBody)}`;
+      chosenBody = candidateBody;
+      chosenUrl = candidateUrl;
+      if (candidateUrl.length <= maxUrlLength) {
+        break;
+      }
+    }
+
+    if (chosenUrl.length > maxUrlLength) {
+      let trimmedBody = chosenBody;
+      while (trimmedBody.length > 120) {
+        trimmedBody = trimmedBody.slice(0, Math.floor(trimmedBody.length * 0.85)).trimEnd() + '\n...(Full report copied to clipboard)';
+        const nextUrl = `mailto:${safeRecipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(trimmedBody)}`;
+        if (nextUrl.length <= maxUrlLength) {
+          chosenBody = trimmedBody;
+          chosenUrl = nextUrl;
+          break;
+        }
+      }
+    }
+
+    return {
+      mailtoUrl: chosenUrl,
+      subject,
+      body: chosenBody,
+      recipientEmail,
+      fullReportText: reportText
+    };
+  };
+
+  const copyTextSilently = async (text) => {
+    let copiedOk = false;
+    if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+      try {
+        await navigator.clipboard.writeText(text);
+        copiedOk = true;
+      } catch (_) {}
+    }
+    if (!copiedOk) {
+      try {
+        const el = document.createElement('textarea');
+        el.value = text;
+        el.setAttribute('readonly', '');
+        el.style.position = 'fixed';
+        el.style.top = '-9999px';
+        el.style.opacity = '0';
+        document.body.appendChild(el);
+        el.select();
+        try { document.execCommand('copy'); } catch (_) {}
+        document.body.removeChild(el);
+        copiedOk = true;
+      } catch (_) {}
+    }
+    return copiedOk;
+  };
+
+  const handleCopyReportClick = async () => {
+    clearShareReportStatus();
+    clearEmailReportStatus();
+    const active = getEffectiveDetails();
+    if (onCopy) await onCopy(active);
+  };
+
+  const handleEmailReport = async () => {
+    fireThriveHaptic(15);
+    if (onClearCopied) onClearCopied();
+    clearShareReportStatus();
+
+    const active = getEffectiveDetails();
+    if (
+      onUpdateUserDetails &&
+      (isEditingDetails || (quickEmailDraft.trim() && quickEmailDraft.trim() !== (userDetails?.email || '').trim()))
+    ) {
+      onUpdateUserDetails(active);
+      setIsEditingDetails(false);
+    }
+
+    const emailPayload = buildEmailReportMailto(active);
+    if (typeof window !== 'undefined') {
+      window.__lastThriveMailtoUrl = emailPayload.mailtoUrl;
+      window.__lastThriveEmailPayload = emailPayload;
+    }
+
+    setEmailReportStatus('opened');
+    if (emailReportTimerRef.current) clearTimeout(emailReportTimerRef.current);
+    emailReportTimerRef.current = setTimeout(() => {
+      emailReportTimerRef.current = null;
+      setEmailReportStatus(null);
+    }, 3000);
+
+    try {
+      const mailtoAnchor = document.createElement('a');
+      mailtoAnchor.href = emailPayload.mailtoUrl;
+      mailtoAnchor.id = 'thrive-mailto-link';
+      mailtoAnchor.style.display = 'none';
+      document.body.appendChild(mailtoAnchor);
+      mailtoAnchor.click();
+      document.body.removeChild(mailtoAnchor);
+    } catch (_) {}
+
+    await copyTextSilently(emailPayload.fullReportText);
   };
 
   const handleShareReport = async () => {
@@ -2184,6 +2461,7 @@ function FinalReport({ data, userDetails, onCopy, onClearCopied, copied, onBack,
     );
     if (isSharingReportRef.current || globalSharing) return;
 
+    clearEmailReportStatus();
     const { headerTitle, reportText } = buildFormattedReportText();
     const sharePayload = { title: headerTitle, text: reportText };
 
@@ -2243,25 +2521,7 @@ function FinalReport({ data, userDetails, onCopy, onClearCopied, copied, onBack,
       }
     }
 
-    let copiedOk = false;
-    if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
-      try {
-        await navigator.clipboard.writeText(reportText);
-        copiedOk = true;
-      } catch (_) {}
-    }
-    if (!copiedOk) {
-      const el = document.createElement('textarea');
-      el.value = reportText;
-      el.setAttribute('readonly', '');
-      el.style.position = 'fixed';
-      el.style.top = '-9999px';
-      el.style.opacity = '0';
-      document.body.appendChild(el);
-      el.select();
-      try { document.execCommand('copy'); } catch (_) {}
-      document.body.removeChild(el);
-    }
+    await copyTextSilently(reportText);
     if (onClearCopied) onClearCopied();
     setShareReportStatus('copied');
     if (shareReportTimerRef.current) clearTimeout(shareReportTimerRef.current);
@@ -2290,6 +2550,9 @@ function FinalReport({ data, userDetails, onCopy, onClearCopied, copied, onBack,
     }, 2500);
   };
 
+  const currentMailtoPreview = buildEmailReportMailto().mailtoUrl;
+  const hasSavedEmail = Boolean((userDetails?.email || '').trim());
+
   return (
     <div className="animate-in fade-in slide-in-from-bottom-8 duration-700">
       
@@ -2303,17 +2566,159 @@ function FinalReport({ data, userDetails, onCopy, onClearCopied, copied, onBack,
         </p>
       </div>
 
-      <div className="bg-[#FAF8F3] border-2 border-[#1E2430] p-6 md:p-10 rounded-3xl mb-12 print:mb-0 relative overflow-hidden print:overflow-visible shadow-[4px_4px_0_#1E2430] print:shadow-none print:border-none print:p-0 print:bg-white">
+      <div className="bg-[#FAF8F3] border-2 border-[#1E2430] p-5 sm:p-6 md:p-10 rounded-3xl mb-12 print:mb-0 relative overflow-hidden print:overflow-visible shadow-[4px_4px_0_#1E2430] print:shadow-none print:border-none print:p-0 print:bg-white">
         
-        {/* Branding Header */}
-        <div className="border-b-2 border-slate-200 pb-6 mb-8 print:pb-3 print:mb-4 text-center md:text-left print:text-left">
-          <h3 className="text-slate-900 font-black text-3xl print:text-2xl mb-2 print:mb-1">
-            {userDetails.interviewee ? `${userDetails.interviewee.toUpperCase()}'S THRIVE REPORT` : 'YOUR THRIVE REPORT'}
-          </h3>
-          <p className="text-slate-600 uppercase tracking-widest font-bold text-sm print:text-xs leading-relaxed">
-            Created by Dr. Steve Huff • Based on the Strengths Model • Powered by Gemini
-            {userDetails.interviewer && <><br/><span className="text-purple-700">Interviewed by {userDetails.interviewer}</span></>}
-          </p>
+        {/* Branding Header & Report Metadata */}
+        <div id="report-metadata-header" className="border-b-2 border-slate-200 pb-6 mb-8 print:pb-3 print:mb-4 text-center md:text-left print:text-left">
+          <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-3">
+            <div className="min-w-0">
+              <h3 className="text-slate-900 font-black text-2xl sm:text-3xl print:text-2xl mb-1.5 print:mb-1 break-words">
+                {userDetails.interviewee ? `${userDetails.interviewee.toUpperCase()}'S THRIVE REPORT` : 'YOUR THRIVE REPORT'}
+              </h3>
+              <p className="text-slate-600 uppercase tracking-widest font-bold text-xs sm:text-sm print:text-xs leading-relaxed">
+                Created by Dr. Steve Huff • Based on the Strengths Model • Powered by Gemini
+              </p>
+            </div>
+            <div className="flex items-center justify-center md:justify-end gap-2 shrink-0 print:hidden">
+              {savedDetailsFeedback && !isEditingDetails && (
+                <span id="report-details-saved-badge" className="text-xs font-extrabold text-emerald-700 bg-emerald-50 border border-emerald-300 px-2.5 py-1 rounded-full">
+                  Details Saved ✓
+                </span>
+              )}
+              {!isEditingDetails && (
+                <button
+                  type="button"
+                  id="edit-report-details-btn"
+                  onClick={handleStartEditDetails}
+                  className="text-xs font-bold text-slate-700 hover:text-slate-900 bg-white hover:bg-slate-100 border-2 border-[#1E2430] px-3.5 py-1.5 rounded-full transition-colors shadow-[2px_2px_0_#1E2430]"
+                >
+                  {hasSavedEmail ? '✏️ Edit Details' : '✉️ Add Email / Edit Details'}
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Visible Metadata Strip (Screen + PDF Printout) */}
+          {(userDetails.interviewee || userDetails.interviewer || userDetails.email) && (
+            <div id="report-metadata-strip" className="flex flex-wrap items-center justify-center md:justify-start print:justify-start gap-2 sm:gap-3 mt-3.5 text-xs sm:text-sm print:text-xs font-bold">
+              {userDetails.interviewee && (
+                <span id="report-meta-interviewee" className="inline-flex items-center gap-1.5 bg-white print:bg-transparent border border-slate-300 print:border-slate-400 text-slate-800 px-3 py-1 rounded-full break-all">
+                  <span>👤</span>
+                  <span>Prepared for: <strong>{userDetails.interviewee}</strong></span>
+                </span>
+              )}
+              {userDetails.interviewer && (
+                <span id="report-meta-interviewer" className="inline-flex items-center gap-1.5 bg-purple-50 print:bg-transparent border border-purple-200 print:border-slate-400 text-purple-800 px-3 py-1 rounded-full break-all">
+                  <span>🎙️</span>
+                  <span>Interviewed by: <strong>{userDetails.interviewer}</strong></span>
+                </span>
+              )}
+              {userDetails.email && (
+                <span id="report-meta-email" className="inline-flex items-center gap-1.5 bg-indigo-50 print:bg-transparent border border-indigo-200 print:border-slate-400 text-indigo-900 px-3 py-1 rounded-full break-all">
+                  <span>✉️</span>
+                  <span>{userDetails.email}</span>
+                </span>
+              )}
+            </div>
+          )}
+
+          {/* Quick Inline Email Entry when Email was Skipped on Step 0 */}
+          {!hasSavedEmail && !isEditingDetails && (
+            <form onSubmit={handleSaveQuickEmail} id="report-quick-email-bar" className="mt-4 bg-white border-2 border-slate-300 rounded-2xl p-3 sm:p-3.5 flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 text-left print:hidden">
+              <label htmlFor="final-email-input" className="text-xs font-extrabold uppercase tracking-wider text-slate-700 shrink-0">
+                ✉️ Send Report to Email:
+              </label>
+              <input
+                id="final-email-input"
+                type="email"
+                value={quickEmailDraft}
+                onChange={(e) => setQuickEmailDraft(e.target.value)}
+                placeholder="Enter email for your PDF & Email Report..."
+                className="w-full sm:flex-1 min-w-0 border-2 border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-800 outline-none focus:border-purple-600 focus:ring-2 focus:ring-purple-100"
+              />
+              <button
+                type="submit"
+                id="save-report-details-btn"
+                className="bg-[#1E2430] hover:bg-slate-800 text-white text-xs font-bold px-4 py-2.5 rounded-full transition-colors shrink-0"
+              >
+                Save Email
+              </button>
+            </form>
+          )}
+
+          {/* Full Inline Editor for Interviewee, Interviewer, and Email */}
+          {isEditingDetails && (
+            <form onSubmit={handleSaveDetails} id="report-details-editor" className="mt-4 bg-white border-2 border-[#1E2430] rounded-2xl p-4 sm:p-5 space-y-4 text-left shadow-sm print:hidden">
+              <div className="flex items-center justify-between border-b border-slate-200 pb-2">
+                <span className="text-xs uppercase tracking-widest font-black text-purple-800">Edit Report Metadata</span>
+                <button
+                  type="button"
+                  onClick={() => setIsEditingDetails(false)}
+                  className="text-xs font-bold text-slate-500 hover:text-slate-800"
+                >
+                  Close
+                </button>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+                <div>
+                  <label htmlFor="final-interviewee-input" className="block text-xs uppercase tracking-wider font-bold text-slate-700 mb-1">
+                    Interviewee Name
+                  </label>
+                  <input
+                    id="final-interviewee-input"
+                    type="text"
+                    value={detailsDraft.interviewee}
+                    onChange={(e) => setDetailsDraft(prev => ({ ...prev, interviewee: e.target.value }))}
+                    placeholder="Who is this report for?"
+                    className="w-full border-2 border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-800 outline-none focus:border-purple-600 focus:ring-2 focus:ring-purple-100"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="final-interviewer-input" className="block text-xs uppercase tracking-wider font-bold text-slate-700 mb-1">
+                    Interviewer Name
+                  </label>
+                  <input
+                    id="final-interviewer-input"
+                    type="text"
+                    value={detailsDraft.interviewer}
+                    onChange={(e) => setDetailsDraft(prev => ({ ...prev, interviewer: e.target.value }))}
+                    placeholder="Who asked the questions?"
+                    className="w-full border-2 border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-800 outline-none focus:border-purple-600 focus:ring-2 focus:ring-purple-100"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="final-email-input" className="block text-xs uppercase tracking-wider font-bold text-slate-700 mb-1">
+                    Email Address
+                  </label>
+                  <input
+                    id="final-email-input"
+                    type="email"
+                    value={detailsDraft.email}
+                    onChange={(e) => setDetailsDraft(prev => ({ ...prev, email: e.target.value }))}
+                    placeholder="For sending your final PDF"
+                    className="w-full border-2 border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-800 outline-none focus:border-purple-600 focus:ring-2 focus:ring-purple-100"
+                  />
+                </div>
+              </div>
+              <div className="flex justify-end gap-2 pt-1">
+                <button
+                  type="button"
+                  id="cancel-report-details-btn"
+                  onClick={() => setIsEditingDetails(false)}
+                  className="text-xs font-bold text-slate-600 hover:text-slate-900 px-4 py-2 rounded-full hover:bg-slate-100 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  id="save-report-details-btn"
+                  className="text-xs font-bold bg-[#1E2430] hover:bg-slate-800 text-white px-5 py-2 rounded-full transition-colors"
+                >
+                  Save Details
+                </button>
+              </div>
+            </form>
+          )}
         </div>
 
         {/* 6 Sections Grid */}
@@ -2433,6 +2838,20 @@ function FinalReport({ data, userDetails, onCopy, onClearCopied, copied, onBack,
               : shareReportStatus === 'copied'
                 ? <><CheckIcon className="w-6 h-6" /> Copied ✓</>
                 : <><span>📤</span> Share Report</>}
+          </button>
+
+          <button 
+            type="button"
+            id="email-thrive-report-btn"
+            onClick={handleEmailReport}
+            data-mailto-url={currentMailtoPreview}
+            className={`w-full sm:w-auto rounded-full font-bold transition-all px-8 py-4 shadow-lg hover:shadow-xl flex items-center justify-center gap-3 text-lg
+              ${emailReportStatus ? 'bg-emerald-600 text-white ring-4 ring-emerald-100' : 'bg-indigo-600 hover:bg-indigo-700 text-white'}
+            `}
+          >
+            {emailReportStatus
+              ? <><CheckIcon className="w-6 h-6" /> Email Opened ✓</>
+              : <><span>✉️</span> Email Report</>}
           </button>
         </div>
 
