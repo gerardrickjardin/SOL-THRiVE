@@ -192,6 +192,37 @@
     <script type="text/babel">
 const { useState, useEffect, useRef } = React;
 
+function triggerThriveHaptic(durationOrPattern = 15) {
+  try {
+    if (
+      typeof window !== 'undefined' &&
+      typeof window.matchMedia === 'function' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    ) {
+      return false;
+    }
+    if (typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function') {
+      const pattern = durationOrPattern == null ? 15 : durationOrPattern;
+      const res = navigator.vibrate(pattern);
+      return res !== false;
+    }
+  } catch (_) {}
+  return false;
+}
+if (typeof window !== 'undefined' && typeof window.triggerThriveHaptic !== 'function') {
+  window.triggerThriveHaptic = triggerThriveHaptic;
+}
+function fireThriveHaptic(durationOrPattern = 15) {
+  try {
+    if (typeof window !== 'undefined' && typeof window.triggerThriveHaptic === 'function') {
+      return window.triggerThriveHaptic(durationOrPattern);
+    }
+    return triggerThriveHaptic(durationOrPattern);
+  } catch (_) {
+    return false;
+  }
+}
+
 // =========================================================================
 // ⚙️ DEVELOPER SETTINGS (PASTE YOUR KEYS HERE TO SAVE THEM PERMANENTLY)
 // =========================================================================
@@ -1092,6 +1123,7 @@ function App() {
   };
 
   const copyToClipboard = async () => {
+    fireThriveHaptic(15);
     const headerTitle = userDetails.interviewee ? `${userDetails.interviewee.toUpperCase()}'S THRIVE REPORT` : "MY THRiVE REPORT";
     const interviewerInfo = userDetails.interviewer ? ` • Interviewed by ${userDetails.interviewer}` : "";
 
@@ -1794,6 +1826,7 @@ function ChatSection({ section, stepNumber, initialDraft, hasApprovedSection, on
   }, []);
 
   const toggleListen = () => {
+    fireThriveHaptic(15);
     if (!recognitionRef.current) {
       alert("Dictation is not supported in this browser. Please type your answers.");
       return;
@@ -1827,6 +1860,7 @@ function ChatSection({ section, stepNumber, initialDraft, hasApprovedSection, on
       }
     }
   };
+  const toggleDictation = toggleListen;
 
   const handlePreSubmit = () => {
     if (draft.trim().length === 0) return;

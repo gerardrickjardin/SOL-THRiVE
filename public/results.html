@@ -575,6 +575,9 @@ async function copyCampaignLink(customText){
 }
 
 document.getElementById('copy').onclick = function(){
+  if (typeof window !== 'undefined' && typeof window.triggerThriveHaptic === 'function') {
+    window.triggerThriveHaptic(15);
+  }
   copyCampaignLink().finally(() => {
     this.textContent = 'COPIED!';
     showShareFeedback('✓ Campaign link copied to clipboard!');
@@ -621,6 +624,9 @@ function canUseNativeShare(payload){
 
 let isNativeSharing = false;
 async function triggerNativeOrFallbackShare(options = {}){
+  if (typeof window !== 'undefined' && typeof window.triggerThriveHaptic === 'function') {
+    window.triggerThriveHaptic(15);
+  }
   if (isNativeSharing) return { shared: false, copied: false, canceled: true };
   const fallbackCopyPayload = options.fallbackText || shareText;
   const fallbackFeedback = options.fallbackFeedback || '✓ Campaign link & caption copied to clipboard!';

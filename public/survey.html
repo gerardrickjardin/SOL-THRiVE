@@ -829,6 +829,37 @@
     </footer>
 
     <script>
+        function triggerThriveHaptic(durationOrPattern = 15) {
+            try {
+                if (
+                    typeof window !== 'undefined' &&
+                    typeof window.matchMedia === 'function' &&
+                    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+                ) {
+                    return false;
+                }
+                if (typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function') {
+                    const pattern = durationOrPattern == null ? 15 : durationOrPattern;
+                    const res = navigator.vibrate(pattern);
+                    return res !== false;
+                }
+            } catch (_) {}
+            return false;
+        }
+        if (typeof window !== 'undefined' && typeof window.triggerThriveHaptic !== 'function') {
+            window.triggerThriveHaptic = triggerThriveHaptic;
+        }
+        function fireThriveHaptic(durationOrPattern = 15) {
+            try {
+                if (typeof window !== 'undefined' && typeof window.triggerThriveHaptic === 'function') {
+                    return window.triggerThriveHaptic(durationOrPattern);
+                }
+                return triggerThriveHaptic(durationOrPattern);
+            } catch (_) {
+                return false;
+            }
+        }
+
         // ==========================================
         // 1. SETTINGS MODAL & NON-OVERLAPPING AUDIO LOGIC
         // ==========================================
@@ -1248,6 +1279,7 @@
         }
 
         function toggleDictation() {
+            fireThriveHaptic(15);
             const textArea = document.getElementById('problem-description');
 
             if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
@@ -1483,6 +1515,7 @@
         }
 
         function handleMetaphorChange(radioEl) {
+            fireThriveHaptic(15);
             const customInput = document.getElementById('custom-metaphor-input');
             if (radioEl.value === 'custom') {
                 customInput.classList.remove('hidden');
@@ -1643,6 +1676,7 @@
         }
 
         function recordScore(val) {
+            fireThriveHaptic(15);
             stopCurrentAudio();
             scores[currentQ] = val;
             answered[currentQ] = true;
@@ -1657,6 +1691,9 @@
             } else {
                 showResults();
             }
+        }
+        function selectOption(val) {
+            return recordScore(val);
         }
 
         // Step back one question WITHOUT discarding the answer — it stays recorded

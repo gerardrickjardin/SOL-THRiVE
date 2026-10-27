@@ -1,3 +1,38 @@
+var triggerThriveHaptic = function (durationOrPattern = 15) {
+    try {
+        if (
+            typeof window !== 'undefined' &&
+            typeof window.matchMedia === 'function' &&
+            window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        ) {
+            return false;
+        }
+        if (typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function') {
+            const pattern = durationOrPattern == null ? 15 : durationOrPattern;
+            const res = navigator.vibrate(pattern);
+            return res !== false;
+        }
+    } catch (_) {
+        // Silently no-op on browsers/platforms without Web Vibration API support
+    }
+    return false;
+};
+
+if (typeof window !== 'undefined') {
+    window.triggerThriveHaptic = triggerThriveHaptic;
+}
+
+var fireThriveHaptic = function (durationOrPattern = 15) {
+    try {
+        if (typeof window !== 'undefined' && typeof window.triggerThriveHaptic === 'function') {
+            return window.triggerThriveHaptic(durationOrPattern);
+        }
+        return triggerThriveHaptic(durationOrPattern);
+    } catch (_) {
+        return false;
+    }
+};
+
 const initThriveUI = () => {
     // Hamburger Menu Logic
     const hamburger = document.querySelector('.hamburger');
@@ -495,6 +530,7 @@ const initThriveUI = () => {
             }
             if (!textToCopy) return;
 
+            fireThriveHaptic(15);
             const copied = await copyTextToClipboard(textToCopy);
 
             const labelEl = btn.querySelector('.copy-btn-label');
@@ -1088,6 +1124,7 @@ const initThriveUI = () => {
     };
 
     const copyMasterPrompt = async (triggerBtn, customDossier) => {
+        fireThriveHaptic(15);
         const promptText = buildMasterPrompt(customDossier);
         const ok = await copyTextWithFallback(promptText);
         setDossierBtnFeedback(
@@ -1099,6 +1136,7 @@ const initThriveUI = () => {
     };
 
     const shareWithFallback = async (sharePayload = {}, triggerBtn = null, options = {}) => {
+        fireThriveHaptic(15);
         const cleanPayload = {};
         if (sharePayload.title) cleanPayload.title = String(sharePayload.title);
         if (sharePayload.text) cleanPayload.text = String(sharePayload.text);
@@ -1170,6 +1208,7 @@ const initThriveUI = () => {
         canNativeShare,
         isSharing: () => isGlobalSharing,
         copyTextWithFallback,
+        triggerHaptic: triggerThriveHaptic,
         refreshStatusBadges,
         refreshPageUI: refreshStatusBadges
     };

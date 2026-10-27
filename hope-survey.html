@@ -251,6 +251,37 @@
     <script type="text/babel">
 const { useState, useEffect, useRef } = window.React;
 
+function triggerThriveHaptic(durationOrPattern = 15) {
+    try {
+        if (
+            typeof window !== 'undefined' &&
+            typeof window.matchMedia === 'function' &&
+            window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        ) {
+            return false;
+        }
+        if (typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function') {
+            const pattern = durationOrPattern == null ? 15 : durationOrPattern;
+            const res = navigator.vibrate(pattern);
+            return res !== false;
+        }
+    } catch (_) {}
+    return false;
+}
+if (typeof window !== 'undefined' && typeof window.triggerThriveHaptic !== 'function') {
+    window.triggerThriveHaptic = triggerThriveHaptic;
+}
+function fireThriveHaptic(durationOrPattern = 15) {
+    try {
+        if (typeof window !== 'undefined' && typeof window.triggerThriveHaptic === 'function') {
+            return window.triggerThriveHaptic(durationOrPattern);
+        }
+        return triggerThriveHaptic(durationOrPattern);
+    } catch (_) {
+        return false;
+    }
+}
+
 // --- DATA STRUCTURE ---
 const surveyQuestions = [
     {
@@ -1141,6 +1172,7 @@ const ReflectionBox = ({ value, onChange }) => {
     }, []);
 
     const toggleListening = () => {
+        fireThriveHaptic(15);
         if (!recognitionRef.current) {
             alert("Speech recognition is not supported in this browser.");
             return;
@@ -1168,6 +1200,7 @@ const ReflectionBox = ({ value, onChange }) => {
             }
         }
     };
+    const toggleDictation = toggleListening;
 
     const handleCleanUp = async () => {
         if (!value || !value.trim()) return;
@@ -1203,6 +1236,8 @@ const ReflectionBox = ({ value, onChange }) => {
                 <div className="flex items-center gap-1 sm:gap-2 shrink-0">
                     <button 
                         type="button"
+                        id="reflection-mic-btn"
+                        data-testid="reflection-mic-btn"
                         onClick={toggleListening}
                         className={`p-1 sm:p-1.5 md:p-2 rounded-full transition-colors flex items-center justify-center shrink-0 ${isListening ? 'bg-red-100 text-red-600 border border-red-300 animate-pulse' : 'bg-white border border-slate-200 text-slate-500 hover:text-blue-600 hover:bg-blue-50'}`}
                         title={isListening ? "Stop Recording" : "Voice to Text"}
@@ -1252,6 +1287,9 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
     const safeSelection = currentSelection !== null && currentSelection >= 1.0 ? currentSelection : 3.0;
     const [rawValue, setRawValue] = window.React.useState(safeSelection);
     const rawValueRef = window.React.useRef(safeSelection);
+    const lastSnappedRef = window.React.useRef(
+        currentSelection !== null && currentSelection >= 1.0 ? Math.round(currentSelection * 2) / 2 : null
+    );
 
     const getZoneForScore = (scoreVal) => {
         if (scoreVal === null || scoreVal === undefined) return 3;
@@ -1268,6 +1306,9 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
             const nextRaw = currentSelection !== null && currentSelection >= 1.0 ? currentSelection : 3.0;
             rawValueRef.current = nextRaw;
             setRawValue(nextRaw);
+            lastSnappedRef.current = currentSelection !== null && currentSelection >= 1.0
+                ? Math.round(currentSelection * 2) / 2
+                : null;
             if (currentSelection !== null && currentSelection >= 1.0) {
                 setMobileAnchorTab(getZoneForScore(currentSelection));
             }
@@ -1283,9 +1324,16 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
         setTimeout(() => setBurstValue(null), 800);
     };
 
+    const handleAnchorTabClick = (zone) => {
+        fireThriveHaptic(12);
+        setMobileAnchorTab(zone);
+    };
+
     const handleEmojiClick = (rating) => {
+        fireThriveHaptic(15);
         setIsDragging(false);
         rawValueRef.current = rating;
+        lastSnappedRef.current = rating;
         onSelect(rating);
         setRawValue(rating);
         setMobileAnchorTab(getZoneForScore(rating));
@@ -1299,10 +1347,15 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
         setRawValue(v);
         const snapped = Math.round(v * 2) / 2;
         setMobileAnchorTab(getZoneForScore(snapped));
-        if (snapped !== currentSelection) {
+        if (snapped !== lastSnappedRef.current) {
+            lastSnappedRef.current = snapped;
+            fireThriveHaptic(12);
+            onSelect(snapped);
+        } else if (snapped !== currentSelection) {
             onSelect(snapped);
         }
     };
+    const handleSliderMove = handleSliderChange;
 
     const handleDragStart = () => setIsDragging(true);
     
@@ -1316,6 +1369,10 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
         rawValueRef.current = snapped;
         setRawValue(snapped);
         setMobileAnchorTab(getZoneForScore(snapped));
+        if (snapped !== lastSnappedRef.current) {
+            lastSnappedRef.current = snapped;
+            fireThriveHaptic(12);
+        }
         onSelect(snapped);
         triggerBurst(snapped);
     };
@@ -1500,7 +1557,7 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
                     </div>
                     <button
                         type="button"
-                        onClick={() => setMobileAnchorTab(1)}
+                        onClick={() => handleAnchorTabClick(1)}
                         className={`flex flex-col items-center leading-tight focus:outline-none max-w-full ${getZoneColor(1)}`}
                     >
                         <span className="text-[10.5px] sm:text-xs md:text-sm tracking-tight sm:tracking-wider md:tracking-widest whitespace-nowrap max-w-full" style={{ fontFamily: '"Sofia Pro Soft", "Sofia Pro", sans-serif', fontWeight: 700 }}>
@@ -1524,7 +1581,7 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
                     </div>
                     <button
                         type="button"
-                        onClick={() => setMobileAnchorTab(3)}
+                        onClick={() => handleAnchorTabClick(3)}
                         className={`flex flex-col items-center leading-tight focus:outline-none max-w-full ${getZoneColor(3)}`}
                     >
                         <span className="text-[10.5px] sm:text-xs md:text-sm tracking-tight sm:tracking-wider md:tracking-widest whitespace-nowrap max-w-full" style={{ fontFamily: '"Sofia Pro Soft", "Sofia Pro", sans-serif', fontWeight: 700 }}>
@@ -1548,7 +1605,7 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
                     </div>
                     <button
                         type="button"
-                        onClick={() => setMobileAnchorTab(5)}
+                        onClick={() => handleAnchorTabClick(5)}
                         className={`flex flex-col items-center leading-tight focus:outline-none max-w-full ${getZoneColor(5)}`}
                     >
                         <span className="text-[10.5px] sm:text-xs md:text-sm tracking-tight sm:tracking-wider md:tracking-widest whitespace-nowrap max-w-full" style={{ fontFamily: '"Sofia Pro Soft", "Sofia Pro", sans-serif', fontWeight: 700 }}>
@@ -1647,7 +1704,7 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
                         type="button"
                         role="tab"
                         aria-selected={activeAnchorZone === 1}
-                        onClick={() => setMobileAnchorTab(1)}
+                        onClick={() => handleAnchorTabClick(1)}
                         className={`py-1 px-0.5 rounded-lg text-[9.5px] sm:text-[11px] tracking-tight font-extrabold transition-all whitespace-nowrap ${
                             activeAnchorZone === 1
                                 ? 'bg-blue-600 text-white shadow-sm'
@@ -1660,7 +1717,7 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
                         type="button"
                         role="tab"
                         aria-selected={activeAnchorZone === 3}
-                        onClick={() => setMobileAnchorTab(3)}
+                        onClick={() => handleAnchorTabClick(3)}
                         className={`py-1 px-0.5 rounded-lg text-[9.5px] sm:text-[11px] tracking-tight font-extrabold transition-all whitespace-nowrap ${
                             activeAnchorZone === 3
                                 ? 'bg-slate-700 text-white shadow-sm'
@@ -1673,7 +1730,7 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ, childr
                         type="button"
                         role="tab"
                         aria-selected={activeAnchorZone === 5}
-                        onClick={() => setMobileAnchorTab(5)}
+                        onClick={() => handleAnchorTabClick(5)}
                         className={`py-1 px-0.5 rounded-lg text-[9.5px] sm:text-[11px] tracking-tight font-extrabold transition-all whitespace-nowrap ${
                             activeAnchorZone === 5
                                 ? 'bg-purple-600 text-white shadow-sm'
