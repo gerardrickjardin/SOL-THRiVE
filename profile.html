@@ -2185,16 +2185,17 @@ function FinalReport({ data, userDetails, onUpdateUserDetails, onCopy, onClearCo
   }, [userDetails?.interviewee, userDetails?.interviewer, userDetails?.email, isEditingDetails]);
 
   useEffect(() => {
+    const active = getEffectiveDetails();
     if (window.ThriveCoachingDossier && typeof window.ThriveCoachingDossier.saveThriveReport === 'function') {
       window.ThriveCoachingDossier.saveThriveReport({
-        interviewee: userDetails?.interviewee || '',
-        interviewer: userDetails?.interviewer || '',
-        email: userDetails?.email || '',
-        userDetails,
+        interviewee: active.interviewee,
+        interviewer: active.interviewer,
+        email: active.email,
+        userDetails: active,
         reportData: data
       });
     }
-  }, [data, userDetails]);
+  }, [data, userDetails?.interviewee, userDetails?.interviewer, userDetails?.email, isEditingDetails, detailsDraft.interviewee, detailsDraft.interviewer, detailsDraft.email, quickEmailDraft]);
 
   useEffect(() => {
     return () => {
@@ -2220,7 +2221,7 @@ function FinalReport({ data, userDetails, onUpdateUserDetails, onCopy, onClearCo
     setEmailReportStatus(null);
   };
 
-  const getEffectiveDetails = (overrideDetails) => {
+  function getEffectiveDetails(overrideDetails) {
     if (overrideDetails && typeof overrideDetails === 'object') {
       return {
         interviewee: String(overrideDetails.interviewee ?? '').trim(),
@@ -2240,12 +2241,31 @@ function FinalReport({ data, userDetails, onUpdateUserDetails, onCopy, onClearCo
       interviewer: String(userDetails?.interviewer ?? '').trim(),
       email: String(userDetails?.email || quickEmailDraft || '').trim()
     };
+  }
+
+  const commitEffectiveDetails = () => {
+    const active = getEffectiveDetails();
+    const currentInterviewee = String(userDetails?.interviewee || '').trim();
+    const currentInterviewer = String(userDetails?.interviewer || '').trim();
+    const currentEmail = String(userDetails?.email || '').trim();
+    const hasChanged =
+      active.interviewee !== currentInterviewee ||
+      active.interviewer !== currentInterviewer ||
+      active.email !== currentEmail;
+    if (onUpdateUserDetails && (isEditingDetails || hasChanged)) {
+      onUpdateUserDetails(active);
+    }
+    if (isEditingDetails) {
+      setIsEditingDetails(false);
+    }
+    setQuickEmailDraft(active.email);
+    return active;
   };
 
   const handleStartEditDetails = () => {
     setDetailsDraft({
-      interviewee: userDetails?.interviewee || '',
-      interviewer: userDetails?.interviewer || '',
+      interviewee: String(userDetails?.interviewee || '').trim(),
+      interviewer: String(userDetails?.interviewer || '').trim(),
       email: (userDetails?.email || quickEmailDraft || '').trim()
     });
     setIsEditingDetails(true);
@@ -2409,7 +2429,7 @@ function FinalReport({ data, userDetails, onUpdateUserDetails, onCopy, onClearCo
   const handleCopyReportClick = async () => {
     clearShareReportStatus();
     clearEmailReportStatus();
-    const active = getEffectiveDetails();
+    const active = commitEffectiveDetails();
     if (onCopy) await onCopy(active);
   };
 
@@ -2418,14 +2438,7 @@ function FinalReport({ data, userDetails, onUpdateUserDetails, onCopy, onClearCo
     if (onClearCopied) onClearCopied();
     clearShareReportStatus();
 
-    const active = getEffectiveDetails();
-    if (
-      onUpdateUserDetails &&
-      (isEditingDetails || (quickEmailDraft.trim() && quickEmailDraft.trim() !== (userDetails?.email || '').trim()))
-    ) {
-      onUpdateUserDetails(active);
-      setIsEditingDetails(false);
-    }
+    const active = commitEffectiveDetails();
 
     const emailPayload = buildEmailReportMailto(active);
     if (typeof window !== 'undefined') {
@@ -2462,7 +2475,8 @@ function FinalReport({ data, userDetails, onUpdateUserDetails, onCopy, onClearCo
     if (isSharingReportRef.current || globalSharing) return;
 
     clearEmailReportStatus();
-    const { headerTitle, reportText } = buildFormattedReportText();
+    const active = commitEffectiveDetails();
+    const { headerTitle, reportText } = buildFormattedReportText(active);
     const sharePayload = { title: headerTitle, text: reportText };
 
     if (window.ThriveCoachingDossier && typeof window.ThriveCoachingDossier.shareWithFallback === 'function') {
@@ -2529,6 +2543,7 @@ function FinalReport({ data, userDetails, onUpdateUserDetails, onCopy, onClearCo
   };
 
   const handleSaveCloud = () => {
+    commitEffectiveDetails();
     if (onPersistReport) onPersistReport();
     setIsSavingCloud(true);
     setTimeout(() => setIsSavingCloud(false), 3000);
@@ -2550,7 +2565,8 @@ function FinalReport({ data, userDetails, onUpdateUserDetails, onCopy, onClearCo
     }, 2500);
   };
 
-  const currentMailtoPreview = buildEmailReportMailto().mailtoUrl;
+  const effectiveDetails = getEffectiveDetails();
+  const currentMailtoPreview = buildEmailReportMailto(effectiveDetails).mailtoUrl;
   const hasSavedEmail = Boolean((userDetails?.email || '').trim());
 
   return (
@@ -2560,7 +2576,7 @@ function FinalReport({ data, userDetails, onUpdateUserDetails, onCopy, onClearCo
         <div className="inline-flex items-center justify-center w-20 h-20 bg-emerald-100 text-emerald-700 rounded-full mb-6 border-2 border-[#1E2430] shadow-[3px_3px_0_#1E2430] transform hover:rotate-12 transition-transform">
           <span className="text-4xl">🎉</span>
         </div>
-        <h2 className="text-slate-900 font-black text-4xl md:text-5xl mb-4 tracking-tight">Congratulations{userDetails.interviewee ? `, ${userDetails.interviewee.split(' ')[0]}` : ''}!</h2>
+        <h2 className="text-slate-900 font-black text-4xl md:text-5xl mb-4 tracking-tight">Congratulations{effectiveDetails.interviewee ? `, ${effectiveDetails.interviewee.split(/\s+/)[0]}` : ''}!</h2>
         <p className="text-slate-600 text-lg md:text-xl leading-relaxed max-w-2xl mx-auto">
           You've done incredible work uncovering your core strengths. Here is your official THRiVE Report, ready for action.
         </p>
@@ -2573,7 +2589,7 @@ function FinalReport({ data, userDetails, onUpdateUserDetails, onCopy, onClearCo
           <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-3">
             <div className="min-w-0">
               <h3 className="text-slate-900 font-black text-2xl sm:text-3xl print:text-2xl mb-1.5 print:mb-1 break-words">
-                {userDetails.interviewee ? `${userDetails.interviewee.toUpperCase()}'S THRIVE REPORT` : 'YOUR THRIVE REPORT'}
+                {effectiveDetails.interviewee ? `${effectiveDetails.interviewee.toUpperCase()}'S THRIVE REPORT` : 'YOUR THRIVE REPORT'}
               </h3>
               <p className="text-slate-600 uppercase tracking-widest font-bold text-xs sm:text-sm print:text-xs leading-relaxed">
                 Created by Dr. Steve Huff • Based on the Strengths Model • Powered by Gemini
@@ -2599,24 +2615,24 @@ function FinalReport({ data, userDetails, onUpdateUserDetails, onCopy, onClearCo
           </div>
 
           {/* Visible Metadata Strip (Screen + PDF Printout) */}
-          {(userDetails.interviewee || userDetails.interviewer || userDetails.email) && (
+          {(effectiveDetails.interviewee || effectiveDetails.interviewer || effectiveDetails.email) && (
             <div id="report-metadata-strip" className="flex flex-wrap items-center justify-center md:justify-start print:justify-start gap-2 sm:gap-3 mt-3.5 text-xs sm:text-sm print:text-xs font-bold">
-              {userDetails.interviewee && (
+              {effectiveDetails.interviewee && (
                 <span id="report-meta-interviewee" className="inline-flex items-center gap-1.5 bg-white print:bg-transparent border border-slate-300 print:border-slate-400 text-slate-800 px-3 py-1 rounded-full break-all">
                   <span>👤</span>
-                  <span>Prepared for: <strong>{userDetails.interviewee}</strong></span>
+                  <span>Prepared for: <strong>{effectiveDetails.interviewee}</strong></span>
                 </span>
               )}
-              {userDetails.interviewer && (
+              {effectiveDetails.interviewer && (
                 <span id="report-meta-interviewer" className="inline-flex items-center gap-1.5 bg-purple-50 print:bg-transparent border border-purple-200 print:border-slate-400 text-purple-800 px-3 py-1 rounded-full break-all">
                   <span>🎙️</span>
-                  <span>Interviewed by: <strong>{userDetails.interviewer}</strong></span>
+                  <span>Interviewed by: <strong>{effectiveDetails.interviewer}</strong></span>
                 </span>
               )}
-              {userDetails.email && (
+              {effectiveDetails.email && (
                 <span id="report-meta-email" className="inline-flex items-center gap-1.5 bg-indigo-50 print:bg-transparent border border-indigo-200 print:border-slate-400 text-indigo-900 px-3 py-1 rounded-full break-all">
                   <span>✉️</span>
-                  <span>{userDetails.email}</span>
+                  <span>{effectiveDetails.email}</span>
                 </span>
               )}
             </div>
@@ -2798,7 +2814,8 @@ function FinalReport({ data, userDetails, onUpdateUserDetails, onCopy, onClearCo
         <div className="flex flex-col sm:flex-row flex-wrap justify-center items-center gap-4">
           <button 
             type="button"
-            onClick={() => window.print()}
+            id="save-pdf-thrive-report-btn"
+            onClick={() => { commitEffectiveDetails(); window.print(); }}
             className="w-full sm:w-auto bg-[#1E2430] hover:bg-slate-800 text-white rounded-full font-bold transition-all px-8 py-4 shadow-lg hover:shadow-xl flex items-center justify-center gap-3 text-lg"
           >
             <PdfIcon className="w-6 h-6" /> Save as PDF

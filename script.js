@@ -814,9 +814,9 @@ const initThriveUI = () => {
             }
         } else if (merged.thriveReport && typeof merged.thriveReport === 'object') {
             const tr = merged.thriveReport;
-            const interviewee = String(tr.interviewee ?? tr.userDetails?.interviewee ?? profState?.userDetails?.interviewee ?? '').trim();
-            const interviewer = String(tr.interviewer ?? tr.userDetails?.interviewer ?? profState?.userDetails?.interviewer ?? '').trim();
-            const email = String(tr.email ?? tr.userDetails?.email ?? profState?.userDetails?.email ?? '').trim();
+            const interviewee = String(tr.interviewee || tr.userDetails?.interviewee || profState?.userDetails?.interviewee || '').trim();
+            const interviewer = String(tr.interviewer || tr.userDetails?.interviewer || profState?.userDetails?.interviewer || '').trim();
+            const email = String(tr.email || tr.userDetails?.email || profState?.userDetails?.email || '').trim();
             merged.thriveReport = {
                 ...tr,
                 interviewee,
@@ -893,9 +893,9 @@ const initThriveUI = () => {
 
     const saveThriveReport = (reportPayload = {}) => {
         const pillars = reportPayload.pillars || reportPayload.reportData || {};
-        const interviewee = String(reportPayload.interviewee ?? reportPayload.userDetails?.interviewee ?? '').trim();
-        const interviewer = String(reportPayload.interviewer ?? reportPayload.userDetails?.interviewer ?? '').trim();
-        const email = String(reportPayload.email ?? reportPayload.userDetails?.email ?? '').trim();
+        const interviewee = String(reportPayload.interviewee || reportPayload.userDetails?.interviewee || '').trim();
+        const interviewer = String(reportPayload.interviewer || reportPayload.userDetails?.interviewer || '').trim();
+        const email = String(reportPayload.email || reportPayload.userDetails?.email || '').trim();
         const userDetails = {
             interviewee,
             interviewer,
