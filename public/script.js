@@ -299,7 +299,7 @@ const initThriveUI = () => {
         let narrationActive = false;
         let walkthroughUtterance = null;
 
-        const walkthroughNarrationText = "Welcome to Thrive Coaching. Step 1: Name the Friction — pinpoint whether you feel stuck in a hole, on a hamster wheel, or juggling too much. Step 2: Map Your Strengths across Traits, Hobbies, Relationships, Interests, Values, and Expertise. Step 3: Reclaim Your Agency and turn insight into concrete daily momentum with your Personos AI coach.";
+        const walkthroughNarrationText = "Welcome to the 5 to THRiVE Practitioner Lab. We equip licensed therapists, coaches, and case managers to triple client outcome velocity across the 167 hours between sessions. Step 1: The Flow Survey pinpoints the client's specific Ugg friction and measures baseline Agency, Clarity, and Momentum. Step 2: The Voice-Driven THRiVE Report uncovers 3 to 5 core resources across Traits, Hobbies, Relationships, Interests, Values, and Experiences using the Safe-Save protocol. Step 3: Filling the G.A.P.S. generates 5 lens-tailored next steps so the client commits to 1 to 3 micro-actions on their live Action Board—while Personos AI automatically generates your clinical DAP notes.";
 
         const stopWalkthroughSpeech = () => {
             if (walkthroughUtterance) {
@@ -604,7 +604,7 @@ const initThriveUI = () => {
         {
             week: 2,
             title: "Week 02: Activating Your Core (The Strengths Model & THRiVE Inventory)",
-            description: "Live workshop on the 6 THRiVE Strengths dimensions: Traits, Hobbies, Relationships, Interests, Values, and Expertise.",
+            description: "Live workshop on the 6 THRiVE Strengths dimensions: Traits, Hobbies, Relationships, Interests, Values, and Experiences.",
             dtstartUtc: "20261111T000000Z",
             dtendUtc: "20261111T011500Z",
             dateDisplay: "Tuesday, November 10, 2026",
@@ -679,6 +679,8 @@ const initThriveUI = () => {
         fireThriveHaptic(20);
     }
 
+    const isValidEmailAddress = (email) => /^\S+@\S+\.\S+$/.test(String(email || '').trim());
+
     const initClassesPage = () => {
         const container = document.getElementById('sessions-container');
         const tzSelect = document.getElementById('tz-select');
@@ -690,7 +692,56 @@ const initThriveUI = () => {
             downloadAllBtn.addEventListener('click', downloadAllIcs);
         }
 
+        const updatePractitionerLabTimezones = (tz) => {
+            if (typeof document === 'undefined' || typeof document.querySelectorAll !== 'function') return;
+            const labTimeEls = document.querySelectorAll('[data-lab-tz-mode]');
+            if (!labTimeEls || !labTimeEls.length) return;
+
+            labTimeEls.forEach(el => {
+                const mode = el.getAttribute('data-lab-tz-mode');
+                const dateLabel = el.getAttribute('data-date-label') || '';
+                if (mode === 'lunch') {
+                    // Thu Nov 12, 2026 12:00 PM - 12:30 PM MST (19:00 - 19:30 UTC)
+                    let lunchStr = '12:00 PM – 12:30 PM MT / 2:00 PM ET';
+                    if (tz === 'America/Denver') {
+                        lunchStr = '12:00 PM – 12:30 PM MT (30 min)';
+                    } else if (tz === 'America/New_York') {
+                        lunchStr = '2:00 PM – 2:30 PM ET (30 min)';
+                    } else if (tz) {
+                        try {
+                            const startObj = new Date(Date.UTC(2026, 10, 12, 19, 0, 0));
+                            const endObj = new Date(Date.UTC(2026, 10, 12, 19, 30, 0));
+                            const tzOpt = tz === 'local' ? undefined : tz;
+                            const sFmt = new Intl.DateTimeFormat('en-US', { timeZone: tzOpt, hour: 'numeric', minute: '2-digit' }).format(startObj);
+                            const eFmt = new Intl.DateTimeFormat('en-US', { timeZone: tzOpt, hour: 'numeric', minute: '2-digit', timeZoneName: 'short' }).format(endObj);
+                            lunchStr = `${sFmt} – ${eFmt} (30 min)`;
+                        } catch (_) {}
+                    }
+                    el.innerHTML = `&#128197; ${dateLabel} &bull; &#9200; ${lunchStr}`;
+                } else if (mode === 'lab') {
+                    // Mon & Wed 5:00 PM - 6:30 PM MST (00:00 - 01:30 UTC)
+                    let labStr = '5:00 – 6:30 PM MT (90 min)';
+                    if (tz === 'America/Denver') {
+                        labStr = '5:00 – 6:30 PM MT (90 min)';
+                    } else if (tz === 'America/New_York') {
+                        labStr = '7:00 – 8:30 PM ET (90 min)';
+                    } else if (tz) {
+                        try {
+                            const startObj = new Date(Date.UTC(2026, 11, 1, 0, 0, 0));
+                            const endObj = new Date(Date.UTC(2026, 11, 1, 1, 30, 0));
+                            const tzOpt = tz === 'local' ? undefined : tz;
+                            const sFmt = new Intl.DateTimeFormat('en-US', { timeZone: tzOpt, hour: 'numeric', minute: '2-digit' }).format(startObj);
+                            const eFmt = new Intl.DateTimeFormat('en-US', { timeZone: tzOpt, hour: 'numeric', minute: '2-digit', timeZoneName: 'short' }).format(endObj);
+                            labStr = `${sFmt} – ${eFmt} (90 min)`;
+                        } catch (_) {}
+                    }
+                    el.innerHTML = `&#128197; ${dateLabel} &bull; &#9200; ${labStr}`;
+                }
+            });
+        };
+
         const renderSessions = (tz) => {
+            updatePractitionerLabTimezones(tz);
             if (!container) return;
             container.innerHTML = COHORT_SESSIONS.map(s => {
                 let timeStr = `${s.timeDisplayMt} / ${s.timeDisplayEt} (75 min)`;
@@ -770,7 +821,7 @@ const initThriveUI = () => {
                 const type = document.getElementById('inq-type')?.value || 'November 2026 Cohort';
                 const msg = (document.getElementById('inq-msg')?.value || '').trim();
 
-                if (!fn || !ln || !em || !msg || msg.length < 10 || !em.includes('@')) {
+                if (!fn || !ln || !em || !msg || msg.length < 10 || !isValidEmailAddress(em)) {
                     if (statusEl) {
                         statusEl.textContent = 'Please complete all required fields (First Name, Last Name, valid Email, and Message of at least 10 characters).';
                         statusEl.className = 'form-status-msg error';
@@ -845,60 +896,102 @@ const initThriveUI = () => {
     const PRACTITIONER_LAB_SESSIONS = [
         LUNCH_AND_LEARN_SESSION,
         {
-            week: 'mod0-preflight',
-            title: "Module 0 (Session 0): Pre-Flight Onboarding & Drop-In Tech Clinic",
-            description: "Intake triage via Gerard's Flow Survey, workstation speech-to-text microphone calibration for dictation, and weekend drop-in IT clinic.",
+            week: 'mod0-preflight-sat',
+            title: "Module 0 (Session 0 — Saturday): Pre-Flight Onboarding & Drop-In Tech Clinic",
+            description: "Intake triage via Gerard's Flow Survey, workstation speech-to-text microphone calibration for dictation, and Saturday drop-in IT clinic.",
             dtstartUtc: "20261128T180000Z",
             dtendUtc: "20261128T193000Z"
         },
         {
+            week: 'mod0-preflight-sun',
+            title: "Module 0 (Session 0 — Sunday): Pre-Flight Onboarding & Drop-In Tech Clinic",
+            description: "Intake triage via Gerard's Flow Survey, workstation speech-to-text microphone calibration for dictation, and Sunday drop-in IT clinic.",
+            dtstartUtc: "20261129T180000Z",
+            dtendUtc: "20261129T193000Z"
+        },
+        {
             week: 'mod1-mon',
-            title: "Module 1A: The 167-Hour Bottleneck & The Observer Stance (5 to THRiVE Lab)",
+            title: "Module 1A (Mon): The 167-Hour Bottleneck & The Observer Stance (5 to THRiVE Lab)",
             description: "Bi-weekly 90-minute live lab session: SOL Theory, RellaFit, and shifting clients from the reactive character to the grounded Observer.",
             dtstartUtc: "20261201T000000Z", // Mon Nov 30 5:00 PM MST = Tue Dec 1 00:00 UTC
             dtendUtc: "20261201T013000Z"
         },
         {
             week: 'mod1-wed',
-            title: "Module 1B: Squad Breakout Lab — Facilitating the Observer Shift",
+            title: "Module 1B (Wed): Squad Breakout Lab — Facilitating the Observer Shift",
             description: "Bi-weekly 90-minute live lab session: Live co-coaching demonstrations and Squad A/B/C breakout lab work.",
-            dtstartUtc: "20261203T000000Z",
+            dtstartUtc: "20261203T000000Z", // Wed Dec 2 5:00 PM MST = Thu Dec 3 00:00 UTC
             dtendUtc: "20261203T013000Z"
         },
         {
             week: 'mod2-mon',
-            title: "Module 2A: The THRiVE Report Protocol (Traits & Hobbies) & Safe-Save Mechanic",
+            title: "Module 2A (Mon): The THRiVE Report Protocol (Traits & Hobbies) & Safe-Save Mechanic",
             description: "Voice-driven assessment across Traits & Hobbies (strict 3-to-5 item quota) with Enter Safe-Saves every 1-2 minutes.",
-            dtstartUtc: "20261208T000000Z",
+            dtstartUtc: "20261208T000000Z", // Mon Dec 7 5:00 PM MST
             dtendUtc: "20261208T013000Z"
         },
         {
+            week: 'mod2-wed',
+            title: "Module 2B (Wed): Squad Breakout Lab — Co-Coaching Practice on T & H with Dictation",
+            description: "Squad A/B/C breakout practice facilitating Traits & Hobbies intake with real-time voice dictation and Safe-Save protocol.",
+            dtstartUtc: "20261210T000000Z", // Wed Dec 9 5:00 PM MST
+            dtendUtc: "20261210T013000Z"
+        },
+        {
             week: 'mod3-mon',
-            title: "Module 3A: Relational Architecture (Relationships & Interests)",
+            title: "Module 3A (Mon): Relational Architecture (Relationships & Interests)",
             description: "Mapping support cast, accountability mirrors, and intellectual curiosity compass in Personos AI (3-5 item quota).",
-            dtstartUtc: "20261215T000000Z",
+            dtstartUtc: "20261215T000000Z", // Mon Dec 14 5:00 PM MST
             dtendUtc: "20261215T013000Z"
         },
         {
+            week: 'mod3-wed',
+            title: "Module 3B (Wed): Squad Breakout Lab — Dictating R & I Pillars in Personos AI",
+            description: "Squad A/B/C breakout lab mapping Relationships & Interests to stabilize clients in housing, recovery, and conflict domains.",
+            dtstartUtc: "20261217T000000Z", // Wed Dec 16 5:00 PM MST
+            dtendUtc: "20261217T013000Z"
+        },
+        {
             week: 'mod4-mon',
-            title: "Module 4A: Synthesizing the Core (Values & Experiences)",
+            title: "Module 4A (Mon): Synthesizing the Core (Values & Experiences)",
             description: "Uncovering non-negotiable operating system values and crucible moments to complete the 6-pillar THRiVE Report.",
-            dtstartUtc: "20261222T000000Z",
+            dtstartUtc: "20261222T000000Z", // Mon Dec 21 5:00 PM MST
             dtendUtc: "20261222T013000Z"
         },
         {
+            week: 'mod4-wed',
+            title: "Module 4B (Wed): Squad Breakout Lab — Full 6-Pillar T-H-R-I-V-E Synthesis & Peer Review",
+            description: "Auditing and finalizing complete 6-pillar THRiVE Reports inside Personos client memory profiles across Squads A, B & C.",
+            dtstartUtc: "20261224T000000Z", // Wed Dec 23 5:00 PM MST
+            dtendUtc: "20261224T013000Z"
+        },
+        {
             week: 'mod5-mon',
-            title: "Module 5A: Filling the G.A.P.S. & Action Board Generation",
+            title: "Module 5A (Mon): Filling the G.A.P.S. & Action Board Generation",
             description: "Generating 5 creative next steps tailored through custom lenses and locking 1-3 committed micro-actions on the live Action Board.",
-            dtstartUtc: "20261229T000000Z",
+            dtstartUtc: "20261229T000000Z", // Mon Dec 28 5:00 PM MST
             dtendUtc: "20261229T013000Z"
         },
         {
+            week: 'mod5-wed',
+            title: "Module 5B (Wed): Squad Breakout Lab — Custom Lens Tuning & Action Board Stress-Testing",
+            description: "Live Squad lab configuring philosophy, scripture, and thought-leader lenses and stress-testing 167-hour client Action Boards.",
+            dtstartUtc: "20261231T000000Z", // Wed Dec 30 5:00 PM MST
+            dtendUtc: "20261231T013000Z"
+        },
+        {
             week: 'mod6-mon',
-            title: "Module 6A: Clinical Hand-Off, Automated DAP Notes & $9/Mo Seat Economics",
-            description: "Automated clinical DAP note generation, $9/month client seat caseload deployment, and Practitioner Lab certification.",
-            dtstartUtc: "20270105T000000Z",
+            title: "Module 6A (Mon): Clinical Hand-Off, Automated DAP Notes & $9/Mo Seat Economics",
+            description: "Automated clinical DAP note generation, $9/month client seat caseload deployment, and clinic/self-pay transition workflows.",
+            dtstartUtc: "20270105T000000Z", // Mon Jan 4 5:00 PM MST
             dtendUtc: "20270105T013000Z"
+        },
+        {
+            week: 'mod6-wed',
+            title: "Module 6B (Wed): Cohort Capstone Presentations & Practitioner Lab Certification",
+            description: "End-to-end Practitioner Case Packet presentations, Squad A/B/C reflections, and 5 to THRiVE Practitioner Lab certification.",
+            dtstartUtc: "20270107T000000Z", // Wed Jan 6 5:00 PM MST
+            dtendUtc: "20270107T013000Z"
         }
     ];
 
@@ -934,7 +1027,7 @@ const initThriveUI = () => {
                 const calActionsEl = document.getElementById('ll-calendar-actions');
                 const submitBtn = document.getElementById('ll-submit-btn');
 
-                if (!fn || !em || !em.includes('@') || !practiceType) {
+                if (!fn || !em || !isValidEmailAddress(em) || !practiceType) {
                     if (statusEl) {
                         statusEl.textContent = 'Please enter your First Name, a valid Email Address, and select your Practice Type.';
                         statusEl.className = 'form-status-msg error';
