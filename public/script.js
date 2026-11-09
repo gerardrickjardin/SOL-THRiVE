@@ -85,7 +85,9 @@ const initThriveUI = () => {
         'mockup-landing',
         'funnel',
         'landingpage',
-        'results'
+        'results',
+        'classes',
+        'schedule'
     ]);
 
     const normalizePageSlug = (rawPath) => {
@@ -583,6 +585,436 @@ const initThriveUI = () => {
             }, 2200);
         });
     });
+
+    // =========================================================================
+    // CLASSES & COHORT CALENDAR ENGINE (November 2026 Cohort)
+    // =========================================================================
+    const COHORT_SESSIONS = [
+        {
+            week: 1,
+            title: "Week 01: Sensing the Landscape (CYNEFIN & Friction Diagnostic)",
+            description: "Live interactive workshop on CYNEFIN sense-making, friction diagnostics, and safe-to-try micro-experiments.",
+            dtstartUtc: "20261104T000000Z", // Tue Nov 3 5:00 PM MT = Wed Nov 4 00:00 UTC
+            dtendUtc: "20261104T011500Z",
+            dateDisplay: "Tuesday, November 3, 2026",
+            timeDisplayMt: "5:00 PM – 6:15 PM MT",
+            timeDisplayEt: "7:00 PM – 8:15 PM ET",
+            epochStart: 1793750400000 // 2026-11-04T00:00:00Z
+        },
+        {
+            week: 2,
+            title: "Week 02: Activating Your Core (The Strengths Model & THRiVE Inventory)",
+            description: "Live workshop on the 6 THRiVE Strengths dimensions: Traits, Hobbies, Relationships, Interests, Values, and Expertise.",
+            dtstartUtc: "20261111T000000Z",
+            dtendUtc: "20261111T011500Z",
+            dateDisplay: "Tuesday, November 10, 2026",
+            timeDisplayMt: "5:00 PM – 6:15 PM MT",
+            timeDisplayEt: "7:00 PM – 8:15 PM ET",
+            epochStart: 1794355200000
+        },
+        {
+            week: 3,
+            title: "Week 03: Partnering with Intelligence (Personos AI Coaching)",
+            description: "Interactive session on Master AI Coaching Prompts, between-session agency, and relational AI co-pilots.",
+            dtstartUtc: "20261118T000000Z",
+            dtendUtc: "20261118T011500Z",
+            dateDisplay: "Tuesday, November 17, 2026",
+            timeDisplayMt: "5:00 PM – 6:15 PM MT",
+            timeDisplayEt: "7:00 PM – 8:15 PM ET",
+            epochStart: 1794960000000
+        },
+        {
+            week: 4,
+            title: "Week 04: Architecture of Momentum (Action Boards & HoPE Index)",
+            description: "Cohort graduation workshop: Kanban Action Board construction, HoPE Index re-benchmarking, and 90-day momentum roadmaps.",
+            dtstartUtc: "20261125T000000Z",
+            dtendUtc: "20261125T011500Z",
+            dateDisplay: "Tuesday, November 24, 2026",
+            timeDisplayMt: "5:00 PM – 6:15 PM MT",
+            timeDisplayEt: "7:00 PM – 8:15 PM ET",
+            epochStart: 1795564800000
+        }
+    ];
+
+    function generateIcsContent(sessions) {
+        const lines = [
+            'BEGIN:VCALENDAR',
+            'VERSION:2.0',
+            'PRODID:-//THRiVE Coaching//Class Schedule//EN',
+            'CALSCALE:GREGORIAN',
+            'METHOD:PUBLISH'
+        ];
+        (sessions || []).forEach(s => {
+            lines.push('BEGIN:VEVENT');
+            lines.push(`UID:thrive-cohort-nov2026-w${s.week}@thrivecoaching.ai`);
+            lines.push('DTSTAMP:20261101T000000Z');
+            lines.push(`DTSTART:${s.dtstartUtc}`);
+            lines.push(`DTEND:${s.dtendUtc}`);
+            lines.push(`SUMMARY:${s.title}`);
+            lines.push(`DESCRIPTION:${s.description}`);
+            lines.push('LOCATION:THRiVE Coaching Live Classroom (Zoom)');
+            lines.push('STATUS:CONFIRMED');
+            lines.push('END:VEVENT');
+        });
+        lines.push('END:VCALENDAR');
+        return lines.join('\r\n');
+    }
+
+    function triggerIcsDownload(filename, icsContent) {
+        if (typeof window === 'undefined' || typeof document === 'undefined') return;
+        const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
+    function downloadAllIcs() {
+        const ics = generateIcsContent(COHORT_SESSIONS);
+        triggerIcsDownload('thrive-coaching-november-2026-cohort.ics', ics);
+        fireThriveHaptic(20);
+    }
+
+    const initClassesPage = () => {
+        const container = document.getElementById('sessions-container');
+        const tzSelect = document.getElementById('tz-select');
+        const downloadAllBtn = document.getElementById('btn-download-all-ics');
+        const form = document.getElementById('program-inquiry-form');
+
+        if (downloadAllBtn && !downloadAllBtn._hasIcsListener) {
+            downloadAllBtn._hasIcsListener = true;
+            downloadAllBtn.addEventListener('click', downloadAllIcs);
+        }
+
+        const renderSessions = (tz) => {
+            if (!container) return;
+            container.innerHTML = COHORT_SESSIONS.map(s => {
+                let timeStr = `${s.timeDisplayMt} / ${s.timeDisplayEt} (75 min)`;
+                if (tz) {
+                    if (tz === 'America/Denver') {
+                        timeStr = `${s.timeDisplayMt} (75 min)`;
+                    } else if (tz === 'America/New_York') {
+                        timeStr = `${s.timeDisplayEt} (75 min)`;
+                    } else {
+                        try {
+                            const startObj = new Date(s.epochStart);
+                            const endObj = new Date(s.epochStart + 75 * 60 * 1000);
+                            const tzOpt = tz === 'local' ? undefined : tz;
+                            const startFmt = new Intl.DateTimeFormat('en-US', { timeZone: tzOpt, hour: 'numeric', minute: '2-digit' }).format(startObj);
+                            const endFmt = new Intl.DateTimeFormat('en-US', { timeZone: tzOpt, hour: 'numeric', minute: '2-digit', timeZoneName: 'short' }).format(endObj);
+                            timeStr = `${startFmt} – ${endFmt} (75 min)`;
+                        } catch (_) {
+                            timeStr = `${s.timeDisplayMt} / ${s.timeDisplayEt} (75 min)`;
+                        }
+                    }
+                }
+                const gCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(s.title)}&dates=${s.dtstartUtc}/${s.dtendUtc}&details=${encodeURIComponent(s.description)}&location=${encodeURIComponent('THRiVE Coaching Live Classroom (Zoom)')}`;
+
+                return `
+                    <div class="session-card">
+                        <div class="session-card-header">
+                            <span class="session-badge">Week 0${s.week} Live Workshop</span>
+                            <span class="session-status">Interactive Call</span>
+                        </div>
+                        <h4>${s.title}</h4>
+                        <p class="session-time">&#128197; ${s.dateDisplay} &bull; &#9200; ${timeStr}</p>
+                        <p class="session-summary">${s.description}</p>
+                        <div class="session-actions">
+                            <a href="${gCalUrl}" target="_blank" rel="noopener noreferrer" class="btn-session-sync">&#43; Google Cal</a>
+                            <button type="button" class="btn-session-sync btn-session-ics" data-week="${s.week}">&#128229; .ics</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Wire per-session .ics downloads
+            container.querySelectorAll('.btn-session-ics').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const w = Number(e.currentTarget.getAttribute('data-week'));
+                    const session = COHORT_SESSIONS.find(x => x.week === w);
+                    if (session) {
+                        const ics = generateIcsContent([session]);
+                        triggerIcsDownload(`thrive-coaching-week-${w}.ics`, ics);
+                        fireThriveHaptic(15);
+                    }
+                });
+            });
+        };
+
+        if (tzSelect && !tzSelect._hasTzListener) {
+            tzSelect._hasTzListener = true;
+            tzSelect.addEventListener('change', (e) => {
+                renderSessions(e.target.value);
+            });
+        }
+
+        if (container) {
+            renderSessions(tzSelect ? tzSelect.value : 'America/Denver');
+        }
+
+        // Prospective Client Inquiry Form Submission
+        if (form && !form._hasInquiryListener) {
+            form._hasInquiryListener = true;
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const submitBtn = document.getElementById('inq-submit-btn');
+                const statusEl = document.getElementById('inq-status');
+                const fn = (document.getElementById('inq-fn')?.value || '').trim();
+                const ln = (document.getElementById('inq-ln')?.value || '').trim();
+                const em = (document.getElementById('inq-em')?.value || '').trim();
+                const ph = (document.getElementById('inq-ph')?.value || '').trim();
+                const type = document.getElementById('inq-type')?.value || 'November 2026 Cohort';
+                const msg = (document.getElementById('inq-msg')?.value || '').trim();
+
+                if (!fn || !ln || !em || !msg || msg.length < 10 || !em.includes('@')) {
+                    if (statusEl) {
+                        statusEl.textContent = 'Please complete all required fields (First Name, Last Name, valid Email, and Message of at least 10 characters).';
+                        statusEl.className = 'form-status-msg error';
+                        statusEl.style.display = 'block';
+                    }
+                    return;
+                }
+
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'Sending Inquiry…';
+                }
+
+                try {
+                    const res = await fetch('/api/event', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            type: 'lead',
+                            data: {
+                                source: 'classes_inquiry_form',
+                                inquiry_type: type,
+                                message: msg,
+                                label: `Program Inquiry: ${type}`
+                            },
+                            lead: {
+                                fn,
+                                ln,
+                                em,
+                                ph,
+                                org: ''
+                            },
+                            ts: new Date().toISOString()
+                        })
+                    });
+
+                    if (res.ok) {
+                        if (statusEl) {
+                            statusEl.textContent = '✓ Inquiry sent! A THRiVE coach will review your question and respond within 24 hours.';
+                            statusEl.className = 'form-status-msg success';
+                            statusEl.style.display = 'block';
+                        }
+                        form.reset();
+                        fireThriveHaptic([20, 50, 20]);
+                    } else {
+                        throw new Error('Server returned error status ' + res.status);
+                    }
+                } catch (err) {
+                    if (statusEl) {
+                        statusEl.innerHTML = 'Unable to send online right now. Please email us directly at <a href="mailto:team@thrivecoaching.ai">team@thrivecoaching.ai</a> or call <a href="tel:7205882002">(720) 588-2002</a>.';
+                        statusEl.className = 'form-status-msg error';
+                        statusEl.style.display = 'block';
+                    }
+                } finally {
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = 'Send Inquiry →';
+                    }
+                }
+            });
+        }
+    };
+
+    const LUNCH_AND_LEARN_SESSION = {
+        week: 'lunch-learn-nov12',
+        title: "5 to THRiVE Practitioner Lab — Thursday Lunch & Learn Live Demo",
+        description: "30-minute live clinical demonstration of the THRiVE Report voice dictation protocol, automated DAP note generation, and the $9/month client seat model. Nov 30 Practitioner Lab is strictly capped at 21 seats (3 Squads of 7).",
+        dtstartUtc: "20261112T190000Z", // Thu Nov 12 12:00 PM MST = 19:00 UTC
+        dtendUtc: "20261112T193000Z"
+    };
+
+    const PRACTITIONER_LAB_SESSIONS = [
+        LUNCH_AND_LEARN_SESSION,
+        {
+            week: 'mod0-preflight',
+            title: "Module 0 (Session 0): Pre-Flight Onboarding & Drop-In Tech Clinic",
+            description: "Intake triage via Gerard's Flow Survey, workstation speech-to-text microphone calibration for dictation, and weekend drop-in IT clinic.",
+            dtstartUtc: "20261128T180000Z",
+            dtendUtc: "20261128T193000Z"
+        },
+        {
+            week: 'mod1-mon',
+            title: "Module 1A: The 167-Hour Bottleneck & The Observer Stance (5 to THRiVE Lab)",
+            description: "Bi-weekly 90-minute live lab session: SOL Theory, RellaFit, and shifting clients from the reactive character to the grounded Observer.",
+            dtstartUtc: "20261201T000000Z", // Mon Nov 30 5:00 PM MST = Tue Dec 1 00:00 UTC
+            dtendUtc: "20261201T013000Z"
+        },
+        {
+            week: 'mod1-wed',
+            title: "Module 1B: Squad Breakout Lab — Facilitating the Observer Shift",
+            description: "Bi-weekly 90-minute live lab session: Live co-coaching demonstrations and Squad A/B/C breakout lab work.",
+            dtstartUtc: "20261203T000000Z",
+            dtendUtc: "20261203T013000Z"
+        },
+        {
+            week: 'mod2-mon',
+            title: "Module 2A: The THRiVE Report Protocol (Traits & Hobbies) & Safe-Save Mechanic",
+            description: "Voice-driven assessment across Traits & Hobbies (strict 3-to-5 item quota) with Enter Safe-Saves every 1-2 minutes.",
+            dtstartUtc: "20261208T000000Z",
+            dtendUtc: "20261208T013000Z"
+        },
+        {
+            week: 'mod3-mon',
+            title: "Module 3A: Relational Architecture (Relationships & Interests)",
+            description: "Mapping support cast, accountability mirrors, and intellectual curiosity compass in Personos AI (3-5 item quota).",
+            dtstartUtc: "20261215T000000Z",
+            dtendUtc: "20261215T013000Z"
+        },
+        {
+            week: 'mod4-mon',
+            title: "Module 4A: Synthesizing the Core (Values & Experiences)",
+            description: "Uncovering non-negotiable operating system values and crucible moments to complete the 6-pillar THRiVE Report.",
+            dtstartUtc: "20261222T000000Z",
+            dtendUtc: "20261222T013000Z"
+        },
+        {
+            week: 'mod5-mon',
+            title: "Module 5A: Filling the G.A.P.S. & Action Board Generation",
+            description: "Generating 5 creative next steps tailored through custom lenses and locking 1-3 committed micro-actions on the live Action Board.",
+            dtstartUtc: "20261229T000000Z",
+            dtendUtc: "20261229T013000Z"
+        },
+        {
+            week: 'mod6-mon',
+            title: "Module 6A: Clinical Hand-Off, Automated DAP Notes & $9/Mo Seat Economics",
+            description: "Automated clinical DAP note generation, $9/month client seat caseload deployment, and Practitioner Lab certification.",
+            dtstartUtc: "20270105T000000Z",
+            dtendUtc: "20270105T013000Z"
+        }
+    ];
+
+    function downloadPractitionerLabIcs() {
+        const ics = generateIcsContent(PRACTITIONER_LAB_SESSIONS);
+        triggerIcsDownload('5-to-thrive-practitioner-lab-2026.ics', ics);
+        fireThriveHaptic(20);
+    }
+
+    function downloadLunchAndLearnIcs() {
+        const ics = generateIcsContent([LUNCH_AND_LEARN_SESSION]);
+        triggerIcsDownload('thrive-lunch-and-learn-nov12.ics', ics);
+        fireThriveHaptic(15);
+    }
+
+    const initLunchAndLearnForm = () => {
+        const llForm = document.getElementById('lunch-learn-form');
+        const llIcsBtn = document.getElementById('ll-ics-btn');
+
+        if (llIcsBtn && !llIcsBtn._hasLlIcsListener) {
+            llIcsBtn._hasLlIcsListener = true;
+            llIcsBtn.addEventListener('click', downloadLunchAndLearnIcs);
+        }
+
+        if (llForm && !llForm._hasLlSubmitListener) {
+            llForm._hasLlSubmitListener = true;
+            llForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const fn = (document.getElementById('ll-first-name')?.value || '').trim();
+                const em = (document.getElementById('ll-email')?.value || '').trim();
+                const practiceType = (document.getElementById('ll-practice-type')?.value || '').trim();
+                const statusEl = document.getElementById('ll-status');
+                const calActionsEl = document.getElementById('ll-calendar-actions');
+                const submitBtn = document.getElementById('ll-submit-btn');
+
+                if (!fn || !em || !em.includes('@') || !practiceType) {
+                    if (statusEl) {
+                        statusEl.textContent = 'Please enter your First Name, a valid Email Address, and select your Practice Type.';
+                        statusEl.className = 'form-status-msg error';
+                        statusEl.style.display = 'block';
+                    }
+                    return;
+                }
+
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'Reserving Seat & Generating Invite…';
+                }
+
+                try {
+                    await fetch('/api/event', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            type: 'lead',
+                            data: {
+                                source: 'thursday_lunch_and_learn_nov12',
+                                practice_type: practiceType,
+                                label: `Thursday Lunch & Learn (Nov 12) — ${practiceType}`
+                            },
+                            lead: {
+                                fn,
+                                ln: '',
+                                em,
+                                ph: '',
+                                org: practiceType
+                            },
+                            ts: new Date().toISOString()
+                        }),
+                        keepalive: true
+                    }).catch(() => {});
+
+                    if (statusEl) {
+                        statusEl.textContent = `✓ Seat reserved for ${fn} (${practiceType})! Your calendar invite (.ics) has been downloaded and confirmation logged for ${em}.`;
+                        statusEl.className = 'form-status-msg success';
+                        statusEl.style.display = 'block';
+                    }
+                    if (calActionsEl) {
+                        calActionsEl.style.display = 'block';
+                    }
+                    downloadLunchAndLearnIcs();
+                } finally {
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = 'Seat Reserved ✓ Download Invite Again';
+                    }
+                }
+            });
+        }
+    };
+
+    const labDownloadBtn = document.getElementById('btn-download-practitioner-lab-ics');
+    if (labDownloadBtn && !labDownloadBtn._hasLabIcsListener) {
+        labDownloadBtn._hasLabIcsListener = true;
+        labDownloadBtn.addEventListener('click', downloadPractitionerLabIcs);
+    }
+
+    if (typeof window !== 'undefined') {
+        window.COHORT_SESSIONS = COHORT_SESSIONS;
+        window.PRACTITIONER_LAB_SESSIONS = PRACTITIONER_LAB_SESSIONS;
+        window.LUNCH_AND_LEARN_SESSION = LUNCH_AND_LEARN_SESSION;
+        window.generateIcsContent = generateIcsContent;
+        window.downloadAllIcs = downloadAllIcs;
+        window.downloadPractitionerLabIcs = downloadPractitionerLabIcs;
+        window.downloadLunchAndLearnIcs = downloadLunchAndLearnIcs;
+        window.initClassesPage = initClassesPage;
+        window.initLunchAndLearnForm = initLunchAndLearnForm;
+    }
+
+    if (document.getElementById('sessions-container') || document.getElementById('tz-select') || document.getElementById('program-inquiry-form')) {
+        initClassesPage();
+    }
+
+    if (document.getElementById('lunch-learn-form')) {
+        initLunchAndLearnForm();
+    }
 
     // Update any dossier status pills on the page
     if (window.ThriveCoachingDossier && typeof window.ThriveCoachingDossier.refreshStatusBadges === 'function') {
