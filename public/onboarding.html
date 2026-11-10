@@ -63,6 +63,8 @@
             box-shadow: 6px 6px 0 var(--ink-border);
             padding: clamp(1.75rem, 3.5vw, 2.75rem);
             margin-bottom: clamp(2.5rem, 4.5vw, 3.5rem);
+            max-width: 100%;
+            min-width: 0;
         }
 
         .hub-card-header {
@@ -77,8 +79,15 @@
         }
 
         .hub-card-header-titles {
-            flex: 1;
-            min-width: 260px;
+            flex: 1 1 240px;
+            min-width: 0;
+            max-width: 100%;
+            overflow-wrap: anywhere;
+        }
+
+        .hub-card p code {
+            overflow-wrap: anywhere;
+            word-break: break-word;
         }
 
         .hub-card-header .section-eyebrow {
@@ -205,6 +214,8 @@
 
         .checklist-item-content {
             flex: 1;
+            min-width: 0;
+            overflow-wrap: anywhere;
         }
 
         .checklist-item-title-row {
@@ -230,12 +241,14 @@
             font-size: 0.9rem;
             color: var(--text-muted);
             line-height: 1.5;
+            overflow-wrap: anywhere;
         }
 
         .checklist-item-desc a {
             color: var(--accent-blue);
             font-weight: 600;
             text-decoration: underline;
+            overflow-wrap: anywhere;
         }
 
         .checklist-item-badge {
@@ -429,7 +442,7 @@
         /* Safe-Save Cadence Trainer */
         .trainer-meta-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
             gap: 1rem;
             margin-bottom: 1.5rem;
         }
@@ -562,7 +575,7 @@
         /* Directory Cards Grid */
         .directory-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr));
             gap: 1.5rem;
             margin-bottom: 1rem;
         }
@@ -1170,8 +1183,54 @@
 
         const VALID_CHECKLIST_KEYS = Object.keys(DEFAULT_CHECKLIST_STATE.checklist);
         let state = JSON.parse(JSON.stringify(DEFAULT_CHECKLIST_STATE));
+        let manualUnchecked = {};
+
+        function safeReadJson(key) {
+            try {
+                if (typeof window !== 'undefined' && window.localStorage) {
+                    const raw = localStorage.getItem(key);
+                    return raw ? JSON.parse(raw) : null;
+                }
+            } catch (_) {}
+            return null;
+        }
+
+        function isFlowSurveyCompletedData(parsedFlow, parsedDossier) {
+            if (parsedFlow && typeof parsedFlow === 'object') {
+                if (
+                    Array.isArray(parsedFlow.answered) &&
+                    parsedFlow.answered.length === 20 &&
+                    parsedFlow.answered.every(Boolean)
+                ) {
+                    return true;
+                }
+                if (
+                    !Array.isArray(parsedFlow.answered) &&
+                    Array.isArray(parsedFlow.scores) &&
+                    parsedFlow.scores.length === 20 &&
+                    parsedFlow.scores.every(s => Number(s) >= 1 && Number(s) <= 5)
+                ) {
+                    return true;
+                }
+            }
+            const fs = parsedDossier && typeof parsedDossier === 'object' ? parsedDossier.flowSurvey : null;
+            return Boolean(fs && (typeof fs.currentScore === 'number' || fs.problem || fs.problemStatement));
+        }
+
+        function isThriveReportCompletedData(parsedProf, parsedDossier) {
+            if (parsedProf && typeof parsedProf === 'object') {
+                if (Number(parsedProf.step) >= 7) return true;
+                const rd = parsedProf.reportData;
+                if (rd && typeof rd === 'object' && ['traits', 'hobbies', 'relationships', 'interests', 'values', 'experiences'].some(k => rd[k] && String(rd[k]).trim())) {
+                    return true;
+                }
+            }
+            const tr = parsedDossier && typeof parsedDossier === 'object' ? parsedDossier.thriveReport : null;
+            return Boolean(tr && tr.pillars && typeof tr.pillars === 'object' && Object.values(tr.pillars).some(v => v && String(v).trim()));
+        }
 
         function loadChecklistState() {
+            let autoUpdated = false;
             try {
                 if (typeof window !== 'undefined' && window.localStorage) {
                     const raw = localStorage.getItem(STORAGE_KEY);
@@ -1186,10 +1245,33 @@
                             });
                             state.checklist = nextChecklist;
                         }
+                        if (parsed && parsed.manualUnchecked && typeof parsed.manualUnchecked === 'object' && !Array.isArray(parsed.manualUnchecked)) {
+                            const nextManual = {};
+                            VALID_CHECKLIST_KEYS.forEach(k => {
+                                if (parsed.manualUnchecked[k] === true) nextManual[k] = true;
+                            });
+                            manualUnchecked = nextManual;
+                        }
+                    }
+
+                    const parsedDossier = safeReadJson('thrive_coaching_dossier_v1');
+                    const parsedFlow = safeReadJson('thrive_flow_survey_state_v1');
+                    const parsedProf = safeReadJson('thrive_profile_state_v1');
+
+                    if (!state.checklist.triage_survey && !manualUnchecked.triage_survey && isFlowSurveyCompletedData(parsedFlow, parsedDossier)) {
+                        state.checklist.triage_survey = true;
+                        autoUpdated = true;
+                    }
+                    if (!state.checklist.thrive_report && !manualUnchecked.thrive_report && isThriveReportCompletedData(parsedProf, parsedDossier)) {
+                        state.checklist.thrive_report = true;
+                        autoUpdated = true;
                     }
                 }
             } catch (err) {
                 console.warn('[Onboarding Hub] localStorage read failed:', err);
+            }
+            if (autoUpdated) {
+                saveChecklistState();
             }
             recomputeAndRenderChecklist();
         }
@@ -1204,7 +1286,8 @@
 
             try {
                 if (typeof window !== 'undefined' && window.localStorage) {
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+                    const payload = Object.assign({}, state, { manualUnchecked });
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
                 }
             } catch (err) {
                 console.warn('[Onboarding Hub] localStorage write failed:', err);
@@ -1252,7 +1335,13 @@
 
         function setChecklistItem(key, completed) {
             if (Object.prototype.hasOwnProperty.call(DEFAULT_CHECKLIST_STATE.checklist, key)) {
-                state.checklist[key] = Boolean(completed);
+                const boolVal = Boolean(completed);
+                state.checklist[key] = boolVal;
+                if (boolVal) {
+                    delete manualUnchecked[key];
+                } else {
+                    manualUnchecked[key] = true;
+                }
                 saveChecklistState();
                 recomputeAndRenderChecklist();
             }
@@ -1265,7 +1354,16 @@
             const checkbox = item.querySelector('.checklist-item-checkbox');
 
             item.addEventListener('click', (e) => {
-                if (e.target.tagName.toLowerCase() === 'a') return; // Allow normal link navigation
+                const anchor = e.target && typeof e.target.closest === 'function'
+                    ? e.target.closest('a')
+                    : (e.target && String(e.target.tagName || '').toLowerCase() === 'a' ? e.target : null);
+                if (anchor) {
+                    const href = String((anchor.getAttribute && anchor.getAttribute('href')) || '');
+                    if (href.includes('learnworlds.com')) {
+                        setChecklistItem('learnworlds_login', true);
+                    }
+                    return; // Allow normal link navigation
+                }
                 if (e.target !== checkbox) {
                     checkbox.checked = !checkbox.checked;
                 }
@@ -1284,8 +1382,9 @@
         if (btnResetChecklist) {
             btnResetChecklist.addEventListener('click', () => {
                 if (confirm('Are you sure you want to reset your Session 0 checklist progress?')) {
-                    Object.keys(state.checklist).forEach(k => {
+                    VALID_CHECKLIST_KEYS.forEach(k => {
                         state.checklist[k] = false;
+                        manualUnchecked[k] = true;
                     });
                     saveChecklistState();
                     recomputeAndRenderChecklist();
@@ -1534,7 +1633,7 @@
 
             textarea.addEventListener('keydown', (e) => {
                 if (!timerRunning) startTrainerTimer();
-                if (e.key === 'Enter') {
+                if (e.key === 'Enter' && !e.isComposing) {
                     // Trigger safe-save
                     executeSafeSave();
                 }
@@ -1576,6 +1675,19 @@
             });
         }
 
+        const directoryGrid = document.getElementById('onboarding-directory-grid');
+        if (directoryGrid && typeof directoryGrid.addEventListener === 'function') {
+            directoryGrid.addEventListener('click', (e) => {
+                const anchor = e && e.target && typeof e.target.closest === 'function'
+                    ? e.target.closest('a')
+                    : (e && e.target && String(e.target.tagName || '').toLowerCase() === 'a' ? e.target : null);
+                const href = anchor ? String((anchor.getAttribute && anchor.getAttribute('href')) || anchor.href || '') : '';
+                if (href.includes('learnworlds.com')) {
+                    setChecklistItem('learnworlds_login', true);
+                }
+            });
+        }
+
         // ======================================================================
         // COMPONENT 5: DEVTOOLS SNIPPET 1-CLICK COPY
         // ======================================================================
@@ -1583,15 +1695,18 @@
         const devtoolsCode = document.getElementById('devtools-snippet-code');
         function markDevtoolsCopied() {
             if (!btnCopyDevtools) return;
+            if (!btnCopyDevtools.dataset) btnCopyDevtools.dataset = {};
             const originalHtml = btnCopyDevtools.dataset.originalHtml || btnCopyDevtools.innerHTML;
             btnCopyDevtools.dataset.originalHtml = originalHtml;
             btnCopyDevtools.innerHTML = '<span>✓ Copied to Clipboard!</span>';
             btnCopyDevtools.style.backgroundColor = '#10B981';
-            clearTimeout(btnCopyDevtools._copyTimer);
-            btnCopyDevtools._copyTimer = setTimeout(() => {
-                btnCopyDevtools.innerHTML = originalHtml;
-                btnCopyDevtools.style.backgroundColor = '';
-            }, 2500);
+            if (typeof clearTimeout === 'function') clearTimeout(btnCopyDevtools._copyTimer);
+            if (typeof setTimeout === 'function') {
+                btnCopyDevtools._copyTimer = setTimeout(() => {
+                    btnCopyDevtools.innerHTML = originalHtml;
+                    btnCopyDevtools.style.backgroundColor = '';
+                }, 2500);
+            }
         }
         function fallbackCopyDevtools(text) {
             try {
@@ -1609,7 +1724,19 @@
                     return;
                 }
             } catch (_) {}
-            if (btnCopyDevtools) btnCopyDevtools.innerHTML = '<span>Please copy manually</span>';
+            if (btnCopyDevtools) {
+                if (!btnCopyDevtools.dataset) btnCopyDevtools.dataset = {};
+                const originalHtml = btnCopyDevtools.dataset.originalHtml || btnCopyDevtools.innerHTML;
+                btnCopyDevtools.dataset.originalHtml = originalHtml;
+                btnCopyDevtools.innerHTML = '<span>Please copy manually</span>';
+                btnCopyDevtools.style.backgroundColor = '';
+                if (typeof clearTimeout === 'function') clearTimeout(btnCopyDevtools._copyTimer);
+                if (typeof setTimeout === 'function') {
+                    btnCopyDevtools._copyTimer = setTimeout(() => {
+                        btnCopyDevtools.innerHTML = originalHtml;
+                    }, 2500);
+                }
+            }
         }
         if (btnCopyDevtools && devtoolsCode) {
             btnCopyDevtools.addEventListener('click', () => {
@@ -1622,7 +1749,7 @@
             });
         }
 
-        // Cross-tab storage listener for live checklist & diagnostic updates
+        // Cross-tab storage & same-tab return listeners for live checklist & diagnostic updates
         if (typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
             window.addEventListener('storage', (e) => {
                 if (!e || e.key === STORAGE_KEY) {
@@ -1630,18 +1757,37 @@
                 } else if (e.key === 'thrive_flow_survey_state_v1' && e.newValue) {
                     try {
                         const parsed = JSON.parse(e.newValue);
-                        if (parsed && parsed.scores && Object.keys(parsed.scores).length >= 20) {
+                        if (isFlowSurveyCompletedData(parsed, null)) {
                             setChecklistItem('triage_survey', true);
                         }
                     } catch (_) {}
                 } else if (e.key === 'thrive_profile_state_v1' && e.newValue) {
                     try {
                         const parsed = JSON.parse(e.newValue);
-                        if (parsed && Number(parsed.step) >= 7) {
+                        if (isThriveReportCompletedData(parsed, null)) {
+                            setChecklistItem('thrive_report', true);
+                        }
+                    } catch (_) {}
+                } else if (e.key === 'thrive_coaching_dossier_v1' && e.newValue) {
+                    try {
+                        const parsed = JSON.parse(e.newValue);
+                        if (isFlowSurveyCompletedData(null, parsed)) {
+                            setChecklistItem('triage_survey', true);
+                        }
+                        if (isThriveReportCompletedData(null, parsed)) {
                             setChecklistItem('thrive_report', true);
                         }
                     } catch (_) {}
                 }
+            });
+            window.addEventListener('pageshow', () => {
+                loadChecklistState();
+            });
+            window.addEventListener('focus', () => {
+                loadChecklistState();
+            });
+            window.addEventListener('thrive-dossier-updated', () => {
+                loadChecklistState();
             });
         }
 
@@ -1657,7 +1803,10 @@
                 executeSafeSave: executeSafeSave,
                 onSpeechSuccess: onSpeechSuccess,
                 resetChecklist: () => {
-                    VALID_CHECKLIST_KEYS.forEach(k => { state.checklist[k] = false; });
+                    VALID_CHECKLIST_KEYS.forEach(k => {
+                        state.checklist[k] = false;
+                        manualUnchecked[k] = true;
+                    });
                     saveChecklistState();
                     recomputeAndRenderChecklist();
                 }

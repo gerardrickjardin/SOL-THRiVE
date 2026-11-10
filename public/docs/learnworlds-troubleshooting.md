@@ -426,16 +426,21 @@ If LearnWorlds' asynchronous scripts or background timers attempt to re-inject t
 
   // Attach persistent observer to document body (fast-filters addedNodes to avoid O(N^2) scans)
   const hasModalNode = (mutations) => {
-    if (!Array.isArray(mutations) || mutations.length === 0) return true;
+    if (!mutations || typeof mutations.length !== 'number' || mutations.length === 0) return true;
     for (let i = 0; i < mutations.length; i++) {
       const added = mutations[i].addedNodes;
       if (!added || added.length === 0) continue;
       for (let j = 0; j < added.length; j++) {
         const n = added[j];
         if (!n) continue;
-        const cls = typeof n.className === 'string' ? n.className : '';
-        if (cls.includes('wizard-') || cls.includes('modal-backdrop')) return true;
-        if (typeof n.querySelector === 'function' && n.querySelector('.wizard-window-wrapper, .wizard-backdrop, .modal-backdrop, [class*="wizard-"]')) {
+        const rawCls = n.className;
+        if (typeof rawCls === 'string' && (rawCls.includes('wizard-') || rawCls.includes('modal-backdrop'))) {
+          return true;
+        }
+        const hasChildElements = typeof n.childElementCount === 'number'
+          ? n.childElementCount > 0
+          : (!n.children || n.children.length > 0);
+        if (hasChildElements && typeof n.querySelector === 'function' && n.querySelector('.wizard-window-wrapper, .wizard-backdrop, .modal-backdrop, [class*="wizard-"]')) {
           return true;
         }
       }

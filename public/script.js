@@ -1825,7 +1825,7 @@ const initThriveUI = () => {
         return true;
     };
 
-    const setDossierBtnFeedback = (triggerBtn, feedbackText, fallbackDefaultLabel) => {
+    const setDossierBtnFeedback = (triggerBtn, feedbackText, fallbackDefaultLabel, isSuccess = true) => {
         if (!triggerBtn || typeof triggerBtn !== 'object' || !('textContent' in triggerBtn)) return;
         const labelEl = typeof triggerBtn.querySelector === 'function'
             ? (triggerBtn.querySelector('.master-prompt-btn-label') || triggerBtn.querySelector('.share-btn-label'))
@@ -1836,8 +1836,12 @@ const initThriveUI = () => {
                 ? String(labelEl.textContent || '').trim()
                 : String(triggerBtn.textContent || '').trim();
         }
-        if (triggerBtn.classList && typeof triggerBtn.classList.add === 'function') {
-            triggerBtn.classList.add('is-copied');
+        if (triggerBtn.classList) {
+            if (isSuccess !== false && typeof triggerBtn.classList.add === 'function') {
+                triggerBtn.classList.add('is-copied');
+            } else if (isSuccess === false && typeof triggerBtn.classList.remove === 'function') {
+                triggerBtn.classList.remove('is-copied');
+            }
         }
         if (labelEl) {
             labelEl.textContent = feedbackText;
@@ -1878,8 +1882,9 @@ const initThriveUI = () => {
         const ok = await copyTextWithFallback(promptText);
         setDossierBtnFeedback(
             triggerBtn,
-            ok ? '✓ Clinical Dossier Copied!' : 'Copied to Clipboard ✓',
-            '📋 Export / Copy Clinical Dossier for LearnWorlds & Personos'
+            ok ? '✓ Clinical Dossier Copied!' : '⚠️ Clipboard Blocked — Copy Manually',
+            '📋 Export / Copy Clinical Dossier for LearnWorlds & Personos',
+            ok
         );
         announceDossierLiveFeedback(
             ok
@@ -1915,7 +1920,7 @@ const initThriveUI = () => {
             if (triggerBtn) triggerBtn._isSharing = true;
             try {
                 await navigator.share(cleanPayload);
-                setDossierBtnFeedback(triggerBtn, sharedLabel, defaultLabel);
+                setDossierBtnFeedback(triggerBtn, sharedLabel, defaultLabel, true);
                 return { ok: true, method: 'share', shared: true, copied: false, canceled: false, text: fallbackText };
             } catch (err) {
                 if (isShareAbortError(err)) {
@@ -1929,7 +1934,12 @@ const initThriveUI = () => {
         }
 
         const ok = await copyTextWithFallback(fallbackText);
-        setDossierBtnFeedback(triggerBtn, ok ? copiedLabel : 'Copied to Clipboard ✓', defaultLabel);
+        setDossierBtnFeedback(
+            triggerBtn,
+            ok ? copiedLabel : '⚠️ Clipboard Blocked — Copy Manually',
+            defaultLabel,
+            ok
+        );
         return { ok, method: 'clipboard', shared: false, copied: ok, canceled: false, text: fallbackText };
     };
 

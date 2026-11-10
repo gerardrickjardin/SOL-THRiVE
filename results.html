@@ -831,7 +831,7 @@ function buildStandaloneClinicalDossier(){
   const cached = safeParse('thrive_coaching_dossier_v1') || {};
   const flowRaw = safeParse('thrive_flow_survey_state_v1');
   const profileRaw = safeParse('thrive_profile_state_v1');
-  const hopeRaw = safeParse('hope_clinical_data_v5');
+  const hopeRaw = safeParse('thrive_hope_survey_state_v1') || safeParse('hope_clinical_data_v5');
 
   const lines = [
     '# 5 to THRiVE — Clinical Diagnostic Dossier (LearnWorlds & Personos Export)',
@@ -847,12 +847,26 @@ function buildStandaloneClinicalDossier(){
     '## Section 01: Baseline Flow Survey (survey.html)'
   ];
 
-  if (cached.flowSurvey && typeof cached.flowSurvey.overallAverage === 'number') {
+  if (cached.flowSurvey && typeof cached.flowSurvey.currentScore === 'number') {
+    const targetPart = typeof cached.flowSurvey.targetScore === 'number' ? ` (Target: ${cached.flowSurvey.targetScore}/100)` : '';
+    lines.push(`- Current Flow Score: ${cached.flowSurvey.currentScore}/100${targetPart}`);
+    if (cached.flowSurvey.problem) lines.push(`- Presenting Challenge: ${cached.flowSurvey.problem}`);
+  } else if (cached.flowSurvey && typeof cached.flowSurvey.overallAverage === 'number') {
     lines.push(`- Overall Flow Score: ${cached.flowSurvey.overallAverage}/5 (${cached.flowSurvey.overallPercent || Math.round((cached.flowSurvey.overallAverage / 5) * 100)}%)`);
-  } else if (flowRaw && flowRaw.scores && typeof flowRaw.scores === 'object') {
-    const vals = Object.values(flowRaw.scores).map(Number).filter(n => !Number.isNaN(n));
-    const avg = vals.length ? (vals.reduce((a, b) => a + b, 0) / vals.length).toFixed(2) : 'N/A';
-    lines.push(`- Recorded Responses: ${vals.length}/20 (Mean Rating: ${avg}/5)`);
+  } else if (flowRaw && Array.isArray(flowRaw.scores)) {
+    const answeredFlags = Array.isArray(flowRaw.answered) ? flowRaw.answered : null;
+    const answeredScores = flowRaw.scores
+      .map((v, idx) => ({ n: Number(v), ok: answeredFlags ? Boolean(answeredFlags[idx]) : Number(v) > 0 }))
+      .filter(x => x.ok && !Number.isNaN(x.n) && x.n > 0)
+      .map(x => x.n);
+    if (answeredScores.length > 0) {
+      const avg = (answeredScores.reduce((a, b) => a + b, 0) / answeredScores.length).toFixed(2);
+      lines.push(`- Recorded Responses: ${answeredScores.length}/20 (Mean Rating: ${avg}/5)`);
+    } else if (flowRaw.problemDescription && String(flowRaw.problemDescription).trim()) {
+      lines.push(`- Status: In-progress draft ("${String(flowRaw.problemDescription).trim()}") — 0/20 ratings completed`);
+    } else {
+      lines.push('- Status: Not yet completed on this device (complete at survey.html)');
+    }
   } else {
     lines.push('- Status: Not yet completed on this device (complete at survey.html)');
   }
@@ -868,7 +882,16 @@ function buildStandaloneClinicalDossier(){
 
   lines.push('', '## Section 03: HoPE Clinical Index (hope-survey.html)');
   if (cached.hopeIndex && typeof cached.hopeIndex === 'object') {
-    lines.push(`- Status: Completed (Overall Index: ${cached.hopeIndex.overallPercent ?? 'Recorded'}%)`);
+    const scorePct = cached.hopeIndex.totalHoPEScore100 ?? cached.hopeIndex.overallPercent;
+    const labelPart = cached.hopeIndex.levelLabel ? ` — ${cached.hopeIndex.levelLabel}` : '';
+    lines.push(scorePct != null
+      ? `- Status: Completed (Overall Index: ${scorePct}/100${labelPart})`
+      : `- Status: Completed${labelPart}`);
+  } else if (hopeRaw && Array.isArray(hopeRaw.surveyHistory) && hopeRaw.surveyHistory.length > 0) {
+    const latest = hopeRaw.surveyHistory[hopeRaw.surveyHistory.length - 1];
+    lines.push(latest && latest.totalScore != null
+      ? `- Status: ${hopeRaw.surveyHistory.length} clinical assessment(s) recorded (Latest Raw Total: ${latest.totalScore}/160)`
+      : `- Status: ${hopeRaw.surveyHistory.length} clinical assessment(s) recorded`);
   } else if (hopeRaw && Array.isArray(hopeRaw.assessments) && hopeRaw.assessments.length > 0) {
     lines.push(`- Status: ${hopeRaw.assessments.length} clinical assessment(s) recorded`);
   } else {
@@ -923,8 +946,12 @@ if (exportDossierBtn) {
       if (!this.dataset.originalLabel) {
         this.dataset.originalLabel = labelEl.textContent;
       }
-      labelEl.textContent = copied ? '✓ Clinical Dossier Copied!' : '✓ Dossier Ready to Paste!';
-      this.classList.add('is-copied');
+      labelEl.textContent = copied ? '✓ Clinical Dossier Copied!' : '⚠️ Clipboard Blocked — Copy Manually';
+      if (copied) {
+        this.classList.add('is-copied');
+      } else {
+        this.classList.remove('is-copied');
+      }
       clearTimeout(this._dossierTimer);
       this._dossierTimer = setTimeout(() => {
         labelEl.textContent = this.dataset.originalLabel || '📋 Export / Copy Clinical Dossier for LearnWorlds & Personos';
@@ -937,7 +964,7 @@ if (exportDossierBtn) {
 
     const msg = copied
       ? '✓ Clinical Dossier copied! Paste into LearnWorlds Review Center or Personos AI.'
-      : '✓ Clinical Dossier prepared for clipboard!';
+      : '⚠️ Clipboard blocked — please copy your diagnostic results manually.';
     if (dossierFeedbackEl) {
       dossierFeedbackEl.textContent = msg;
       clearTimeout(dossierFeedbackEl._timer);

@@ -412,6 +412,20 @@ main{max-width:1240px;margin:auto;padding:36px 28px 80px}
   };
   $('#nav-cta').onclick=()=>{go(1);const a=$('#audit');if(a.style.display!=='none')a.scrollIntoView({behavior:'smooth',block:'center'})};
 
+  const voteLabels={dap_notes:'Automated Clinical DAP Notes',action_boards:'Between-Session Action Boards ($9/mo seats)',observer_stance:'Strengths Intake & The Observer Stance'};
+  function persistAudit(extra){
+    try{
+      const ts=new Date().toISOString(),L=state.lead||{};
+      const payload=Object.assign({first:L.fn||'',last:L.ln||'',email:L.em||'',phone:L.ph||'',organization:L.org||'',fn:L.fn||'',ln:L.ln||'',em:L.em||'',ph:L.ph||'',org:L.org||'',ratings:state.ratings,completedAt:ts},extra||{});
+      if(typeof sessionStorage!=='undefined'&&sessionStorage)sessionStorage.setItem('solThrive',JSON.stringify(payload));
+      if(typeof localStorage!=='undefined'&&localStorage){
+        localStorage.setItem('solThrive',JSON.stringify(payload));
+        if(L.fn)localStorage.setItem('solThriveLead',JSON.stringify(payload));
+        if(payload.priorities&&payload.priorities.length)localStorage.setItem('solThriveVotes',JSON.stringify(payload));
+      }
+    }catch(e){}
+  }
+
   // Lead submit
   $('#lead').addEventListener('submit',e=>{
     e.preventDefault();
@@ -419,6 +433,7 @@ main{max-width:1240px;margin:auto;padding:36px 28px 80px}
     if(Object.values(L).some(v=>!v)){$('#lead-err').textContent='Please complete every field.';return}
     if(!/^\S+@\S+\.\S+$/.test(L.em)){$('#lead-err').textContent='Please enter a valid email address.';return}
     state.lead=L;$('#lead-err').textContent='';
+    persistAudit();
     track('lead',{ratings:state.ratings});
     $('#greet').textContent='Welcome, '+L.fn+'. Here is the practitioner consensus.';
     $('#story').pause();
@@ -440,7 +455,7 @@ main{max-width:1240px;margin:auto;padding:36px 28px 80px}
   }
   $$('.vote').forEach(b=>b.onclick=()=>{state.vote=b.dataset.v;$$('.vote').forEach(x=>x.classList.toggle('sel',x===b));updVote()});
   updVote();
-  $('#vote-submit').onclick=()=>{track('vote',{vote:state.vote});initBooking();go(4)};
+  $('#vote-submit').onclick=()=>{const p=voteLabels[state.vote]||state.vote;persistAudit({vote:state.vote,votes:p?[p]:[],priorities:p?[p]:[],votedAt:new Date().toISOString()});track('vote',{vote:state.vote});initBooking();go(4)};
 
   // Calendar (Booking Calendar embed)
   const fmt=d=>d.toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'});

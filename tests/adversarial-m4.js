@@ -646,6 +646,339 @@ function makeButtonMock(initialLabel = '📋 Export / Copy Clinical Dossier for 
   }
   assert(secretLeak === null, 'Zero unreplaced %VITE_% placeholders or server API keys in public/', secretLeak || '');
 
+  // ---------------------------------------------------------------------------
+  // SUITE 7: Adversarial Reviewer Regression Suite (Cross-Page Integration)
+  // ---------------------------------------------------------------------------
+  console.log('\n--- SUITE 7: Adversarial Reviewer Regression Suite ---');
+
+  // 7A: Total clipboard failure (clipboardRejects + execCommandFails) must NOT show false-positive green copied state
+  {
+    const env = runScriptJsInSandbox({}, {}, { clipboardRejects: true, execCommandFails: true });
+    const btn = makeButtonMock('📋 Export / Copy Clinical Dossier for LearnWorlds & Personos');
+    const res = await env.dossierApi.copyMasterPrompt(btn);
+    assert(res.copied === false && res.ok === false, 'copyMasterPrompt returns copied=false when both clipboard and execCommand fail');
+    assert(!btn.classList.contains('is-copied'), 'Does NOT add .is-copied class when clipboard write fails');
+    assert(btn._labelSpan.textContent.includes('Clipboard Blocked'), 'Button label warns user when clipboard write fails', btn._labelSpan.textContent);
+    assert(env.liveFeedbackEl.textContent.includes('Clipboard blocked'), 'Live feedback warns user when clipboard write fails', env.liveFeedbackEl.textContent);
+    clearTimeout(btn._dossierTimeout);
+    clearTimeout(env.liveFeedbackEl._dossierFeedbackTimer);
+  }
+
+  // 7B: funnel.html Practice Audit + Vote persistence -> ThriveCoachingDossier Section 00 integration
+  {
+    const funnelHtml = readFile('funnel.html');
+    const inlineScripts = [...funnelHtml.matchAll(/<script>([\s\S]*?)<\/script>/g)].map(m => m[1]);
+    const funnelScript = inlineScripts.find(s => s.includes("$('#lead')") && s.includes("$('#vote-submit')"));
+    assert(Boolean(funnelScript), 'Located funnel.html interactive audit & vote script');
+
+    const localStore = createStorageMock({});
+    const sessionStore = createStorageMock({});
+    const els = {};
+    const makeFunnelEl = (id, val = '') => {
+      const listeners = {};
+      const classes = new Set();
+      const children = [];
+      const el = {
+        id,
+        value: val,
+        textContent: '',
+        innerHTML: '',
+        disabled: false,
+        dataset: {},
+        style: {},
+        children,
+        onclick: null,
+        appendChild(ch) { children.push(ch); return ch; },
+        classList: {
+          add: (c) => classes.add(c),
+          remove: (c) => classes.delete(c),
+          toggle: (c, f) => (typeof f === 'boolean' ? (f ? classes.add(c) : classes.delete(c)) : (classes.has(c) ? classes.delete(c) : classes.add(c))),
+          contains: (c) => classes.has(c)
+        },
+        setAttribute() {},
+        getAttribute: () => null,
+        querySelector: (sel) => (sel === '.rate' ? el._rateBox : null),
+        querySelectorAll: () => [],
+        scrollIntoView() {},
+        focus() {},
+        pause() {},
+        addEventListener(t, fn) { (listeners[t] = listeners[t] || []).push(fn); },
+        _fire(t, evt = {}) {
+          if (t === 'click' && typeof el.onclick === 'function') el.onclick(evt);
+          (listeners[t] || []).forEach(fn => fn.call(el, evt));
+        }
+      };
+      if (id) els[id] = el;
+      return el;
+    };
+
+    makeFunnelEl('fn', 'Dr. Elena');
+    makeFunnelEl('ln', 'Vance');
+    makeFunnelEl('em', 'elena@clinic.org');
+    makeFunnelEl('ph', '303-555-0199');
+    makeFunnelEl('org', 'Front Range Mindful Practice');
+    ['lead', 'lead-err', 'greet', 'story', 'bars', 'audit', 'audit-submit', 'nav-cta',
+     'vote-submit', 'vote-hint', 'book-submit', 'pay-form', 'pay-btn', 'pay-err', 'pay-grid',
+     'success', 'ok-msg', 'qiNYlb85QHIu0foCh24A', 'pay-when', 'pay-who'].forEach(id => makeFunnelEl(id));
+
+    const qEls = ['0', '1', '2'].map(qIdx => {
+      const qEl = makeFunnelEl('q-' + qIdx);
+      qEl.dataset = { q: qIdx };
+      qEl._rateBox = makeFunnelEl('rate-box-' + qIdx);
+      return qEl;
+    });
+    const voteBtnDap = makeFunnelEl('vote-dap');
+    voteBtnDap.dataset = { v: 'dap_notes' };
+
+    const funnelDoc = {
+      getElementById: (id) => els[id] || makeFunnelEl(id),
+      querySelector: (sel) => {
+        if (sel.startsWith('#')) {
+          const id = sel.slice(1);
+          return els[id] || makeFunnelEl(id);
+        }
+        return makeFunnelEl('');
+      },
+      querySelectorAll: (sel) => {
+        if (sel === '.q') return qEls;
+        if (sel === '.vote') return [voteBtnDap];
+        return [];
+      },
+      createElement: () => makeFunnelEl(''),
+      addEventListener() {}
+    };
+    const funnelWin = {
+      localStorage: localStore,
+      sessionStorage: sessionStore,
+      location: { origin: 'https://www.thrivecoaching.ai', pathname: '/funnel.html', search: '' },
+      fetch: () => Promise.resolve({ ok: true, json: () => Promise.resolve({ ok: true }) }),
+      matchMedia: () => ({ matches: false }),
+      scrollTo() {},
+      addEventListener() {}
+    };
+    const funnelCtx = {
+      window: funnelWin,
+      document: funnelDoc,
+      location: funnelWin.location,
+      localStorage: localStore,
+      sessionStorage: sessionStore,
+      navigator: { vibrate: () => true },
+      fetch: funnelWin.fetch,
+      URLSearchParams,
+      setTimeout: () => 1,
+      clearTimeout,
+      setInterval: () => 1,
+      clearInterval() {},
+      console
+    };
+    vm.createContext(funnelCtx);
+    vm.runInContext(funnelScript, funnelCtx);
+
+    // Click rating 5, 4, 5 on the 3 dynamically created rating buttons
+    qEls[0]._rateBox.children[4]._fire('click');
+    qEls[1]._rateBox.children[3]._fire('click');
+    qEls[2]._rateBox.children[4]._fire('click');
+    els['lead']._fire('submit', { preventDefault() {} });
+    voteBtnDap._fire('click');
+    els['vote-submit']._fire('click', { preventDefault() {} });
+
+    const persistedSession = JSON.parse(sessionStore.getItem('solThrive') || 'null');
+    assert(Boolean(persistedSession && persistedSession.first === 'Dr. Elena' && persistedSession.ratings[0] === 5 && persistedSession.ratings[1] === 4), 'funnel.html persists Practice Audit lead & ratings [5, 4, 5] to sessionStorage.solThrive');
+    assert(Array.isArray(persistedSession.votes) && persistedSession.votes.includes('Automated Clinical DAP Notes'), 'funnel.html persists human-readable voted capability to solThrive.votes');
+
+    const downstreamEnv = runScriptJsInSandbox(localStore._dump(), sessionStore._dump());
+    const exportedDossier = downstreamEnv.dossierApi.buildClinicalDossier();
+    assert(exportedDossier.includes('Dr. Elena Vance') && exportedDossier.includes('Front Range Mindful Practice'), 'Downstream Clinical Dossier exports funnel.html practitioner & org');
+    assert(exportedDossier.includes('Automated Clinical DAP Notes'), 'Downstream Clinical Dossier exports funnel.html voted capability');
+  }
+
+  // 7C: onboarding.html same-tab load auto-check, Step 1 draft rejection, resetChecklist manualUnchecked, and LMS click auto-check
+  {
+    const onboardingHtml = readFile('onboarding.html');
+    const inlineMatch = onboardingHtml.match(/<script>\s*\(function initOnboardingHub\(\)[\s\S]*?<\/script>/);
+    const code = inlineMatch[0].replace(/^<script>/, '').replace(/<\/script>$/, '');
+
+    const runOnboardingSandbox = (initialLocal = {}) => {
+      const localStore = createStorageMock(initialLocal);
+      const winListeners = {};
+      const dirGridListeners = {};
+      const directoryGridEl = {
+        addEventListener(t, fn) { (dirGridListeners[t] = dirGridListeners[t] || []).push(fn); },
+        _fire(t, evt) { (dirGridListeners[t] || []).forEach(fn => fn(evt)); }
+      };
+      const docMock = {
+        getElementById: (id) => (id === 'onboarding-directory-grid' ? directoryGridEl : null),
+        querySelector: () => null,
+        querySelectorAll: () => [],
+        addEventListener() {}
+      };
+      const winMock = {
+        localStorage: localStore,
+        addEventListener(t, fn) { (winListeners[t] = winListeners[t] || []).push(fn); },
+        _fire(t, evt) { (winListeners[t] || []).forEach(fn => fn(evt)); }
+      };
+      const ctx = { window: winMock, document: docMock, localStorage: localStore, navigator: {}, setTimeout, clearTimeout, setInterval: () => 1, clearInterval() {}, console };
+      vm.createContext(ctx);
+      vm.runInContext(code, ctx);
+      return { winMock, directoryGridEl, localStore };
+    };
+
+    // Step 1 Flow Survey draft (20 zero scores, answered=false) must NOT check triage_survey on load or storage event
+    const draftRun = runOnboardingSandbox({
+      thrive_flow_survey_state_v1: JSON.stringify({
+        problemDescription: 'Draft challenge',
+        scores: new Array(20).fill(0),
+        answered: new Array(20).fill(false)
+      })
+    });
+    assert(draftRun.winMock.ThriveOnboarding.getState().checklist.triage_survey === false, 'Step 1 unanswered Flow Survey draft does NOT prematurely check triage_survey on load');
+    draftRun.winMock._fire('storage', {
+      key: 'thrive_flow_survey_state_v1',
+      newValue: JSON.stringify({ problemDescription: 'Typing...', scores: new Array(20).fill(0), answered: new Array(20).fill(false) })
+    });
+    assert(draftRun.winMock.ThriveOnboarding.getState().checklist.triage_survey === false, 'Step 1 unanswered Flow Survey draft does NOT prematurely check triage_survey via cross-tab storage event');
+
+    // Completed Flow Survey + THRiVE Report in localStorage auto-checks on same-tab load, and resetChecklist() keeps them unchecked
+    const completedRun = runOnboardingSandbox({
+      thrive_flow_survey_state_v1: JSON.stringify({
+        problemDescription: 'Completed challenge',
+        scores: new Array(20).fill(4),
+        answered: new Array(20).fill(true)
+      }),
+      thrive_profile_state_v1: JSON.stringify({ step: 7 })
+    });
+    assert(completedRun.winMock.ThriveOnboarding.getState().checklist.triage_survey === true, 'Completed Flow Survey in localStorage auto-checks triage_survey on same-tab load');
+    assert(completedRun.winMock.ThriveOnboarding.getState().checklist.thrive_report === true, 'Completed THRiVE Report in localStorage auto-checks thrive_report on same-tab load');
+
+    completedRun.winMock.ThriveOnboarding.resetChecklist();
+    assert(completedRun.winMock.ThriveOnboarding.getState().completedCount === 0, 'resetChecklist() clears checklist to 0/7');
+    completedRun.winMock._fire('pageshow', {});
+    assert(completedRun.winMock.ThriveOnboarding.getState().completedCount === 0, 'pageshow after resetChecklist() respects manualUnchecked and stays 0/7');
+
+    // Clicking LearnWorlds link in #onboarding-directory-grid auto-checks learnworlds_login
+    completedRun.directoryGridEl._fire('click', {
+      target: { tagName: 'A', href: 'https://thrive-coaching.learnworlds.com', getAttribute: (k) => (k === 'href' ? 'https://thrive-coaching.learnworlds.com' : null) }
+    });
+    assert(completedRun.winMock.ThriveOnboarding.getState().checklist.learnworlds_login === true, 'Clicking LearnWorlds link in directory grid auto-checks learnworlds_login');
+  }
+
+  // 7D: how-to-use.html strict email validation rejects malformed "@" inputs
+  {
+    const howToUseHtml = readFile('how-to-use.html');
+    const valMatch = howToUseHtml.match(/function validateHelpDeskInputs\([\s\S]*?return\s*\{[\s\S]*?\};\s*\}/);
+    assert(Boolean(valMatch), 'Extracted validateHelpDeskInputs from how-to-use.html');
+    const fnValidator = new Function(`${valMatch[0]}; return validateHelpDeskInputs;`)();
+    for (const badEmail of ['@', 'user@', '@domain.com', 'user@domain', 'user@domain.c', 'user @domain.com']) {
+      assert(fnValidator('Jane', 'Doe', badEmail, 'Detailed issue description here').valid === false, `validateHelpDeskInputs rejects malformed email "${badEmail}"`);
+    }
+    assert(fnValidator('Jane', 'Doe', 'jane.doe@thrivecoaching.ai', 'Detailed issue description here').valid === true, 'validateHelpDeskInputs accepts valid clinical email');
+  }
+
+  // 7E: results.html standalone dossier reads currentScore/totalHoPEScore100/thrive_hope_survey_state_v1 and warns on clipboard failure
+  {
+    const resultsHtml = readFile('results.html');
+    const inlineCode = [...resultsHtml.matchAll(/<script>([\s\S]*?)<\/script>/g)][0][1];
+    const els = {};
+    const makeEl = (id) => {
+      const listeners = {};
+      const classes = new Set();
+      const labelSpan = { textContent: '📋 Export / Copy Clinical Dossier for LearnWorlds & Personos' };
+      const el = {
+        id,
+        textContent: '',
+        value: '',
+        disabled: false,
+        muted: true,
+        paused: true,
+        currentTime: 0,
+        dataset: { w: '84', base: '40' },
+        style: {},
+        classList: {
+          add: (c) => classes.add(c),
+          remove: (c) => classes.delete(c),
+          toggle: (c, f) => (typeof f === 'boolean' ? (f ? classes.add(c) : classes.delete(c)) : (classes.has(c) ? classes.delete(c) : classes.add(c))),
+          contains: (c) => classes.has(c)
+        },
+        setAttribute() {},
+        getAttribute: () => '44',
+        querySelector: () => labelSpan,
+        select() {},
+        play: () => Promise.resolve(),
+        pause() {},
+        addEventListener(t, fn) { (listeners[t] = listeners[t] || []).push(fn); },
+        _fire(t, evt = {}) { return Promise.all((listeners[t] || []).map(fn => fn.call(el, evt))); },
+        _labelSpan: labelSpan
+      };
+      els[id] = el;
+      return el;
+    };
+    ['nm', 'org-label', 'r1', 'r2', 'r3', 'blueprint-video-box', 'blueprint-video', 'play-blueprint-btn',
+     'blueprint-play-icon', 'restart-blueprint-btn', 'blueprint-caption', 'video-status-tag', 'voices-badge',
+     'vote', 'lnk', 'copy', 'share-native', 'share-fb', 'share-ig', 'share-tt', 'share-feedback',
+     'download-pdf-btn', 'export-clinical-dossier-btn', 'dossier-export-feedback', 'dossier-status-badge'].forEach(makeEl);
+
+    const localStore = createStorageMock({
+      thrive_coaching_dossier_v1: JSON.stringify({
+        flowSurvey: { currentScore: 74, targetScore: 90, problem: 'Between-session drift' },
+        hopeIndex: { totalHoPEScore100: 82, levelLabel: 'Strong Clinical Alignment' }
+      })
+    });
+    const sessionStore = createStorageMock({});
+    const docMock = {
+      getElementById: (id) => els[id] || makeEl(id),
+      querySelector: () => makeEl('voice-count'),
+      querySelectorAll: () => [],
+      createElement: () => ({ value: '', style: {}, setAttribute() {}, select() {} }),
+      body: { appendChild() {}, removeChild() {} },
+      execCommand: () => false
+    };
+    const navMock = {
+      vibrate: () => true,
+      clipboard: { writeText: () => Promise.reject(new Error('Blocked')) }
+    };
+    const winMock = {
+      location: { origin: 'https://www.thrivecoaching.ai' },
+      localStorage: localStore,
+      sessionStorage: sessionStore,
+      navigator: navMock,
+      document: docMock,
+      matchMedia: () => ({ matches: false }),
+      addEventListener() {},
+      dispatchEvent() {},
+      print() {}
+    };
+    const ctx = {
+      window: winMock,
+      document: docMock,
+      navigator: navMock,
+      localStorage: localStore,
+      sessionStorage: sessionStore,
+      CustomEvent: class { constructor(t, i = {}) { this.type = t; this.detail = i.detail; } },
+      requestAnimationFrame: () => {},
+      AbortController,
+      setTimeout,
+      clearTimeout,
+      setInterval: () => 1,
+      clearInterval() {},
+      console
+    };
+    vm.createContext(ctx);
+    vm.runInContext(inlineCode, ctx);
+
+    const standalonePrompt = ctx.buildStandaloneClinicalDossier();
+    assert(standalonePrompt.includes('Current Flow Score: 74/100 (Target: 90/100)'), 'results.html standalone dossier reads cached.flowSurvey.currentScore & targetScore');
+    assert(standalonePrompt.includes('Overall Index: 82/100 — Strong Clinical Alignment'), 'results.html standalone dossier reads cached.hopeIndex.totalHoPEScore100 & levelLabel');
+    assert(!standalonePrompt.includes('Recorded%'), 'results.html standalone dossier never outputs literal "Recorded%"');
+
+    await els['export-clinical-dossier-btn']._fire('click');
+    assert(!els['export-clinical-dossier-btn'].classList.contains('is-copied'), 'results.html standalone export does NOT add .is-copied when clipboard copy fails');
+    assert(els['export-clinical-dossier-btn']._labelSpan.textContent.includes('Clipboard Blocked'), 'results.html standalone export warns when clipboard copy fails');
+    assert(els['dossier-export-feedback'].textContent.includes('Clipboard blocked'), 'results.html #dossier-export-feedback warns when clipboard copy fails');
+    clearTimeout(els['export-clinical-dossier-btn']._dossierTimer);
+    clearTimeout(els['dossier-export-feedback']._timer);
+    clearTimeout(els['share-feedback']._timer);
+  }
+
   console.log('\n================================================================================');
   console.log(`  Milestone 4 & Full Release Summary: ${passed} passed, ${failed} failed`);
   console.log('================================================================================');

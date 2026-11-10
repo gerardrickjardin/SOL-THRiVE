@@ -975,18 +975,26 @@
             // 1. DevTools Snippet Copy Handler
             const btnCopyDevtools = document.getElementById('btn-copy-devtools');
             const devtoolsCode = document.getElementById('devtools-snippet-code');
+            function markDevtoolsCopyResult(btn, ok) {
+                if (!btn) return;
+                if (!btn.dataset) btn.dataset = {};
+                const original = btn.dataset.originalHtml || btn.innerHTML || '<span>📋 Copy DevTools One-Liner</span>';
+                btn.dataset.originalHtml = original;
+                btn.innerHTML = ok ? '<span>✓ Copied to Clipboard!</span>' : '<span>Please copy snippet manually</span>';
+                btn.style.backgroundColor = ok ? '#059669' : '';
+                if (btn._copyTimer) clearTimeout(btn._copyTimer);
+                btn._copyTimer = setTimeout(function() {
+                    btn.innerHTML = original;
+                    btn.style.backgroundColor = '';
+                }, 2500);
+            }
+
             if (btnCopyDevtools && devtoolsCode) {
                 btnCopyDevtools.addEventListener('click', function() {
                     const text = devtoolsCode.textContent || '';
                     if (navigator.clipboard && navigator.clipboard.writeText) {
                         navigator.clipboard.writeText(text).then(function() {
-                            const original = btnCopyDevtools.innerHTML;
-                            btnCopyDevtools.innerHTML = '<span>✓ Copied to Clipboard!</span>';
-                            btnCopyDevtools.style.backgroundColor = '#059669';
-                            setTimeout(function() {
-                                btnCopyDevtools.innerHTML = original;
-                                btnCopyDevtools.style.backgroundColor = '';
-                            }, 2500);
+                            markDevtoolsCopyResult(btnCopyDevtools, true);
                         }).catch(function() {
                             fallbackCopy(text, btnCopyDevtools);
                         });
@@ -1000,18 +1008,16 @@
                 try {
                     const ta = document.createElement('textarea');
                     ta.value = text;
+                    ta.setAttribute('readonly', '');
                     ta.style.position = 'fixed';
                     ta.style.left = '-9999px';
                     document.body.appendChild(ta);
                     ta.select();
-                    document.execCommand('copy');
+                    const ok = Boolean(document.execCommand && document.execCommand('copy'));
                     document.body.removeChild(ta);
-                    btn.innerHTML = '<span>✓ Copied to Clipboard!</span>';
-                    setTimeout(function() {
-                        btn.innerHTML = '<span>📋 Copy DevTools One-Liner</span>';
-                    }, 2500);
+                    markDevtoolsCopyResult(btn, ok);
                 } catch (err) {
-                    btn.innerHTML = '<span>Please copy snippet manually</span>';
+                    markDevtoolsCopyResult(btn, false);
                 }
             }
 
@@ -1031,7 +1037,7 @@
             function validateHelpDeskInputs(fn, ln, em, msg) {
                 if (!fn || fn.trim().length === 0) return { valid: false, error: 'Please enter your first name.' };
                 if (!ln || ln.trim().length === 0) return { valid: false, error: 'Please enter your last name.' };
-                if (!em || em.trim().length === 0 || !em.includes('@')) return { valid: false, error: 'Please provide a valid email address.' };
+                if (!em || !/^[^\s@]+@[^\s@]+\.[^\s@][^\s@]+$/.test(em.trim())) return { valid: false, error: 'Please provide a valid email address.' };
                 if (!msg || msg.trim().length < 10) return { valid: false, error: 'Please describe the issue in at least 10 characters.' };
                 return { valid: true };
             }
