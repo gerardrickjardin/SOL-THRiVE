@@ -28,144 +28,158 @@
 <meta name="twitter:description" content="See how your Clinical Practice Audit compares with verified community practitioners and vote on the SOL THRiVE Community Blueprint priorities.">
 <meta name="twitter:image" content="https://sol-th-ri-ve.vercel.app/assets/hero-banner-1920.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@700&family=Patrick+Hand&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --cream:#F8F3E4; --slate:#5B79A6; --slate-d:#4A6590; --sage:#9DB68C; --sage-d:#7E9C6E; --earth:#8A5A3B;
-  --pale:#CFDFF2; --gray:#6F6F75; --ink:#2B2B30; --gold:#F2D675;
+  --cream:#F9F6F0; --slate:#5B79A6; --slate-d:#3E5880; --sage:#9DB68C; --sage-d:#5B7F4A; --earth:#8A5A3B;
+  --pale:#E8EFF9; --gray:#4B5563; --ink:#18181B; --gold:#F5B82E; --violet:#7C2AE8;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{min-height:100%}
 body{
-  font-family:'Patrick Hand',cursive;color:var(--ink);font-size:17px;line-height:1.25;
-  background-color:#F3EEE0;
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:var(--ink);font-size:15px;line-height:1.45;
+  background-color:var(--cream);
   background-image:
-    radial-gradient(ellipse 55% 60% at 0% 0%,rgba(91,121,166,.28),transparent 65%),
-    radial-gradient(ellipse 50% 55% at 100% 100%,rgba(126,156,110,.30),transparent 65%),
-    radial-gradient(ellipse 40% 45% at 100% 0%,rgba(207,223,242,.75),transparent 65%),
-    radial-gradient(ellipse 35% 40% at 0% 100%,rgba(138,90,59,.12),transparent 65%),
-    radial-gradient(rgba(43,43,48,.08) 1px,transparent 1.3px);
-  background-size:auto,auto,auto,auto,22px 22px;background-repeat:no-repeat,no-repeat,no-repeat,no-repeat,repeat;
+    radial-gradient(ellipse 55% 60% at 0% 0%,rgba(91,121,166,.16),transparent 65%),
+    radial-gradient(ellipse 50% 55% at 100% 100%,rgba(124,42,232,.10),transparent 65%),
+    radial-gradient(ellipse 40% 45% at 100% 0%,rgba(232,239,249,.65),transparent 65%),
+    radial-gradient(rgba(24,24,27,.05) 1px,transparent 1.2px);
+  background-size:auto,auto,auto,22px 22px;background-repeat:no-repeat,no-repeat,no-repeat,repeat;
   background-attachment:fixed;
   overflow-x:hidden;
   overflow-y:auto;
 }
-h1,h2,h3{font-family:'Kalam',cursive;font-weight:700}
-.wrap{max-width:1180px;margin:0 auto;padding:0 24px 18px;min-height:100vh;height:auto;display:flex;flex-direction:column}
+h1,h2,h3{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;letter-spacing:-.02em;line-height:1.18}
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px 24px;min-height:100vh;height:auto;display:flex;flex-direction:column}
 
-.top{display:grid;grid-template-columns:auto 1fr auto;align-items:center;padding:12px 0 6px;gap:10px}
-.brand{font-family:'Kalam',cursive;font-weight:700;font-size:1.55rem;display:flex;align-items:center;gap:8px;letter-spacing:1px;text-decoration:none;color:var(--ink);white-space:nowrap}
-.brand b{color:var(--slate)}
-.top h1{font-size:clamp(0.9rem,1.2vw,1.08rem);text-align:center;line-height:1.15}
-.hl{background:rgba(242,214,117,.7);border-radius:6px;padding:0 6px}
-.top-nav{justify-self:end;display:flex;align-items:center;gap:6px;flex-wrap:nowrap}
-.btn-sm{justify-self:end;white-space:nowrap;border:1.5px solid var(--ink);border-radius:10px;padding:4px 10px;font-size:.88rem;background:#fffdf6;font:inherit;cursor:pointer;box-shadow:0 2px 0 rgba(43,43,48,.25);transition:.15s;color:var(--ink);text-decoration:none}
+.top{display:grid;grid-template-columns:auto 1fr auto;align-items:center;padding:14px 0 8px;gap:12px}
+.brand{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:1.4rem;display:flex;align-items:center;gap:8px;letter-spacing:-.02em;text-decoration:none;color:var(--ink);white-space:nowrap}
+.brand b{color:var(--violet)}
+.top h1{font-size:clamp(0.95rem,1.25vw,1.15rem);text-align:center;line-height:1.25}
+.hl{background:rgba(245,184,46,.45);border-radius:6px;padding:1px 7px}
+.top-nav{justify-self:end;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.btn-sm{justify-self:end;white-space:nowrap;border:1.5px solid var(--ink);border-radius:999px;padding:6px 13px;font-family:'Inter',sans-serif;font-weight:600;font-size:.82rem;background:#ffffff;cursor:pointer;box-shadow:0 2px 0 rgba(24,24,27,.85);transition:.15s;color:var(--ink);text-decoration:none}
 .btn-sm:hover{transform:translateY(1px);box-shadow:none}
-.btn-sm:focus-visible,.brand:focus-visible{outline:3px solid var(--slate);outline-offset:3px;border-radius:10px}
-.btn-sm.active,.btn-sm[aria-current="page"]{background:#FFFBEB;background-image:linear-gradient(135deg,#FFFBEB 0%,#F5C84C 100%);color:#1E2430;border-color:#1E2430;font-weight:700;box-shadow:2px 2px 0 #1E2430}
+.btn-sm:focus-visible,.brand:focus-visible{outline:3px solid var(--violet);outline-offset:3px;border-radius:999px}
+.btn-sm.active,.btn-sm[aria-current="page"]{background:#FFFBEB;background-image:linear-gradient(135deg,#FFFBEB 0%,#F5B82E 100%);color:#18181B;border-color:#18181B;font-weight:700;box-shadow:2px 2px 0 #18181B}
 
 .card{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:8px;
-  border:1.5px solid rgba(43,43,48,.75);border-radius:18px;background:rgba(251,247,236,.85);backdrop-filter:blur(3px);
-  box-shadow:0 8px 24px rgba(74,101,144,.18);padding:16px 20px}
+  border:1.5px solid var(--ink);border-radius:20px;background:rgba(255,255,255,.94);backdrop-filter:blur(4px);
+  box-shadow:0 4px 0 #18181B,0 12px 28px rgba(24,24,27,.08);padding:18px 22px}
 .col{display:flex;flex-direction:column;gap:12px;min-height:0}
-.col + .col{border-left:1.5px dashed rgba(111,111,117,.55);padding-left:22px;margin-left:-11px}
-.box{border:1.5px solid rgba(43,43,48,.7);border-radius:12px;background:#fffdf7;padding:10px 14px}
+.col + .col{border-left:1.5px dashed rgba(75,85,99,.38);padding-left:22px;margin-left:-11px}
+.box{border:1.5px solid rgba(24,24,27,.8);border-radius:14px;background:#ffffff;padding:12px 15px}
 .grow{flex:1;min-height:0;display:flex;flex-direction:column}
 .tagrow{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:8px;flex-wrap:wrap}
-.tag{display:inline-block;background:var(--pale);border-radius:6px;padding:0 10px;font-size:.78rem;text-transform:uppercase;letter-spacing:1px;color:#3a4a66}
-.tag.green{background:rgba(157,182,140,.6);color:#2f4a24}
-.tag.gold{background:var(--gold);color:#5a4a10}
-.thanks-line{color:var(--slate-d);font-family:'Kalam';font-size:1.15rem}
-.small{font-size:.92rem;color:#4a4a50}
-.small b{color:var(--ink)}
-.sectitle{font-size:.85rem;text-transform:uppercase;letter-spacing:1.2px;color:var(--slate-d);margin:8px 0 4px}
+.tag{display:inline-block;background:#F1E7FD;border-radius:999px;padding:3px 10px;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--violet)}
+.tag.green{background:#DCFCE7;color:#166534}
+.tag.gold{background:#FEF3C7;color:#92400E}
+.thanks-line{color:var(--slate-d);font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:.98rem}
+.small{font-size:.86rem;color:var(--gray);line-height:1.45}
+.small b{color:var(--ink);font-weight:600}
+.sectitle{font-size:.76rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--slate-d);margin:8px 0 4px}
 
 /* consensus bars */
-.bar{margin-top:7px}
-.bar .row{display:flex;align-items:center;gap:8px;font-size:.95rem}
+.bar{margin-top:8px}
+.bar .row{display:flex;align-items:center;gap:8px;font-size:.86rem;font-weight:500}
 .bar .name{flex:1}
-.chip{background:var(--ink);color:#fff;border-radius:999px;padding:0 10px;font-size:.78rem;letter-spacing:.5px;white-space:nowrap}
-.chip em{color:var(--gold);font-style:normal}
-.pct{font-family:'Kalam';font-size:1rem;min-width:40px;text-align:right}
-.track{height:9px;border:1.5px solid rgba(43,43,48,.7);border-radius:6px;background:#efe7cf;margin-top:3px;overflow:hidden}
-.fill{height:100%;width:0;background:var(--sage);border-radius:4px;transition:width 1.1s cubic-bezier(.2,.8,.2,1)}
-.fill.b{background:var(--slate)}.fill.c{background:#E3B23C}
+.chip{background:var(--ink);color:#fff;border-radius:999px;padding:2px 10px;font-size:.72rem;font-weight:600;letter-spacing:.04em;white-space:nowrap}
+.chip em{color:var(--gold);font-style:normal;font-weight:700}
+.pct{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:.92rem;min-width:40px;text-align:right}
+.track{height:9px;border:1.5px solid rgba(24,24,27,.75);border-radius:999px;background:#F3F4F6;margin-top:4px;overflow:hidden}
+.fill{height:100%;width:0;background:var(--sage);border-radius:999px;transition:width 1.1s cubic-bezier(.2,.8,.2,1)}
+.fill.b{background:var(--slate)}.fill.c{background:var(--gold)}
 
 /* video */
-.video{position:relative;flex:1;min-height:175px;border:1.5px solid var(--ink);border-radius:10px;overflow:hidden;
-  background:#dbe9d0 url('assets/sol-meadow-scene.jpg') center/cover no-repeat;margin-top:2px}
+.video{position:relative;flex:1;min-height:175px;border:1.5px solid var(--ink);border-radius:12px;overflow:hidden;
+  background:#dbe9d0 url('assets/sol-meadow-scene.jpg') center/cover no-repeat;margin-top:4px}
 .video-el{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .35s ease;pointer-events:none}
 .video.is-playing .video-el{opacity:1}
 .play{position:absolute;inset:0;width:100%;height:100%;background:transparent;border:0;cursor:pointer;display:grid;place-items:center;z-index:1}
 .play:hover{background:rgba(255,255,255,.12)}
 .play-badge{
-  width:52px;height:52px;border-radius:50%;background:rgba(248,243,228,.92);border:2px solid var(--ink);
-  box-shadow:0 4px 12px rgba(43,43,48,.35);display:grid;place-items:center;font-size:1.25rem;color:var(--ink);transition:transform .2s,opacity .25s;
+  width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.94);border:2px solid var(--ink);
+  box-shadow:0 4px 12px rgba(24,24,27,.35);display:grid;place-items:center;font-size:1.2rem;color:var(--ink);transition:transform .2s,opacity .25s;
 }
 .play:hover .play-badge{transform:scale(1.08)}
 .video.is-playing .play-badge{opacity:0;transform:scale(.85)}
 .video.is-playing:hover .play-badge{opacity:.9;transform:scale(1)}
-.video-caption{position:absolute;left:10px;right:10px;bottom:8px;background:rgba(43,43,48,.88);color:#fff;padding:3px 10px;border-radius:7px;font-size:.84rem;z-index:2;text-align:left}
-.cta{width:100%;margin-top:8px;padding:6px;border:1.5px solid var(--ink);border-radius:10px;background:var(--sage);font:inherit;font-size:1rem;text-transform:uppercase;letter-spacing:1.5px;cursor:pointer;box-shadow:0 2px 0 rgba(43,43,48,.3);transition:.15s;color:var(--ink);text-align:center;text-decoration:none;display:block}
+.video-caption{position:absolute;left:10px;right:10px;bottom:8px;background:rgba(24,24,27,.88);color:#fff;padding:4px 10px;border-radius:8px;font-size:.8rem;z-index:2;text-align:left}
+.cta{width:100%;margin-top:8px;padding:9px 12px;border:1.5px solid var(--ink);border-radius:10px;background:var(--sage);font-family:'Inter',sans-serif;font-weight:700;font-size:.84rem;text-transform:uppercase;letter-spacing:.06em;cursor:pointer;box-shadow:0 2px 0 rgba(24,24,27,.85);transition:.15s;color:var(--ink);text-align:center;text-decoration:none;display:block}
 .cta:hover{transform:translateY(1px);box-shadow:none}
-.note{margin-top:8px;font-size:.88rem;background:#F8F0D6;border:1.5px solid rgba(43,43,48,.5);border-radius:10px;padding:4px 10px}
-.note b{color:var(--earth)}
+.note{margin-top:8px;font-size:.82rem;background:#FFFBEB;border:1.5px solid rgba(24,24,27,.45);border-radius:10px;padding:6px 10px;color:#374151}
+.note b{color:var(--earth);font-weight:700}
 
 /* vote */
-.vote{flex:1;min-height:0;display:flex;flex-direction:column}
-.vote h2{font-size:1.25rem;margin:2px 0 6px}
-.opt{display:flex;align-items:center;gap:10px;border:1.5px solid rgba(43,43,48,.7);border-radius:10px;background:#fffdf7;padding:7px 12px;margin-top:8px;cursor:pointer;transition:.12s;flex:1;min-height:0}
+.vote{display:flex;flex-direction:column}
+.vote h2{font-size:1.2rem;margin:4px 0 6px}
+.opt{display:flex;align-items:center;gap:10px;border:1.5px solid rgba(24,24,27,.75);border-radius:12px;background:#FAFAFA;padding:8px 12px;margin-top:8px;cursor:pointer;transition:.12s}
 .opt:hover{background:var(--pale)}
-.opt.on{background:rgba(157,182,140,.45)}
+.opt.on{background:#ECFDF5;border-color:#059669}
 .opt div{flex:1}
-.opt strong{font-family:'Kalam';font-size:1.02rem;display:block}
-.opt span{font-size:.88rem;color:#4a4a50}
-.vote-badge{background:var(--pale);border:1px solid rgba(43,43,48,.35);border-radius:999px;padding:1px 8px;font-size:.76rem !important;color:#2B2B30 !important;white-space:nowrap;font-weight:700}
+.opt strong{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:.94rem;display:block;color:var(--ink);margin-bottom:2px}
+.opt span{font-size:.8rem;color:var(--gray);line-height:1.35;display:block}
+.vote-badge{background:var(--pale);border:1px solid rgba(24,24,27,.35);border-radius:999px;padding:2px 8px;font-size:.72rem !important;color:var(--ink) !important;white-space:nowrap;font-weight:700}
 .opt.on .vote-badge{background:var(--gold);border-color:var(--ink)}
 .opt .dot{width:20px;height:20px;border:1.5px solid var(--ink);border-radius:50%;background:#fff;flex:none;display:grid;place-items:center}
-.opt.on .dot::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--slate-d)}
-.vote .cta.primary{background:var(--slate);color:#fff}
-.vote .cta.primary:hover{background:var(--slate-d)}
-.vote .cta[disabled]{background:var(--sage);color:var(--ink);cursor:default}
+.opt.on .dot::after{content:"";width:10px;height:10px;border-radius:50%;background:#059669}
+.vote .cta.primary{background:linear-gradient(90deg,#D91B82 0%,#8B2CF5 100%);color:#fff}
+.vote .cta.primary:hover{opacity:.95}
+.vote .cta[disabled]{background:var(--sage);color:var(--ink);cursor:default;opacity:1}
+
+/* clinical dossier export */
+.export-dossier-btn{
+  width:100%;display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:10px 14px;border:1.5px solid var(--ink);border-radius:10px;
+  background:linear-gradient(90deg,#D91B82 0%,#8B2CF5 100%);
+  color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:.86rem;
+  letter-spacing:.01em;cursor:pointer;box-shadow:0 3px 0 #18181B;transition:transform .15s,box-shadow .15s,background .15s;
+  text-decoration:none;text-align:center;
+}
+.export-dossier-btn:hover{transform:translateY(-1px);box-shadow:0 4px 0 #18181B}
+.export-dossier-btn:active{transform:translateY(2px);box-shadow:none}
+.export-dossier-btn:focus-visible{outline:3px solid var(--violet);outline-offset:3px}
+.export-dossier-btn.is-copied{background:linear-gradient(90deg,#059669 0%,#10B981 100%);color:#fff}
 
 .share .link{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
-.share input{flex:1 1 180px;font:inherit;font-size:.95rem;padding:6px 10px;border:1.5px solid rgba(43,43,48,.7);border-radius:8px;background:#fffdf7;min-width:0}
-.share button{font:inherit;font-size:.9rem;letter-spacing:1px;padding:6px 12px;border:1.5px solid var(--ink);border-radius:8px;background:var(--pale);cursor:pointer;white-space:nowrap}
+.share input{flex:1 1 180px;font-family:'Inter',sans-serif;font-size:.85rem;padding:7px 10px;border:1.5px solid rgba(24,24,27,.75);border-radius:8px;background:#FAFAFA;min-width:0;color:var(--ink)}
+.share button{font-family:'Inter',sans-serif;font-weight:700;font-size:.78rem;letter-spacing:.05em;padding:7px 12px;border:1.5px solid var(--ink);border-radius:8px;background:var(--pale);cursor:pointer;white-space:nowrap;color:var(--ink)}
 .share button#share-native{background:var(--gold);font-weight:700}
 @media(max-width:520px){
   .share input{flex:1 1 100%}
   .share button{flex:1 1 calc(50% - 4px);text-align:center}
 }
 .socials{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
-.socials a{text-align:center;padding:5px 0;border:1.5px solid var(--ink);border-radius:8px;color:#fff;text-decoration:none;font-size:.95rem;cursor:pointer;transition:transform .12s,opacity .15s}
+.socials a{text-align:center;padding:6px 0;border:1.5px solid var(--ink);border-radius:8px;color:#fff;text-decoration:none;font-size:.84rem;font-weight:600;cursor:pointer;transition:transform .12s,opacity .15s}
 .socials a:hover{transform:translateY(-1px);opacity:.92}
 .s1{background:var(--slate)}.s2{background:var(--earth)}.s3{background:var(--ink)}
-.share-feedback{font-size:.82rem;color:var(--sage-d);margin-top:5px;min-height:1.1em;font-weight:700}
+.share-feedback{font-size:.8rem;color:var(--sage-d);margin-top:5px;min-height:1.1em;font-weight:700}
 .actions{display:grid;grid-template-columns:1.2fr 1fr;gap:10px;margin-top:auto}
 .actions .cta{margin-top:0}
 .actions .gold{background:var(--gold)}
-.actions .plain{background:#fffdf7}
+.actions .plain{background:#ffffff}
 .print-blueprint-summary{display:none}
 
 @media(max-width:860px){
   body{overflow:auto}.wrap{height:auto;min-height:100vh}
   .top{grid-template-columns:1fr;justify-items:center;text-align:center}.btn-sm{justify-self:center}.top-nav{justify-self:center;justify-content:center}
-  .card{grid-template-columns:1fr}.col+.col{border-left:0;margin-left:0;padding-left:0;border-top:1.5px dashed rgba(111,111,117,.55);padding-top:14px}
+  .card{grid-template-columns:1fr}.col+.col{border-left:0;margin-left:0;padding-left:0;border-top:1.5px dashed rgba(75,85,99,.38);padding-top:14px}
   .video{flex:none;aspect-ratio:16/10}
 }
 @media(min-width:861px){
   html,body{overflow-x:hidden;overflow-y:auto}
 }
 @media(min-width:861px) and (min-height:860px){
-  .wrap{height:100vh}
+  .wrap{min-height:100vh;height:auto}
 }
 @media print{
   @page{margin:0.4in}
   html,body{height:auto !important;min-height:0 !important;overflow:visible !important;background:#fff !important;-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important}
   .wrap{height:auto !important;min-height:0 !important;padding:0 !important}
-  #video-section-box,.box.vote,.btn-sm,.top-nav,.share,.actions,#restart-blueprint-btn,.play,#vote,#vote-prompt-hint,.video{display:none !important}
+  #video-section-box,.box.vote,.btn-sm,.top-nav,.share,.actions,#restart-blueprint-btn,.play,#vote,#vote-prompt-hint,.video,#dossier-export-box,.export-dossier-btn,#export-clinical-dossier-btn{display:none !important}
   .print-blueprint-summary{display:block !important;margin-top:12px !important}
-  .card{display:block !important;border:1.5px solid #2B2B30 !important;box-shadow:none !important;background:#fff !important;break-inside:avoid !important;page-break-inside:avoid !important}
+  .card{display:block !important;border:1.5px solid #18181B !important;box-shadow:none !important;background:#fff !important;break-inside:avoid !important;page-break-inside:avoid !important}
   .box{break-inside:avoid !important;page-break-inside:avoid !important}
   .col + .col{border-left:0 !important;padding-left:0 !important;margin-left:0 !important;margin-top:0 !important}
   .fill{transition:none !important}
@@ -180,12 +194,13 @@ h1,h2,h3{font-family:'Kalam',cursive;font-weight:700}
 <div class="wrap">
   <header class="top">
     <a class="brand" href="mockup-landing.html">
-      <svg width="40" height="40" viewBox="0 0 60 60"><g fill="none" stroke="#2B2B30" stroke-width="3" stroke-linecap="round"><circle cx="30" cy="30" r="11" fill="#F2D675"/><path d="M30 6v8M30 46v8M6 30h8M46 30h8M13 13l6 6M41 41l6 6M47 13l-6 6M19 41l-6 6"/></g></svg>
+      <svg width="38" height="38" viewBox="0 0 60 60"><g fill="none" stroke="#18181B" stroke-width="3" stroke-linecap="round"><circle cx="30" cy="30" r="11" fill="#F5B82E"/><path d="M30 6v8M30 46v8M6 30h8M46 30h8M13 13l6 6M41 41l6 6M47 13l-6 6M19 41l-6 6"/></g></svg>
       <span>SOL <b>THRiVE</b></span>
     </a>
     <h1>Here’s How Your Voice Shapes The Movement &amp; The <span class="hl">Community Blueprint</span></h1>
     <nav class="top-nav nav-links" aria-label="Site Navigation">
       <a class="btn-sm active" href="mockup-landing.html" aria-current="page">SOL THRiVE</a>
+      <a class="btn-sm" href="onboarding.html">Session 0 Hub</a>
       <a class="btn-sm" href="index.html">Enter Full Homepage →</a>
     </nav>
   </header>
@@ -247,6 +262,15 @@ h1,h2,h3{font-family:'Kalam',cursive;font-weight:700}
           <a class="s3" id="share-tt" href="https://www.tiktok.com/" target="_blank" rel="noopener noreferrer">TikTok</a>
         </div>
         <div class="share-feedback" id="share-feedback" aria-live="polite"></div>
+      </div>
+
+      <div class="box" id="dossier-export-box">
+        <div class="tagrow"><span class="tag">📋 LearnWorlds &amp; Personos Homework</span><span class="tag green" id="dossier-status-badge">Ready to Export</span></div>
+        <p class="small" style="margin-bottom:8px">Copy your formatted <b>Clinical Diagnostic Dossier</b> (Practice Audit, Flow Survey, THRiVE 6-Pillar Report &amp; HoPE Index) for 1-click homework submission or Personos AI setup.</p>
+        <button type="button" class="export-dossier-btn copy-master-prompt-btn" id="export-clinical-dossier-btn" data-export-dossier="true" data-inline-dossier-handled="true">
+          <span class="master-prompt-btn-label">📋 Export / Copy Clinical Dossier for LearnWorlds &amp; Personos</span>
+        </button>
+        <div class="share-feedback" id="dossier-export-feedback" aria-live="polite"></div>
       </div>
 
       <div class="actions">
@@ -526,6 +550,12 @@ document.getElementById('vote').onclick = function(){
     }
   } catch (_) {}
 
+  try {
+    if (window.ThriveCoachingDossier && typeof window.ThriveCoachingDossier.savePracticeAudit === 'function') {
+      window.ThriveCoachingDossier.savePracticeAudit(votePayload);
+    }
+  } catch (_) {}
+
   updateVoteTallies(priorities);
   this.textContent = '✓ Vote submitted — thank you!';
   this.disabled = true;
@@ -769,6 +799,157 @@ document.getElementById('download-pdf-btn').addEventListener('click', () => {
   if (typeof window.cleanupBlueprintAudio === 'function') window.cleanupBlueprintAudio();
   window.print();
 });
+
+// 6. 1-Click Clinical Dossier Export (LearnWorlds & Personos)
+function getCurrentAuditSnapshot(){
+  const selectedPriorities = [...document.querySelectorAll('.opt.on')].map(
+    o => o.getAttribute('data-priority') || (o.querySelector('strong') ? o.querySelector('strong').textContent.trim() : '')
+  ).filter(Boolean);
+  let fallbackPriorities = selectedPriorities;
+  if (!fallbackPriorities.length) {
+    try {
+      const savedVotes = JSON.parse(localStorage.getItem('solThriveVotes') || 'null');
+      if (savedVotes && Array.isArray(savedVotes.priorities)) fallbackPriorities = savedVotes.priorities;
+    } catch (_) {}
+  }
+  return {
+    first: d.first || 'Friend',
+    last: d.last || '',
+    email: d.email || '',
+    organization: d.organization || 'Community Supporter',
+    ratings: r,
+    priorities: fallbackPriorities,
+    timestamp: new Date().toISOString()
+  };
+}
+
+function buildStandaloneClinicalDossier(){
+  const snap = getCurrentAuditSnapshot();
+  const safeParse = (k) => {
+    try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch (_) { return null; }
+  };
+  const cached = safeParse('thrive_coaching_dossier_v1') || {};
+  const flowRaw = safeParse('thrive_flow_survey_state_v1');
+  const profileRaw = safeParse('thrive_profile_state_v1');
+  const hopeRaw = safeParse('hope_clinical_data_v5');
+
+  const lines = [
+    '# 5 to THRiVE — Clinical Diagnostic Dossier (LearnWorlds & Personos Export)',
+    `Generated: ${new Date().toISOString()}`,
+    `Practitioner / Respondent: ${snap.first}${snap.last ? ' ' + snap.last : ''} (${snap.organization})`,
+    '',
+    '## Section 00: Practice Readiness Audit & Community Blueprint',
+    `- Q1 Between-Session Engagement Without Prompting: ${snap.ratings[0]}/5`,
+    `- Q2 Clients Turning to Unverified AI / Search: ${snap.ratings[1]}/5`,
+    `- Q3 Need for Guardrailed HIPAA-Compliant AI Co-Pilot: ${snap.ratings[2]}/5`,
+    `- Selected Community Blueprint Priorities: ${snap.priorities.length ? snap.priorities.join(', ') : 'None selected yet'}`,
+    '',
+    '## Section 01: Baseline Flow Survey (survey.html)'
+  ];
+
+  if (cached.flowSurvey && typeof cached.flowSurvey.overallAverage === 'number') {
+    lines.push(`- Overall Flow Score: ${cached.flowSurvey.overallAverage}/5 (${cached.flowSurvey.overallPercent || Math.round((cached.flowSurvey.overallAverage / 5) * 100)}%)`);
+  } else if (flowRaw && flowRaw.scores && typeof flowRaw.scores === 'object') {
+    const vals = Object.values(flowRaw.scores).map(Number).filter(n => !Number.isNaN(n));
+    const avg = vals.length ? (vals.reduce((a, b) => a + b, 0) / vals.length).toFixed(2) : 'N/A';
+    lines.push(`- Recorded Responses: ${vals.length}/20 (Mean Rating: ${avg}/5)`);
+  } else {
+    lines.push('- Status: Not yet completed on this device (complete at survey.html)');
+  }
+
+  lines.push('', '## Section 02: THRiVE 6-Pillar Report (profile.html)');
+  if (cached.thriveReport && cached.thriveReport.pillars) {
+    lines.push('- Status: Completed & synced in unified dossier');
+  } else if (profileRaw && typeof profileRaw === 'object') {
+    lines.push(`- Status: In-progress / saved state detected (Step ${profileRaw.step || 1})`);
+  } else {
+    lines.push('- Status: Not yet completed on this device (complete at profile.html)');
+  }
+
+  lines.push('', '## Section 03: HoPE Clinical Index (hope-survey.html)');
+  if (cached.hopeIndex && typeof cached.hopeIndex === 'object') {
+    lines.push(`- Status: Completed (Overall Index: ${cached.hopeIndex.overallPercent ?? 'Recorded'}%)`);
+  } else if (hopeRaw && Array.isArray(hopeRaw.assessments) && hopeRaw.assessments.length > 0) {
+    lines.push(`- Status: ${hopeRaw.assessments.length} clinical assessment(s) recorded`);
+  } else {
+    lines.push('- Status: Not yet completed on this device (complete at hope-survey.html)');
+  }
+
+  lines.push(
+    '',
+    '## Section 04: Personos AI Execution Engine & LearnWorlds Homework Directive',
+    'Paste this Clinical Diagnostic Dossier into the LearnWorlds Squad Review Center or your Personos AI Execution Engine session to initialize between-session micro-reps and automated DAP notes.'
+  );
+  return lines.join('\n');
+}
+
+function refreshResultsDossierBadge(){
+  const badge = document.getElementById('dossier-status-badge');
+  if (!badge) return;
+  try {
+    if (window.ThriveCoachingDossier && typeof window.ThriveCoachingDossier.getCompletionSummary === 'function') {
+      const summary = window.ThriveCoachingDossier.getCompletionSummary();
+      const totalDone = typeof summary.totalCompleted === 'number' ? summary.totalCompleted : (summary.count || 0);
+      badge.textContent = totalDone > 0
+        ? `${totalDone}/4 Diagnostics Synced`
+        : 'Audit Ready to Export';
+    }
+  } catch (_) {}
+}
+
+const exportDossierBtn = document.getElementById('export-clinical-dossier-btn');
+const dossierFeedbackEl = document.getElementById('dossier-export-feedback');
+if (exportDossierBtn) {
+  exportDossierBtn.addEventListener('click', async function(){
+    fireThriveHaptic(15);
+    const snap = getCurrentAuditSnapshot();
+    let copied = false;
+    let promptText = '';
+
+    try {
+      if (window.ThriveCoachingDossier && typeof window.ThriveCoachingDossier.savePracticeAudit === 'function') {
+        window.ThriveCoachingDossier.savePracticeAudit(snap);
+      }
+    } catch (_) {}
+
+    if (window.ThriveCoachingDossier && typeof window.ThriveCoachingDossier.copyMasterPrompt === 'function') {
+      const res = await window.ThriveCoachingDossier.copyMasterPrompt(this);
+      copied = Boolean(res && res.copied);
+      promptText = (res && (res.promptText || res.prompt)) || '';
+    } else {
+      promptText = buildStandaloneClinicalDossier();
+      copied = await copyCampaignLink(promptText);
+      const labelEl = this.querySelector('.master-prompt-btn-label') || this;
+      if (!this.dataset.originalLabel) {
+        this.dataset.originalLabel = labelEl.textContent;
+      }
+      labelEl.textContent = copied ? '✓ Clinical Dossier Copied!' : '✓ Dossier Ready to Paste!';
+      this.classList.add('is-copied');
+      clearTimeout(this._dossierTimer);
+      this._dossierTimer = setTimeout(() => {
+        labelEl.textContent = this.dataset.originalLabel || '📋 Export / Copy Clinical Dossier for LearnWorlds & Personos';
+        this.classList.remove('is-copied');
+      }, 2600);
+      try {
+        window.dispatchEvent(new CustomEvent('thrive-dossier-exported', { detail: { copied, length: promptText.length } }));
+      } catch (_) {}
+    }
+
+    const msg = copied
+      ? '✓ Clinical Dossier copied! Paste into LearnWorlds Review Center or Personos AI.'
+      : '✓ Clinical Dossier prepared for clipboard!';
+    if (dossierFeedbackEl) {
+      dossierFeedbackEl.textContent = msg;
+      clearTimeout(dossierFeedbackEl._timer);
+      dossierFeedbackEl._timer = setTimeout(() => { dossierFeedbackEl.textContent = ''; }, 3500);
+    }
+    showShareFeedback(msg);
+    refreshResultsDossierBadge();
+  });
+}
+
+window.addEventListener('DOMContentLoaded', refreshResultsDossierBadge);
+window.addEventListener('thrive-dossier-updated', refreshResultsDossierBadge);
 </script>
 </body>
 </html>

@@ -2449,6 +2449,8 @@ a {
     .footer,
     .no-print,
     .copy-master-prompt-btn,
+    .export-dossier-btn,
+    .export-clinical-dossier-btn,
     .share-master-prompt-btn,
     .dossier-cta-bar,
     .dossier-status-pill,
@@ -2570,7 +2572,11 @@ a {
    MASTER AI COACHING DOSSIER & RESUME BANNER
    ========================================== */
 button.copy-master-prompt-btn,
-.copy-master-prompt-btn {
+.copy-master-prompt-btn,
+button.export-dossier-btn,
+.export-dossier-btn,
+button.export-clinical-dossier-btn,
+.export-clinical-dossier-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -2592,7 +2598,11 @@ button.copy-master-prompt-btn,
 }
 
 button.copy-master-prompt-btn:hover,
-.copy-master-prompt-btn:hover {
+.copy-master-prompt-btn:hover,
+button.export-dossier-btn:hover,
+.export-dossier-btn:hover,
+button.export-clinical-dossier-btn:hover,
+.export-clinical-dossier-btn:hover {
     transform: translate(-2px, -2px);
     box-shadow: 6px 6px 0 var(--ink-border, #1E2430);
     background-color: #F5C842;
@@ -2601,6 +2611,10 @@ button.copy-master-prompt-btn:hover,
 
 button.copy-master-prompt-btn.is-copied,
 .copy-master-prompt-btn.is-copied,
+button.export-dossier-btn.is-copied,
+.export-dossier-btn.is-copied,
+button.export-clinical-dossier-btn.is-copied,
+.export-clinical-dossier-btn.is-copied,
 button.share-master-prompt-btn.is-copied,
 .share-master-prompt-btn.is-copied {
     background: #059669 !important;

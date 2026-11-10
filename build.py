@@ -1,7 +1,7 @@
 import os, shutil
 
 out_dirs = ['dist', 'public']
-files = ['index.html', '404.html', 'mockup-landing.html', 'funnel.html', 'results.html', 'profile.html', 'survey.html', 'approach.html', 'how-to-use.html', 'rebuilding-life-challenges.html', 'employment-challenges.html', 'style.css', 'script.js', 'hope-survey.html', 'manifest.webmanifest', 'favicon.svg', 'favicon-32x32.png', 'apple-touch-icon.png', 'icon-192.png', 'icon-512.png', 'ai-avatar.png', 'minds-eye.png', 'minds-eye-animated.mp4', 'minds-eye-animated.webm']
+files = ['index.html', 'classes.html', 'onboarding.html', '404.html', 'mockup-landing.html', 'funnel.html', 'results.html', 'profile.html', 'survey.html', 'approach.html', 'how-to-use.html', 'rebuilding-life-challenges.html', 'employment-challenges.html', 'style.css', 'tailwind.css', 'script.js', 'hope-survey.html', 'manifest.webmanifest', 'favicon.svg', 'favicon-32x32.png', 'apple-touch-icon.png', 'icon-192.png', 'icon-512.png', 'ai-avatar.png', 'minds-eye.png', 'minds-eye-animated.mp4', 'minds-eye-animated.webm']
 
 # Archival design files kept in the repo but never referenced by any page.
 # They are skipped during the build (and any stale copies are removed from the output).
@@ -45,6 +45,15 @@ for out_dir in out_dirs:
             shutil.copy2(os.path.join(assets_src, asset), os.path.join(assets_dest, asset))
         for asset in excluded_assets:
             remove_if_exists(os.path.join(assets_dest, asset))
+
+    docs_src = 'docs'
+    docs_dest = os.path.join(out_dir, 'docs')
+    if os.path.exists(docs_src):
+        os.makedirs(docs_dest, exist_ok=True)
+        for doc_file in ['learnworlds-troubleshooting.md']:
+            src_doc = os.path.join(docs_src, doc_file)
+            if os.path.exists(src_doc):
+                shutil.copy2(src_doc, os.path.join(docs_dest, doc_file))
 
     revoked_keys = {
         "AIzaSyDhByu-gVi8PNLtDdl41ETxOmu2JOEVt8A",

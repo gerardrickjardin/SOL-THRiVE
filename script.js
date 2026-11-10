@@ -87,7 +87,8 @@ const initThriveUI = () => {
         'landingpage',
         'results',
         'classes',
-        'schedule'
+        'schedule',
+        'onboarding'
     ]);
 
     const normalizePageSlug = (rawPath) => {
@@ -1177,6 +1178,84 @@ const initThriveUI = () => {
         flex_pss: 'Q20 Psychological Safety Score (PSS)'
     };
 
+    const safeGetStorageItem = (storageType, key) => {
+        try {
+            if (storageType === 'session' && typeof sessionStorage !== 'undefined' && sessionStorage) {
+                return sessionStorage.getItem(key);
+            }
+            if (typeof localStorage !== 'undefined' && localStorage) {
+                return localStorage.getItem(key);
+            }
+        } catch (_) {}
+        return null;
+    };
+
+    const normalizePracticeAuditPayload = (auditData) => {
+        if (!auditData || typeof auditData !== 'object' || Array.isArray(auditData)) return null;
+        const rawFirst = String(auditData.first || auditData.fn || auditData.firstName || '').trim();
+        const first = rawFirst === 'Friend' ? '' : rawFirst;
+        const last = String(auditData.last || auditData.ln || auditData.lastName || '').trim();
+        const email = String(auditData.email || auditData.em || '').trim();
+        const organization = String(auditData.organization || auditData.org || '').trim();
+
+        let ratings = null;
+        if (Array.isArray(auditData.ratings) && auditData.ratings.length >= 3) {
+            const parsedRatings = auditData.ratings.slice(0, 3).map(v => {
+                const n = Number(v);
+                return Number.isFinite(n) && n >= 1 && n <= 5 ? n : null;
+            });
+            if (parsedRatings.some(n => n !== null)) {
+                ratings = parsedRatings;
+            }
+        }
+
+        const rawPrios = Array.isArray(auditData.priorities)
+            ? auditData.priorities
+            : (Array.isArray(auditData.votes) ? auditData.votes : (auditData.vote ? [auditData.vote] : []));
+        const priorities = rawPrios
+            .map(p => String(p || '').trim())
+            .filter(Boolean);
+
+        const hasMeaningfulData = Boolean(
+            ratings ||
+            priorities.length > 0 ||
+            first ||
+            last ||
+            email ||
+            organization
+        );
+        if (!hasMeaningfulData) return null;
+
+        return {
+            completedAt: auditData.completedAt || auditData.votedAt || auditData.timestamp || new Date().toISOString(),
+            first,
+            last,
+            email,
+            organization,
+            ratings,
+            priorities
+        };
+    };
+
+    const derivePracticeAuditFromStorage = () => {
+        const sessionObj = safeParseJSON(safeGetStorageItem('session', 'solThrive'));
+        const votesObj = safeParseJSON(safeGetStorageItem('local', 'solThriveVotes'));
+        const leadObj = safeParseJSON(safeGetStorageItem('local', 'solThriveLead'));
+        const localObj = safeParseJSON(safeGetStorageItem('local', 'solThrive'));
+
+        const sources = [votesObj, sessionObj, leadObj, localObj].filter(s => s && typeof s === 'object' && !Array.isArray(s));
+        if (sources.length === 0) return null;
+
+        const combined = {};
+        sources.slice().reverse().forEach(src => {
+            Object.assign(combined, src);
+        });
+        if (votesObj && Array.isArray(votesObj.priorities) && votesObj.priorities.length > 0) {
+            combined.priorities = votesObj.priorities;
+        }
+        return normalizePracticeAuditPayload(combined);
+    };
+
     const normalizeFlowSurveyPayload = (flowData) => {
         if (!flowData || typeof flowData !== 'object') return null;
         const problem = String(flowData.problem || flowData.problemStatement || '').trim();
@@ -1198,6 +1277,19 @@ const initThriveUI = () => {
             if (typeof dims.Actions === 'number') normalized.actionsScore = dims.Actions;
             if (typeof dims.Support === 'number') normalized.supportScore = dims.Support;
             if (typeof dims.Tools === 'number') normalized.toolsScore = dims.Tools;
+
+            const scoredList = Object.entries(dims)
+                .filter(([, val]) => typeof val === 'number' && Number.isFinite(val))
+                .sort((a, b) => b[1] - a[1]);
+            if (scoredList.length > 0) {
+                if (!normalized.strongestDimension) {
+                    normalized.strongestDimension = `${scoredList[0][0]} (${scoredList[0][1]}/25)`;
+                }
+                if (!normalized.lowestDimension) {
+                    const low = scoredList[scoredList.length - 1];
+                    normalized.lowestDimension = `${low[0]} (${low[1]}/25)`;
+                }
+            }
         }
         return normalized;
     };
@@ -1271,13 +1363,26 @@ const initThriveUI = () => {
     const deriveFromSavedStates = (dossier) => {
         const merged = { ...(dossier || {}) };
 
+        // 0. Derive Practice Readiness & Community Blueprint Audit (Section 00)
+        const storedAudit = derivePracticeAuditFromStorage();
+        if (merged.practiceAudit) {
+            const normExplicit = normalizePracticeAuditPayload(merged.practiceAudit);
+            if (normExplicit && storedAudit) {
+                merged.practiceAudit = normalizePracticeAuditPayload({ ...storedAudit, ...normExplicit });
+            } else {
+                merged.practiceAudit = normExplicit || storedAudit;
+            }
+        } else if (storedAudit) {
+            merged.practiceAudit = storedAudit;
+        }
+
         if (merged.flowSurvey) {
             merged.flowSurvey = normalizeFlowSurveyPayload(merged.flowSurvey);
         }
 
         // 1. Derive from thrive_flow_survey_state_v1 if not already present (only when all 20 questions are answered)
         if (!merged.flowSurvey) {
-            const flowState = safeParseJSON(typeof localStorage !== 'undefined' ? localStorage.getItem('thrive_flow_survey_state_v1') : null);
+            const flowState = safeParseJSON(safeGetStorageItem('local', 'thrive_flow_survey_state_v1'));
             if (
                 flowState &&
                 Array.isArray(flowState.scores) &&
@@ -1307,7 +1412,7 @@ const initThriveUI = () => {
         }
 
         // 2. Derive from thrive_profile_state_v1 if not already present
-        const profState = safeParseJSON(typeof localStorage !== 'undefined' ? localStorage.getItem('thrive_profile_state_v1') : null);
+        const profState = safeParseJSON(safeGetStorageItem('local', 'thrive_profile_state_v1'));
         if (!merged.thriveReport) {
             if (profState && profState.reportData && typeof profState.reportData === 'object') {
                 const rd = profState.reportData;
@@ -1358,7 +1463,7 @@ const initThriveUI = () => {
 
         // 3. Derive from thrive_hope_survey_state_v1 if not already present
         if (!merged.hopeIndex) {
-            const hopeState = safeParseJSON(typeof localStorage !== 'undefined' ? localStorage.getItem('thrive_hope_survey_state_v1') : null);
+            const hopeState = safeParseJSON(safeGetStorageItem('local', 'thrive_hope_survey_state_v1'));
             if (hopeState) {
                 if (hopeState.summary && typeof hopeState.summary.totalHoPEScore100 === 'number') {
                     merged.hopeIndex = hopeState.summary;
@@ -1382,7 +1487,7 @@ const initThriveUI = () => {
 
     const readDossier = () => {
         try {
-            const raw = safeParseJSON(localStorage.getItem(DOSSIER_KEY)) || {};
+            const raw = safeParseJSON(safeGetStorageItem('local', DOSSIER_KEY)) || {};
             return deriveFromSavedStates(raw);
         } catch (_) {
             return {};
@@ -1394,7 +1499,9 @@ const initThriveUI = () => {
             const current = readDossier();
             const next = typeof updater === 'function' ? updater(current) : { ...current, ...updater };
             next.updatedAt = new Date().toISOString();
-            localStorage.setItem(DOSSIER_KEY, JSON.stringify(next));
+            if (typeof localStorage !== 'undefined' && localStorage) {
+                localStorage.setItem(DOSSIER_KEY, JSON.stringify(next));
+            }
             refreshStatusBadges();
             if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function') {
                 window.dispatchEvent(new CustomEvent('thrive-dossier-updated', { detail: next }));
@@ -1403,6 +1510,19 @@ const initThriveUI = () => {
         } catch (_) {
             return {};
         }
+    };
+
+    const savePracticeAudit = (auditData) => {
+        const normalized = normalizePracticeAuditPayload(auditData);
+        if (!normalized) return readDossier();
+        return writeDossier(prev => ({
+            ...prev,
+            practiceAudit: {
+                ...(prev.practiceAudit || {}),
+                ...normalized,
+                completedAt: normalized.completedAt || new Date().toISOString()
+            }
+        }));
     };
 
     const saveFlowSurvey = (flowData) => {
@@ -1452,6 +1572,12 @@ const initThriveUI = () => {
 
     const getCompletionSummary = (customDossier) => {
         const d = customDossier ? deriveFromSavedStates(customDossier) : readDossier();
+        const hasPracticeAudit = Boolean(
+            d.practiceAudit && (
+                (Array.isArray(d.practiceAudit.ratings) && d.practiceAudit.ratings.some(n => typeof n === 'number' && n > 0)) ||
+                (Array.isArray(d.practiceAudit.priorities) && d.practiceAudit.priorities.length > 0)
+            )
+        );
         const hasFlow = Boolean(d.flowSurvey && (d.flowSurvey.problem || d.flowSurvey.problemStatement || typeof d.flowSurvey.currentScore === 'number'));
         const hasProfile = Boolean(
             d.thriveReport &&
@@ -1460,7 +1586,8 @@ const initThriveUI = () => {
         );
         const hasHope = Boolean(d.hopeIndex && typeof d.hopeIndex.totalHoPEScore100 === 'number');
         const count = (hasFlow ? 1 : 0) + (hasProfile ? 1 : 0) + (hasHope ? 1 : 0);
-        return { count, hasFlow, hasProfile, hasHope, dossier: d };
+        const totalCompleted = count + (hasPracticeAudit ? 1 : 0);
+        return { count, totalCompleted, hasPracticeAudit, hasFlow, hasProfile, hasHope, dossier: d };
     };
 
     const getTierLabel = (score25) => {
@@ -1469,26 +1596,62 @@ const initThriveUI = () => {
         return 'Low / Friction Drop';
     };
 
+    const countPillarItems = (text) => {
+        const cleaned = String(text || '').trim();
+        if (!cleaned) return 0;
+        const lines = cleaned.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+        if (lines.length > 1) return lines.length;
+        return cleaned.split(/[,;•]+/).map(s => s.trim()).filter(Boolean).length;
+    };
+
     const buildMasterPrompt = (customDossier) => {
-        const { count, hasFlow, hasProfile, hasHope, dossier } = getCompletionSummary(customDossier);
+        const { count, totalCompleted, hasPracticeAudit, hasFlow, hasProfile, hasHope, dossier } = getCompletionSummary(customDossier);
+        const pa = dossier.practiceAudit || {};
+        const tr = dossier.thriveReport || {};
+        const fullName = [pa.first, pa.last].filter(Boolean).join(' ').trim() || tr.interviewee || 'Unspecified';
+        const orgLabel = pa.organization || '5 to THRiVE Practitioner Lab';
+        const contactEmail = pa.email || tr.email || 'Unspecified';
         const lines = [];
 
-        lines.push('=== SOL THRiVE • MASTER AI COACHING DOSSIER (PERSONOS AI PROMPT) ===');
-        lines.push(`Completed Diagnostic Steps Included: ${count} of 3 (${[
+        lines.push('================================================================================');
+        lines.push('5 TO THRiVE PRACTITIONER LAB • CLINICAL DOSSIER & HOMEWORK SUBMISSION');
+        lines.push('Destination: LearnWorlds Review Center & Personos AI Execution Engine');
+        lines.push('================================================================================');
+        lines.push(`Exported: ${new Date().toISOString()}`);
+        lines.push(`Practitioner / Client: ${fullName}`);
+        lines.push(`Organization / Cohort: ${orgLabel}`);
+        lines.push(`Contact Email: ${contactEmail}`);
+        lines.push(`Diagnostic Baseline Progress: ${totalCompleted} of 4 Sections Recorded (${[
+            hasPracticeAudit ? '✓ Section 0: Practice Audit' : '○ Section 0: Practice Audit',
             hasFlow ? '✓ Step 1: Flow Survey' : '○ Step 1: Flow Survey',
-            hasProfile ? '✓ Step 2: THRiVE Strengths Report' : '○ Step 2: THRiVE Strengths Report',
+            hasProfile ? '✓ Step 2: THRiVE Report' : '○ Step 2: THRiVE Report',
             hasHope ? '✓ Step 3: HoPE Index' : '○ Step 3: HoPE Index'
         ].join(' | ')})`);
         lines.push('');
 
-        // STEP 1: FLOW SURVEY
-        lines.push('------------------------------------------------------------');
-        lines.push('1. STEP 01 — FLOW SURVEY (FRICTION & FLOW DIAGNOSTIC)');
-        lines.push('------------------------------------------------------------');
+        // SECTION 0: PRACTICE READINESS & COMMUNITY BLUEPRINT AUDIT
+        lines.push('--------------------------------------------------------------------------------');
+        lines.push('0. SECTION 00 — PRACTICE READINESS & COMMUNITY BLUEPRINT AUDIT (results.html)');
+        lines.push('--------------------------------------------------------------------------------');
+        if (hasPracticeAudit) {
+            const ratings = Array.isArray(pa.ratings) ? pa.ratings : [null, null, null];
+            lines.push(`• Between-Session Engagement Without Prompting: ${ratings[0] != null ? `${ratings[0]} / 5` : 'Unrated'} (Community Consensus: 84%)`);
+            lines.push(`• Clients Seeking Unverified AI / Search for Distress: ${ratings[1] != null ? `${ratings[1]} / 5` : 'Unrated'} (Community Consensus: 94%)`);
+            lines.push(`• Guardrailed, HIPAA-Compliant AI Co-Pilot & DAP Notes: ${ratings[2] != null ? `${ratings[2]} / 5` : 'Unrated'} (Community Consensus: 89%)`);
+            lines.push(`• Voted Blueprint Priorities: ${Array.isArray(pa.priorities) && pa.priorities.length > 0 ? pa.priorities.join(', ') : 'None selected yet'}`);
+        } else {
+            lines.push('[Not yet completed on this device — Complete the Practice Readiness & Community Blueprint Audit at results.html or funnel.html.]');
+        }
+        lines.push('');
+
+        // SECTION 1: FLOW SURVEY
+        lines.push('--------------------------------------------------------------------------------');
+        lines.push('1. SECTION 01 — THE FLOW SURVEY (FRICTION & FLOW DIAGNOSTIC) (survey.html)');
+        lines.push('--------------------------------------------------------------------------------');
         if (hasFlow) {
             const fs = normalizeFlowSurveyPayload(dossier.flowSurvey) || dossier.flowSurvey;
             if (fs.problem) {
-                lines.push(`• Specific Friction ("What Is It?"): "${fs.problem}"`);
+                lines.push(`• Primary "Ugg" Friction Point ("What Is It?"): "${fs.problem}"`);
             }
             if (fs.metaphor) {
                 lines.push(`• Chosen Experience Metaphor ("What Is It Like?"): ${fs.metaphor}${fs.metaphorDesc ? ` — ${fs.metaphorDesc}` : ''}`);
@@ -1500,7 +1663,7 @@ const initThriveUI = () => {
                 lines.push(`• Current Flow Score: ${fs.currentScore} / 100 (THRiVE 60% Friction-Reduction Target: ${target} / 100)`);
             }
             if (fs.dimensions) {
-                lines.push('• Flow Dimension Breakdown (each 0–25):');
+                lines.push('• 4-Dimension Flow Breakdown (0–25 Scale):');
                 ['Agency', 'Actions', 'Support', 'Tools'].forEach(dim => {
                     if (typeof fs.dimensions[dim] === 'number') {
                         const s = fs.dimensions[dim];
@@ -1515,44 +1678,46 @@ const initThriveUI = () => {
                 lines.push(`• Primary Friction Drop: ${fs.lowestDimension}`);
             }
         } else {
-            lines.push('[Not yet completed — User can complete the 3-minute Flow Survey at survey.html to pinpoint their specific friction and Agency/Actions/Support/Tools scores.]');
+            lines.push('[Not yet completed on this device — Complete the 3-minute Flow Survey at survey.html to pinpoint specific friction and Agency/Actions/Support/Tools scores.]');
         }
         lines.push('');
 
-        // STEP 2: THRIVE REPORT
-        lines.push('------------------------------------------------------------');
-        lines.push('2. STEP 02 — THE THRiVE REPORT (6-PILLAR STRENGTHS INVENTORY)');
-        lines.push('------------------------------------------------------------');
+        // SECTION 2: THRIVE REPORT
+        lines.push('--------------------------------------------------------------------------------');
+        lines.push('2. SECTION 02 — THE THRiVE REPORT (6-PILLAR STRENGTHS INVENTORY) (profile.html)');
+        lines.push('--------------------------------------------------------------------------------');
         if (hasProfile) {
-            const tr = dossier.thriveReport;
             if (tr.interviewee || tr.interviewer) {
-                lines.push(`• Client / Interviewee: ${tr.interviewee || 'Unspecified'}${tr.interviewer ? ` (Interviewed by ${tr.interviewer})` : ''}`);
+                lines.push(`• Client / Interviewee: ${tr.interviewee || 'Unspecified'}${tr.interviewer ? ` (Interviewed by: ${tr.interviewer})` : ''}`);
             }
             if (tr.email) {
                 lines.push(`• Contact Email: ${tr.email}`);
             }
+            lines.push('• Clinical Quota Guideline: 3 to 5 Verified Items Per Pillar');
             const pillarLabels = [
-                ['traits', 'Traits (T) — Core Qualities & Superpowers'],
-                ['hobbies', 'Hobbies (H) — Energy Generators & Flow Activities'],
-                ['relationships', 'Relationships (R) — Supportive Ensemble Cast'],
-                ['interests', 'Interests (I) — Intellectual Curiosity & Rabbit Holes'],
-                ['values', 'Values (V) — Non-Negotiable Principles'],
-                ['experiences', 'Experiences (E) — Peak Memories & Highlight Reel']
+                ['traits', 'Traits (T) — Core Qualities & Innate Superpowers'],
+                ['hobbies', 'Hobbies (H) — Flow-State Energy Generators'],
+                ['relationships', 'Relationships (R) — Supportive Cast & Accountability Mirrors'],
+                ['interests', 'Interests (I) — Intellectual Curiosity Compass'],
+                ['values', 'Values (V) — Non-Negotiable Operating Principles'],
+                ['experiences', 'Experiences (E) — Crucible Moments & Highlight Reel']
             ];
             pillarLabels.forEach(([key, label]) => {
                 const val = tr.pillars?.[key] ? String(tr.pillars[key]).trim() : '';
-                lines.push(`• ${label}:`);
-                lines.push(val ? val : '  (Not yet recorded)');
+                const itemCount = countPillarItems(val);
+                const countSuffix = itemCount > 0 ? ` [${itemCount} item${itemCount === 1 ? '' : 's'} logged]` : '';
+                lines.push(`• ${label}${countSuffix}:`);
+                lines.push(val ? `  ${val.replace(/\r?\n/g, '\n  ')}` : '  (Not yet recorded)');
             });
         } else {
-            lines.push('[Not yet completed — User can build their 6-pillar THRiVE Strengths Report at profile.html across Traits, Hobbies, Relationships, Interests, Values, and Experiences.]');
+            lines.push('[Not yet completed on this device — Build the 6-pillar THRiVE Strengths Report at profile.html across Traits, Hobbies, Relationships, Interests, Values, and Experiences.]');
         }
         lines.push('');
 
-        // STEP 3: HOPE INDEX
-        lines.push('------------------------------------------------------------');
-        lines.push('3. STEP 03 — THE HoPE INDEX (20 LIFE ANCHORS & CONTEXTUAL LAYERING)');
-        lines.push('------------------------------------------------------------');
+        // SECTION 3: HOPE INDEX
+        lines.push('--------------------------------------------------------------------------------');
+        lines.push('3. SECTION 03 — THE HoPE INDEX (20 LIFE ANCHORS & CONTEXTUAL LAYERING) (hope-survey.html)');
+        lines.push('--------------------------------------------------------------------------------');
         if (hasHope) {
             const hi = dossier.hopeIndex;
             lines.push(`• Total HoPE Capacity Score: ${hi.totalHoPEScore100}% (${hi.tierText || 'ASSESSED'})`);
@@ -1564,7 +1729,7 @@ const initThriveUI = () => {
                 lines.push(`• Priority Growth Focus Area: ${hi.lowestDimension.name} (${Number(hi.lowestDimension.score).toFixed(1)} / 5.0 in ${hi.lowestDimension.space || 'HoPE Index'})`);
             }
             if (Array.isArray(hi.dimensions) && hi.dimensions.length > 0) {
-                lines.push('• 6 Core Dimension Averages:');
+                lines.push('• 6 Core Dimension Averages (0–5.0 Scale):');
                 hi.dimensions.forEach(d => {
                     if (d && d.name) {
                         const scStr = (d.score !== null && d.score !== undefined) ? `${Number(d.score).toFixed(1)} / 5.0` : 'Unrated';
@@ -1593,35 +1758,38 @@ const initThriveUI = () => {
                 }
             }
         } else {
-            lines.push('[Not yet completed — User can complete the 20-question HoPE Index at hope-survey.html to benchmark their Outer Physical Space, Inner Relational Space, and Psychological Safety.]');
+            lines.push('[Not yet completed on this device — Complete the 20-question HoPE Index at hope-survey.html to benchmark Outer Physical Space, Inner Relational Space, and Psychological Safety.]');
         }
         lines.push('');
 
-        // COACHING INSTRUCTIONS
-        lines.push('------------------------------------------------------------');
-        lines.push('4. INSTRUCTIONS FOR PERSONOS AI COACH');
-        lines.push('------------------------------------------------------------');
-        lines.push('Please act as my SOL THRiVE Corner Coach (grounded in The Strengths Model, the CYNEFIN Framework, and The Heart & Soul of Change):');
-        lines.push('1. Empathy & Sense-Making ("Rate the Level, Not the Player"): Validate the environmental and relational friction shown above without judgment.');
-        lines.push('2. Strengths-First Synthesis: Connect my THRiVE Report strengths (Traits, Hobbies, Relationships, Interests, Values, Experiences) and strongest Flow/HoPE anchors directly to my primary friction point and lowest-scoring dimension.');
-        lines.push('3. Five Simple, Practical, and Fun (SPF) Next Steps: Propose 5 concrete, manageable micro-experiments I can try this week to reduce my friction by 60% and build daily momentum.');
+        // SECTION 4: PERSONOS AI & LEARNWORLDS DIRECTIVES
+        lines.push('--------------------------------------------------------------------------------');
+        lines.push('4. SECTION 04 — PERSONOS AI EXECUTION ENGINE & LEARNWORLDS HOMEWORK DIRECTIVE');
+        lines.push('--------------------------------------------------------------------------------');
+        lines.push('Please act as my 5 to THRiVE Clinical Force Multiplier and Corner Coach (grounded in SOL Theory, RellaFit, The Strengths Model, and CYNEFIN):');
+        lines.push('1. Grounding in the Observer Stance ("Rate the Level, Not the Player"): Validate the environmental and relational friction documented above without pathologizing the individual.');
+        lines.push('2. Strengths-First Synthesis: Anchor the 6 THRiVE pillars (Traits, Hobbies, Relationships, Interests, Values, Experiences) and strongest Flow/HoPE dimensions directly against the primary friction drop.');
+        lines.push('3. Five Simple, Practical, and Fun (SPF) Action Board Steps: Formulate 5 concrete micro-experiments for the 167 hours between clinical sessions to reduce friction by 60%.');
+        lines.push('4. Automated Clinical DAP Note Draft: Structure session insights into audit-ready Data, Assessment, and Plan sections for practitioner review and LearnWorlds Review Center submission.');
+        lines.push('================================================================================');
 
         return lines.join('\n');
     };
 
     const refreshStatusBadges = () => {
         if (typeof document === 'undefined') return;
-        const { count, hasFlow, hasProfile, hasHope } = getCompletionSummary();
+        const { count, hasPracticeAudit, hasFlow, hasProfile, hasHope } = getCompletionSummary();
         document.querySelectorAll('[data-dossier-status]').forEach(el => {
-            if (count === 0) {
-                el.textContent = 'Ready to combine your 3 steps (0/3 saved so far)';
+            if (count === 0 && !hasPracticeAudit) {
+                el.textContent = 'Ready to combine your baseline diagnostics (0/3 core tools saved)';
             } else {
                 const names = [
+                    hasPracticeAudit ? 'Practice Audit' : null,
                     hasFlow ? 'Flow Survey' : null,
                     hasProfile ? 'THRiVE Report' : null,
                     hasHope ? 'HoPE Index' : null
                 ].filter(Boolean).join(' + ');
-                el.textContent = `${count}/3 Steps Ready (${names})`;
+                el.textContent = `${count}/3 Core Diagnostics Ready (${names})`;
             }
         });
     };
@@ -1693,16 +1861,35 @@ const initThriveUI = () => {
         }, 2500);
     };
 
+    const announceDossierLiveFeedback = (msg) => {
+        if (typeof document === 'undefined' || typeof document.getElementById !== 'function') return;
+        const liveEl = document.getElementById('dossier-export-feedback') || document.getElementById('share-feedback');
+        if (!liveEl) return;
+        liveEl.textContent = msg;
+        if (liveEl._dossierFeedbackTimer) clearTimeout(liveEl._dossierFeedbackTimer);
+        liveEl._dossierFeedbackTimer = setTimeout(() => {
+            if (liveEl.textContent === msg) liveEl.textContent = '';
+        }, 3200);
+    };
+
     const copyMasterPrompt = async (triggerBtn, customDossier) => {
         fireThriveHaptic(15);
         const promptText = buildMasterPrompt(customDossier);
         const ok = await copyTextWithFallback(promptText);
         setDossierBtnFeedback(
             triggerBtn,
-            ok ? 'Copied ✓' : 'Copied to Clipboard ✓',
-            '📋 Copy Master AI Coaching Prompt'
+            ok ? '✓ Clinical Dossier Copied!' : 'Copied to Clipboard ✓',
+            '📋 Export / Copy Clinical Dossier for LearnWorlds & Personos'
         );
-        return { ok, method: 'clipboard', shared: false, copied: ok, canceled: false, promptText };
+        announceDossierLiveFeedback(
+            ok
+                ? '✓ Clinical Dossier copied to clipboard for LearnWorlds Review Center & Personos AI!'
+                : '⚠️ Clipboard blocked — please copy your diagnostic results manually.'
+        );
+        if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function') {
+            window.dispatchEvent(new CustomEvent('thrive-dossier-exported', { detail: { ok, copied: ok, promptText, length: promptText.length } }));
+        }
+        return { ok, method: 'clipboard', shared: false, copied: ok, canceled: false, promptText, prompt: promptText };
     };
 
     const shareWithFallback = async (sharePayload = {}, triggerBtn = null, options = {}) => {
@@ -1717,7 +1904,7 @@ const initThriveUI = () => {
             : [cleanPayload.text, cleanPayload.url].filter(Boolean).join('\n');
         const defaultLabel = options.defaultLabel || '📤 Share Dossier';
         const sharedLabel = options.sharedLabel || 'Shared ✓';
-        const copiedLabel = options.copiedLabel || 'Copied ✓';
+        const copiedLabel = options.copiedLabel || '✓ Clinical Dossier Copied!';
 
         if (isGlobalSharing || (triggerBtn && triggerBtn._isSharing)) {
             return { ok: false, method: 'share', shared: false, copied: false, canceled: true, text: fallbackText };
@@ -1750,7 +1937,7 @@ const initThriveUI = () => {
         const promptText = buildMasterPrompt(customDossier);
         const res = await shareWithFallback(
             {
-                title: 'SOL THRiVE • Master AI Coaching Dossier',
+                title: '5 to THRiVE Practitioner Lab • Clinical Dossier',
                 text: promptText
             },
             triggerBtn,
@@ -1758,7 +1945,7 @@ const initThriveUI = () => {
                 fallbackText: promptText,
                 defaultLabel: '📤 Share Dossier',
                 sharedLabel: 'Shared ✓',
-                copiedLabel: 'Copied ✓'
+                copiedLabel: '✓ Clinical Dossier Copied!'
             }
         );
         return { ...res, promptText };
@@ -1766,13 +1953,16 @@ const initThriveUI = () => {
 
     window.ThriveCoachingDossier = {
         readDossier,
+        savePracticeAudit,
         saveFlowSurvey,
         saveThriveReport,
         saveHopeIndex,
         getCompletionSummary,
         getSummaryStatus: getCompletionSummary,
         buildMasterPrompt,
+        buildClinicalDossier: buildMasterPrompt,
         copyMasterPrompt,
+        exportClinicalDossier: copyMasterPrompt,
         shareMasterPrompt,
         shareWithFallback,
         canNativeShare,
@@ -1795,9 +1985,9 @@ const initThriveUI = () => {
             }
 
             const btn = e.target && typeof e.target.closest === 'function'
-                ? e.target.closest('.copy-master-prompt-btn')
+                ? e.target.closest('.copy-master-prompt-btn, .export-dossier-btn, .export-clinical-dossier-btn, [data-export-dossier]')
                 : null;
-            if (btn && !btn.hasAttribute('data-react-handled')) {
+            if (btn && !btn.hasAttribute('data-react-handled') && !btn.hasAttribute('data-inline-dossier-handled')) {
                 e.preventDefault();
                 copyMasterPrompt(btn);
             }

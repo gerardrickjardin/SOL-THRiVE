@@ -424,8 +424,28 @@ If LearnWorlds' asynchronous scripts or background timers attempt to re-inject t
   // Run initial sweep
   purgeModal();
 
-  // Attach persistent observer to document body
-  const observer = new MutationObserver(() => purgeModal());
+  // Attach persistent observer to document body (fast-filters addedNodes to avoid O(N^2) scans)
+  const hasModalNode = (mutations) => {
+    if (!Array.isArray(mutations) || mutations.length === 0) return true;
+    for (let i = 0; i < mutations.length; i++) {
+      const added = mutations[i].addedNodes;
+      if (!added || added.length === 0) continue;
+      for (let j = 0; j < added.length; j++) {
+        const n = added[j];
+        if (!n) continue;
+        const cls = typeof n.className === 'string' ? n.className : '';
+        if (cls.includes('wizard-') || cls.includes('modal-backdrop')) return true;
+        if (typeof n.querySelector === 'function' && n.querySelector('.wizard-window-wrapper, .wizard-backdrop, .modal-backdrop, [class*="wizard-"]')) {
+          return true;
+        }
+      }
+    }
+    return false;
+  };
+
+  const observer = new MutationObserver((mutations) => {
+    if (hasModalNode(mutations)) purgeModal();
+  });
   observer.observe(document.body, { childList: true, subtree: true });
 
   console.log('[THRiVE LMS]: Persistent Modal Guard active. Wizard will not reappear this session.');
@@ -497,7 +517,11 @@ For power users who maintain userscript managers (**Tampermonkey**, **Violentmon
     }
 
     dismissWizard();
-    const obs = new MutationObserver(dismissWizard);
+    const obs = new MutationObserver((mutations) => {
+        if (!Array.isArray(mutations) || mutations.some(m => m.addedNodes && m.addedNodes.length > 0)) {
+            dismissWizard();
+        }
+    });
     obs.observe(document.body, { childList: true, subtree: true });
 })();
 ```

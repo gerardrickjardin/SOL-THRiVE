@@ -196,12 +196,15 @@
             <ul class="nav-links">
                 <li><a href="index.html#about">About</a></li>
                 <li><a href="approach.html">Our Approach</a></li>
+                <li><a href="classes.html">Classes</a></li>
+                <li><a href="onboarding.html">Session 0 Hub</a></li>
                 <li><a href="profile.html">THRiVE Report</a></li>
                 <li><a href="hope-survey.html">HoPE Index</a></li>
                 <li class="dropdown">
                     <a href="how-to-use.html">How To Use <span class="dropdown-caret">&#9662;</span></a>
                     <div class="dropdown-content">
                         <a href="how-to-use.html">Overview &amp; Guide</a>
+                        <a href="onboarding.html">Session 0 Pre-Flight Hub</a>
                         <a href="rebuilding-life-challenges.html">Rebuilding Life Challenges</a>
                         <a href="employment-challenges.html">Employment Challenges</a>
                     </div>
@@ -216,6 +219,8 @@
             <div class="menu-title">FIND YOUR FLOW</div>
             <ul>
                 <li><a href="index.html">Home</a></li>
+                <li><a href="onboarding.html">Session 0 Pre-Flight Hub</a></li>
+                <li><a href="classes.html">Classes</a></li>
                 <li><a href="survey.html" class="active" aria-current="page">Flow Survey</a></li>
                 <li><a href="profile.html">THRiVE Report</a></li>
                 <li><a href="hope-survey.html">HoPE Index</a></li>
@@ -223,6 +228,7 @@
                 <li class="dropdown">
                     <a href="how-to-use.html">How To Use This Page</a>
                     <div class="dropdown-content">
+                        <a href="onboarding.html">Session 0 Pre-Flight Hub</a>
                         <a href="rebuilding-life-challenges.html">Rebuilding Life Challenges</a>
                         <a href="employment-challenges.html">Employment Challenges</a>
                     </div>
@@ -630,8 +636,8 @@
                             <span class="text-xl">📊</span> View Detailed Interpretation
                         </button>
                         <div class="flex flex-col sm:flex-row gap-2.5 w-full">
-                            <button type="button" class="copy-master-prompt-btn flex-1 justify-center">
-                                📋 Copy Master AI Coaching Prompt
+                            <button type="button" id="results-export-dossier-btn" data-export-dossier="true" class="export-dossier-btn copy-master-prompt-btn flex-1 justify-center">
+                                <span class="master-prompt-btn-label">📋 Export / Copy Clinical Dossier for LearnWorlds &amp; Personos</span>
                             </button>
                             <button type="button" id="results-share-dossier-btn" data-share-master-prompt class="share-master-prompt-btn justify-center">
                                 📤 Share Dossier
@@ -718,8 +724,8 @@
                             <span class="text-xl">📸</span> Save as Image (JPG)
                         </button>
                         <div class="flex flex-col sm:flex-row gap-2.5 w-full">
-                            <button type="button" class="copy-master-prompt-btn flex-1 justify-center">
-                                📋 Copy Master AI Coaching Prompt
+                            <button type="button" id="summary-export-dossier-btn" data-export-dossier="true" class="export-dossier-btn copy-master-prompt-btn flex-1 justify-center">
+                                <span class="master-prompt-btn-label">📋 Export / Copy Clinical Dossier for LearnWorlds &amp; Personos</span>
                             </button>
                             <button type="button" id="summary-share-dossier-btn" data-share-master-prompt class="share-master-prompt-btn justify-center">
                                 📤 Share Dossier
@@ -803,6 +809,25 @@
 
     </main>
 
+    <section class="no-print" aria-label="Clinical Diagnostic Dossier Export" style="max-width: 1100px; margin: 0 auto 2.5rem; padding: 0 1rem; width: 100%;">
+        <div class="dossier-cta-bar">
+            <div class="dossier-cta-info">
+                <span class="dossier-status-pill" data-dossier-status>0/3 Tools Saved in Coaching Dossier</span>
+                <h4>5 to THRiVE Clinical Diagnostic Dossier</h4>
+                <p>1-click export of your saved Flow Survey, THRiVE 6-Pillar Report &amp; HoPE Index for LearnWorlds Squad homework or Personos AI setup.</p>
+            </div>
+            <div class="dossier-cta-actions">
+                <button type="button" id="survey-persistent-export-dossier-btn" data-export-dossier="true" class="export-dossier-btn copy-master-prompt-btn">
+                    <span class="master-prompt-btn-label">📋 Export / Copy Clinical Dossier for LearnWorlds &amp; Personos</span>
+                </button>
+                <button type="button" data-share-master-prompt class="share-master-prompt-btn">
+                    📤 Share Dossier
+                </button>
+            </div>
+        </div>
+        <div id="dossier-export-feedback" aria-live="polite" style="font-size: 0.85rem; font-weight: 700; color: #059669; margin-top: 0.5rem; text-align: center; min-height: 1.25rem;"></div>
+    </section>
+
     <footer class="footer no-print">
         <div class="footer-content">
             <div class="footer-brand">
@@ -810,6 +835,8 @@
                 <p>Evidence-based psychology meets applied AI to help you find your flow.</p>
             </div>
             <div class="footer-nav">
+                <a href="onboarding.html">Session 0 Hub</a>
+                <a href="classes.html">Classes</a>
                 <a href="survey.html">Flow Survey</a>
                 <a href="profile.html">THRiVE Report</a>
                 <a href="hope-survey.html">HoPE Index</a>

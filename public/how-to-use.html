@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>How To Use — THRiVE Coaching</title>
-    <meta name="description" content="Learn how to test-drive Personos AI with pre-built Common GAPS coaching scenarios across Rebuilding Life Challenges and Employment Challenges.">
+    <title>Practitioner Guide &amp; IT Help Desk — THRiVE Coaching</title>
+    <meta name="description" content="Complete practitioner guide to the 3-Tier Clinical Ecosystem (thrivecoaching.ai, LearnWorlds Squads, and Personos AI), Review Center homework walkthrough, DevTools modal bypass, IT Help Desk, and Common GAPS simulation lab.">
     <meta name="theme-color" content="#F7F4EB">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -16,21 +16,509 @@
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="SOL THRiVE Coaching">
-    <meta property="og:title" content="How To Use Personos AI — THRiVE Coaching">
-    <meta property="og:description" content="Learn how to test-drive Personos AI with pre-built Common GAPS coaching scenarios across Rebuilding Life Challenges and Employment Challenges.">
-    <meta property="og:url" content="https://sol-th-ri-ve.vercel.app/how-to-use.html">
-    <meta property="og:image" content="https://sol-th-ri-ve.vercel.app/assets/hero-banner-1920.jpg">
+    <meta property="og:title" content="Practitioner Guide &amp; IT Help Desk Portal — THRiVE Coaching">
+    <meta property="og:description" content="Master the 3-Tier Clinical Ecosystem: Front-Door Diagnostics, LearnWorlds Classroom &amp; Squads A/B/C, Personos AI execution engine, and IT support clinic.">
+    <meta property="og:url" content="https://thrivecoaching.ai/how-to-use.html">
+    <meta property="og:image" content="https://thrivecoaching.ai/assets/hero-banner-1920.jpg">
     <meta property="og:image:width" content="1920">
     <meta property="og:image:height" content="1070">
-    <meta property="og:image:alt" content="SOL THRiVE Coaching — From Tangled Friction to Blooming Flow">
+    <meta property="og:image:alt" content="SOL THRiVE Coaching — 3-Tier Clinical Ecosystem Guide">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="How To Use Personos AI — THRiVE Coaching">
-    <meta name="twitter:description" content="Learn how to test-drive Personos AI with pre-built Common GAPS coaching scenarios across Rebuilding Life Challenges and Employment Challenges.">
-    <meta name="twitter:image" content="https://sol-th-ri-ve.vercel.app/assets/hero-banner-1920.jpg">
+    <meta name="twitter:title" content="Practitioner Guide &amp; IT Help Desk Portal — THRiVE Coaching">
+    <meta name="twitter:description" content="Master the 3-Tier Clinical Ecosystem: Front-Door Diagnostics, LearnWorlds Classroom &amp; Squads A/B/C, Personos AI execution engine, and IT support clinic.">
+    <meta name="twitter:image" content="https://thrivecoaching.ai/assets/hero-banner-1920.jpg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=Nunito:wght@700;800;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Scoped High-Impact Styling for Practitioner Guide & IT Help Desk */
+        .page-content {
+            padding-bottom: 4rem;
+        }
+
+        .guide-section {
+            margin-bottom: 3.5rem;
+        }
+
+        .section-header-block {
+            margin-bottom: 2rem;
+        }
+
+        .section-header-block .section-eyebrow {
+            display: inline-block;
+            font-size: 0.85rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--accent-red, #E11D48);
+            background: #FFE4E6;
+            padding: 0.35rem 0.85rem;
+            border-radius: 999px;
+            margin-bottom: 0.75rem;
+        }
+
+        .section-header-block h2 {
+            font-size: clamp(1.6rem, 3vw, 2.3rem);
+            margin-bottom: 0.5rem;
+            color: var(--text-color, #141824);
+        }
+
+        .section-header-block p {
+            color: var(--text-muted, #4B5563);
+            font-size: 1.05rem;
+            max-width: 800px;
+        }
+
+        /* Hero Pill Badges */
+        .hero-ecosystem-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .ecosystem-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 999px;
+            font-size: 0.875rem;
+            font-weight: 700;
+            border: 2px solid var(--ink-border, #1E2430);
+            background: #FFFFFF;
+            color: var(--text-color, #141824);
+            box-shadow: 2px 2px 0px var(--ink-border, #1E2430);
+        }
+
+        .ecosystem-pill.tier-1-pill { background: #EBF5FF; border-color: #0478fe; color: #0356b8; }
+        .ecosystem-pill.tier-2-pill { background: #F5EBFD; border-color: #8B2FC9; color: #6B1FA3; }
+        .ecosystem-pill.tier-3-pill { background: #FEF3C7; border-color: #D97706; color: #92400E; }
+
+        /* 3-Tier Grid */
+        .ecosystem-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .tier-card {
+            background: #FFFFFF;
+            border: 2px solid var(--ink-border, #1E2430);
+            border-radius: 18px;
+            padding: 1.75rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 4px 4px 0px var(--ink-border, #1E2430);
+            position: relative;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .tier-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 6px 6px 0px var(--ink-border, #1E2430);
+        }
+
+        .tier-card-header {
+            margin-bottom: 1.25rem;
+        }
+
+        .tier-tag {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            padding: 0.3rem 0.65rem;
+            border-radius: 6px;
+            margin-bottom: 0.75rem;
+        }
+
+        .tier-tag.tag-t1 { background: #0478fe; color: #FFFFFF; }
+        .tier-tag.tag-t2 { background: #8B2FC9; color: #FFFFFF; }
+        .tier-tag.tag-t3 { background: #D97706; color: #FFFFFF; }
+
+        .tier-card h3 {
+            font-size: 1.35rem;
+            margin-bottom: 0.35rem;
+            color: var(--text-color, #141824);
+        }
+
+        .tier-subhead {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: var(--text-muted, #4B5563);
+            margin-bottom: 0.75rem;
+        }
+
+        .tier-card p {
+            font-size: 0.95rem;
+            color: var(--text-muted, #4B5563);
+            line-height: 1.55;
+            margin-bottom: 1rem;
+        }
+
+        .tier-feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 1.5rem 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .tier-feature-list li {
+            font-size: 0.875rem;
+            color: var(--text-color, #141824);
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            line-height: 1.45;
+        }
+
+        .tier-feature-list li strong {
+            color: #111827;
+        }
+
+        .tier-feature-list .check-icon {
+            color: #10B981;
+            font-weight: 900;
+            flex-shrink: 0;
+        }
+
+        .tier-card-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-top: auto;
+        }
+
+        .tier-action-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.65rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 700;
+            border-radius: 8px;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .tier-action-btn.primary {
+            background: var(--ink-border, #1E2430);
+            color: #FFFFFF;
+            border: 2px solid var(--ink-border, #1E2430);
+        }
+
+        .tier-action-btn.primary:hover {
+            background: #374151;
+            color: #FFFFFF;
+        }
+
+        .tier-action-btn.outline {
+            background: #FFFFFF;
+            color: var(--text-color, #141824);
+            border: 2px solid var(--ink-border, #1E2430);
+        }
+
+        .tier-action-btn.outline:hover {
+            background: #F3F4F6;
+        }
+
+        /* Walkthrough Steps Grid */
+        .walkthrough-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .walkthrough-step-box {
+            background: #FFFFFF;
+            border: 2px solid var(--ink-border, #1E2430);
+            border-radius: 14px;
+            padding: 1.25rem;
+            box-shadow: 3px 3px 0px var(--ink-border, #1E2430);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .walkthrough-num {
+            display: inline-block;
+            font-size: 0.8rem;
+            font-weight: 900;
+            color: #8B2FC9;
+            background: #F5EBFD;
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+            margin-bottom: 0.75rem;
+            width: fit-content;
+        }
+
+        .walkthrough-step-box h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-color, #141824);
+        }
+
+        .walkthrough-step-box p {
+            font-size: 0.875rem;
+            color: var(--text-muted, #4B5563);
+            line-height: 1.5;
+        }
+
+        /* DevTools Code Block Box */
+        .devtools-box {
+            background: #FFFFFF;
+            border: 2px solid var(--ink-border, #1E2430);
+            border-radius: 18px;
+            padding: 1.75rem;
+            box-shadow: 4px 4px 0px var(--ink-border, #1E2430);
+            margin-top: 1.5rem;
+        }
+
+        .devtools-box-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .devtools-box-header h3 {
+            font-size: 1.25rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .code-snippet-box {
+            background: #1E2430;
+            color: #F8FAFC;
+            border-radius: 12px;
+            padding: 1.25rem;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            overflow-x: auto;
+            position: relative;
+            margin-bottom: 1rem;
+            border: 2px solid var(--ink-border, #1E2430);
+        }
+
+        .code-snippet-box code {
+            color: #E2E8F0;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .devtools-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .btn-action-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.7rem 1.25rem;
+            background: #10B981;
+            color: #FFFFFF;
+            font-weight: 700;
+            font-size: 0.875rem;
+            border-radius: 8px;
+            border: 2px solid var(--ink-border, #1E2430);
+            cursor: pointer;
+            box-shadow: 2px 2px 0px var(--ink-border, #1E2430);
+            transition: all 0.2s ease;
+        }
+
+        .btn-action-primary:hover {
+            background: #059669;
+            transform: translateY(-1px);
+        }
+
+        .btn-action-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.7rem 1.25rem;
+            background: #FFFFFF;
+            color: var(--text-color, #141824);
+            font-weight: 700;
+            font-size: 0.875rem;
+            border-radius: 8px;
+            border: 2px solid var(--ink-border, #1E2430);
+            text-decoration: none;
+            cursor: pointer;
+            box-shadow: 2px 2px 0px var(--ink-border, #1E2430);
+            transition: all 0.2s ease;
+        }
+
+        .btn-action-secondary:hover {
+            background: #F3F4F6;
+        }
+
+        /* IT Help Desk Support Portal */
+        .helpdesk-section {
+            background: #FAF8F3;
+            border: 2px solid var(--ink-border, #1E2430);
+            border-radius: 20px;
+            padding: 2.25rem;
+            box-shadow: 4px 4px 0px var(--ink-border, #1E2430);
+        }
+
+        .helpdesk-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.35fr;
+            gap: 2.5rem;
+        }
+
+        .helpdesk-info h2 {
+            font-size: 1.85rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .helpdesk-info p {
+            color: var(--text-muted, #4B5563);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .clinic-hours-box {
+            background: #FFFFFF;
+            border: 2px solid var(--ink-border, #1E2430);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 2px 2px 0px var(--ink-border, #1E2430);
+        }
+
+        .clinic-hours-box h4 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #8B2FC9;
+        }
+
+        .clinic-hours-box ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            font-size: 0.875rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .clinic-hours-box li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .form-row-two {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 700;
+            font-size: 0.875rem;
+            margin-bottom: 0.35rem;
+            color: var(--text-color, #141824);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            font-size: 0.95rem;
+            font-family: inherit;
+            border: 2px solid #CBD5E1;
+            border-radius: 8px;
+            background: #FFFFFF;
+            color: var(--text-color, #141824);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #0478fe;
+            box-shadow: 0 0 0 3px rgba(4, 120, 254, 0.2);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+        }
+
+        .form-status-msg {
+            padding: 1rem 1.25rem;
+            border-radius: 8px;
+            font-size: 0.925rem;
+            font-weight: 600;
+            line-height: 1.5;
+            margin-top: 1rem;
+        }
+
+        .form-status-msg.status-success {
+            background: #ECFDF5;
+            border: 2px solid #10B981;
+            color: #065F46;
+        }
+
+        .form-status-msg.status-error {
+            background: #FEF2F2;
+            border: 2px solid #EF4444;
+            color: #991B1B;
+        }
+
+        @media (max-width: 1024px) {
+            .ecosystem-grid {
+                grid-template-columns: 1fr;
+            }
+            .walkthrough-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .helpdesk-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .walkthrough-grid {
+                grid-template-columns: 1fr;
+            }
+            .form-row-two {
+                grid-template-columns: 1fr;
+            }
+            .helpdesk-section {
+                padding: 1.5rem;
+            }
+        }
+    </style>
 </head>
 <body class="subpage-body">
     <header class="header">
@@ -49,22 +537,23 @@
         <div class="nav-right desktop-menu">
             <ul class="nav-links">
                 <li><a href="index.html#lunch-and-learn">Lunch &amp; Learn</a></li>
-                <li><a href="index.html#about">3-Tier Ecosystem</a></li>
-                <li><a href="approach.html">Our Approach</a></li>
                 <li><a href="classes.html">Classes &amp; Schedule</a></li>
+                <li><a href="onboarding.html">Session 0 Hub</a></li>
+                <li><a href="survey.html">Flow Survey</a></li>
                 <li><a href="profile.html">THRiVE Report</a></li>
                 <li><a href="hope-survey.html">HoPE Index</a></li>
+                <li><a href="approach.html">Our Approach</a></li>
                 <li class="dropdown">
                     <a href="how-to-use.html" class="active" aria-current="page">How To Use <span class="dropdown-caret">&#9662;</span></a>
                     <div class="dropdown-content">
                         <a href="how-to-use.html" class="active" aria-current="page">Overview &amp; Guide</a>
                         <a href="rebuilding-life-challenges.html">Rebuilding Life Challenges</a>
                         <a href="employment-challenges.html">Employment Challenges</a>
+                        <a href="how-to-use.html#it-help-desk">IT Help Desk Support</a>
                     </div>
                 </li>
-                <li><a href="index.html#video-section">Video</a></li>
                 <li><a href="mockup-landing.html">SOL THRiVE</a></li>
-                <li><a href="survey.html" class="nav-cta-pill">Flow Survey &rarr;</a></li>
+                <li><a href="funnel.html" class="nav-cta-pill">Enroll ($297) &rarr;</a></li>
             </ul>
         </div>
 
@@ -74,6 +563,7 @@
                 <li><a href="index.html">Home</a></li>
                 <li><a href="index.html#lunch-and-learn">Thursday Lunch &amp; Learn</a></li>
                 <li><a href="classes.html">Classes &amp; Schedule</a></li>
+                <li><a href="onboarding.html">Session 0 Pre-Flight Hub</a></li>
                 <li><a href="survey.html">Flow Survey</a></li>
                 <li><a href="profile.html">THRiVE Report</a></li>
                 <li><a href="hope-survey.html">HoPE Index</a></li>
@@ -83,11 +573,11 @@
                     <div class="dropdown-content">
                         <a href="rebuilding-life-challenges.html">Rebuilding Life Challenges</a>
                         <a href="employment-challenges.html">Employment Challenges</a>
+                        <a href="how-to-use.html#it-help-desk">IT Help Desk Support</a>
                     </div>
                 </li>
-                <li><a href="index.html#about">3-Tier Ecosystem</a></li>
-                <li><a href="index.html#video-section">Video</a></li>
                 <li><a href="mockup-landing.html">SOL THRiVE</a></li>
+                <li><a href="funnel.html">Enroll in Practitioner Lab ($297)</a></li>
             </ul>
         </div>
     </header>
@@ -96,53 +586,293 @@
         <div class="subpage-container">
             <!-- Hero Header -->
             <section class="subpage-hero">
-                <span class="section-eyebrow">Personos AI • Interactive Test-Drive Guide</span>
-                <h1>How To Use <span class="highlight">This Page</span></h1>
-                <p class="section-lead">Test-drive Personos AI using realistic, pre-formatted coaching prompts before exploring your own personal goals and challenges.</p>
-            </section>
-
-            <!-- Guide & 3-Step Instructions Card -->
-            <section class="guide-overview-card" aria-label="How To Use Instructions">
-                <div class="guide-narrative">
-                    <p>
-                        The categories below represent <strong>Common GAPS — Goals to Achieve and Problems to Solve</strong> — designed to help you test drive Personos.
-                    </p>
-                    <p>
-                        Each entry is pre-formatted to be copied and pasted directly into the Personos chat window.
-                    </p>
-                    <p>
-                        Simply choose a scenario that interests you, copy the entire text block (all three sections) using the one-click <strong>Copy Scenario</strong> button, and paste it into the chat window in Personos.
-                    </p>
-                    <p>
-                        This is a great way to experience the system's creativity and get comfortable with the platform before inputting your own personal challenges.
-                    </p>
-                </div>
-
-                <div class="guide-steps-grid">
-                    <div class="guide-step-box">
-                        <span class="guide-step-num">Step 01</span>
-                        <h3>Pick a Common GAP Category</h3>
-                        <p>Choose between <strong>Rebuilding Life Challenges</strong> or <strong>Employment Challenges</strong> below to browse 9 real-world coaching scenarios.</p>
-                    </div>
-                    <div class="guide-step-box">
-                        <span class="guide-step-num">Step 02</span>
-                        <h3>Click "Copy Scenario"</h3>
-                        <p>Every card features a one-click button that copies all three prompt sections—framing, personal quote, and coaching instructions—to your clipboard.</p>
-                    </div>
-                    <div class="guide-step-box">
-                        <span class="guide-step-num">Step 03</span>
-                        <h3>Paste Into Personos AI</h3>
-                        <p>Paste the prompt into Personos to receive a tailored psychological insight plus five creative, strengths-aligned next steps.</p>
-                    </div>
+                <span class="section-eyebrow">5 to THRiVE Practitioner Lab • System Architecture</span>
+                <h1>The 3-Tier <span class="highlight">Clinical Ecosystem</span></h1>
+                <p class="section-lead">How thrivecoaching.ai, LearnWorlds, and Personos AI integrate to 3x client outcomes across the 167 hours between clinical sessions.</p>
+                <div class="hero-ecosystem-badges">
+                    <span class="ecosystem-pill tier-1-pill">⚡ Tier 1: Front-Door Diagnostics (thrivecoaching.ai)</span>
+                    <span class="ecosystem-pill tier-2-pill">🎓 Tier 2: The Classroom (LearnWorlds LMS • 21 Seats)</span>
+                    <span class="ecosystem-pill tier-3-pill">🤖 Tier 3: Clinical Execution (Personos AI • $9/mo Seats)</span>
                 </div>
             </section>
 
-            <!-- Common GAPS Category Cards -->
-            <section id="common-gaps" class="gaps-categories-section" aria-label="Common GAPS Categories">
-                <div class="section-header" style="margin-bottom: 1.5rem;">
-                    <span class="section-eyebrow">Common GAPS • Goals to Achieve &amp; Problems to Solve</span>
-                    <h2>Explore the <span class="highlight-yellow">Scenario Categories</span></h2>
-                    <p class="section-lead">Select a category below to view ready-to-copy coaching prompts and illustrations.</p>
+            <!-- SECTION 1: VISUAL 3-TIER ECOSYSTEM ARCHITECTURE -->
+            <section class="guide-section" id="ecosystem-architecture">
+                <div class="section-header-block">
+                    <span class="section-eyebrow">Integrated System Map</span>
+                    <h2>Architecture of the 167-Hour Model</h2>
+                    <p>Traditional therapy and coaching touch a client for just 1 hour each week. The 5 to THRiVE Practitioner Lab connects front-door diagnostics, structured classroom cohort training, and AI co-piloting into one seamless clinical container.</p>
+                </div>
+
+                <div class="ecosystem-grid">
+                    <!-- TIER 1 -->
+                    <article class="tier-card" id="tier-1-diagnostics">
+                        <div class="tier-card-header">
+                            <span class="tier-tag tag-t1">Tier 01 • The Front Door</span>
+                            <h3>thrivecoaching.ai</h3>
+                            <div class="tier-subhead">Intake Diagnostics &amp; Dossier Export</div>
+                            <p>The client and trainee entry point. Captures baseline psychological friction, clarifies strengths, and exports clean clinical data.</p>
+                        </div>
+
+                        <ul class="tier-feature-list">
+                            <li><span class="check-icon">&#10003;</span> <div><strong>Flow Survey Triage:</strong> Measures Agency, Clarity, and Momentum while isolating client friction ("Ugg").</div></li>
+                            <li><span class="check-icon">&#10003;</span> <div><strong>6-Pillar THRiVE Report:</strong> Catalogs Traits, Hobbies, Relationships, Interests, Values, and Experiences (3–5 items each).</div></li>
+                            <li><span class="check-icon">&#10003;</span> <div><strong>HoPE Index Diagnostic:</strong> 20 life anchors tracking longitudinal outcome velocity.</div></li>
+                            <li><span class="check-icon">&#10003;</span> <div><strong>1-Click Clinical Dossier Export:</strong> Instantly packages multi-assessment profiles for homework submission or intake pasting.</div></li>
+                        </ul>
+
+                        <div class="tier-card-actions">
+                            <a href="survey.html" class="tier-action-btn primary">Take Flow Survey &rarr;</a>
+                            <a href="profile.html" class="tier-action-btn outline">Build THRiVE Report</a>
+                        </div>
+                    </article>
+
+                    <!-- TIER 2 -->
+                    <article class="tier-card" id="tier-2-learnworlds">
+                        <div class="tier-card-header">
+                            <span class="tier-tag tag-t2">Tier 02 • The Classroom</span>
+                            <h3>LearnWorlds LMS</h3>
+                            <div class="tier-subhead">7 Modules, Review Center &amp; Squads</div>
+                            <p>The practitioner training grounds at <code>https://thrive-coaching.learnworlds.com</code>. Structured coursework, peer supervision, and live breakouts.</p>
+                        </div>
+
+                        <ul class="tier-feature-list">
+                            <li><span class="check-icon">&#10003;</span> <div><strong>7-Module Master Curriculum:</strong> Module 0 Pre-Flight through Module 6 Capstone with Luke &amp; Steve.</div></li>
+                            <li><span class="check-icon">&#10003;</span> <div><strong>3 Private Squads of 7:</strong> Strictly 21 seats divided into Squad A (1–7), Squad B (8–14), and Squad C (15–21).</div></li>
+                            <li><span class="check-icon">&#10003;</span> <div><strong>Review Center Submissions:</strong> Dedicated instructor grading for weekly reflections and Action Boards.</div></li>
+                            <li><span class="check-icon">&#10003;</span> <div><strong>Instant Modal Bypass:</strong> 1-click DevTools script to unlock setup popups immediately.</div></li>
+                        </ul>
+
+                        <div class="tier-card-actions">
+                            <a href="https://thrive-coaching.learnworlds.com" target="_blank" rel="noopener noreferrer" class="tier-action-btn primary">Open LearnWorlds LMS ↗</a>
+                            <a href="#learnworlds-guide" class="tier-action-btn outline">View Squad Walkthrough &darr;</a>
+                        </div>
+                    </article>
+
+                    <!-- TIER 3 -->
+                    <article class="tier-card" id="tier-3-personos">
+                        <div class="tier-card-header">
+                            <span class="tier-tag tag-t3">Tier 03 • The Engine</span>
+                            <h3>Personos AI</h3>
+                            <div class="tier-subhead">Clinical Execution &amp; DAP Note Automation</div>
+                            <p>The relational AI co-pilot active in the 167 hours between clinical sessions. Shifting clients from reactive friction to the grounded Observer stance.</p>
+                        </div>
+
+                        <ul class="tier-feature-list">
+                            <li><span class="check-icon">&#10003;</span> <div><strong>Safe-Save Cadence:</strong> Voice dictation locked into client memory every 1–2 minutes with <code>Enter</code> keypresses.</div></li>
+                            <li><span class="check-icon">&#10003;</span> <div><strong>Strict 3–5 Quota:</strong> Prevents cognitive overwhelm across the 6 THRiVE pillars.</div></li>
+                            <li><span class="check-icon">&#10003;</span> <div><strong>G.A.P.S. Custom Lenses:</strong> 5 creative options (philosophy, scripture, thought leaders) -> 1–3 micro-actions on live Action Boards.</div></li>
+                            <li><span class="check-icon">&#10003;</span> <div><strong>Automated DAP Notes &amp; $9/Mo Seats:</strong> Generates audit-ready Data, Assessment, Plan notes to save 5+ hours weekly.</div></li>
+                        </ul>
+
+                        <div class="tier-card-actions">
+                            <a href="#common-gaps" class="tier-action-btn primary">Test-Drive Common GAPS &rarr;</a>
+                            <a href="onboarding.html" class="tier-action-btn outline">Practice Safe-Save Trainer</a>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <!-- SECTION 2: LEARNWORLDS & REVIEW CENTER WALKTHROUGH -->
+            <section class="guide-section" id="learnworlds-guide">
+                <div class="section-header-block">
+                    <span class="section-eyebrow">LearnWorlds LMS Walkthrough</span>
+                    <h2>Navigating Squads A, B &amp; C and the Review Center</h2>
+                    <p>Follow these four operational steps to access your private cohort group, review peer case studies, and submit weekly clinical homework assignments.</p>
+                </div>
+
+                <div class="walkthrough-grid">
+                    <div class="walkthrough-step-box">
+                        <span class="walkthrough-num">Step 01</span>
+                        <h3>Sign In to LearnWorlds</h3>
+                        <p>Go to <a href="https://thrive-coaching.learnworlds.com" target="_blank" rel="noopener noreferrer"><code>thrive-coaching.learnworlds.com</code></a> and log in using the email address associated with your Practitioner Lab enrollment.</p>
+                    </div>
+
+                    <div class="walkthrough-step-box">
+                        <span class="walkthrough-num">Step 02</span>
+                        <h3>Access Your Squad Space</h3>
+                        <p>Navigate to <strong>Community &rarr; 5 to THRiVE Practitioner Lab — Squads</strong> and open your assigned breakout space (Squad A: Seats 1–7, Squad B: Seats 8–14, or Squad C: Seats 15–21).</p>
+                    </div>
+
+                    <div class="walkthrough-step-box">
+                        <span class="walkthrough-num">Step 03</span>
+                        <h3>Submit to Review Center</h3>
+                        <p>Under your active course module, click <strong>Review Center Assignment</strong>. Export your diagnostic dossier from <code>results.html</code> or <code>profile.html</code> and paste it into the submission text box.</p>
+                    </div>
+
+                    <div class="walkthrough-step-box">
+                        <span class="walkthrough-num">Step 04</span>
+                        <h3>Bypass Setup Overlays</h3>
+                        <p>If a blank white screen appears at <code>/author/courses</code> due to browser privacy extensions, use the 1-click DevTools bypass script below to unlock the dashboard immediately.</p>
+                    </div>
+                </div>
+
+                <!-- DevTools Bypass Snippet -->
+                <div class="devtools-box">
+                    <div class="devtools-box-header">
+                        <div>
+                            <h3>🛠️ DevTools Modal Bypass One-Liner</h3>
+                            <p style="color: var(--text-muted, #4B5563); font-size: 0.9rem; margin-top: 0.25rem;">Removes <code>.wizard-window-wrapper.-school</code> overlay and re-enables body overflow scrolling in 1 click.</p>
+                        </div>
+                        <div class="devtools-actions">
+                            <button type="button" id="btn-copy-devtools" class="btn-action-primary">
+                                <span>📋 Copy DevTools One-Liner</span>
+                            </button>
+                            <a href="docs/learnworlds-troubleshooting.md" target="_blank" class="btn-action-secondary">
+                                <span>📖 Read Troubleshooting Manual ↗</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="code-snippet-box">
+                        <pre><code id="devtools-snippet-code">(() => {
+  const selectors = ['.wizard-window-wrapper', '.wizard-window-wrapper.-school', '.wizard-window', '.wizard-backdrop', '.modal-backdrop', '.lw-modal-backdrop'];
+  selectors.forEach(sel => document.querySelectorAll(sel).forEach(el => el.remove()));
+  ['overflow', 'overflow-y', 'overflow-x', 'height', 'position'].forEach(prop => {
+    document.body.style.removeProperty(prop);
+    document.documentElement.style.removeProperty(prop);
+  });
+  document.body.style.setProperty('overflow', 'auto', 'important');
+  document.documentElement.style.setProperty('overflow', 'auto', 'important');
+  document.body.classList.remove('modal-open', 'wizard-open', 'no-scroll', 'has-modal', '-locked');
+  console.log('[THRiVE LMS]: Setup popup purged. Dashboard unlocked!');
+})();</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 3: IT HELP DESK & TECH CLINIC SUPPORT FORM -->
+            <section class="guide-section" id="it-help-desk">
+                <div class="helpdesk-section">
+                    <div class="helpdesk-grid">
+                        <div class="helpdesk-info">
+                            <span class="section-eyebrow">Practitioner Tech Support</span>
+                            <h2>IT Help Desk &amp; Tech Clinic Portal</h2>
+                            <p>Having trouble with workstation microphone calibration, LearnWorlds LMS access, Review Center homework, or preparing for our Session 0 weekend clinics? Submit a priority ticket directly to Gerard and the technical support team.</p>
+
+                            <div class="clinic-hours-box">
+                                <h4>📅 Session 0 Weekend Drop-In Tech Clinics</h4>
+                                <ul>
+                                    <li><strong>Saturday, Nov 28, 2026:</strong> 10:00 AM – 1:00 PM MT (Open Zoom Room)</li>
+                                    <li><strong>Sunday, Nov 29, 2026:</strong> 2:00 PM – 5:00 PM MT (Open Zoom Room)</li>
+                                    <li><strong>Host:</strong> Gerard Rick Jardin (Co-Developer &amp; Tech Clinic Lead)</li>
+                                    <li><strong>Focus:</strong> Workstation mic calibration, Safe-Save timing, and Squad access.</li>
+                                </ul>
+                            </div>
+
+                            <div style="font-size: 0.875rem; color: var(--text-muted, #4B5563);">
+                                <p><strong>Direct Inquiries:</strong> <a href="mailto:team@thrivecoaching.ai" style="color:#0478fe; font-weight:700;">team@thrivecoaching.ai</a> | <a href="tel:7205882002" style="color:inherit;">(720) 588-2002</a></p>
+                            </div>
+                        </div>
+
+                        <div class="helpdesk-form-card">
+                            <form id="it-helpdesk-form" novalidate>
+                                <h3 style="font-size: 1.25rem; margin-bottom: 1rem; color: var(--text-color, #141824);">Submit an IT Support Request</h3>
+
+                                <div class="form-row-two">
+                                    <div class="form-group">
+                                        <label for="it-fn">First Name *</label>
+                                        <input type="text" id="it-fn" name="first_name" required placeholder="First name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="it-ln">Last Name *</label>
+                                        <input type="text" id="it-ln" name="last_name" required placeholder="Last name">
+                                    </div>
+                                </div>
+
+                                <div class="form-row-two">
+                                    <div class="form-group">
+                                        <label for="it-em">Email Address *</label>
+                                        <input type="email" id="it-em" name="email" required placeholder="you@practice.com">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="it-ph">Phone Number (Optional)</label>
+                                        <input type="tel" id="it-ph" name="phone" placeholder="(720) 555-0199">
+                                    </div>
+                                </div>
+
+                                <div class="form-row-two">
+                                    <div class="form-group">
+                                        <label for="it-squad">Squad Assignment</label>
+                                        <select id="it-squad" name="squad">
+                                            <option value="Squad A (Seats 1–7)">Squad A (Seats 1–7)</option>
+                                            <option value="Squad B (Seats 8–14)">Squad B (Seats 8–14)</option>
+                                            <option value="Squad C (Seats 15–21)">Squad C (Seats 15–21)</option>
+                                            <option value="Not Yet Assigned / Waitlist">Not Yet Assigned / Waitlist</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="it-urg">Urgency Level</label>
+                                        <select id="it-urg" name="urgency">
+                                            <option value="Low — General Question">Low — General Question</option>
+                                            <option value="Medium — Needed for Weekend Tech Clinic (Nov 28–29)" selected>Medium — Needed for Weekend Tech Clinic (Nov 28–29)</option>
+                                            <option value="High — Blocking Live Lab Session">High — Blocking Live Lab Session</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="it-cat">Issue Category *</label>
+                                    <select id="it-cat" name="category" required>
+                                        <option value="Microphone &amp; Voice Dictation Calibration">Microphone &amp; Voice Dictation Calibration</option>
+                                        <option value="LearnWorlds Login / White Screen Issue">LearnWorlds Login / White Screen Issue</option>
+                                        <option value="Review Center Homework Submission">Review Center Homework Submission</option>
+                                        <option value="Squad Community Space Access">Squad Community Space Access</option>
+                                        <option value="Session 0 Weekend Tech Clinic (Nov 28–29)">Session 0 Weekend Tech Clinic (Nov 28–29)</option>
+                                        <option value="Personos AI Configuration">Personos AI Configuration</option>
+                                        <option value="General Technical Support">General Technical Support</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="it-msg">Describe the Technical Issue * (Minimum 10 characters)</label>
+                                    <textarea id="it-msg" name="message" rows="4" required minlength="10" placeholder="Please describe your browser (Chrome, Edge, Safari), workstation mic setup, or any specific error messages you encountered..."></textarea>
+                                </div>
+
+                                <button type="submit" id="it-submit-btn" class="cta-button primary btn-block" style="width: 100%; justify-content: center; font-size: 1rem; padding: 0.85rem;">
+                                    Submit Ticket to IT Team &rarr;
+                                </button>
+
+                                <div id="it-status" class="form-status-msg" role="alert" style="display:none;"></div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 4: CLINICAL SIMULATION LAB (COMMON GAPS) -->
+            <section id="common-gaps" class="gaps-categories-section guide-section" aria-label="Common GAPS Clinical Simulation">
+                <div class="section-header-block">
+                    <span class="section-eyebrow">Common GAPS • Clinical Simulation Lab</span>
+                    <h2>Goals to Achieve &amp; Problems to Solve</h2>
+                    <p class="section-lead">The scenarios below simulate high-stakes moments across recovery and career development. Test-drive Personos AI by copying pre-formatted clinical prompts directly into the chat window.</p>
+                </div>
+
+                <!-- 3-Step Instructions Card -->
+                <div class="guide-overview-card" style="margin-bottom: 2rem;" aria-label="Simulation Instructions">
+                    <div class="guide-narrative">
+                        <p>
+                            Each entry is pre-formatted to be copied and pasted directly into the Personos chat window. Simply choose a scenario that interests you, copy the entire prompt using the <strong>Copy Scenario</strong> button, and paste it into Personos to experience how the AI crafts 5 creative options mapped to custom lenses.
+                        </p>
+                    </div>
+
+                    <div class="guide-steps-grid">
+                        <div class="guide-step-box">
+                            <span class="guide-step-num">Step 01</span>
+                            <h3>Pick a Common GAP Category</h3>
+                            <p>Choose between <strong>Rebuilding Life Challenges</strong> or <strong>Employment Challenges</strong> below to browse 9 real-world coaching scenarios.</p>
+                        </div>
+                        <div class="guide-step-box">
+                            <span class="guide-step-num">Step 02</span>
+                            <h3>Click "Copy Scenario"</h3>
+                            <p>Every card features a one-click button that copies all three prompt sections—framing, personal quote, and coaching instructions—to your clipboard.</p>
+                        </div>
+                        <div class="guide-step-box">
+                            <span class="guide-step-num">Step 03</span>
+                            <h3>Paste Into Personos AI</h3>
+                            <p>Paste the prompt into Personos to receive a tailored psychological insight plus five creative, strengths-aligned next steps.</p>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="gaps-categories-grid">
@@ -187,17 +917,17 @@
                 </div>
             </section>
 
-            <!-- Bottom Navigation / Coach CTA -->
+            <!-- Bottom Navigation / Dossier CTA -->
             <section class="challenge-bottom-nav" aria-label="Additional Tools">
-                <span class="section-eyebrow">Want Personalized Results?</span>
+                <span class="section-eyebrow">Export Clinical Data</span>
                 <h3>Combine Scenarios With Your Own THRiVE Profile</h3>
-                <p>When you add your THRiVE Report summary into the "Other Notes" section of Personos, every scenario above automatically adapts its five next steps to match your personal strengths.</p>
+                <p>When you add your THRiVE Report summary into Personos, every scenario above automatically adapts its five next steps to match your client's personal strengths.</p>
                 <div style="margin-bottom: 1rem;">
                     <span class="dossier-status-pill" data-dossier-status>Ready to combine your 3 steps (0/3 saved so far)</span>
                 </div>
                 <div class="challenge-bottom-links">
-                    <button type="button" class="copy-master-prompt-btn" id="howto-copy-master-prompt-btn">
-                        <span class="master-prompt-btn-label">&#128203; Copy Master AI Coaching Prompt</span>
+                    <button type="button" class="export-dossier-btn copy-master-prompt-btn" id="howto-copy-master-prompt-btn" data-export-dossier="true">
+                        <span class="master-prompt-btn-label">&#128203; Export / Copy Clinical Dossier for LearnWorlds &amp; Personos</span>
                     </button>
                     <button type="button" class="share-master-prompt-btn" id="howto-share-master-prompt-btn" data-share-master-prompt>
                         <span class="master-prompt-btn-label">&#128228; Share Dossier</span>
@@ -219,12 +949,14 @@
             <div class="footer-nav">
                 <a href="index.html#lunch-and-learn">Thursday Lunch &amp; Learn</a>
                 <a href="classes.html">Classes &amp; Schedule</a>
+                <a href="onboarding.html">Session 0 Hub</a>
                 <a href="survey.html">Flow Survey</a>
                 <a href="profile.html">THRiVE Report</a>
                 <a href="hope-survey.html">HoPE Index</a>
                 <a href="approach.html">Our Approach</a>
                 <a href="how-to-use.html">How To Use</a>
                 <a href="mockup-landing.html">SOL THRiVE</a>
+                <a href="funnel.html">Enroll ($297)</a>
             </div>
             <div class="footer-contact">
                 <a href="mailto:team@thrivecoaching.ai">team@thrivecoaching.ai</a>
@@ -237,6 +969,158 @@
         </div>
     </footer>
 
+    <!-- Interactive Client Scripts for DevTools Copy & IT Help Desk -->
+    <script>
+        (function() {
+            // 1. DevTools Snippet Copy Handler
+            const btnCopyDevtools = document.getElementById('btn-copy-devtools');
+            const devtoolsCode = document.getElementById('devtools-snippet-code');
+            if (btnCopyDevtools && devtoolsCode) {
+                btnCopyDevtools.addEventListener('click', function() {
+                    const text = devtoolsCode.textContent || '';
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(text).then(function() {
+                            const original = btnCopyDevtools.innerHTML;
+                            btnCopyDevtools.innerHTML = '<span>✓ Copied to Clipboard!</span>';
+                            btnCopyDevtools.style.backgroundColor = '#059669';
+                            setTimeout(function() {
+                                btnCopyDevtools.innerHTML = original;
+                                btnCopyDevtools.style.backgroundColor = '';
+                            }, 2500);
+                        }).catch(function() {
+                            fallbackCopy(text, btnCopyDevtools);
+                        });
+                    } else {
+                        fallbackCopy(text, btnCopyDevtools);
+                    }
+                });
+            }
+
+            function fallbackCopy(text, btn) {
+                try {
+                    const ta = document.createElement('textarea');
+                    ta.value = text;
+                    ta.style.position = 'fixed';
+                    ta.style.left = '-9999px';
+                    document.body.appendChild(ta);
+                    ta.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(ta);
+                    btn.innerHTML = '<span>✓ Copied to Clipboard!</span>';
+                    setTimeout(function() {
+                        btn.innerHTML = '<span>📋 Copy DevTools One-Liner</span>';
+                    }, 2500);
+                } catch (err) {
+                    btn.innerHTML = '<span>Please copy snippet manually</span>';
+                }
+            }
+
+            // 2. IT Help Desk Form Submission Logic
+            const form = document.getElementById('it-helpdesk-form');
+            const statusDiv = document.getElementById('it-status');
+            const submitBtn = document.getElementById('it-submit-btn');
+
+            function showStatus(message, isSuccess) {
+                if (!statusDiv) return;
+                statusDiv.style.display = 'block';
+                statusDiv.className = isSuccess ? 'form-status-msg status-success' : 'form-status-msg status-error';
+                statusDiv.textContent = message;
+                statusDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+
+            function validateHelpDeskInputs(fn, ln, em, msg) {
+                if (!fn || fn.trim().length === 0) return { valid: false, error: 'Please enter your first name.' };
+                if (!ln || ln.trim().length === 0) return { valid: false, error: 'Please enter your last name.' };
+                if (!em || em.trim().length === 0 || !em.includes('@')) return { valid: false, error: 'Please provide a valid email address.' };
+                if (!msg || msg.trim().length < 10) return { valid: false, error: 'Please describe the issue in at least 10 characters.' };
+                return { valid: true };
+            }
+
+            async function submitHelpDeskTicket(e) {
+                if (e && e.preventDefault) e.preventDefault();
+
+                const fn = (document.getElementById('it-fn')?.value || '').trim();
+                const ln = (document.getElementById('it-ln')?.value || '').trim();
+                const em = (document.getElementById('it-em')?.value || '').trim();
+                const ph = (document.getElementById('it-ph')?.value || '').trim();
+                const squad = document.getElementById('it-squad')?.value || 'Not Yet Assigned';
+                const cat = document.getElementById('it-cat')?.value || 'General Technical Support';
+                const urg = document.getElementById('it-urg')?.value || 'Medium';
+                const msg = (document.getElementById('it-msg')?.value || '').trim();
+
+                const validation = validateHelpDeskInputs(fn, ln, em, msg);
+                if (!validation.valid) {
+                    showStatus(validation.error, false);
+                    return false;
+                }
+
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'Submitting Ticket to IT Team…';
+                }
+
+                const payload = {
+                    type: 'lead',
+                    data: {
+                        source: 'it_help_desk_support',
+                        category: cat,
+                        squad: squad,
+                        urgency: urg,
+                        message: msg,
+                        label: `IT Help Desk: [${cat}] - ${fn} ${ln} (${squad})`
+                    },
+                    lead: {
+                        fn: fn,
+                        ln: ln,
+                        em: em,
+                        ph: ph,
+                        org: squad
+                    },
+                    ts: new Date().toISOString()
+                };
+
+                try {
+                    const response = await fetch('/api/event', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json().catch(() => ({ ok: true }));
+                        if (data && (data.ok === true || response.status === 200)) {
+                            showStatus('✓ Ticket Logged! Gerard and the IT support team have received your request. We will follow up via email. For immediate help, attend our Session 0 Weekend Tech Clinics on Saturday Nov 28 or Sunday Nov 29.', true);
+                            if (form) form.reset();
+                            return true;
+                        }
+                    }
+
+                    showStatus('⚠️ Unable to submit ticket. Please email team@thrivecoaching.ai or contact Gerard directly.', false);
+                    return false;
+                } catch (err) {
+                    showStatus('⚠️ Unable to reach IT support server. Please email team@thrivecoaching.ai or visit our weekend drop-in clinic.', false);
+                    return false;
+                } finally {
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = 'Submit Ticket to IT Team →';
+                    }
+                }
+            }
+
+            if (form) {
+                form.addEventListener('submit', submitHelpDeskTicket);
+            }
+
+            // Expose test helpers to window
+            if (typeof window !== 'undefined') {
+                window.ThriveHowToUse = {
+                    validateHelpDeskInputs: validateHelpDeskInputs,
+                    submitHelpDeskTicket: submitHelpDeskTicket
+                };
+            }
+        })();
+    </script>
     <script src="script.js" defer></script>
 </body>
 </html>

@@ -15,7 +15,7 @@ async function forward(payload) {
 module.exports = async (req, res) => {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
   const { type, data, lead, ts } = req.body || {};
-  if (!['lead', 'vote', 'booking'].includes(type)) return res.status(400).json({ error: 'Bad event type' });
+  if (!['lead', 'vote', 'booking', 'support'].includes(type)) return res.status(400).json({ error: 'Bad event type' });
   // 'payment' is intentionally NOT accepted from the browser; see stripe-webhook.js
   try {
     const l = lead || {};
@@ -37,6 +37,10 @@ module.exports = async (req, res) => {
       rating_ethical_ai_copilot: r[2] ?? '',
       vote: (data && data.vote) || '',
       booking_label: (data && data.label) || '',
+      support_category: (data && data.category) || '',
+      support_urgency: (data && data.urgency) || '',
+      support_squad: (data && data.squad) || '',
+      message: (data && data.message) || '',
       data, lead,
     });
     res.status(200).json({ ok: true });

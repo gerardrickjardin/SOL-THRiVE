@@ -29,7 +29,7 @@ const removeIfExists = (filePath) => {
     fs.mkdirSync(outDir);
   }
 
-  const files = ['index.html', 'classes.html', '404.html', 'mockup-landing.html', 'funnel.html', 'results.html', 'profile.html', 'survey.html', 'approach.html', 'how-to-use.html', 'rebuilding-life-challenges.html', 'employment-challenges.html', 'style.css', 'tailwind.css', 'script.js', 'hope-survey.html', 'manifest.webmanifest', 'favicon.svg', 'favicon-32x32.png', 'apple-touch-icon.png', 'icon-192.png', 'icon-512.png', 'ai-avatar.png', 'minds-eye.png', 'minds-eye-animated.mp4', 'minds-eye-animated.webm', 'minds-eye-white-bg.mp4'];
+  const files = ['index.html', 'classes.html', 'onboarding.html', '404.html', 'mockup-landing.html', 'funnel.html', 'results.html', 'profile.html', 'survey.html', 'approach.html', 'how-to-use.html', 'rebuilding-life-challenges.html', 'employment-challenges.html', 'style.css', 'tailwind.css', 'script.js', 'hope-survey.html', 'manifest.webmanifest', 'favicon.svg', 'favicon-32x32.png', 'apple-touch-icon.png', 'icon-192.png', 'icon-512.png', 'ai-avatar.png', 'minds-eye.png', 'minds-eye-animated.mp4', 'minds-eye-animated.webm', 'minds-eye-white-bg.mp4'];
 
   files.forEach(file => {
     if (fs.existsSync(file)) {
@@ -52,6 +52,21 @@ const removeIfExists = (filePath) => {
       fs.copyFileSync(path.join(assetsDirSrc, file), path.join(assetsDirDest, file));
     });
     EXCLUDED_ASSETS.forEach(file => removeIfExists(path.join(assetsDirDest, file)));
+  }
+
+  const publicDocsFiles = ['learnworlds-troubleshooting.md'];
+  const docsDirSrc = path.join(__dirname, 'docs');
+  const docsDirDest = path.join(outDir, 'docs');
+  if (fs.existsSync(docsDirSrc)) {
+    if (!fs.existsSync(docsDirDest)) {
+      fs.mkdirSync(docsDirDest, { recursive: true });
+    }
+    publicDocsFiles.forEach(docFile => {
+      const srcPath = path.join(docsDirSrc, docFile);
+      if (fs.existsSync(srcPath)) {
+        fs.copyFileSync(srcPath, path.join(docsDirDest, docFile));
+      }
+    });
   }
 
   const REVOKED_KEYS = new Set([

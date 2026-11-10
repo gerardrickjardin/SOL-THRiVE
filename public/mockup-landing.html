@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>THRIVE Coaching | Clinical Practice Audit &amp; Course Booking</title>
-<meta name="description" content="Take the 3-question Clinical Practice Audit, see community consensus, cast your vote, and book your THRIVE Coaching course.">
+<title>5 to THRiVE Practitioner Lab | Clinical Practice Audit &amp; Enrollment</title>
+<meta name="description" content="Take the 3-question Clinical Practice Audit, see practitioner consensus, cast your squad vote, and enroll in the 5 to THRiVE Practitioner Lab ($297 tuition, 21-seat cap).">
 <meta name="theme-color" content="#F7F4EB">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -16,16 +16,16 @@
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="SOL THRiVE Coaching">
-<meta property="og:title" content="THRIVE Coaching | Clinical Practice Audit &amp; Course Booking">
-<meta property="og:description" content="Take the 3-question Clinical Practice Audit, see community consensus, cast your vote, and book your THRIVE Coaching course.">
+<meta property="og:title" content="5 to THRiVE Practitioner Lab | Clinical Practice Audit &amp; Enrollment">
+<meta property="og:description" content="Take the 3-question Clinical Practice Audit, see practitioner consensus, cast your squad vote, and enroll in the 5 to THRiVE Practitioner Lab ($297 tuition, 21-seat cap).">
 <meta property="og:url" content="https://sol-th-ri-ve.vercel.app/mockup-landing.html">
 <meta property="og:image" content="https://sol-th-ri-ve.vercel.app/assets/hero-banner-1920.jpg">
 <meta property="og:image:width" content="1920">
 <meta property="og:image:height" content="1070">
 <meta property="og:image:alt" content="SOL THRiVE Coaching — From Tangled Friction to Blooming Flow">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="THRIVE Coaching | Clinical Practice Audit &amp; Course Booking">
-<meta name="twitter:description" content="Take the 3-question Clinical Practice Audit, see community consensus, cast your vote, and book your THRIVE Coaching course.">
+<meta name="twitter:title" content="5 to THRiVE Practitioner Lab | Clinical Practice Audit &amp; Enrollment">
+<meta name="twitter:description" content="Take the 3-question Clinical Practice Audit, see practitioner consensus, cast your squad vote, and enroll in the 5 to THRiVE Practitioner Lab ($297 tuition, 21-seat cap).">
 <meta name="twitter:image" content="https://sol-th-ri-ve.vercel.app/assets/hero-banner-1920.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -216,7 +216,10 @@ main{max-width:1240px;margin:auto;padding:36px 28px 80px}
 <nav>
   <div class="nav-in">
     <a class="logo" href="#" id="logo-link"><span>THRIVE</span> Coaching</a>
-    <button class="btn btn-primary btn-sm" id="nav-cta" type="button">Flow Survey</button>
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <a class="btn btn-white btn-sm" href="onboarding.html">Session 0 Hub</a>
+      <button class="btn btn-primary btn-sm" id="nav-cta" type="button">Flow Survey</button>
+    </div>
   </div>
 </nav>
 
@@ -228,9 +231,9 @@ main{max-width:1240px;margin:auto;padding:36px 28px 80px}
   <!-- ========== STEPS 1-2: split screen ========== -->
   <section class="view active" id="v-intro">
     <header class="hero">
-      <span class="eyebrow">Clinical Practice Audit</span>
-      <h1>Help every family <em>THRIVE</em> between sessions.</h1>
-      <p>Evidence-based psychology meets ethical, human-centered AI coaching, uniting clinicians, mentors, and families to close the between-session support gap.</p>
+      <span class="eyebrow">5 to THRiVE Practitioner Lab • Nov 30 Launch</span>
+      <h1>Help every client THRIVE across the <em>167 hours</em> between sessions.</h1>
+      <p>Equipping Therapists, Coaches, and Case Managers to 3x Client Outcomes. 6-Week Experiential Lab launching Monday, Nov 30, 2026. Strictly capped at 21 seats across Squads A, B, and C.</p>
     </header>
 
     <div class="grid">
@@ -253,7 +256,7 @@ main{max-width:1240px;margin:auto;padding:36px 28px 80px}
         <!-- Audit -->
         <div id="audit">
           <h2>Clinical Practice Audit</h2>
-          <p class="sub" id="audit-sub">Rate each statement from 1 to 5. Takes about 30 seconds.</p>
+          <p class="sub" id="audit-sub">Rate each statement from 1 to 5. Evaluates your practice readiness for the 167-hour clinical model.</p>
           <div class="q" data-q="0">
             <span class="lab">Q1 · Between-session engagement</span>
             <p>How often do your clients actively practice tools or reflections between sessions without you having to prompt them?</p>
@@ -265,8 +268,8 @@ main{max-width:1240px;margin:auto;padding:36px 28px 80px}
             <div class="rate"></div><div class="ends"><span>1 = Never</span><span>5 = Constantly</span></div>
           </div>
           <div class="q" data-q="2">
-            <span class="lab">Q3 · The ethical co-pilot</span>
-            <p>How valuable would a strictly guardrailed, HIPAA-compliant AI be if it acted purely as your co-pilot, empowering the relationship rather than replacing it?</p>
+            <span class="lab">Q3 · The ethical co-pilot &amp; DAP notes</span>
+            <p>How valuable would a strictly guardrailed AI co-pilot be to generate automated DAP notes and keep clients accountable for $9/month?</p>
             <div class="rate"></div><div class="ends"><span>1 = Not valuable</span><span>5 = Essential</span></div>
           </div>
           <button class="btn btn-primary btn-block" id="audit-submit" type="button" disabled>Submit &amp; view your practice readiness profile →</button>
@@ -275,8 +278,8 @@ main{max-width:1240px;margin:auto;padding:36px 28px 80px}
         <!-- Lead form -->
         <form id="lead" style="display:none" novalidate>
           <span class="eyebrow">Audit complete</span>
-          <h2>Where should we send your profile?</h2>
-          <p class="sub">Your results are ready. Tell us who you are to unlock them.</p>
+          <h2>Where should we send your clinical practice profile?</h2>
+          <p class="sub">Your practice readiness score is calculated. Enter your details to view the community consensus and claim your squad seat.</p>
           <div class="row2">
             <div class="field"><label for="fn">First Name</label><input id="fn" autocomplete="given-name" required></div>
             <div class="field"><label for="ln">Last Name</label><input id="ln" autocomplete="family-name" required></div>
@@ -309,11 +312,11 @@ main{max-width:1240px;margin:auto;padding:36px 28px 80px}
         </div>
       </div>
       <div class="card">
-        <h2>Cast Your Vote</h2>
-        <p class="sub">Which community priority should we fund first?</p>
-        <button class="vote" data-v="spaces" type="button"><span class="ic"><svg width="30" height="30" viewBox="0 0 32 32" fill="none" stroke="#18181B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 28V14l8-6 8 6v14M4 28h24M20 28V18h8v10M10 28v-8h4v8"/></svg></span><span><b>Transform Community Spaces</b><small>Safe, welcoming places to gather and grow.</small></span><span class="chk">✓</span></button>
-        <button class="vote" data-v="mentors" type="button"><span class="ic"><svg width="30" height="30" viewBox="0 0 32 32" fill="none" stroke="#18181B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="9" r="4"/><circle cx="23" cy="14" r="3"/><path d="M4 28c0-6 3-10 7-10s7 4 7 10M19 28c0-4 2-7 4-7s5 3 5 7"/></svg></span><span><b>Empower Mentors</b><small>Equip guides who walk beside our youth.</small></span><span class="chk">✓</span></button>
-        <button class="vote" data-v="neighborhoods" type="button"><span class="ic"><svg width="30" height="30" viewBox="0 0 32 32" fill="none" stroke="#18181B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 28S4 20 4 11a6 6 0 0 1 12-2 6 6 0 0 1 12 2c0 9-12 17-12 17z"/></svg></span><span><b>Heal Our Neighborhoods</b><small>Restore trust and support block by block.</small></span><span class="chk">✓</span></button>
+        <h2>Which Clinical Capability Should We Prioritize?</h2>
+        <p class="sub">Cast your vote to shape your squad's live breakout co-coaching focus:</p>
+        <button class="vote" data-v="dap_notes" type="button"><span class="ic"><svg width="30" height="30" viewBox="0 0 32 32" fill="none" stroke="#18181B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v24a2 2 0 0 0 2 2h20a2 2 0 0 0 2-2V16"/><path d="M18 2v6h6"/><path d="m9 15 2 2 4-4"/><path d="m9 21 2 2 4-4"/></svg></span><span><b>Automated Clinical DAP Notes</b><small>Generate Data, Assessment, Plan documentation directly from Personos transcripts to reclaim 5+ hours weekly.</small></span><span class="chk">✓</span></button>
+        <button class="vote" data-v="action_boards" type="button"><span class="ic"><svg width="30" height="30" viewBox="0 0 32 32" fill="none" stroke="#18181B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="26" height="24" rx="3"/><path d="M9 10h14M9 16h8M9 22h11"/></svg></span><span><b>Between-Session Action Boards ($9/mo seats)</b><small>Sponsor or transition clients to live Action Boards with 1–3 committed micro-actions in the 167 hours.</small></span><span class="chk">✓</span></button>
+        <button class="vote" data-v="observer_stance" type="button"><span class="ic"><svg width="30" height="30" viewBox="0 0 32 32" fill="none" stroke="#18181B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="16" r="10"/><path d="M16 10v6l4 2"/><circle cx="16" cy="16" r="3"/></svg></span><span><b>Strengths Intake &amp; The Observer Stance</b><small>Shift clients from reactive distress to the grounded Observer using SOL Theory &amp; the 6-pillar THRiVE intake.</small></span><span class="chk">✓</span></button>
         <p class="hint" id="vote-hint">Choose a priority to continue.</p>
         <button class="btn btn-primary btn-block" id="vote-submit" type="button" disabled>Submit my vote &amp; book my class →</button>
       </div>
@@ -323,9 +326,9 @@ main{max-width:1240px;margin:auto;padding:36px 28px 80px}
   <!-- ========== STEP 4: Calendar ========== -->
   <section class="view" id="v-book">
     <header class="hero">
-      <span class="eyebrow">Book Your Class</span>
-      <h1>Pick a date and time.</h1>
-      <p>Thanks for voting. Choose the session that fits your schedule.</p>
+      <span class="eyebrow">Reserve Your Cohort Schedule</span>
+      <h1>Confirm Your Intake Briefing.</h1>
+      <p>Thanks for voting. Pick your preferred intake briefing date leading into our Monday, Nov 30 launch (Live sessions Mon &amp; Wed 5:00–6:30 PM MT).</p>
     </header>
     <div class="card" style="max-width:860px;margin:0 auto;width:100%">
       <iframe id="qiNYlb85QHIu0foCh24A" src="https://link.visioncontrol.io/widget/booking/qiNYlb85QHIu0foCh24A" allow="payment" title="Booking Calendar" style="width:100%;min-height:640px;border:none;overflow:hidden" scrolling="no"></iframe>
@@ -338,14 +341,18 @@ main{max-width:1240px;margin:auto;padding:36px 28px 80px}
     <header class="hero">
       <span class="eyebrow">Secure Checkout</span>
       <h1>Complete your enrollment.</h1>
-      <p>One last step to reserve your seat.</p>
+      <p>One last step to reserve your squad seat.</p>
     </header>
     <div class="grid" id="pay-grid">
       <div class="card">
-        <h2>Order summary</h2>
-        <p class="sub">THRIVE Coaching Course</p>
-        <div class="line"><span>Live cohort class</span><span>$297.00</span></div>
-        <div class="line"><span>Session</span><span id="pay-when" style="text-align:right"></span></div>
+        <h2>Order Summary</h2>
+        <p class="sub">5 to THRiVE Practitioner Lab (Nov 30, 2026 Cohort)</p>
+        <div class="line"><span>6-Week Experiential Lab (21-Seat Cohort Cap)</span><span>$297.00</span></div>
+        <div class="line"><span>Private Squad Placement (Squad A, B, or C — 7 Seats Each)</span><span>Included</span></div>
+        <div class="line"><span>Personos AI DAP Note Generator &amp; Caseload Setup</span><span>Included</span></div>
+        <div class="line"><span>Session 0 Pre-Flight &amp; Weekend Tech Clinics (Nov 28–29)</span><span>Included</span></div>
+        <div class="line"><span>5 to THRiVE Practitioner Certification</span><span>Included</span></div>
+        <div class="line"><span>Intake Briefing</span><span id="pay-when" style="text-align:right"></span></div>
         <div class="line"><span>Enrolling</span><span id="pay-who"></span></div>
         <div class="line total"><span>Total due</span><span>$297.00</span></div>
       </div>
@@ -353,15 +360,16 @@ main{max-width:1240px;margin:auto;padding:36px 28px 80px}
         <h2>Payment</h2>
         <p class="sub">Payments are processed securely by Stripe.</p>
         <div id="payment-element" style="margin-bottom:18px;min-height:120px"></div>
-        <button class="btn btn-primary btn-block" id="pay-btn" type="submit" disabled>Pay $297.00 &amp; enroll</button>
+        <button class="btn btn-primary btn-block" id="pay-btn" type="submit" disabled>Pay $297.00 &amp; Enroll in Practitioner Lab</button>
         <div class="err" id="pay-err" role="alert"></div>
         <p class="fine">Secured by Stripe. We never see or store your card details.</p>
       </form>
     </div>
     <div class="card success" id="success" style="display:none;max-width:560px;margin:auto">
       <svg width="90" height="90" viewBox="0 0 90 90" fill="none" stroke="#18181B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="45" cy="45" r="32"/><path d="M30 46l11 11 20-24" stroke="#7C2AE8" stroke-width="4"/></svg>
-      <h2>You’re enrolled!</h2>
+      <h2>You’re enrolled in the Practitioner Lab!</h2>
       <p id="ok-msg"></p>
+      <a class="btn btn-primary" href="onboarding.html" style="margin-top:16px">Launch Session 0 Pre-Flight Hub &rarr;</a>
     </div>
   </section>
 </main>
@@ -375,7 +383,7 @@ main{max-width:1240px;margin:auto;padding:36px 28px 80px}
   function track(type,data){
     try{fetch('/api/event',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type,data,lead:state.lead,ts:new Date().toISOString()}),keepalive:true}).catch(()=>{})}catch(e){}
   }
-  const labels=['Between-session engagement','Client AI reality','Ethical AI co-pilot'];
+  const labels=['Between-session engagement','Client AI reality','Ethical AI co-pilot & DAP notes'];
 
   function go(step){
     const id={1:'v-intro',2:'v-intro',3:'v-consensus',4:'v-book',5:'v-pay'}[step];
@@ -412,7 +420,7 @@ main{max-width:1240px;margin:auto;padding:36px 28px 80px}
     if(!/^\S+@\S+\.\S+$/.test(L.em)){$('#lead-err').textContent='Please enter a valid email address.';return}
     state.lead=L;$('#lead-err').textContent='';
     track('lead',{ratings:state.ratings});
-    $('#greet').textContent='Welcome, '+L.fn+'. Here’s the community consensus.';
+    $('#greet').textContent='Welcome, '+L.fn+'. Here is the practitioner consensus.';
     $('#story').pause();
     renderBars();go(3);
     setTimeout(()=>$$('.fill').forEach(f=>f.style.width=f.dataset.w+'%'),120);
@@ -471,9 +479,9 @@ main{max-width:1240px;margin:auto;padding:36px 28px 80px}
     if(!stripeReady)return;
     const btn=$('#pay-btn');btn.disabled=true;btn.textContent='Processing…';$('#pay-err').textContent='';
     const {error,paymentIntent}=await stripe.confirmPayment({elements,redirect:'if_required',confirmParams:{return_url:location.origin+location.pathname,receipt_email:state.lead.em}});
-    if(error){$('#pay-err').textContent=error.message;btn.disabled=false;btn.textContent='Pay $297.00 & enroll';return}
+    if(error){$('#pay-err').textContent=error.message;btn.disabled=false;btn.textContent='Pay $297.00 & Enroll in Practitioner Lab';return}
     $('#pay-grid').style.display='none';$('#success').style.display='block';$('#success').classList.add('col-swap');
-    $('#ok-msg').textContent='A confirmation is on its way to '+state.lead.em+'.';
+    $('#ok-msg').textContent='A confirmation is on its way to '+state.lead.em+'. You will receive your LearnWorlds classroom invite and Squad assignment for Session 0 Pre-Flight (Nov 28–29).';
     window.scrollTo({top:0,behavior:'smooth'});
   });
 })();
