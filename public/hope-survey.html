@@ -67,54 +67,13 @@
             gap: 0.5rem;
             flex-shrink: 0;
         }
-        @media (min-width: 1025px) and (max-width: 1380px) {
-            .header {
-                padding: 0.75rem 1rem;
-                gap: 0.5rem;
-            }
-            .logo {
-                font-size: 1.25rem;
-            }
-            .brand-sub {
-                font-size: 1rem;
-            }
-            .desktop-menu ul {
-                gap: 0.55rem;
-            }
-            .desktop-menu a,
-            .desktop-menu .dropdown-toggle {
-                font-size: 0.78rem;
-            }
-            .desktop-menu ul > li > a.active:not(.nav-cta-pill),
-            .desktop-menu ul > li > a[aria-current="page"]:not(.nav-cta-pill),
-            .desktop-menu .dropdown > .dropdown-toggle.active-parent {
-                padding: 0.18rem 0.45rem;
-            }
-            .nav-cta-pill {
-                padding: 0.35rem 0.75rem;
-                font-size: 0.78rem !important;
-            }
-        }
         @media (max-width: 640px) {
-            .header {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                gap: 0.4rem;
-                padding: 0.45rem 0.75rem;
-            }
-            .logo {
-                font-size: 1.15rem;
-            }
-            .brand-sub {
-                font-size: 0.95rem;
-            }
             .header-auth-wrap {
                 gap: 0.35rem;
             }
         }
         html, body {
-            overflow-x: hidden;
+            overflow-x: clip;
             max-width: 100vw;
         }
     </style>
@@ -123,8 +82,8 @@
     
     <!-- THRiVE Global Header -->
     <header class="header print:hidden">
-        <nav class="nav-left">
-            <button class="hamburger" aria-label="Toggle menu">
+        <nav class="nav-left" aria-label="Primary Mobile Navigation">
+            <button class="hamburger" type="button" aria-label="Toggle Menu" aria-expanded="false" aria-controls="mobile-nav-drawer">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -136,65 +95,77 @@
             </a>
         </div>
         <div class="nav-right">
-            <div class="desktop-menu">
+            <nav class="desktop-menu" aria-label="Primary Navigation">
                 <ul class="nav-links">
-                    <li><a href="index.html#about">About</a></li>
-                    <li><a href="approach.html">Our Approach</a></li>
-                    <li><a href="classes.html">Classes</a></li>
-                    <li><a href="onboarding.html">Session 0 Hub</a></li>
+                    <li><a href="approach.html">How It Works</a></li>
+                    <li><a href="classes.html">Class Schedule</a></li>
                     <li class="dropdown resources-dropdown">
-                        <button type="button" class="dropdown-toggle active-parent" aria-expanded="false" aria-haspopup="true">Resources <span class="dropdown-caret">&#9662;</span></button>
-                        <div class="dropdown-content">
+                        <button type="button" class="dropdown-toggle active-parent" aria-expanded="false" aria-haspopup="true" aria-controls="desktop-resources-menu">Resources <span class="dropdown-caret" aria-hidden="true">&#9662;</span></button>
+                        <div class="dropdown-content resources-mega-menu" id="desktop-resources-menu">
+                            <div class="resources-group">
+                                <div class="resources-group-label">Tools &amp; Assessments</div>
+                                <a href="profile.html">THRiVE Report</a>
+                                <a href="hope-survey.html" class="active" aria-current="page">HoPE Index</a>
+                                <a href="survey.html">Flow Survey</a>
+                            </div>
+                            <div class="resources-group">
+                                <div class="resources-group-label">Learning</div>
+                                <a href="how-to-use.html">Overview &amp; Guide</a>
+                                <a href="index.html#video-section">Video</a>
+                                <a href="index.html#about">3-Tier Ecosystem</a>
+                            </div>
+                            <div class="resources-group">
+                                <div class="resources-group-label">Practical Guides</div>
+                                <a href="rebuilding-life-challenges.html">Rebuilding Life Challenges</a>
+                                <a href="employment-challenges.html">Employment Challenges</a>
+                            </div>
+                            <div class="resources-group">
+                                <div class="resources-group-label">Events</div>
+                                <a href="index.html#lunch-and-learn">Lunch &amp; Learn</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li><a href="funnel.html" class="nav-cta-pill">Claim Your Seat</a></li>
+                </ul>
+            </nav>
+            <a href="funnel.html" class="mobile-header-cta">Claim Your Seat</a>
+            <div id="header-auth-slot" class="header-auth-wrap"></div>
+        </div>
+
+        <nav class="nav-menu mobile-drawer" id="mobile-nav-drawer" aria-label="Mobile Navigation">
+            <div class="menu-title">FIND YOUR FLOW</div>
+            <ul>
+                <li><a href="approach.html">How It Works</a></li>
+                <li><a href="classes.html">Class Schedule</a></li>
+                <li class="dropdown resources-dropdown">
+                    <button type="button" class="dropdown-toggle active-parent" aria-expanded="false" aria-haspopup="true" aria-controls="mobile-resources-menu">Resources <span class="dropdown-caret" aria-hidden="true">&#9662;</span></button>
+                    <div class="dropdown-content" id="mobile-resources-menu">
+                        <div class="resources-group">
+                            <div class="resources-group-label">Tools &amp; Assessments</div>
                             <a href="profile.html">THRiVE Report</a>
                             <a href="hope-survey.html" class="active" aria-current="page">HoPE Index</a>
                             <a href="survey.html">Flow Survey</a>
                         </div>
-                    </li>
-                    <li class="dropdown">
-                        <a href="how-to-use.html">How To Use <span class="dropdown-caret">&#9662;</span></a>
-                        <div class="dropdown-content">
+                        <div class="resources-group">
+                            <div class="resources-group-label">Learning</div>
                             <a href="how-to-use.html">Overview &amp; Guide</a>
-                            <a href="onboarding.html">Session 0 Pre-Flight Hub</a>
+                            <a href="index.html#video-section">Video</a>
+                            <a href="index.html#about">3-Tier Ecosystem</a>
+                        </div>
+                        <div class="resources-group">
+                            <div class="resources-group-label">Practical Guides</div>
                             <a href="rebuilding-life-challenges.html">Rebuilding Life Challenges</a>
                             <a href="employment-challenges.html">Employment Challenges</a>
                         </div>
-                    </li>
-                    <li><a href="index.html#video-section">Video</a></li>
-                    <li><a href="mockup-landing.html">SOL THRiVE</a></li>
-                    <li><a href="funnel.html" class="nav-cta-pill">Claim Your Seat &rarr;</a></li>
-                </ul>
-            </div>
-            <div id="header-auth-slot" class="header-auth-wrap"></div>
-        </div>
-
-        <div class="nav-menu mobile-drawer">
-            <div class="menu-title">FIND YOUR FLOW</div>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="onboarding.html">Session 0 Pre-Flight Hub</a></li>
-                <li><a href="classes.html">Classes</a></li>
-                <li class="dropdown resources-dropdown">
-                    <button type="button" class="dropdown-toggle active-parent" aria-expanded="false" aria-haspopup="true">Resources <span class="dropdown-caret">&#9662;</span></button>
-                    <div class="dropdown-content">
-                        <a href="profile.html">THRiVE Report</a>
-                        <a href="hope-survey.html" class="active" aria-current="page">HoPE Index</a>
-                        <a href="survey.html">Flow Survey</a>
+                        <div class="resources-group">
+                            <div class="resources-group-label">Events</div>
+                            <a href="index.html#lunch-and-learn">Lunch &amp; Learn</a>
+                        </div>
                     </div>
                 </li>
-                <li><a href="approach.html">Our Approach</a></li>
-                <li class="dropdown">
-                    <a href="how-to-use.html">How To Use This Page</a>
-                    <div class="dropdown-content">
-                        <a href="onboarding.html">Session 0 Pre-Flight Hub</a>
-                        <a href="rebuilding-life-challenges.html">Rebuilding Life Challenges</a>
-                        <a href="employment-challenges.html">Employment Challenges</a>
-                    </div>
-                </li>
-                <li><a href="index.html#about">About</a></li>
-                <li><a href="index.html#video-section">Video</a></li>
-                <li><a href="mockup-landing.html">SOL THRiVE</a></li>
+                <li class="mobile-drawer-cta-wrap"><a href="funnel.html" class="mobile-drawer-cta">Claim Your Seat</a></li>
             </ul>
-        </div>
+        </nav>
     </header>
 
     <div id="root"></div>
@@ -225,14 +196,16 @@
                 <p>Evidence-based psychology meets applied AI to help you find your flow.</p>
             </div>
             <div class="footer-nav">
-                <a href="onboarding.html">Session 0 Hub</a>
-                <a href="classes.html">Classes</a>
-                <a href="survey.html">Flow Survey</a>
+                <a href="approach.html">How It Works</a>
+                <a href="classes.html">Class Schedule</a>
                 <a href="profile.html">THRiVE Report</a>
                 <a href="hope-survey.html">HoPE Index</a>
-                <a href="approach.html">Our Approach</a>
-                <a href="how-to-use.html">How To Use</a>
-                <a href="mockup-landing.html">SOL THRiVE</a>
+                <a href="survey.html">Flow Survey</a>
+                <a href="how-to-use.html">Overview &amp; Guide</a>
+                <a href="rebuilding-life-challenges.html">Rebuilding Life Challenges</a>
+                <a href="employment-challenges.html">Employment Challenges</a>
+                <a href="index.html#lunch-and-learn">Lunch &amp; Learn</a>
+                <a href="funnel.html">Claim Your Seat</a>
             </div>
             <div class="footer-contact">
                 <a href="mailto:team@thrivecoaching.ai">team@thrivecoaching.ai</a>

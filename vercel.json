@@ -1,5 +1,9 @@
 {
   "cleanUrls": true,
+  "redirects": [
+    { "source": "/mockup-landing", "destination": "/funnel", "permanent": true },
+    { "source": "/mockup-landing.html", "destination": "/funnel", "permanent": true }
+  ],
   "rewrites": [
     { "source": "/landingpage", "destination": "/funnel.html" }
   ],

@@ -42,20 +42,28 @@ var fireThriveHaptic = function (durationOrPattern = 15) {
 };
 
 const initThriveUI = () => {
-    // Click-driven Resources Dropdown Logic (Desktop & Mobile Drawer)
+    // Click & Keyboard-Accessible Resources Dropdown Logic (Desktop & Mobile Drawer)
     const clickDropdowns = Array.from(document.querySelectorAll('.dropdown.resources-dropdown'));
-    const closeClickDropdowns = (exceptDropdown = null) => {
+    const closeClickDropdowns = (exceptDropdown = null, restoreToggleFocus = false) => {
         clickDropdowns.forEach(dd => {
             if (dd === exceptDropdown) return;
+            const wasOpen = dd.classList.contains('open');
             dd.classList.remove('open');
             const toggle = dd.querySelector(':scope > .dropdown-toggle');
-            if (toggle) toggle.setAttribute('aria-expanded', 'false');
+            if (toggle) {
+                toggle.setAttribute('aria-expanded', 'false');
+                if (restoreToggleFocus && wasOpen && dd.contains(document.activeElement)) {
+                    toggle.focus();
+                }
+            }
         });
     };
 
     clickDropdowns.forEach(dd => {
         const toggle = dd.querySelector(':scope > .dropdown-toggle');
         if (!toggle) return;
+        const getMenuItems = () => Array.from(dd.querySelectorAll('.dropdown-content a'));
+
         toggle.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -64,7 +72,55 @@ const initThriveUI = () => {
             dd.classList.toggle('open', willOpen);
             toggle.setAttribute('aria-expanded', String(willOpen));
         });
-        dd.querySelectorAll('.dropdown-content a').forEach(item => {
+
+        toggle.addEventListener('keydown', (e) => {
+            const items = getMenuItems();
+            if (!items.length) return;
+            if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                e.preventDefault();
+                e.stopPropagation();
+                closeClickDropdowns(dd);
+                dd.classList.add('open');
+                toggle.setAttribute('aria-expanded', 'true');
+                (e.key === 'ArrowDown' ? items[0] : items[items.length - 1]).focus();
+            }
+        });
+
+        dd.addEventListener('keydown', (e) => {
+            if (!dd.classList.contains('open')) return;
+            const items = getMenuItems();
+            const idx = items.indexOf(document.activeElement);
+            if (e.key === 'Escape') {
+                e.preventDefault();
+                e.stopPropagation();
+                closeClickDropdowns(null, true);
+                return;
+            }
+            if (!items.length || idx === -1) return;
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                items[(idx + 1) % items.length].focus();
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                items[(idx - 1 + items.length) % items.length].focus();
+            } else if (e.key === 'Home') {
+                e.preventDefault();
+                items[0].focus();
+            } else if (e.key === 'End') {
+                e.preventDefault();
+                items[items.length - 1].focus();
+            }
+        });
+
+        dd.addEventListener('focusout', (e) => {
+            if (!dd.classList.contains('open')) return;
+            if (e.relatedTarget && !dd.contains(e.relatedTarget)) {
+                dd.classList.remove('open');
+                toggle.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        getMenuItems().forEach(item => {
             item.addEventListener('click', () => {
                 dd.classList.remove('open');
                 toggle.setAttribute('aria-expanded', 'false');
@@ -80,7 +136,7 @@ const initThriveUI = () => {
 
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
-            closeClickDropdowns();
+            closeClickDropdowns(null, true);
         }
     });
 
@@ -90,29 +146,36 @@ const initThriveUI = () => {
     const navLinks = document.querySelectorAll('.nav-menu a');
 
     if (hamburger && navMenu) {
+        const setDrawerState = (open, restoreFocus = false) => {
+            navMenu.classList.toggle('open', open);
+            hamburger.classList.toggle('open', open);
+            hamburger.setAttribute('aria-expanded', String(open));
+            if (!open) {
+                closeClickDropdowns();
+                if (restoreFocus) hamburger.focus();
+            }
+        };
+
         hamburger.setAttribute('aria-expanded', 'false');
         hamburger.addEventListener('click', () => {
-            const isOpen = navMenu.classList.toggle('open');
-            hamburger.classList.toggle('open', isOpen);
-            hamburger.setAttribute('aria-expanded', String(isOpen));
-            if (!isOpen) closeClickDropdowns();
+            setDrawerState(!navMenu.classList.contains('open'));
         });
 
         navLinks.forEach(link => {
             link.addEventListener('click', () => {
-                navMenu.classList.remove('open');
-                hamburger.classList.remove('open');
-                hamburger.setAttribute('aria-expanded', 'false');
-                closeClickDropdowns();
+                setDrawerState(false);
             });
         });
 
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && navMenu.classList.contains('open')) {
-                navMenu.classList.remove('open');
-                hamburger.classList.remove('open');
-                hamburger.setAttribute('aria-expanded', 'false');
-                closeClickDropdowns();
+                setDrawerState(false, true);
+            }
+        });
+
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 1025 && navMenu.classList.contains('open')) {
+                setDrawerState(false);
             }
         });
     }
@@ -229,13 +292,13 @@ const initThriveUI = () => {
         }
         const currentSlug = resolveCurrentPageSlug(pathname, isCustomPathname);
         const currentHash = String(rawHash || '').trim().toLowerCase();
-        const effectiveNavSlug = (currentSlug === 'results' || currentSlug === 'funnel' || currentSlug === 'landingpage')
-            ? 'mockup-landing'
+        const effectiveNavSlug = (currentSlug === 'results' || currentSlug === 'mockup-landing' || currentSlug === 'landingpage')
+            ? 'funnel'
             : currentSlug;
         const is404Route = currentSlug === '404' || effectiveNavSlug === '404';
 
         const allNavLinks = Array.from(document.querySelectorAll(
-            '.desktop-menu a, .nav-menu a, .nav-links a, .mobile-drawer a, .top-nav a, .challenge-switcher a'
+            '.desktop-menu a, .nav-menu a, .nav-links a, .mobile-drawer a, .mobile-header-cta, .top-nav a, .challenge-switcher a'
         ));
 
         let hasMatchingHashNav = false;
