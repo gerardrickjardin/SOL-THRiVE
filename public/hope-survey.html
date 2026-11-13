@@ -81,11 +81,13 @@
             .desktop-menu ul {
                 gap: 0.55rem;
             }
-            .desktop-menu a {
+            .desktop-menu a,
+            .desktop-menu .dropdown-toggle {
                 font-size: 0.78rem;
             }
             .desktop-menu ul > li > a.active:not(.nav-cta-pill),
-            .desktop-menu ul > li > a[aria-current="page"]:not(.nav-cta-pill) {
+            .desktop-menu ul > li > a[aria-current="page"]:not(.nav-cta-pill),
+            .desktop-menu .dropdown > .dropdown-toggle.active-parent {
                 padding: 0.18rem 0.45rem;
             }
             .nav-cta-pill {
@@ -140,8 +142,14 @@
                     <li><a href="approach.html">Our Approach</a></li>
                     <li><a href="classes.html">Classes</a></li>
                     <li><a href="onboarding.html">Session 0 Hub</a></li>
-                    <li><a href="profile.html">THRiVE Report</a></li>
-                    <li><a href="hope-survey.html" class="active" aria-current="page">HoPE Index</a></li>
+                    <li class="dropdown resources-dropdown">
+                        <button type="button" class="dropdown-toggle active-parent" aria-expanded="false" aria-haspopup="true">Resources <span class="dropdown-caret">&#9662;</span></button>
+                        <div class="dropdown-content">
+                            <a href="profile.html">THRiVE Report</a>
+                            <a href="hope-survey.html" class="active" aria-current="page">HoPE Index</a>
+                            <a href="survey.html">Flow Survey</a>
+                        </div>
+                    </li>
                     <li class="dropdown">
                         <a href="how-to-use.html">How To Use <span class="dropdown-caret">&#9662;</span></a>
                         <div class="dropdown-content">
@@ -153,7 +161,7 @@
                     </li>
                     <li><a href="index.html#video-section">Video</a></li>
                     <li><a href="mockup-landing.html">SOL THRiVE</a></li>
-                    <li><a href="survey.html" class="nav-cta-pill">Flow Survey &rarr;</a></li>
+                    <li><a href="funnel.html" class="nav-cta-pill">Claim Your Seat &rarr;</a></li>
                 </ul>
             </div>
             <div id="header-auth-slot" class="header-auth-wrap"></div>
@@ -165,9 +173,14 @@
                 <li><a href="index.html">Home</a></li>
                 <li><a href="onboarding.html">Session 0 Pre-Flight Hub</a></li>
                 <li><a href="classes.html">Classes</a></li>
-                <li><a href="survey.html">Flow Survey</a></li>
-                <li><a href="profile.html">THRiVE Report</a></li>
-                <li><a href="hope-survey.html" class="active" aria-current="page">HoPE Index</a></li>
+                <li class="dropdown resources-dropdown">
+                    <button type="button" class="dropdown-toggle active-parent" aria-expanded="false" aria-haspopup="true">Resources <span class="dropdown-caret">&#9662;</span></button>
+                    <div class="dropdown-content">
+                        <a href="profile.html">THRiVE Report</a>
+                        <a href="hope-survey.html" class="active" aria-current="page">HoPE Index</a>
+                        <a href="survey.html">Flow Survey</a>
+                    </div>
+                </li>
                 <li><a href="approach.html">Our Approach</a></li>
                 <li class="dropdown">
                     <a href="how-to-use.html">How To Use This Page</a>

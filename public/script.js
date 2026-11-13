@@ -42,6 +42,48 @@ var fireThriveHaptic = function (durationOrPattern = 15) {
 };
 
 const initThriveUI = () => {
+    // Click-driven Resources Dropdown Logic (Desktop & Mobile Drawer)
+    const clickDropdowns = Array.from(document.querySelectorAll('.dropdown.resources-dropdown'));
+    const closeClickDropdowns = (exceptDropdown = null) => {
+        clickDropdowns.forEach(dd => {
+            if (dd === exceptDropdown) return;
+            dd.classList.remove('open');
+            const toggle = dd.querySelector(':scope > .dropdown-toggle');
+            if (toggle) toggle.setAttribute('aria-expanded', 'false');
+        });
+    };
+
+    clickDropdowns.forEach(dd => {
+        const toggle = dd.querySelector(':scope > .dropdown-toggle');
+        if (!toggle) return;
+        toggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const willOpen = !dd.classList.contains('open');
+            closeClickDropdowns(dd);
+            dd.classList.toggle('open', willOpen);
+            toggle.setAttribute('aria-expanded', String(willOpen));
+        });
+        dd.querySelectorAll('.dropdown-content a').forEach(item => {
+            item.addEventListener('click', () => {
+                dd.classList.remove('open');
+                toggle.setAttribute('aria-expanded', 'false');
+            });
+        });
+    });
+
+    document.addEventListener('click', (e) => {
+        if (e.target && typeof e.target.closest === 'function' && !e.target.closest('.dropdown.resources-dropdown')) {
+            closeClickDropdowns();
+        }
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeClickDropdowns();
+        }
+    });
+
     // Hamburger Menu Logic
     const hamburger = document.querySelector('.hamburger');
     const navMenu = document.querySelector('.nav-menu');
@@ -53,6 +95,7 @@ const initThriveUI = () => {
             const isOpen = navMenu.classList.toggle('open');
             hamburger.classList.toggle('open', isOpen);
             hamburger.setAttribute('aria-expanded', String(isOpen));
+            if (!isOpen) closeClickDropdowns();
         });
 
         navLinks.forEach(link => {
@@ -60,6 +103,7 @@ const initThriveUI = () => {
                 navMenu.classList.remove('open');
                 hamburger.classList.remove('open');
                 hamburger.setAttribute('aria-expanded', 'false');
+                closeClickDropdowns();
             });
         });
 
@@ -68,6 +112,7 @@ const initThriveUI = () => {
                 navMenu.classList.remove('open');
                 hamburger.classList.remove('open');
                 hamburger.setAttribute('aria-expanded', 'false');
+                closeClickDropdowns();
             }
         });
     }
@@ -231,7 +276,7 @@ const initThriveUI = () => {
         });
 
         document.querySelectorAll('.desktop-menu .dropdown, .nav-menu .dropdown, .nav-links .dropdown, .mobile-drawer .dropdown').forEach(dropdown => {
-            const trigger = dropdown.querySelector(':scope > a');
+            const trigger = dropdown.querySelector(':scope > a, :scope > .dropdown-toggle');
             const activeChild = dropdown.querySelector('.dropdown-content a.active, .dropdown-content a[aria-current="page"]');
             if (trigger) {
                 trigger.classList.toggle('active-parent', Boolean(!is404Route && activeChild && !trigger.classList.contains('active')));
