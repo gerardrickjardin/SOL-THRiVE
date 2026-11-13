@@ -791,6 +791,106 @@ a {
     font-size: clamp(0.88rem, 1.08vw, 1rem);
 }
 
+.hero-cta-stack {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.85rem;
+    margin-top: 0.25rem;
+}
+
+.cta-button.hero-primary-cta {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem 0.75rem;
+    padding: 0.9rem 1.45rem;
+    background: linear-gradient(135deg, #B91372 0%, #6D1CC4 100%);
+    color: #ffffff;
+    border: 2px solid var(--ink-border);
+    box-shadow: 0 12px 28px rgba(109, 28, 196, 0.34), 3px 3px 0 var(--ink-border);
+    white-space: normal;
+    max-width: 100%;
+    line-height: 1.25;
+}
+
+.cta-button.hero-primary-cta:hover {
+    background: linear-gradient(135deg, #A30F64 0%, #5B15A6 100%);
+    transform: translate(-2px, -2px);
+    box-shadow: 0 16px 34px rgba(109, 28, 196, 0.42), 5px 5px 0 var(--ink-border);
+}
+
+.cta-button.hero-primary-cta:focus-visible {
+    outline: 3px solid var(--ink-border);
+    outline-offset: 4px;
+}
+
+.hero-cta-label {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: clamp(0.95rem, 1.15vw, 1.08rem);
+    letter-spacing: -0.01em;
+    color: #ffffff;
+}
+
+.hero-cta-pricing {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    padding: 0.22rem 0.72rem;
+    border-radius: 999px;
+    background-color: #ffffff;
+    border: 1.5px solid var(--ink-border);
+    line-height: 1.15;
+    flex-shrink: 0;
+}
+
+.hero-price-regular {
+    font-size: 0.85em;
+    font-weight: 600;
+    color: #6B7280;
+    text-decoration: line-through;
+    text-decoration-thickness: 1.75px;
+}
+
+.hero-price-founding {
+    font-size: 1.05em;
+    font-weight: 900;
+    color: #5B15A6;
+}
+
+.hero-secondary-link {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: clamp(0.88rem, 1vw, 0.96rem);
+    font-weight: 500;
+    color: #374151;
+    line-height: 1.45;
+    max-width: 100%;
+    padding: 0.15rem 0.3rem;
+    border-radius: 6px;
+    transition: color 0.2s ease;
+}
+
+.hero-secondary-action {
+    font-weight: 700;
+    color: #5B15A6;
+    text-decoration: underline;
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 3px;
+    transition: color 0.2s ease;
+}
+
+.hero-secondary-link:hover .hero-secondary-action {
+    color: #B91372;
+}
+
+.hero-secondary-link:focus-visible {
+    outline: 2.5px solid #5B15A6;
+    outline-offset: 3px;
+}
+
 .hero-trust-row {
     display: flex;
     flex-wrap: wrap;
@@ -839,6 +939,18 @@ a {
     .hero-cta-group .cta-button {
         padding: 0.7rem 1.1rem;
         font-size: clamp(0.84rem, min(1.08vw, 2.1vh), 1rem);
+    }
+    .hero-cta-stack {
+        gap: 0.65rem;
+    }
+    .cta-button.hero-primary-cta {
+        padding: 0.76rem 1.25rem;
+    }
+    .hero-cta-label {
+        font-size: clamp(0.86rem, min(1.08vw, 2.05vh), 1.02rem);
+    }
+    .hero-secondary-link {
+        font-size: clamp(0.82rem, min(0.95vw, 1.85vh), 0.92rem);
     }
 }
 

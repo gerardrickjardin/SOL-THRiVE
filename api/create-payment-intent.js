@@ -1,5 +1,5 @@
 // Creates a Stripe PaymentIntent. Price is fixed server-side so it can't be tampered with.
-const AMOUNT_CENTS = 29700; // $297.00
+const AMOUNT_CENTS = 49500; // $495.00 Founding Seat Rate (Regular $995.00)
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
@@ -11,7 +11,7 @@ module.exports = async (req, res) => {
     amount: String(AMOUNT_CENTS),
     currency: 'usd',
     'automatic_payment_methods[enabled]': 'true',
-    description: 'THRIVE Coaching Course',
+    description: '5 to THRiVE Practitioner Lab — Founding Seat',
     receipt_email: lead.em || '',
     'metadata[first_name]': lead.fn || '',
     'metadata[last_name]': lead.ln || '',
