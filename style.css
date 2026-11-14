@@ -639,7 +639,7 @@ a {
     align-items: center;
     position: relative;
     overflow: hidden;
-    background-color: #FCF4E3;
+    background-color: #FEFAF3;
     border-bottom: none;
     padding: clamp(2rem, 4vw, 3.25rem) 5%;
 }
@@ -963,7 +963,7 @@ a {
    HERO VALUE PILLARS STRIP (BELOW HERO)
    ========================================== */
 .hero-pillars-strip {
-    background-color: #FCF4E3;
+    background-color: #FEFAF3;
     padding: 0.5rem 5% clamp(2.5rem, 4vw, 3.5rem);
     position: relative;
     z-index: 2;

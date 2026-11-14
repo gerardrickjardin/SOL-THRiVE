@@ -10,6 +10,7 @@ const EXCLUDED_ASSETS = new Set([
   'Hero Page (1).png',
   'SOL THRiVE Hero Page Background.png',
   'hero-uphill-strides.png',
+  'New Hero Page Background V2.png',
   'THRiVECoaching Hero img.jpeg',
   'hope_index_visual.png',
   'map_mockup.png',
