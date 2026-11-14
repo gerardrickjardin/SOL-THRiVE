@@ -247,8 +247,8 @@
         <!-- Third Section: The 5-Step Method (Unstuck Your Self: The 5 to THRiVE Method) -->
         <section id="method-section" class="method-section">
             <div class="method-bg-tufts" aria-hidden="true">
-                <svg class="method-tuft method-tuft-left" viewBox="0 0 120 70"><path d="M0 64 Q45 50 96 58 M16 58 L8 38 M22 57 L22 33 M28 57 L36 39 M44 55 L42 42 M52 55 L58 43" fill="none" stroke="#18181B" stroke-width="1.8" stroke-linecap="round"/></svg>
-                <svg class="method-tuft method-tuft-right" viewBox="0 0 120 70"><path d="M24 58 Q75 50 120 64 M76 55 L70 41 M84 55 L86 35 M92 56 L98 37 M102 58 L112 45" fill="none" stroke="#18181B" stroke-width="1.8" stroke-linecap="round"/></svg>
+                <img class="method-tuft method-tuft-left" src="assets/method-sketch-hill.png" alt="" width="320" height="170" loading="lazy">
+                <img class="method-tuft method-tuft-right" src="assets/method-sketch-hill.png" alt="" width="320" height="170" loading="lazy">
             </div>
 
             <div class="method-container">
@@ -288,37 +288,17 @@
                         </div>
 
                         <div class="method-journey-track">
-                            <!-- Hand-drawn connecting arcs, thinker sketch, and summit flag SVG -->
-                            <svg class="method-journey-svg" viewBox="0 0 1000 220" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-                                <!-- Thinker sketch on left -->
-                                <g stroke="#18181B" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M46 58 c-7 -8 5 -18 14 -12 c8 -6 19 4 12 13 c5 7 -4 16 -13 12 c-8 4 -18 -4 -13 -13 z" stroke-width="1.5"/>
-                                    <path d="M52 60 c4 -4 11 -1 8 4 c-3 4 -9 1 -6 -3" stroke-width="1.3"/>
-                                    <circle cx="59" cy="96" r="11" fill="#FFFEFA"/>
-                                    <path d="M47 110 h24 l-2 36 h-20 z" fill="#FFFEFA"/>
-                                    <path d="M51 146 v36 M67 146 v36 M45 182 h9 M64 182 h9 M47 114 l-6 14 l12 -4 M69 114 l6 15 l-13 2"/>
-                                    <path d="M34 184 h50" stroke-width="1.6"/>
-                                </g>
+                            <!-- Nano Banana hand-drawn thinker and summit ridge sketches -->
+                            <img class="method-thinker-img" src="assets/method-sketch-thinker.png" alt="Hand-drawn puzzled thinker illustration" width="362" height="380" loading="lazy">
+                            <img class="method-summit-img" src="assets/method-sketch-summit.png" alt="Hand-drawn mountain summit peak with purple flag" width="540" height="277" loading="lazy">
 
-                                <!-- Flowing dashed path between Steps 1..5 and Summit -->
-                                <path d="M188 92 Q256 44 318 108 M366 132 Q420 162 478 82 M532 62 Q588 30 648 112 M694 134 Q742 158 790 74 M836 62 L900 72" fill="none" stroke="#18181B" stroke-width="2" stroke-dasharray="6 6" stroke-linecap="round"/>
-
+                            <!-- Dashed journey arcs connecting nodes 1..5 to the summit ridge -->
+                            <svg class="method-journey-svg" viewBox="0 0 1000 230" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+                                <path d="M216 96 Q274 52 325 110 M370 124 Q420 144 464 88 M514 68 Q562 46 592 108 M640 120 Q672 120 699 82 M750 66 Q796 58 830 128" fill="none" stroke="#18181B" stroke-width="2" stroke-dasharray="6 6" stroke-linecap="round"/>
                                 <!-- Crest sparks over Step 3 -->
-                                <path d="M492 22 L488 10 M505 20 L505 7 M518 22 L523 11" fill="none" stroke="#18181B" stroke-width="1.8" stroke-linecap="round"/>
+                                <path d="M478 24 L474 12 M490 22 L490 9 M502 24 L507 13" fill="none" stroke="#18181B" stroke-width="1.8" stroke-linecap="round"/>
                                 <!-- Small arc accent over Step 2 -->
-                                <path d="M368 48 L377 37 M374 53 L384 44" fill="none" stroke="#18181B" stroke-width="1.7" stroke-linecap="round"/>
-
-                                <!-- Summit mountain and purple flag on right -->
-                                <g stroke="#18181B" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M775 212 Q838 175 882 108 L912 66 L938 82 Q964 114 995 142" fill="#FAF4E8"/>
-                                    <path d="M846 196 Q914 148 992 162"/>
-                                    <path d="M886 112 L908 118 M922 86 L944 96 M832 184 L856 176"/>
-                                    <path d="M806 198 L802 188 M812 198 L813 187 M965 152 L968 142 M972 153 L979 144" stroke-width="1.5"/>
-                                    <!-- Summit flag -->
-                                    <path d="M912 66 V30"/>
-                                    <path d="M912 31 L939 38 L912 47 Z" fill="#8B5CF6"/>
-                                    <path d="M901 23 L894 17 M912 20 L912 11 M924 23 L931 17 M944 31 L952 29" stroke-width="1.6"/>
-                                </g>
+                                <path d="M368 50 L377 39 M374 55 L384 46" fill="none" stroke="#18181B" stroke-width="1.7" stroke-linecap="round"/>
                             </svg>
 
                             <!-- Semantic positioned numbered question nodes -->
@@ -356,11 +336,7 @@
                                 <span class="method-step-num method-num-lavender">1</span>
                                 <h3>Who are you?</h3>
                             </div>
-                            <svg class="method-step-icon" viewBox="0 0 48 48" aria-hidden="true">
-                                <circle cx="24" cy="24" r="7.5" fill="none" stroke="#18181B" stroke-width="2"/>
-                                <path d="M12 41 c1.5 -7 22.5 -7 24 0" fill="none" stroke="#18181B" stroke-width="2" stroke-linecap="round"/>
-                                <path d="M17 12 L13 7 M24 10 V4 M31 12 L35 7" fill="none" stroke="#18181B" stroke-width="1.9" stroke-linecap="round"/>
-                            </svg>
+                            <img class="method-step-icon" src="assets/method-icon-person.png" alt="Hand-drawn person sketch icon" width="44" height="68" loading="lazy">
                         </div>
                         <span class="method-step-subtitle">The THRiVE Report</span>
                         <p>Bypass deficit-heavy intake forms with a conversational, strengths-based map across Traits, Hobbies, Relationships, Interests, Values, and Experiences.</p>
@@ -372,12 +348,7 @@
                                 <span class="method-step-num method-num-yellow">2</span>
                                 <h3>Where are you?</h3>
                             </div>
-                            <svg class="method-step-icon" viewBox="0 0 48 48" aria-hidden="true">
-                                <path d="M7 22 l11 -4 l12 4 l11 -4 v19 l-11 4 l-12 -4 l-11 4 z" fill="#FFFEFA" stroke="#18181B" stroke-width="1.9" stroke-linejoin="round"/>
-                                <path d="M18 18 v19 M30 22 v19" fill="none" stroke="#18181B" stroke-width="1.7"/>
-                                <path d="M24 27 c-4.5 -5.5 -6.5 -9.5 -6.5 -12.5 a6.5 6.5 0 1 1 13 0 c0 3 -2 7 -6.5 12.5 z" fill="#D8B4FE" stroke="#18181B" stroke-width="1.9"/>
-                                <circle cx="24" cy="14.5" r="2.2" fill="#FFFEFA" stroke="#18181B" stroke-width="1.5"/>
-                            </svg>
+                            <img class="method-step-icon method-step-icon-wide" src="assets/method-icon-map.png" alt="Hand-drawn folded map with pin icon" width="58" height="45" loading="lazy">
                         </div>
                         <span class="method-step-subtitle">The Flow Survey</span>
                         <p>Pinpoint the friction slowing you down across Agency, Actions, Tools, and Support to establish your Day 1 baseline score.</p>
@@ -389,12 +360,7 @@
                                 <span class="method-step-num method-num-lavender">3</span>
                                 <h3>Where do you want to be?</h3>
                             </div>
-                            <svg class="method-step-icon" viewBox="0 0 48 48" aria-hidden="true">
-                                <circle cx="22" cy="27" r="14" fill="#FFFEFA" stroke="#18181B" stroke-width="1.9"/>
-                                <circle cx="22" cy="27" r="8.5" fill="#FFFEFA" stroke="#18181B" stroke-width="1.8"/>
-                                <circle cx="22" cy="27" r="3.5" fill="#D8B4FE" stroke="#18181B" stroke-width="1.8"/>
-                                <path d="M23 26 L38 11 M33 10 h6 v6 M36 13 l3 -5 M36 13 l5 -3" fill="none" stroke="#18181B" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
+                            <img class="method-step-icon" src="assets/method-icon-target.png" alt="Hand-drawn bullseye target with arrow icon" width="50" height="50" loading="lazy">
                         </div>
                         <span class="method-step-subtitle">Future Vision</span>
                         <p>Paint a concrete visual metaphor of what life and work look like once the bottleneck is resolved.</p>
@@ -406,13 +372,7 @@
                                 <span class="method-step-num method-num-lavender">4</span>
                                 <h3>Who are you going to go with?</h3>
                             </div>
-                            <svg class="method-step-icon" viewBox="0 0 48 48" aria-hidden="true">
-                                <circle cx="13" cy="23" r="4.5" fill="#FFFEFA" stroke="#18181B" stroke-width="1.8"/>
-                                <circle cx="35" cy="23" r="4.5" fill="#FFFEFA" stroke="#18181B" stroke-width="1.8"/>
-                                <circle cx="24" cy="20" r="5.5" fill="#FFFEFA" stroke="#18181B" stroke-width="1.9"/>
-                                <path d="M6 39 c1 -5 13 -5 14 0 M28 39 c1 -5 13 -5 14 0 M15 41 c1.5 -6.5 16.5 -6.5 18 0" fill="#FFFEFA" stroke="#18181B" stroke-width="1.9" stroke-linecap="round"/>
-                                <path d="M18 10 L15 5 M24 8 V3 M30 10 L33 5" fill="none" stroke="#18181B" stroke-width="1.8" stroke-linecap="round"/>
-                            </svg>
+                            <img class="method-step-icon method-step-icon-wide" src="assets/method-icon-squad.png" alt="Hand-drawn three-person peer squad icon" width="58" height="46" loading="lazy">
                         </div>
                         <span class="method-step-subtitle">Your THRiVE Squad</span>
                         <p>Walk the trail alongside a dedicated 7-person peer squad of fellow practitioners so nobody climbs alone.</p>
@@ -424,12 +384,7 @@
                                 <span class="method-step-num method-num-yellow">5</span>
                                 <h3>How are you going to get there?</h3>
                             </div>
-                            <svg class="method-step-icon" viewBox="0 0 48 48" aria-hidden="true">
-                                <rect x="10" y="10" width="28" height="32" rx="4" fill="#FFFEFA" stroke="#18181B" stroke-width="1.9"/>
-                                <path d="M10 17 h28" fill="none" stroke="#18181B" stroke-width="1.8"/>
-                                <path d="M17 7 v6 M31 7 v6" fill="none" stroke="#18181B" stroke-width="2.2" stroke-linecap="round"/>
-                                <path d="M15 24 l2.5 2.5 l4 -4 M24 25 h9 M15 33 l2.5 2.5 l4 -4 M24 34 h9" fill="none" stroke="#18181B" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
+                            <img class="method-step-icon" src="assets/method-icon-clipboard.png" alt="Hand-drawn checklist notepad icon" width="46" height="56" loading="lazy">
                         </div>
                         <span class="method-step-subtitle">21 Strides</span>
                         <p>Break your vision into 21 daily micro-actions, worked seven at a time on your live Action Board and tracked on your Progress Map&mdash;while Personos drafts your clinical DAP notes.</p>
