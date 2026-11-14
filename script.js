@@ -701,47 +701,47 @@ const initThriveUI = () => {
     const COHORT_SESSIONS = [
         {
             week: 1,
-            title: "Week 01: Sensing the Landscape (CYNEFIN & Friction Diagnostic)",
-            description: "Live interactive workshop on CYNEFIN sense-making, friction diagnostics, and safe-to-try micro-experiments.",
-            dtstartUtc: "20261104T000000Z", // Tue Nov 3 5:00 PM MT = Wed Nov 4 00:00 UTC
-            dtendUtc: "20261104T011500Z",
-            dateDisplay: "Tuesday, November 3, 2026",
-            timeDisplayMt: "5:00 PM – 6:15 PM MT",
-            timeDisplayEt: "7:00 PM – 8:15 PM ET",
-            epochStart: 1793750400000 // 2026-11-04T00:00:00Z
+            title: "Session 01: Sensing the Landscape (CYNEFIN & Friction Diagnostic)",
+            description: "Live kickoff on CYNEFIN sense-making, the 167-hour bottleneck, Observer Stance, and Flow Survey triage.",
+            dtstartUtc: "20261208T000000Z", // Mon Dec 7 5:00 PM MT = Tue Dec 8 00:00 UTC
+            dtendUtc: "20261208T013000Z",
+            dateDisplay: "Monday, December 7, 2026",
+            timeDisplayMt: "5:00 PM – 6:30 PM MT",
+            timeDisplayEt: "7:00 PM – 8:30 PM ET",
+            epochStart: Date.UTC(2026, 11, 8, 0, 0, 0)
         },
         {
             week: 2,
-            title: "Week 02: Activating Your Core (The Strengths Model & THRiVE Inventory)",
-            description: "Live workshop on the 6 THRiVE Strengths dimensions: Traits, Hobbies, Relationships, Interests, Values, and Experiences.",
-            dtstartUtc: "20261111T000000Z",
-            dtendUtc: "20261111T011500Z",
-            dateDisplay: "Tuesday, November 10, 2026",
-            timeDisplayMt: "5:00 PM – 6:15 PM MT",
-            timeDisplayEt: "7:00 PM – 8:15 PM ET",
-            epochStart: 1794355200000
+            title: "Session 02: Activating Your Core (Strengths Intake & THRiVE Report)",
+            description: "Live workshop on voice-dictated 6-pillar THRiVE Report intake across Traits, Hobbies, Relationships, Interests, Values, and Experiences.",
+            dtstartUtc: "20261215T000000Z", // Mon Dec 14 5:00 PM MT
+            dtendUtc: "20261215T013000Z",
+            dateDisplay: "Monday, December 14, 2026",
+            timeDisplayMt: "5:00 PM – 6:30 PM MT",
+            timeDisplayEt: "7:00 PM – 8:30 PM ET",
+            epochStart: Date.UTC(2026, 11, 15, 0, 0, 0)
         },
         {
             week: 3,
-            title: "Week 03: Partnering with Intelligence (Personos AI Coaching)",
-            description: "Interactive session on Master AI Coaching Prompts, between-session agency, and relational AI co-pilots.",
-            dtstartUtc: "20261118T000000Z",
-            dtendUtc: "20261118T011500Z",
-            dateDisplay: "Tuesday, November 17, 2026",
-            timeDisplayMt: "5:00 PM – 6:15 PM MT",
-            timeDisplayEt: "7:00 PM – 8:15 PM ET",
-            epochStart: 1794960000000
+            title: "Session 03: Partnering with Intelligence (21 Daily Strides & G.A.P.S.)",
+            description: "Turning strengths-based intake into 21 daily strides using Personos AI custom lenses and between-session Action Boards.",
+            dtstartUtc: "20261222T000000Z", // Mon Dec 21 5:00 PM MT
+            dtendUtc: "20261222T013000Z",
+            dateDisplay: "Monday, December 21, 2026",
+            timeDisplayMt: "5:00 PM – 6:30 PM MT",
+            timeDisplayEt: "7:00 PM – 8:30 PM ET",
+            epochStart: Date.UTC(2026, 11, 22, 0, 0, 0)
         },
         {
             week: 4,
-            title: "Week 04: Architecture of Momentum (Action Boards & HoPE Index)",
-            description: "Cohort graduation workshop: Kanban Action Board construction, HoPE Index re-benchmarking, and 90-day momentum roadmaps.",
-            dtstartUtc: "20261125T000000Z",
-            dtendUtc: "20261125T011500Z",
-            dateDisplay: "Tuesday, November 24, 2026",
-            timeDisplayMt: "5:00 PM – 6:15 PM MT",
-            timeDisplayEt: "7:00 PM – 8:15 PM ET",
-            epochStart: 1795564800000
+            title: "Session 04: Architecture of Momentum (Automated DAP Notes & HoPE Index)",
+            description: "Cohort graduation: automated clinical DAP notes without losing the human touch, HoPE Index benchmarking, and $9/mo client seat rollout.",
+            dtstartUtc: "20261229T000000Z", // Mon Dec 28 5:00 PM MT
+            dtendUtc: "20261229T013000Z",
+            dateDisplay: "Monday, December 28, 2026",
+            timeDisplayMt: "5:00 PM – 6:30 PM MT",
+            timeDisplayEt: "7:00 PM – 8:30 PM ET",
+            epochStart: Date.UTC(2026, 11, 29, 0, 0, 0)
         }
     ];
 
@@ -784,7 +784,7 @@ const initThriveUI = () => {
 
     function downloadAllIcs() {
         const ics = generateIcsContent(COHORT_SESSIONS);
-        triggerIcsDownload('thrive-coaching-november-2026-cohort.ics', ics);
+        triggerIcsDownload('thrive-coaching-december-2026-pilot.ics', ics);
         fireThriveHaptic(20);
     }
 
@@ -810,7 +810,7 @@ const initThriveUI = () => {
                 const mode = el.getAttribute('data-lab-tz-mode');
                 const dateLabel = el.getAttribute('data-date-label') || '';
                 if (mode === 'lunch') {
-                    // Thu Nov 12, 2026 12:00 PM - 12:30 PM MST (19:00 - 19:30 UTC)
+                    // Thu Nov 19, 2026 12:00 PM - 12:30 PM MST (19:00 - 19:30 UTC)
                     let lunchStr = '12:00 PM – 12:30 PM MT / 2:00 PM ET';
                     if (tz === 'America/Denver') {
                         lunchStr = '12:00 PM – 12:30 PM MT (30 min)';
@@ -818,8 +818,8 @@ const initThriveUI = () => {
                         lunchStr = '2:00 PM – 2:30 PM ET (30 min)';
                     } else if (tz) {
                         try {
-                            const startObj = new Date(Date.UTC(2026, 10, 12, 19, 0, 0));
-                            const endObj = new Date(Date.UTC(2026, 10, 12, 19, 30, 0));
+                            const startObj = new Date(Date.UTC(2026, 10, 19, 19, 0, 0));
+                            const endObj = new Date(Date.UTC(2026, 10, 19, 19, 30, 0));
                             const tzOpt = tz === 'local' ? undefined : tz;
                             const sFmt = new Intl.DateTimeFormat('en-US', { timeZone: tzOpt, hour: 'numeric', minute: '2-digit' }).format(startObj);
                             const eFmt = new Intl.DateTimeFormat('en-US', { timeZone: tzOpt, hour: 'numeric', minute: '2-digit', timeZoneName: 'short' }).format(endObj);
@@ -828,7 +828,7 @@ const initThriveUI = () => {
                     }
                     el.innerHTML = `&#128197; ${dateLabel} &bull; &#9200; ${lunchStr}`;
                 } else if (mode === 'lab') {
-                    // Mon & Wed 5:00 PM - 6:30 PM MST (00:00 - 01:30 UTC)
+                    // Mondays Dec 7-28 5:00 PM - 6:30 PM MST (00:00 - 01:30 UTC next day)
                     let labStr = '5:00 – 6:30 PM MT (90 min)';
                     if (tz === 'America/Denver') {
                         labStr = '5:00 – 6:30 PM MT (90 min)';
@@ -836,8 +836,8 @@ const initThriveUI = () => {
                         labStr = '7:00 – 8:30 PM ET (90 min)';
                     } else if (tz) {
                         try {
-                            const startObj = new Date(Date.UTC(2026, 11, 1, 0, 0, 0));
-                            const endObj = new Date(Date.UTC(2026, 11, 1, 1, 30, 0));
+                            const startObj = new Date(Date.UTC(2026, 11, 8, 0, 0, 0));
+                            const endObj = new Date(Date.UTC(2026, 11, 8, 1, 30, 0));
                             const tzOpt = tz === 'local' ? undefined : tz;
                             const sFmt = new Intl.DateTimeFormat('en-US', { timeZone: tzOpt, hour: 'numeric', minute: '2-digit' }).format(startObj);
                             const eFmt = new Intl.DateTimeFormat('en-US', { timeZone: tzOpt, hour: 'numeric', minute: '2-digit', timeZoneName: 'short' }).format(endObj);
@@ -853,22 +853,22 @@ const initThriveUI = () => {
             updatePractitionerLabTimezones(tz);
             if (!container) return;
             container.innerHTML = COHORT_SESSIONS.map(s => {
-                let timeStr = `${s.timeDisplayMt} / ${s.timeDisplayEt} (75 min)`;
+                let timeStr = `${s.timeDisplayMt} / ${s.timeDisplayEt} (90 min)`;
                 if (tz) {
                     if (tz === 'America/Denver') {
-                        timeStr = `${s.timeDisplayMt} (75 min)`;
+                        timeStr = `${s.timeDisplayMt} (90 min)`;
                     } else if (tz === 'America/New_York') {
-                        timeStr = `${s.timeDisplayEt} (75 min)`;
+                        timeStr = `${s.timeDisplayEt} (90 min)`;
                     } else {
                         try {
                             const startObj = new Date(s.epochStart);
-                            const endObj = new Date(s.epochStart + 75 * 60 * 1000);
+                            const endObj = new Date(s.epochStart + 90 * 60 * 1000);
                             const tzOpt = tz === 'local' ? undefined : tz;
                             const startFmt = new Intl.DateTimeFormat('en-US', { timeZone: tzOpt, hour: 'numeric', minute: '2-digit' }).format(startObj);
                             const endFmt = new Intl.DateTimeFormat('en-US', { timeZone: tzOpt, hour: 'numeric', minute: '2-digit', timeZoneName: 'short' }).format(endObj);
-                            timeStr = `${startFmt} – ${endFmt} (75 min)`;
+                            timeStr = `${startFmt} – ${endFmt} (90 min)`;
                         } catch (_) {
-                            timeStr = `${s.timeDisplayMt} / ${s.timeDisplayEt} (75 min)`;
+                            timeStr = `${s.timeDisplayMt} / ${s.timeDisplayEt} (90 min)`;
                         }
                     }
                 }
@@ -877,7 +877,7 @@ const initThriveUI = () => {
                 return `
                     <div class="session-card">
                         <div class="session-card-header">
-                            <span class="session-badge">Week 0${s.week} Live Workshop</span>
+                            <span class="session-badge">Session 0${s.week} Live Lab</span>
                             <span class="session-status">Interactive Call</span>
                         </div>
                         <h4>${s.title}</h4>
@@ -927,7 +927,7 @@ const initThriveUI = () => {
                 const ln = (document.getElementById('inq-ln')?.value || '').trim();
                 const em = (document.getElementById('inq-em')?.value || '').trim();
                 const ph = (document.getElementById('inq-ph')?.value || '').trim();
-                const type = document.getElementById('inq-type')?.value || 'November 2026 Cohort';
+                const type = document.getElementById('inq-type')?.value || 'December 2026 Founding Pilot Cohort';
                 const msg = (document.getElementById('inq-msg')?.value || '').trim();
 
                 if (!fn || !ln || !em || !msg || msg.length < 10 || !isValidEmailAddress(em)) {
@@ -995,124 +995,68 @@ const initThriveUI = () => {
     };
 
     const LUNCH_AND_LEARN_SESSION = {
-        week: 'lunch-learn-nov12',
-        title: "5 to THRiVE Practitioner Lab — Thursday Lunch & Learn Live Demo",
-        description: "30-minute live clinical demonstration of the THRiVE Report voice dictation protocol, automated DAP note generation, and the $9/month client seat model. Nov 30 Practitioner Lab is strictly capped at 21 seats (3 Squads of 7).",
-        dtstartUtc: "20261112T190000Z", // Thu Nov 12 12:00 PM MST = 19:00 UTC
-        dtendUtc: "20261112T193000Z"
+        week: 'lunch-learn-nov19',
+        title: "5 to THRiVE Founding Pilot Lab — Thursday Lunch & Learn Live Demo",
+        description: "30-minute live clinical demonstration of the THRiVE Report voice dictation protocol, 21 daily strides, automated DAP note generation, and the $9/month client seat model. Dec 7 Founding Pilot Lab is strictly capped at 21 seats (3 Squads of 7).",
+        dtstartUtc: "20261119T190000Z", // Thu Nov 19 12:00 PM MST = 19:00 UTC
+        dtendUtc: "20261119T193000Z"
     };
 
     const PRACTITIONER_LAB_SESSIONS = [
         LUNCH_AND_LEARN_SESSION,
         {
-            week: 'mod0-preflight-sat',
-            title: "Module 0 (Session 0 — Saturday): Pre-Flight Onboarding & Drop-In Tech Clinic",
+            week: 'session0-preflight-sat',
+            title: "Session 0 (Saturday): Pre-Flight Onboarding & Drop-In Tech Clinic",
             description: "Intake triage via Gerard's Flow Survey, workstation speech-to-text microphone calibration for dictation, and Saturday drop-in IT clinic.",
-            dtstartUtc: "20261128T180000Z",
-            dtendUtc: "20261128T193000Z"
+            dtstartUtc: "20261205T180000Z",
+            dtendUtc: "20261205T193000Z"
         },
         {
-            week: 'mod0-preflight-sun',
-            title: "Module 0 (Session 0 — Sunday): Pre-Flight Onboarding & Drop-In Tech Clinic",
+            week: 'session0-preflight-sun',
+            title: "Session 0 (Sunday): Pre-Flight Onboarding & Drop-In Tech Clinic",
             description: "Intake triage via Gerard's Flow Survey, workstation speech-to-text microphone calibration for dictation, and Sunday drop-in IT clinic.",
-            dtstartUtc: "20261129T180000Z",
-            dtendUtc: "20261129T193000Z"
+            dtstartUtc: "20261206T180000Z",
+            dtendUtc: "20261206T193000Z"
         },
         {
-            week: 'mod1-mon',
-            title: "Module 1A (Mon): The 167-Hour Bottleneck & The Observer Stance (5 to THRiVE Lab)",
-            description: "Bi-weekly 90-minute live lab session: SOL Theory, RellaFit, and shifting clients from the reactive character to the grounded Observer.",
-            dtstartUtc: "20261201T000000Z", // Mon Nov 30 5:00 PM MST = Tue Dec 1 00:00 UTC
-            dtendUtc: "20261201T013000Z"
-        },
-        {
-            week: 'mod1-wed',
-            title: "Module 1B (Wed): Squad Breakout Lab — Facilitating the Observer Shift",
-            description: "Bi-weekly 90-minute live lab session: Live co-coaching demonstrations and Squad A/B/C breakout lab work.",
-            dtstartUtc: "20261203T000000Z", // Wed Dec 2 5:00 PM MST = Thu Dec 3 00:00 UTC
-            dtendUtc: "20261203T013000Z"
-        },
-        {
-            week: 'mod2-mon',
-            title: "Module 2A (Mon): The THRiVE Report Protocol (Traits & Hobbies) & Safe-Save Mechanic",
-            description: "Voice-driven assessment across Traits & Hobbies (strict 3-to-5 item quota) with Enter Safe-Saves every 1-2 minutes.",
-            dtstartUtc: "20261208T000000Z", // Mon Dec 7 5:00 PM MST
+            week: 'session1-mon',
+            title: "Session 01: The 167-Hour Bottleneck & The Observer Stance (5 to THRiVE Founding Pilot)",
+            description: "CYNEFIN sense-making, SOL Theory, RellaFit, and shifting clients from the reactive character to the grounded Observer.",
+            dtstartUtc: "20261208T000000Z", // Mon Dec 7 5:00 PM MST = Tue Dec 8 00:00 UTC
             dtendUtc: "20261208T013000Z"
         },
         {
-            week: 'mod2-wed',
-            title: "Module 2B (Wed): Squad Breakout Lab — Co-Coaching Practice on T & H with Dictation",
-            description: "Squad A/B/C breakout practice facilitating Traits & Hobbies intake with real-time voice dictation and Safe-Save protocol.",
-            dtstartUtc: "20261210T000000Z", // Wed Dec 9 5:00 PM MST
-            dtendUtc: "20261210T013000Z"
-        },
-        {
-            week: 'mod3-mon',
-            title: "Module 3A (Mon): Relational Architecture (Relationships & Interests)",
-            description: "Mapping support cast, accountability mirrors, and intellectual curiosity compass in Personos AI (3-5 item quota).",
+            week: 'session2-mon',
+            title: "Session 02: Strengths-Based Intake, THRiVE Report & Safe-Save Protocol",
+            description: "Voice-driven assessment across Traits, Hobbies, Relationships, Interests, Values, and Experiences with Enter Safe-Saves.",
             dtstartUtc: "20261215T000000Z", // Mon Dec 14 5:00 PM MST
             dtendUtc: "20261215T013000Z"
         },
         {
-            week: 'mod3-wed',
-            title: "Module 3B (Wed): Squad Breakout Lab — Dictating R & I Pillars in Personos AI",
-            description: "Squad A/B/C breakout lab mapping Relationships & Interests to stabilize clients in housing, recovery, and conflict domains.",
-            dtstartUtc: "20261217T000000Z", // Wed Dec 16 5:00 PM MST
-            dtendUtc: "20261217T013000Z"
-        },
-        {
-            week: 'mod4-mon',
-            title: "Module 4A (Mon): Synthesizing the Core (Values & Experiences)",
-            description: "Uncovering non-negotiable operating system values and crucible moments to complete the 6-pillar THRiVE Report.",
+            week: 'session3-mon',
+            title: "Session 03: 21 Daily Strides, Custom Lenses & Filling the G.A.P.S.",
+            description: "Turning strengths-based intake into 21 daily strides, custom lenses, and committed micro-actions on the Action Board.",
             dtstartUtc: "20261222T000000Z", // Mon Dec 21 5:00 PM MST
             dtendUtc: "20261222T013000Z"
         },
         {
-            week: 'mod4-wed',
-            title: "Module 4B (Wed): Squad Breakout Lab — Full 6-Pillar T-H-R-I-V-E Synthesis & Peer Review",
-            description: "Auditing and finalizing complete 6-pillar THRiVE Reports inside Personos client memory profiles across Squads A, B & C.",
-            dtstartUtc: "20261224T000000Z", // Wed Dec 23 5:00 PM MST
-            dtendUtc: "20261224T013000Z"
-        },
-        {
-            week: 'mod5-mon',
-            title: "Module 5A (Mon): Filling the G.A.P.S. & Action Board Generation",
-            description: "Generating 5 creative next steps tailored through custom lenses and locking 1-3 committed micro-actions on the live Action Board.",
+            week: 'session4-mon',
+            title: "Session 04: Automated DAP Notes, Clinical Hand-Off & $9/Mo Seat Economics",
+            description: "Automated clinical DAP notes without losing the human touch, $9/month client seat caseload deployment, and Founding Pilot Lab certification.",
             dtstartUtc: "20261229T000000Z", // Mon Dec 28 5:00 PM MST
             dtendUtc: "20261229T013000Z"
-        },
-        {
-            week: 'mod5-wed',
-            title: "Module 5B (Wed): Squad Breakout Lab — Custom Lens Tuning & Action Board Stress-Testing",
-            description: "Live Squad lab configuring philosophy, scripture, and thought-leader lenses and stress-testing 167-hour client Action Boards.",
-            dtstartUtc: "20261231T000000Z", // Wed Dec 30 5:00 PM MST
-            dtendUtc: "20261231T013000Z"
-        },
-        {
-            week: 'mod6-mon',
-            title: "Module 6A (Mon): Clinical Hand-Off, Automated DAP Notes & $9/Mo Seat Economics",
-            description: "Automated clinical DAP note generation, $9/month client seat caseload deployment, and clinic/self-pay transition workflows.",
-            dtstartUtc: "20270105T000000Z", // Mon Jan 4 5:00 PM MST
-            dtendUtc: "20270105T013000Z"
-        },
-        {
-            week: 'mod6-wed',
-            title: "Module 6B (Wed): Cohort Capstone Presentations & Practitioner Lab Certification",
-            description: "End-to-end Practitioner Case Packet presentations, Squad A/B/C reflections, and 5 to THRiVE Practitioner Lab certification.",
-            dtstartUtc: "20270107T000000Z", // Wed Jan 6 5:00 PM MST
-            dtendUtc: "20270107T013000Z"
         }
     ];
 
     function downloadPractitionerLabIcs() {
         const ics = generateIcsContent(PRACTITIONER_LAB_SESSIONS);
-        triggerIcsDownload('5-to-thrive-practitioner-lab-2026.ics', ics);
+        triggerIcsDownload('5-to-thrive-founding-pilot-2026.ics', ics);
         fireThriveHaptic(20);
     }
 
     function downloadLunchAndLearnIcs() {
         const ics = generateIcsContent([LUNCH_AND_LEARN_SESSION]);
-        triggerIcsDownload('thrive-lunch-and-learn-nov12.ics', ics);
+        triggerIcsDownload('thrive-lunch-and-learn-nov19.ics', ics);
         fireThriveHaptic(15);
     }
 
@@ -1157,9 +1101,9 @@ const initThriveUI = () => {
                         body: JSON.stringify({
                             type: 'lead',
                             data: {
-                                source: 'thursday_lunch_and_learn_nov12',
+                                source: 'thursday_lunch_and_learn_nov19',
                                 practice_type: practiceType,
-                                label: `Thursday Lunch & Learn (Nov 12) — ${practiceType}`
+                                label: `Thursday Lunch & Learn (Nov 19) — ${practiceType}`
                             },
                             lead: {
                                 fn,

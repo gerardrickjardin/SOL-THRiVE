@@ -1,5 +1,5 @@
 // Creates a Stripe PaymentIntent. Price is fixed server-side so it can't be tampered with.
-const AMOUNT_CENTS = 49500; // $495.00 Founding Seat Rate (Regular $995.00)
+const AMOUNT_CENTS = 50000; // $500.00 Founding Seat Rate (Regular $995.00)
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
