@@ -183,6 +183,8 @@ const initThriveUI = () => {
     // Active Page & Section Highlighting in Desktop Navbar & Mobile Drawer
     const KNOWN_PAGE_SLUGS = new Set([
         'index',
+        'lunch-and-learn',
+        'clinical-ecosystem',
         'survey',
         'profile',
         'hope-survey',
@@ -326,7 +328,7 @@ const initThriveUI = () => {
             } else if (parsed.slug === 'index') {
                 isMatch = effectiveNavSlug === 'index' && !hasMatchingHashNav;
             } else {
-                isMatch = parsed.slug === effectiveNavSlug || parsed.slug === currentSlug;
+                isMatch = (parsed.slug === effectiveNavSlug || parsed.slug === currentSlug) && !hasMatchingHashNav;
             }
 
             if (isMatch) {

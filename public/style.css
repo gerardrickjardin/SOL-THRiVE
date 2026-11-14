@@ -1098,6 +1098,7 @@ a {
     margin-bottom: var(--spacing-lg);
 }
 
+.section-header h1,
 .section-header h2 {
     font-size: clamp(1.9rem, 4.5vw, 3rem);
     max-width: 820px;
@@ -3562,9 +3563,9 @@ a {
 }
 
 .dropdown.resources-dropdown .resources-mega-menu {
-    min-width: 500px;
+    min-width: 550px;
     padding: 1.35rem 1.5rem;
-    grid-template-columns: repeat(2, minmax(215px, 1fr));
+    grid-template-columns: repeat(2, minmax(245px, 1fr));
     gap: 1.25rem 1.75rem;
 }
 
@@ -4859,6 +4860,13 @@ button.resume-btn-secondary:hover,
     }
 }
 
+.lunch-learn-grid > *,
+.lunch-learn-pitch,
+.lunch-learn-form-card {
+    min-width: 0;
+}
+
+.lunch-learn-pitch h1,
 .lunch-learn-pitch h2 {
     color: #ffffff;
     font-size: clamp(1.9rem, 3.8vw, 2.75rem);
@@ -5427,4 +5435,395 @@ button.resume-btn-secondary:hover,
     background: #FAF5FF;
     border: 2px solid var(--accent-purple, #8B2FC9);
     box-shadow: 4px 4px 0 var(--accent-purple, #8B2FC9);
+}
+
+/* ==========================================
+   Anchor Scroll Offset & December Cohort Section
+   ========================================== */
+#video-section,
+#about,
+#ecosystem-section,
+#offer-section,
+#survey,
+#cohort-section,
+#lunch-and-learn {
+    scroll-margin-top: calc(var(--header-height) + 18px);
+}
+
+.cohort-section {
+    background: #ffffff;
+    padding: clamp(4.25rem, 7vw, 6.25rem) 0;
+    overflow-x: clip;
+}
+
+.cohort-container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1.06fr) minmax(0, 0.94fr);
+    gap: clamp(2.25rem, 4.5vw, 4.25rem);
+    align-items: start;
+}
+
+.cohort-timeline-col {
+    min-width: 0;
+}
+
+.cohort-eyebrow {
+    display: inline-block;
+    background: #EDE9FE;
+    color: #7C3AED;
+    font-family: var(--font-heading);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.38rem 0.95rem;
+    border-radius: 999px;
+    margin-bottom: 1.05rem;
+}
+
+.cohort-timeline-col h2 {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 3.6vw, 2.85rem);
+    font-weight: 900;
+    line-height: 1.14;
+    letter-spacing: -0.025em;
+    color: #18181B;
+    margin: 0 0 1.05rem;
+}
+
+.cohort-highlight {
+    background: #EDE9FE;
+    color: #18181B;
+    padding: 0.02em 0.32em;
+    border-radius: 6px;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+}
+
+.cohort-lead {
+    color: #52525B;
+    font-size: 0.97rem;
+    line-height: 1.65;
+    max-width: 510px;
+    margin: 0 0 1.45rem;
+}
+
+.cohort-schedule-sub {
+    color: #7C3AED;
+    font-family: var(--font-heading);
+    font-size: 0.86rem;
+    font-weight: 800;
+    margin: 0 0 0.75rem;
+}
+
+.cohort-timeline {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.cohort-timeline::before {
+    content: '';
+    position: absolute;
+    left: 22px;
+    top: 23px;
+    bottom: 23px;
+    width: 2px;
+    background: #E9D5FF;
+    z-index: 0;
+}
+
+.cohort-timeline-row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1.15rem;
+    padding: 0.95rem 0;
+}
+
+.cohort-timeline-row:first-child {
+    padding-top: 0;
+}
+
+.cohort-timeline-row:last-child {
+    padding-bottom: 0;
+}
+
+.cohort-timeline-row:not(:last-child) .cohort-session-info::after {
+    content: '';
+    display: block;
+    height: 1px;
+    background: #E4E4E7;
+    margin-top: 0.95rem;
+}
+
+.cohort-timeline-row:not(:last-child) {
+    padding-bottom: 0;
+}
+
+.cohort-date-badge {
+    position: relative;
+    z-index: 1;
+    width: 46px;
+    min-width: 46px;
+    height: 46px;
+    border-radius: 10px;
+    border: 1.5px solid #3F3F46;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.04;
+    flex-shrink: 0;
+}
+
+.cohort-date-yellow {
+    background: #FEF08A;
+}
+
+.cohort-date-lavender {
+    background: #F3E8FF;
+}
+
+.cohort-date-num {
+    font-family: var(--font-heading);
+    font-size: 0.86rem;
+    font-weight: 900;
+    color: #18181B;
+    letter-spacing: -0.02em;
+}
+
+.cohort-date-mon {
+    font-family: var(--font-heading);
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    color: #27272A;
+    margin-top: 1px;
+}
+
+.cohort-session-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.16rem;
+}
+
+.cohort-session-info strong {
+    font-family: var(--font-heading);
+    font-size: 0.96rem;
+    font-weight: 800;
+    color: #18181B;
+    line-height: 1.3;
+}
+
+.cohort-session-info span {
+    font-size: 0.82rem;
+    color: #71717A;
+    line-height: 1.45;
+}
+
+.cohort-offer-card {
+    min-width: 0;
+    background: #FAF5FF;
+    border: 2px solid #18181B;
+    border-radius: 16px;
+    box-shadow: 6px 6px 0 #18181B;
+    overflow: hidden;
+}
+
+.cohort-card-header {
+    background: #141422;
+    color: #ffffff;
+    padding: 1.35rem 1.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.cohort-card-title-group {
+    min-width: 0;
+}
+
+.cohort-card-kicker {
+    display: block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #CBD5E1;
+    margin-bottom: 0.25rem;
+}
+
+.cohort-card-subtitle {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 0.92rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    color: #ffffff;
+}
+
+.cohort-card-price {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 3.2vw, 2.55rem);
+    font-weight: 900;
+    color: #ffffff;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    flex-shrink: 0;
+}
+
+.cohort-card-body {
+    padding: 1.65rem 1.75rem 1.8rem;
+}
+
+.cohort-card-body h3 {
+    font-family: var(--font-heading);
+    font-size: 1.28rem;
+    font-weight: 900;
+    color: #18181B;
+    margin: 0 0 1.15rem;
+}
+
+.cohort-includes-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.45rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.cohort-includes-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+}
+
+.cohort-check-icon {
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    border-radius: 50%;
+    background: #FEF08A;
+    border: 1.5px solid #18181B;
+    color: #18181B;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+.cohort-includes-list li > div {
+    min-width: 0;
+}
+
+.cohort-includes-list li strong {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 0.93rem;
+    font-weight: 800;
+    color: #18181B;
+    line-height: 1.3;
+    margin-bottom: 0.14rem;
+}
+
+.cohort-includes-list li span {
+    display: block;
+    font-size: 0.82rem;
+    color: #64748B;
+    line-height: 1.45;
+}
+
+.cohort-cta-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    width: 100%;
+    padding: 0.95rem 1.25rem;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #9333EA 0%, #7E22CE 100%);
+    color: #ffffff;
+    font-family: var(--font-heading);
+    font-size: 0.95rem;
+    font-weight: 800;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(126, 34, 206, 0.28);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cohort-cta-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(126, 34, 206, 0.36);
+}
+
+.cohort-scarcity-note {
+    text-align: center;
+    font-size: 0.78rem;
+    color: #64748B;
+    line-height: 1.5;
+    margin: 1rem 0 1.15rem;
+}
+
+.cohort-scarcity-note strong {
+    color: #334155;
+}
+
+.cohort-barrier-note {
+    border: 1.5px dashed #CBD5E1;
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+    background: rgba(255, 255, 255, 0.65);
+    font-size: 0.78rem;
+    color: #64748B;
+    line-height: 1.5;
+}
+
+.cohort-barrier-note strong {
+    color: #334155;
+}
+
+@media (max-width: 900px) {
+    .cohort-container {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+    }
+}
+
+@media (max-width: 520px) {
+    .cohort-container {
+        padding: 0 1rem;
+    }
+
+    .cohort-card-header {
+        padding: 1.15rem 1.2rem;
+    }
+
+    .cohort-card-body {
+        padding: 1.35rem 1.2rem 1.45rem;
+    }
+
+    .cohort-cta-btn {
+        font-size: 0.86rem;
+        padding: 0.88rem 0.9rem;
+    }
+
+    .scarcity-banner {
+        border-radius: 16px;
+        text-align: left;
+        align-items: flex-start;
+        padding: 0.9rem 1rem;
+    }
+
+    .scarcity-banner .scarcity-pulse {
+        margin-top: 0.35rem;
+    }
 }
