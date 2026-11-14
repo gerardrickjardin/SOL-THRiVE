@@ -637,7 +637,9 @@ a {
     min-height: calc(100vh - var(--header-height));
     display: flex;
     align-items: center;
-    background-color: #FDF5E3;
+    position: relative;
+    overflow: hidden;
+    background-color: #FCF4E3;
     border-bottom: 1px solid rgba(20, 24, 36, 0.08);
     padding: clamp(2rem, 4vw, 3.25rem) 5%;
 }
@@ -805,26 +807,29 @@ a {
     outline-offset: 3px;
 }
 
-.hero-visual {
-    position: relative;
-    z-index: 2;
+.hero-cover-backdrop {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
     display: flex;
     align-items: center;
-    justify-content: center;
-    width: 100%;
+    justify-content: flex-end;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 4%, #000 96%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, #000 4%, #000 96%, transparent 100%);
 }
 
-.hero-illustration-img {
+.hero-cover-img {
     width: 100%;
-    max-width: 600px;
-    max-height: calc(100vh - var(--header-height) - 4.5rem);
-    height: auto;
+    height: 100%;
+    max-width: none;
     object-fit: contain;
+    object-position: right center;
     display: block;
     user-select: none;
     pointer-events: none;
-    -webkit-mask-image: radial-gradient(ellipse 96% 96% at 52% 50%, #000 76%, transparent 100%);
-    mask-image: radial-gradient(ellipse 96% 96% at 52% 50%, #000 76%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 6%);
+    mask-image: linear-gradient(to right, transparent 0%, #000 6%);
 }
 
 .hero-trust-row {
@@ -869,22 +874,22 @@ a {
     .cta-button.hero-primary-cta {
         padding: 0.85rem 1.65rem;
     }
-    .hero-illustration-img {
-        max-height: calc(100vh - var(--header-height) - 3rem);
-    }
 }
 
-/* Mobile & Tablet Hero Layout: Stack copy cleanly above the uphill illustration */
+/* Mobile & Tablet Hero Layout: Stack copy cleanly above the V2 artwork */
 @media (max-width: 1024px) {
     .hero.hero-full-screen {
         height: auto;
         min-height: auto;
-        padding: 2rem 5% 1.75rem;
+        flex-direction: column;
+        align-items: center;
+        padding: 2rem 5% 1.25rem;
+        gap: 1.25rem;
     }
 
     .hero-split-container {
         grid-template-columns: 1fr;
-        gap: 1.75rem;
+        gap: 0;
     }
 
     .hero-content {
@@ -892,23 +897,43 @@ a {
         margin: 0 auto;
     }
 
-    .hero-visual {
-        max-width: 540px;
+    .hero-cover-backdrop {
+        position: relative;
+        inset: auto;
+        display: block;
+        width: 100%;
+        max-width: 560px;
         margin: 0 auto;
+        overflow: hidden;
+        -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 4%, #000 96%, transparent 100%);
+        mask-image: linear-gradient(to right, transparent 0%, #000 4%, #000 96%, transparent 100%);
     }
 
-    .hero-illustration-img {
-        max-height: 52vh;
+    .hero-cover-img {
+        width: 180%;
+        height: auto;
+        max-width: none;
+        object-fit: initial;
+        object-position: initial;
+        transform: translateX(-44%);
+        margin-top: -12%;
+        -webkit-mask-image: none;
+        mask-image: none;
     }
 }
 
 @media (max-width: 480px) {
     .hero.hero-full-screen {
-        padding: 1.15rem 5% 1.35rem;
+        padding: 1rem 5% 0.9rem;
+        gap: 0.5rem;
+    }
+
+    .hero-cover-img {
+        margin-top: -13%;
     }
 
     .hero-split-container {
-        gap: 1.15rem;
+        gap: 0;
     }
 
     .hero-eyebrow {
@@ -3736,7 +3761,7 @@ button.resume-btn-secondary:hover,
 /* 1. Split Hero Practitioner Headline Sizing */
 .hero-content.practitioner-hero-content {
     width: 100%;
-    max-width: 600px;
+    max-width: min(540px, 40vw);
 }
 
 .hero h1.practitioner-hero-title {
