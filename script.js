@@ -400,165 +400,31 @@ const initThriveUI = () => {
     window.addEventListener('hashchange', () => updateActiveNavLinks());
     window.addEventListener('popstate', () => updateActiveNavLinks());
 
-    // Video Placeholder Interactive Walkthrough + Local Video Player
+    // Overview Video Placeholder -> Coming Soon State
     const videoCard = document.getElementById('video-player-card');
     if (videoCard) {
-        const videoEl = document.getElementById('homepage-walkthrough-video');
-        const playToggleBtn = document.getElementById('video-toggle-play');
-        const restartBtn = document.getElementById('video-restart-btn');
-        const muteBtn = document.getElementById('video-mute-btn');
-        let narrationActive = false;
-        let walkthroughUtterance = null;
-
-        const walkthroughNarrationText = "Welcome to the 5 to THRiVE Practitioner Lab. We equip licensed therapists, coaches, and case managers to triple client outcome velocity across the 167 hours between sessions. Step 1: The Flow Survey pinpoints the client's specific Ugg friction and measures baseline Agency, Clarity, and Momentum. Step 2: The Voice-Driven THRiVE Report uncovers 3 to 5 core resources across Traits, Hobbies, Relationships, Interests, Values, and Experiences using the Safe-Save protocol. Step 3: Filling the G.A.P.S. generates 5 lens-tailored next steps so the client commits to 1 to 3 micro-actions on their live Action Board—while Personos AI automatically generates your clinical DAP notes.";
-
-        const stopWalkthroughSpeech = () => {
-            if (walkthroughUtterance) {
-                walkthroughUtterance.onend = null;
-                walkthroughUtterance.onerror = null;
-                walkthroughUtterance = null;
-            }
-            if (window.speechSynthesis) {
-                try { window.speechSynthesis.cancel(); } catch (_) {}
-            }
-        };
-
-        const speakWalkthrough = () => {
-            if (!window.speechSynthesis || (!narrationActive && (!videoEl || videoEl.muted))) return;
-            try {
-                stopWalkthroughSpeech();
-                const u = new SpeechSynthesisUtterance(walkthroughNarrationText);
-                u.rate = 1.0;
-                walkthroughUtterance = u;
-                u.onend = () => { if (walkthroughUtterance === u) walkthroughUtterance = null; };
-                u.onerror = () => { if (walkthroughUtterance === u) walkthroughUtterance = null; };
-                window.speechSynthesis.speak(u);
-            } catch (_) {}
-        };
-
-        const syncPlayBtnLabel = () => {
-            if (!playToggleBtn || !videoEl) return;
-            playToggleBtn.innerHTML = videoEl.paused ? '&#9654; Play Video' : '&#9208; Pause Video';
-        };
-
-        const syncMuteBtnLabel = () => {
-            if (!muteBtn || !videoEl) return;
-            muteBtn.innerHTML = (videoEl.muted && !narrationActive) ? '&#128266; Unmute Narration' : '&#128263; Mute';
-        };
-
-        const handleWalkthroughPlayFailure = () => {
-            if (videoEl && videoEl.paused) {
-                stopWalkthroughSpeech();
-            }
-            syncPlayBtnLabel();
-        };
-
         const activateVideoCard = () => {
             if (!videoCard.classList.contains('is-active')) {
                 videoCard.classList.add('is-active');
                 videoCard.removeAttribute('role');
                 videoCard.removeAttribute('tabindex');
+                videoCard.removeAttribute('aria-label');
                 const activePanel = videoCard.querySelector('.video-active-panel');
                 if (activePanel) {
                     activePanel.setAttribute('aria-hidden', 'false');
                 }
-                if (videoEl) {
-                    videoEl.currentTime = 0;
-                    const playPromise = videoEl.play();
-                    syncPlayBtnLabel();
-                    if (playPromise && typeof playPromise.then === 'function') {
-                        playPromise.then(syncPlayBtnLabel).catch(handleWalkthroughPlayFailure);
-                    }
-                }
             }
         };
 
-        if (playToggleBtn && videoEl) {
-            playToggleBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                if (videoEl.paused) {
-                    const p = videoEl.play();
-                    syncPlayBtnLabel();
-                    if (p && typeof p.then === 'function') p.then(syncPlayBtnLabel).catch(handleWalkthroughPlayFailure);
-                    if (narrationActive || !videoEl.muted) speakWalkthrough();
-                } else {
-                    videoEl.pause();
-                    stopWalkthroughSpeech();
-                    syncPlayBtnLabel();
-                }
-            });
-        }
-
-        if (restartBtn && videoEl) {
-            restartBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                videoEl.currentTime = 0;
-                const p = videoEl.play();
-                syncPlayBtnLabel();
-                if (p && typeof p.then === 'function') p.then(syncPlayBtnLabel).catch(handleWalkthroughPlayFailure);
-                if (narrationActive || !videoEl.muted) speakWalkthrough();
-            });
-        }
-
-        if (muteBtn && videoEl) {
-            muteBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const shouldUnmute = videoEl.muted && !narrationActive;
-                videoEl.muted = !shouldUnmute;
-                narrationActive = shouldUnmute;
-                if (narrationActive) {
-                    if (videoEl.paused) {
-                        const p = videoEl.play();
-                        syncPlayBtnLabel();
-                        if (p && typeof p.then === 'function') p.then(syncPlayBtnLabel).catch(handleWalkthroughPlayFailure);
-                    }
-                    speakWalkthrough();
-                } else {
-                    stopWalkthroughSpeech();
-                }
-                syncMuteBtnLabel();
-            });
-        }
-
-        if (videoEl) {
-            videoEl.addEventListener('click', (e) => {
-                e.stopPropagation();
-                if (videoEl.paused) {
-                    const p = videoEl.play();
-                    syncPlayBtnLabel();
-                    if (p && typeof p.then === 'function') p.then(syncPlayBtnLabel).catch(handleWalkthroughPlayFailure);
-                    if (narrationActive || !videoEl.muted) speakWalkthrough();
-                } else {
-                    videoEl.pause();
-                    stopWalkthroughSpeech();
-                    syncPlayBtnLabel();
-                }
-            });
-        }
-
-        videoCard.addEventListener('click', (e) => {
-            if (e.target.closest('a, button, video')) return;
+        videoCard.addEventListener('click', () => {
             activateVideoCard();
         });
         videoCard.addEventListener('keydown', (e) => {
-            if (e.target.closest('a, button, video')) return;
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
                 activateVideoCard();
             }
         });
-
-        const cleanupWalkthroughAudio = () => {
-            stopWalkthroughSpeech();
-            if (videoEl && !videoEl.paused) {
-                try { videoEl.pause(); } catch (_) {}
-            }
-            syncPlayBtnLabel();
-            syncMuteBtnLabel();
-        };
-        window.addEventListener('pagehide', cleanupWalkthroughAudio);
-        window.addEventListener('beforeunload', cleanupWalkthroughAudio);
-        window.addEventListener('pageshow', (e) => { if (e && e.persisted) cleanupWalkthroughAudio(); });
     }
 
     const cancelPageSpeech = () => {

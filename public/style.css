@@ -1385,9 +1385,13 @@ a {
 
 .video-placeholder.is-active {
     cursor: default;
-    aspect-ratio: auto;
-    min-height: 420px;
-    padding: 2.5rem 1.75rem;
+    transform: none;
+    box-shadow: 2px 4px 0 #18181B;
+}
+
+.video-placeholder.is-active:hover {
+    transform: none;
+    box-shadow: 2px 4px 0 #18181B;
 }
 
 .video-placeholder.is-active .video-center-cta {
@@ -1402,13 +1406,24 @@ a {
     width: 100%;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     text-align: center;
-    gap: 1.25rem;
+    padding: 1.5rem;
+    gap: 0.75rem;
     color: #ffffff;
 }
 
 .video-placeholder.is-active .video-active-panel {
     display: flex;
+}
+
+.video-coming-soon-title {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 4.4vw, 3.25rem);
+    font-weight: 900;
+    letter-spacing: -0.025em;
+    line-height: 1.08;
+    color: #FFFFFF;
 }
 
 .video-walkthrough-badge {
