@@ -1679,11 +1679,11 @@ a {
 }
 
 .method-title-row {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.85rem;
-    max-width: 880px;
+    gap: 0.75rem;
+    max-width: 100%;
     margin: 0 auto;
 }
 
@@ -1694,11 +1694,18 @@ a {
 }
 
 .method-header h2 {
-    font-size: clamp(1.9rem, 3.6vw, 2.72rem);
+    font-size: clamp(1.65rem, 3.05vw, 2.55rem);
     line-height: 1.16;
     letter-spacing: -0.025em;
     color: var(--text-color);
     margin: 0;
+    text-wrap: balance;
+}
+
+@media (min-width: 768px) {
+    .method-header h2 {
+        white-space: nowrap;
+    }
 }
 
 .method-lead {
