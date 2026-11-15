@@ -643,7 +643,7 @@ a {
     overflow: hidden;
     background-color: #FEFAF3;
     border-bottom: none;
-    padding: clamp(0.75rem, 1.4vw, 1.25rem) 0 clamp(0.75rem, 1.5vw, 1.25rem);
+    padding: clamp(4.25rem, 8.5vh, 6rem) 0 clamp(0.5rem, 1vw, 1rem);
 }
 
 .hero-centered-container {
@@ -818,7 +818,7 @@ a {
     z-index: 2;
     width: 100%;
     max-width: 1920px;
-    margin: -115px auto -2%;
+    margin: clamp(-350px, -23.5vw, -250px) auto -2.5%;
     display: flex;
     justify-content: center;
     overflow: hidden;
@@ -865,18 +865,18 @@ a {
     }
 }
 
-/* Short desktop screens (typical 720p/768p laptops): keep left-to-right full span with comfortable spacing below the hero CTA link */
+/* Short desktop screens (typical 720p/768p laptops): generous upper breather + centered copy nestled into panoramic valley */
 @media (min-width: 1025px) and (max-height: 820px) {
     .hero.hero-full-screen {
-        padding-top: 0.7rem;
-        padding-bottom: 0.5rem;
+        padding-top: clamp(3.15rem, 6.8vh, 4.25rem);
+        padding-bottom: 0.4rem;
     }
     .hero-eyebrow {
         margin-bottom: 0.65rem;
     }
     .hero-full-screen h1,
     .hero h1.practitioner-hero-title {
-        font-size: clamp(1.85rem, min(3.15vw, 5.4vh), 2.72rem);
+        font-size: clamp(1.85rem, min(2.65vw, 5.2vh), 2.5rem);
         margin-bottom: 0.65rem;
     }
     .hero-full-screen .hero-content p {
@@ -889,17 +889,17 @@ a {
     .hero-drawing-wrap {
         width: 100%;
         max-width: 1920px;
-        margin-top: -120px;
-        margin-bottom: -1.5%;
+        margin-top: clamp(-305px, -22.5vw, -235px);
+        margin-bottom: -2%;
     }
 }
 
-/* Tablet & Intermediate Viewports: ensure generous spacing below copy and full-width panoramic drawing */
+/* Tablet & Intermediate Viewports: generous upper breather and balanced valley spacing */
 @media (max-width: 1160px) {
     .hero.hero-full-screen {
         height: auto;
         min-height: auto;
-        padding: 1.75rem 0 1.25rem;
+        padding: clamp(2.75rem, 5.5vw, 3.75rem) 0 1rem;
     }
 
     .hero-content {
@@ -911,13 +911,13 @@ a {
     .hero-drawing-wrap {
         width: 100%;
         max-width: none;
-        margin: clamp(1.75rem, 4.5vw, 3.25rem) auto 0;
+        margin: -2.25rem auto 0;
     }
 }
 
 @media (max-width: 480px) {
     .hero.hero-full-screen {
-        padding: 1.15rem 0 0.9rem;
+        padding: 2.15rem 0 0.9rem;
     }
 
     .hero-content {
@@ -953,7 +953,7 @@ a {
     .hero-drawing-wrap {
         width: 100%;
         max-width: none;
-        margin: clamp(1.75rem, 6vw, 3rem) auto 0;
+        margin: -0.5rem auto 0;
     }
 
     .hero-drawing-img {
@@ -4658,7 +4658,7 @@ button.resume-btn-secondary:hover,
 @media (min-width: 1025px) and (max-height: 820px) {
     .hero-full-screen h1.practitioner-hero-title {
         font-size: clamp(1.85rem, min(2.68vw, 5.4vh), 2.55rem);
-        max-width: 880px;
+        max-width: 780px;
     }
 }
 
