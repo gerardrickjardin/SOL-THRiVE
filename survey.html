@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Flow Survey — THRiVE Coaching</title>
     <meta name="description" content="Pinpoint what kind of friction is slowing you down and measure your current Flow Score across Agency, Actions, Support, and Tools.">
-    <meta name="theme-color" content="#F7F4EB">
+    <meta name="theme-color" content="#F7EBD5">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -91,15 +91,15 @@
     <script src="script.js" defer></script>
     <style>
         body.survey-page {
-            background-color: var(--bg-cream, #F7F4EB);
-            color: var(--text-color, #141824);
+            background-color: var(--bg-cream, #F7EBD5);
+            color: var(--text-color, #1F1B16);
             font-family: var(--font-body, 'Poppins', sans-serif);
         }
         .survey-card {
-            background-color: #ffffff;
-            border: 2px solid var(--ink-border, #1E2430);
+            background-color: #FFFDF8;
+            border: 2px solid var(--ink-border, #1F1B16);
             border-radius: 24px;
-            box-shadow: 6px 6px 0 var(--ink-border, #1E2430);
+            box-shadow: 6px 6px 0 var(--ink-border, #1F1B16);
         }
         .flow-segment {
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -107,15 +107,15 @@
         }
         .metaphor-card {
             position: relative;
-            border: 2px solid rgba(30, 36, 48, 0.16);
+            border: 2px solid rgba(31, 27, 22, 0.16);
             border-radius: 18px;
-            background-color: #ffffff;
+            background-color: #FFFDF8;
             transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
         }
         .metaphor-card:hover {
             transform: translateY(-3px);
-            border-color: var(--accent-purple, #8B2FC9);
-            box-shadow: 4px 4px 0 var(--ink-border, #1E2430);
+            border-color: var(--brand-blue-dark, #4D6278);
+            box-shadow: 4px 4px 0 var(--ink-border, #1F1B16);
         }
         .metaphor-check-badge {
             opacity: 0;
@@ -123,9 +123,9 @@
             transition: opacity 0.18s ease, transform 0.18s ease;
         }
         input[type="radio"]:checked + .metaphor-card {
-            border-color: var(--ink-border, #1E2430);
-            background-color: #F5EBFD;
-            box-shadow: 5px 5px 0 var(--ink-border, #1E2430);
+            border-color: var(--ink-border, #1F1B16);
+            background-color: #DCE5EE;
+            box-shadow: 5px 5px 0 var(--ink-border, #1F1B16);
             transform: translate(-2px, -2px);
         }
         input[type="radio"]:checked + .metaphor-card .metaphor-check-badge {
@@ -136,16 +136,16 @@
             animation: pulse 2s infinite;
         }
         @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(225, 29, 72, 0.5); }
-            70% { box-shadow: 0 0 0 10px rgba(225, 29, 72, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(225, 29, 72, 0); }
+            0% { box-shadow: 0 0 0 0 rgba(204, 95, 87, 0.5); }
+            70% { box-shadow: 0 0 0 10px rgba(204, 95, 87, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(204, 95, 87, 0); }
         }
         @keyframes shimmer-gradient {
             0% { background-position: 200% 0; }
             100% { background-position: -200% 0; }
         }
         .smooth-gradient-bar {
-            background: linear-gradient(90deg, #8B2FC9, #D81159, #0478fe, #8B2FC9) !important;
+            background: linear-gradient(90deg, #CC5F57, #DCB055, #77A763, #6F8296, #CC5F57) !important;
             background-size: 200% 100% !important;
             animation: shimmer-gradient 4s linear infinite;
         }
@@ -158,21 +158,21 @@
             font-family: var(--font-heading, 'Nunito', sans-serif);
             font-size: 0.8rem;
             font-weight: 800;
-            border: 1.5px solid rgba(30, 36, 48, 0.15);
-            background-color: rgba(255, 255, 255, 0.7);
-            color: #6B7280;
+            border: 1.5px solid rgba(31, 27, 22, 0.16);
+            background-color: rgba(255, 253, 248, 0.8);
+            color: #6B6156;
             transition: all 0.2s ease;
         }
         .step-pill.active {
-            background-color: #1E2430;
-            color: #ffffff;
-            border-color: #1E2430;
-            box-shadow: 2px 2px 0 rgba(139, 47, 201, 0.4);
+            background-color: #1F1B16;
+            color: #FFFDF8;
+            border-color: #1F1B16;
+            box-shadow: 2px 2px 0 rgba(204, 95, 87, 0.45);
         }
         .step-pill.completed {
-            background-color: #F5EBFD;
-            color: #8B2FC9;
-            border-color: #8B2FC9;
+            background-color: #DAE9D2;
+            color: #3E6630;
+            border-color: #5B8A49;
         }
     </style>
 </head>
@@ -1669,26 +1669,26 @@
         }
 
         const questions = [
-            { id: 1, cat: "Agency", icon: "🕯️", text: "feel a sense of hope that this situation can be resolved?", color: "#3b82f6" },
-            { id: 2, cat: "Agency", icon: "🕯️", text: "believe you have the power to shift the outcome of this challenge?", color: "#3b82f6" },
-            { id: 3, cat: "Agency", icon: "🕯️", text: "stay calm enough to think clearly rather than just reacting to this stressor?", color: "#3b82f6" },
-            { id: 4, cat: "Agency", icon: "🕯️", text: "feel \"in the driver’s seat\" of your emotional response to this hurdle?", color: "#3b82f6" },
-            { id: 5, cat: "Agency", icon: "🕯️", text: "feel like you are experimenting and learning as you navigate this path?", color: "#3b82f6" },
-            { id: 6, cat: "Actions", icon: "🗺️", text: "see clear, positive steps you can take right now to resolve this issue?", color: "#10b981" },
-            { id: 7, cat: "Actions", icon: "🗺️", text: "find yourself breaking this big mountain down into small, manageable actions?", color: "#10b981" },
-            { id: 8, cat: "Actions", icon: "🗺️", text: "take consistent steps toward a solution to this problem?", color: "#10b981" },
-            { id: 9, cat: "Actions", icon: "🗺️", text: "apply a specific method to solve this problem?", color: "#10b981" },
-            { id: 10, cat: "Actions", icon: "🗺️", text: "stay aware of what you can control and what you can't control in this situation?", color: "#10b981" },
-            { id: 11, cat: "Support", icon: "🤝", text: "turn to people who give you genuine, non-judgmental support for this specific struggle?", color: "#f59e0b" },
-            { id: 12, cat: "Support", icon: "🤝", text: "speak with people who allow you to vent and brainstorm new solutions to this dilemma?", color: "#f59e0b" },
-            { id: 13, cat: "Support", icon: "🤝", text: "feel comfortable asking for help with this challenge?", color: "#f59e0b" },
-            { id: 14, cat: "Support", icon: "🤝", text: "lean on a community or coach that truly understands this situation?", color: "#f59e0b" },
-            { id: 15, cat: "Support", icon: "🤝", text: "feel seen and heard by the people closest to you regarding this matter?", color: "#f59e0b" },
-            { id: 16, cat: "Tools", icon: "⚙️", text: "use frameworks, apps, or visual aids to find new strategies for this challenge?", color: "#8b5cf6" },
-            { id: 17, cat: "Tools", icon: "⚙️", text: "easily find a \"Plan B\" when your initial approach to this obstacle doesn't work?", color: "#8b5cf6" },
-            { id: 18, cat: "Tools", icon: "⚙️", text: "access expert resources on how to resolve this specific type of problem?", color: "#8b5cf6" },
-            { id: 19, cat: "Tools", icon: "⚙️", text: "feel confident that your strategy here is based on best practices?", color: "#8b5cf6" },
-            { id: 20, cat: "Tools", icon: "⚙️", text: "feel equipped with the right \"gear\" for this specific climb?", color: "#8b5cf6" }
+            { id: 1, cat: "Agency", icon: "🕯️", text: "feel a sense of hope that this situation can be resolved?", color: "#6F8296" },
+            { id: 2, cat: "Agency", icon: "🕯️", text: "believe you have the power to shift the outcome of this challenge?", color: "#6F8296" },
+            { id: 3, cat: "Agency", icon: "🕯️", text: "stay calm enough to think clearly rather than just reacting to this stressor?", color: "#6F8296" },
+            { id: 4, cat: "Agency", icon: "🕯️", text: "feel \"in the driver’s seat\" of your emotional response to this hurdle?", color: "#6F8296" },
+            { id: 5, cat: "Agency", icon: "🕯️", text: "feel like you are experimenting and learning as you navigate this path?", color: "#6F8296" },
+            { id: 6, cat: "Actions", icon: "🗺️", text: "see clear, positive steps you can take right now to resolve this issue?", color: "#77A763" },
+            { id: 7, cat: "Actions", icon: "🗺️", text: "find yourself breaking this big mountain down into small, manageable actions?", color: "#77A763" },
+            { id: 8, cat: "Actions", icon: "🗺️", text: "take consistent steps toward a solution to this problem?", color: "#77A763" },
+            { id: 9, cat: "Actions", icon: "🗺️", text: "apply a specific method to solve this problem?", color: "#77A763" },
+            { id: 10, cat: "Actions", icon: "🗺️", text: "stay aware of what you can control and what you can't control in this situation?", color: "#77A763" },
+            { id: 11, cat: "Support", icon: "🤝", text: "turn to people who give you genuine, non-judgmental support for this specific struggle?", color: "#DCB055" },
+            { id: 12, cat: "Support", icon: "🤝", text: "speak with people who allow you to vent and brainstorm new solutions to this dilemma?", color: "#DCB055" },
+            { id: 13, cat: "Support", icon: "🤝", text: "feel comfortable asking for help with this challenge?", color: "#DCB055" },
+            { id: 14, cat: "Support", icon: "🤝", text: "lean on a community or coach that truly understands this situation?", color: "#DCB055" },
+            { id: 15, cat: "Support", icon: "🤝", text: "feel seen and heard by the people closest to you regarding this matter?", color: "#DCB055" },
+            { id: 16, cat: "Tools", icon: "⚙️", text: "use frameworks, apps, or visual aids to find new strategies for this challenge?", color: "#CC5F57" },
+            { id: 17, cat: "Tools", icon: "⚙️", text: "easily find a \"Plan B\" when your initial approach to this obstacle doesn't work?", color: "#CC5F57" },
+            { id: 18, cat: "Tools", icon: "⚙️", text: "access expert resources on how to resolve this specific type of problem?", color: "#CC5F57" },
+            { id: 19, cat: "Tools", icon: "⚙️", text: "feel confident that your strategy here is based on best practices?", color: "#CC5F57" },
+            { id: 20, cat: "Tools", icon: "⚙️", text: "feel equipped with the right \"gear\" for this specific climb?", color: "#CC5F57" }
         ];
 
         let currentQ = 0;

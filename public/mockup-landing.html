@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Claim Your Seat — 5 to THRiVE Practitioner Lab | SOL THRiVE Enrollment</title>
 <meta name="description" content="Enroll directly in the 4-session 5 to THRiVE Founding Pilot Lab starting Monday, Dec 7 ($500 founding tuition, $995 regular; 21-seat cap) or schedule your optional cohort intake briefing.">
-<meta name="theme-color" content="#F7F4EB">
+<meta name="theme-color" content="#F7EBD5">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -34,20 +34,20 @@
 <script src="script.js" defer></script>
 <style>
 :root{
-  --cream:#F9F6F0; --white:#FFFFFF; --ink:#18181B; --slate:#4B5563;
-  --violet:#7C2AE8; --gold:#F5B82E;
-  --grad:linear-gradient(90deg,#D91B82 0%,#8B2CF5 100%);
-  --shadow:0 3px 0 #18181B; --line:1.5px solid #18181B;
+  --cream:#F7EBD5; --white:#FFFDF8; --ink:#1F1B16; --slate:#4E463D;
+  --violet:#4D6278; --gold:#DCB055;
+  --grad:linear-gradient(90deg,#CC5F57 0%,#AC4038 100%);
+  --shadow:0 3px 0 #1F1B16; --line:1.5px solid #1F1B16;
 }
 body.funnel-page{background-color:var(--cream);color:var(--slate);font-family:'Inter',sans-serif;font-weight:400;line-height:1.55;min-height:100vh;
-  background-image:radial-gradient(rgba(24,24,27,.05) 1px,transparent 1px);background-size:22px 22px}
+  background-image:radial-gradient(rgba(31,27,22,.055) 1px,transparent 1px);background-size:22px 22px}
 main.funnel-main{max-width:1240px;margin:auto;padding:32px 28px 80px;width:100%}
 .funnel-main h1,.funnel-main h2,.funnel-main h3{font-family:'Plus Jakarta Sans','Nunito',sans-serif;font-weight:800;color:var(--ink);letter-spacing:-.02em;line-height:1.12}
 .funnel-main strong,.funnel-main b,.funnel-main button,.funnel-main input,.funnel-main label{font-weight:600}
 /* Buttons */
 .funnel-main .btn{font-family:'Inter',sans-serif;font-weight:600;font-size:1rem;border-radius:9999px;padding:14px 28px;cursor:pointer;border:0;transition:transform .15s,box-shadow .15s,opacity .2s;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px}
-.funnel-main .btn-primary{background:var(--grad);color:#fff;box-shadow:0 8px 20px -6px rgba(139,44,245,.55)}
-.funnel-main .btn-primary:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 26px -6px rgba(139,44,245,.65)}
+.funnel-main .btn-primary{background:var(--grad);color:#FFFDF8;box-shadow:0 8px 20px -6px rgba(172,64,56,.50)}
+.funnel-main .btn-primary:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 26px -6px rgba(172,64,56,.62)}
 .funnel-main .btn-primary:disabled{opacity:.45;cursor:not-allowed}
 .funnel-main .btn-sm{padding:10px 20px;font-size:.9rem}
 .funnel-main .btn-white{background:var(--white);color:var(--ink);border:var(--line);box-shadow:var(--shadow)}
@@ -56,15 +56,15 @@ main.funnel-main{max-width:1240px;margin:auto;padding:32px 28px 80px;width:100%}
 .funnel-main .btn-block{width:100%}
 /* View Switcher / Stepper */
 .stepper{display:flex;gap:8px;justify-content:center;margin-bottom:24px;flex-wrap:wrap}
-.stepper button{font-family:'Inter',sans-serif;font-size:.8rem;font-weight:600;padding:7px 15px;border-radius:9999px;border:1.5px solid rgba(24,24,27,.2);color:var(--slate);background:var(--white);cursor:pointer;transition:.2s}
+.stepper button{font-family:'Inter',sans-serif;font-size:.8rem;font-weight:600;padding:7px 15px;border-radius:9999px;border:1.5px solid rgba(31,27,22,.22);color:var(--slate);background:var(--white);cursor:pointer;transition:.2s}
 .stepper button:hover{border-color:var(--ink);color:var(--ink)}
-.stepper button:focus-visible{outline:2.5px solid var(--accent-purple,#8B2FC9);outline-offset:2px}
-.stepper button.on{border-color:var(--ink);color:#fff;background:var(--violet);box-shadow:var(--shadow)}
+.stepper button:focus-visible{outline:2.5px solid var(--brand-blue-dark,#4D6278);outline-offset:2px}
+.stepper button.on{border-color:var(--ink);color:#FFFDF8;background:var(--violet);box-shadow:var(--shadow)}
 .stepper button.done{color:var(--ink);border-color:var(--ink)}
-.eyebrow{display:inline-block;font-size:.75rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--violet);background:#F1E7FD;padding:5px 12px;border-radius:9999px;margin-bottom:12px}
+.eyebrow{display:inline-block;font-size:.75rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#455B70;background:#DCE5EE;padding:5px 12px;border-radius:9999px;margin-bottom:12px}
 .funnel-hero{text-align:center;max-width:840px;margin:0 auto 28px;background:transparent;overflow:visible}
 .funnel-hero h1{font-size:clamp(1.85rem,4vw,3rem);margin-bottom:10px}
-.funnel-hero h1 em{font-style:normal;background:linear-gradient(90deg,#D91B82,#8B2CF5);-webkit-background-clip:text;background-clip:text;color:transparent}
+.funnel-hero h1 em{font-style:normal;background:linear-gradient(90deg,#B54840,#4D6278);-webkit-background-clip:text;background-clip:text;color:transparent}
 .funnel-hero p{font-size:1.02rem;color:var(--slate)}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start}
 .card{background:var(--white);border:var(--line);border-radius:24px;box-shadow:var(--shadow);padding:28px}
@@ -75,20 +75,20 @@ main.funnel-main{max-width:1240px;margin:auto;padding:32px 28px 80px;width:100%}
 .col-swap{animation:in .45s cubic-bezier(.2,.8,.2,1)}
 @keyframes in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 /* SOL THRiVE Integrated Callout in Direct Checkout */
-.sol-story-box{margin-top:18px;padding:16px 18px;background:var(--cream);border:1.5px dashed rgba(24,24,27,.28);border-radius:16px}
+.sol-story-box{margin-top:18px;padding:16px 18px;background:var(--cream);border:1.5px dashed rgba(31,27,22,.28);border-radius:16px}
 .sol-story-box .sol-badge{font-size:.7rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--violet);margin-bottom:6px;display:block}
 .sol-story-box p{font-size:.88rem;line-height:1.5;color:var(--ink);margin-bottom:10px}
 .sol-story-quote{font-size:.84rem;color:var(--slate);display:flex;align-items:center;gap:10px;margin-bottom:12px}
 .sol-quick-links{display:flex;flex-wrap:wrap;gap:8px}
-.sol-link-chip{background:var(--white);border:1.5px solid rgba(24,24,27,.22);border-radius:9999px;padding:6px 12px;font-size:.8rem;font-weight:600;color:var(--ink);cursor:pointer;transition:.15s}
+.sol-link-chip{background:var(--white);border:1.5px solid rgba(31,27,22,.22);border-radius:9999px;padding:6px 12px;font-size:.8rem;font-weight:600;color:var(--ink);cursor:pointer;transition:.15s}
 .sol-link-chip:hover{border-color:var(--violet);color:var(--violet)}
 /* Form */
 .field{margin-bottom:12px}
 .field label{display:block;font-size:.8rem;color:var(--ink);margin-bottom:4px}
-.field input{width:100%;font-family:'Inter';font-weight:400;font-size:.96rem;padding:10px 13px;border:var(--line);border-radius:12px;background:var(--cream);color:var(--ink);outline:none;transition:.15s}
-.field input:focus{background:#fff;border-color:var(--violet);box-shadow:0 0 0 3px rgba(124,42,232,.18)}
+.field input{width:100%;font-family:'Inter';font-weight:400;font-size:.96rem;padding:10px 13px;border:var(--line);border-radius:12px;background:#FAF2E3;color:var(--ink);outline:none;transition:.15s}
+.field input:focus{background:#FFFDF8;border-color:var(--violet);box-shadow:0 0 0 3px rgba(77,98,120,.2)}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.err{color:#D91B82;font-size:.82rem;margin-top:8px;min-height:1.2em}
+.err{color:#B54840;font-size:.82rem;margin-top:8px;min-height:1.2em}
 .fine{font-size:.78rem;text-align:center;margin-top:10px}
 /* Checkout */
 .line{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid rgba(24,24,27,.12);font-size:.93rem}
@@ -252,7 +252,7 @@ main.funnel-main{max-width:1240px;margin:auto;padding:32px 28px 80px;width:100%}
     </div>
 
     <div class="card success" id="success" style="display:none;max-width:560px;margin:auto">
-      <svg width="90" height="90" viewBox="0 0 90 90" fill="none" stroke="#18181B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="45" cy="45" r="32"/><path d="M30 46l11 11 20-24" stroke="#7C2AE8" stroke-width="4"/></svg>
+      <svg width="90" height="90" viewBox="0 0 90 90" fill="none" stroke="#1F1B16" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="45" cy="45" r="32"/><path d="M30 46l11 11 20-24" stroke="#5B8A49" stroke-width="4"/></svg>
       <h2>You’re enrolled in the Founding Pilot Lab!</h2>
       <p id="ok-msg"></p>
       <a class="btn btn-primary" href="onboarding.html" style="margin-top:16px">Launch Session 0 Pre-Flight Hub &rarr;</a>
@@ -399,7 +399,7 @@ main.funnel-main{max-width:1240px;margin:auto;padding:32px 28px 80px;width:100%}
         mode:'payment',
         amount:50000,
         currency:'usd',
-        appearance:{theme:'stripe',variables:{colorPrimary:'#7C2AE8',colorText:'#18181B',colorBackground:'#FFFFFF',fontFamily:'Inter, sans-serif',borderRadius:'12px'}}
+        appearance:{theme:'stripe',variables:{colorPrimary:'#B54840',colorText:'#1F1B16',colorBackground:'#FFFDF8',fontFamily:'Inter, sans-serif',borderRadius:'12px'}}
       });
       elements.create('payment',{
         defaultValues:{
