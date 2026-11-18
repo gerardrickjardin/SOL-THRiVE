@@ -8,6 +8,7 @@ const EXCLUDED_ASSETS = new Set([
   '.DS_Store',
   'Hero Page.png',
   'Hero Page (1).png',
+  'Hero Page Drawing.png',
   'SOL THRiVE Hero Page Background.png',
   'hero-uphill-strides.png',
   'New Hero Page Background V2.png',
