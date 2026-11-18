@@ -652,7 +652,10 @@ a {
 }
 
 .hero.hero-full-screen {
-    min-height: calc(100vh - var(--header-height));
+    height: calc(100vh - var(--header-height));
+    height: calc(100svh - var(--header-height));
+    min-height: 580px;
+    max-height: 980px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -661,16 +664,20 @@ a {
     overflow: hidden;
     background-color: var(--bg-cream);
     border-bottom: none;
-    padding: clamp(4.25rem, 8.5vh, 6rem) 0 clamp(0.5rem, 1vw, 1rem);
+    padding: 0;
 }
 
 .hero-centered-container {
     width: 100%;
+    height: 100%;
+    flex: 1 1 auto;
+    min-height: 0;
     max-width: none;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: flex-start;
     position: relative;
     z-index: 2;
     overflow-x: clip;
@@ -683,7 +690,7 @@ a {
     width: 100%;
     max-width: 940px;
     padding: 0 24px;
-    margin: 0 auto;
+    margin: clamp(2rem, 5.5vh, 3.5rem) auto 0;
     background: transparent;
 }
 
@@ -843,24 +850,28 @@ a {
 }
 
 .hero-drawing-wrap {
-    position: relative;
+    position: absolute;
+    inset: 0 0 8px 0;
     z-index: 2;
     width: 100%;
-    max-width: 1920px;
-    margin: clamp(-335px, -22.5vw, -240px) auto 0;
+    max-width: none;
+    margin: 0;
     display: flex;
+    align-items: flex-end;
     justify-content: center;
     overflow: hidden;
     pointer-events: none;
 }
 
 .hero-drawing-img {
-    width: 102.5%;
-    max-width: none;
+    width: min(102.5%, calc((100vh - var(--header-height) - 8px) * 1.84));
+    width: min(102.5%, calc((100svh - var(--header-height) - 8px) * 1.84));
+    max-width: 1920px;
     height: auto;
     flex-shrink: 0;
     display: block;
     object-fit: contain;
+    object-position: center bottom;
     user-select: none;
     pointer-events: none;
     transform: translateX(-0.2%);
@@ -894,41 +905,68 @@ a {
     }
 }
 
-/* Short desktop screens (typical 720p/768p laptops): generous upper breather + centered copy nestled into panoramic valley */
-@media (min-width: 1025px) and (max-height: 820px) {
-    .hero.hero-full-screen {
-        padding-top: clamp(3.15rem, 6.8vh, 4.25rem);
-        padding-bottom: 0.4rem;
+/* 16:9 & short desktop/laptop viewports: keep text nestled cleanly inside the sky valley while 100% of the drawing stays above the fold */
+@media (min-width: 961px) and (max-height: 860px) {
+    .hero-content,
+    .hero-content.practitioner-hero-content {
+        margin-top: clamp(1.35rem, 3.8vh, 2.25rem);
     }
     .hero-eyebrow {
-        margin-bottom: 0.65rem;
+        margin-bottom: 0.55rem;
     }
     .hero-full-screen h1,
     .hero h1.practitioner-hero-title {
-        font-size: clamp(1.85rem, min(2.65vw, 5.2vh), 2.5rem);
-        margin-bottom: 0.65rem;
+        font-size: clamp(1.72rem, min(2.5vw, 4.8vh), 2.38rem);
+        margin-bottom: 0.55rem;
+        max-width: min(750px, 55vw);
     }
     .hero-full-screen .hero-content p {
-        font-size: clamp(0.88rem, min(1vw, 1.95vh), 0.97rem);
-        margin-bottom: 0.95rem;
+        font-size: clamp(0.85rem, min(0.98vw, 1.88vh), 0.96rem);
+        margin-bottom: 0.82rem;
+    }
+    .hero-cta-stack {
+        gap: 0.52rem;
     }
     .cta-button.hero-primary-cta {
-        padding: 0.82rem 1.65rem;
-    }
-    .hero-drawing-wrap {
-        width: 100%;
-        max-width: 1920px;
-        margin-top: clamp(-295px, -21.5vw, -225px);
-        margin-bottom: 0;
+        padding: 0.78rem 1.6rem;
+        font-size: clamp(0.92rem, 1.08vw, 1.02rem);
     }
 }
 
-/* Tablet & Intermediate Viewports: generous upper breather and balanced valley spacing */
-@media (max-width: 1160px) {
+@media (min-width: 961px) and (max-height: 760px) {
+    .hero-content,
+    .hero-content.practitioner-hero-content {
+        margin-top: 0.9rem;
+    }
+    .hero-eyebrow {
+        margin-bottom: 0.42rem;
+    }
+    .hero-full-screen h1,
+    .hero h1.practitioner-hero-title {
+        margin-bottom: 0.42rem;
+    }
+    .hero-full-screen .hero-content p {
+        margin-bottom: 0.62rem;
+    }
+    .hero-cta-stack {
+        gap: 0.42rem;
+    }
+    .cta-button.hero-primary-cta {
+        padding: 0.66rem 1.45rem;
+    }
+}
+
+/* Portrait Tablet & Mobile Viewports */
+@media (max-width: 960px) {
     .hero.hero-full-screen {
         height: auto;
         min-height: auto;
-        padding: clamp(2.75rem, 5.5vw, 3.75rem) 0 1rem;
+        max-height: none;
+        padding: clamp(2.25rem, 5vw, 3.25rem) 0 0.75rem;
+    }
+
+    .hero-centered-container {
+        height: auto;
     }
 
     .hero-content {
@@ -938,9 +976,16 @@ a {
     }
 
     .hero-drawing-wrap {
+        position: relative;
+        inset: auto;
         width: 100%;
         max-width: none;
         margin: -2.25rem auto 0;
+    }
+
+    .hero-drawing-img {
+        width: 102.5%;
+        max-width: none;
     }
 }
 
@@ -4856,10 +4901,10 @@ button.resume-btn-secondary:hover,
     text-align: center;
 }
 
-@media (min-width: 1025px) and (max-height: 820px) {
+@media (min-width: 961px) and (max-height: 860px) {
     .hero-full-screen h1.practitioner-hero-title {
-        font-size: clamp(1.85rem, min(2.68vw, 5.4vh), 2.55rem);
-        max-width: 780px;
+        font-size: clamp(1.72rem, min(2.5vw, 4.8vh), 2.38rem);
+        max-width: min(750px, 55vw);
     }
 }
 
