@@ -1335,6 +1335,91 @@ a {
     margin: 0 auto;
 }
 
+.video-embed-card {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    margin-top: 2.25rem;
+    background-color: #1F1B16;
+    border: 1.75px solid #1F1B16;
+    box-shadow: 4px 5px 0 #1F1B16;
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.video-youtube-iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+}
+
+.video-restart-actions {
+    margin-top: 1.35rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.video-restart-unmute-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    padding: 0.82rem 1.65rem;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #CC5F57 0%, #AC4038 100%);
+    color: #FFFDF8;
+    border: 1.75px solid #1F1B16;
+    box-shadow: 2px 3px 0 #1F1B16;
+    font-family: var(--font-heading);
+    font-size: clamp(0.92rem, 1.15vw, 1.02rem);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    cursor: pointer;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+}
+
+.video-restart-unmute-btn:hover {
+    transform: translate(-1.5px, -1.5px);
+    box-shadow: 4px 5px 0 #1F1B16;
+    filter: brightness(1.04);
+}
+
+.video-restart-unmute-btn:active {
+    transform: translate(1px, 1.5px);
+    box-shadow: 1px 1.5px 0 #1F1B16;
+}
+
+.video-restart-unmute-btn:focus-visible {
+    outline: 2.5px solid var(--brand-blue-dark, #4D6278);
+    outline-offset: 4px;
+}
+
+.video-restart-icon {
+    flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+    .video-embed-card {
+        border-radius: 16px;
+        margin-top: 1.65rem;
+    }
+
+    .video-restart-actions {
+        margin-top: 1.05rem;
+    }
+
+    .video-restart-unmute-btn {
+        width: 100%;
+        max-width: 320px;
+        padding: 0.78rem 1.25rem;
+    }
+}
+
 .video-placeholder {
     width: 100%;
     aspect-ratio: 16 / 9;

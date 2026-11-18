@@ -194,29 +194,29 @@
                 <h2>Why Clients Stall Between Tuesday and Next Week: <span class="hero-mark hero-mark-red">And How We Fix It</span></h2>
                 <p class="section-lead">Watch how solo practitioners and case managers use <strong>Personos AI</strong> to bridge the 167-hour gap between sessions.</p>
 
-                <!-- Prominent Interactive Overview Video Card -->
-                <div class="video-placeholder" id="video-player-card" role="button" tabindex="0" aria-label="Watch The 167-Hour Gap 2-minute overview video">
-                    <div class="video-backdrop-decor" aria-hidden="true">
-                        <svg class="video-bg-vectors" viewBox="0 0 960 540" preserveAspectRatio="none">
-                            <path d="M-20 430 C 140 310, 260 355, 420 420 C 560 475, 760 420, 980 245" fill="none" stroke="rgba(220, 176, 85, 0.34)" stroke-width="2" stroke-dasharray="6 8" stroke-linecap="round"/>
-                            <circle cx="285" cy="310" r="46" fill="none" stroke="rgba(247, 235, 213, 0.16)" stroke-width="1.5"/>
-                            <path d="M685 74 L742 158 L658 205" fill="none" stroke="rgba(133, 145, 158, 0.42)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M775 342 L826 378 L792 432" fill="none" stroke="rgba(119, 167, 99, 0.36)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                        <div class="video-overlay-gradient"></div>
-                    </div>
-                    <div class="video-center-cta">
-                        <span class="video-card-eyebrow">PERSONOS AI &times; 5 TO THRIVE</span>
-                        <span class="video-card-title">THE 167-HOUR GAP</span>
-                        <span class="video-cta-sub">From one weekly hour to 21 days of follow-through</span>
-                        <div class="play-button" aria-hidden="true"></div>
-                    </div>
-                    <div class="video-active-panel video-coming-soon-panel" aria-hidden="true" aria-live="polite">
-                        <span class="video-coming-soon-title">Coming Soon</span>
-                    </div>
+                <!-- Embedded Autoplaying Muted YouTube Overview Video -->
+                <div class="video-embed-card" id="video-player-card">
+                    <iframe
+                        id="overview-youtube-iframe"
+                        class="video-youtube-iframe"
+                        src="https://www.youtube.com/embed/LfzsKMef61A?autoplay=1&amp;mute=1&amp;playsinline=1&amp;loop=1&amp;playlist=LfzsKMef61A&amp;rel=0&amp;modestbranding=1&amp;enablejsapi=1"
+                        title="Why Clients Stall Between Tuesday and Next Week: And How We Fix It — 2-Minute Overview"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin"
+                        allowfullscreen>
+                    </iframe>
                 </div>
 
-                <p class="video-source-note">Single 2&ndash;3 minute overview video &bull; Video source to be connected</p>
+                <div class="video-restart-actions">
+                    <button type="button" class="video-restart-unmute-btn" id="video-restart-unmute-btn">
+                        <svg class="video-restart-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                        </svg>
+                        <span>Click to Restart and Unmute</span>
+                    </button>
+                </div>
             </div>
         </section>
 
