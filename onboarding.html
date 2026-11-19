@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Session 0 Pre-Flight Onboarding Hub — THRiVE Coaching</title>
-    <meta name="description" content="Session 0 Pre-Flight Onboarding Hub for the 5 to THRiVE Practitioner Lab. Calibrate workstation microphone dictation, practice the Safe-Save protocol, verify LMS squad placement, and access diagnostics.">
+    <meta name="description"
+        content="Session 0 Pre-Flight Onboarding Hub for the 5 to THRiVE Practitioner Lab. Calibrate workstation microphone dictation, practice the Safe-Save protocol, verify LMS squad placement, and access diagnostics.">
     <meta name="theme-color" content="#F7EBD5">
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
@@ -13,12 +15,25 @@
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="SOL THRiVE Coaching">
     <meta property="og:title" content="Session 0 Pre-Flight Onboarding Hub — THRiVE Coaching">
-    <meta property="og:description" content="Equipping Therapists, Coaches, and Case Managers to 3x Client Follow-Through. Complete your pre-flight workstation checklist before our Monday, Dec 7 launch.">
+    <meta property="og:description"
+        content="Equipping Therapists, Coaches, and Case Managers to 3x Client Follow-Through. Complete your pre-flight workstation checklist before our Monday, Dec 7 launch.">
     <meta property="og:url" content="https://www.thrivecoaching.ai/onboarding">
-    <meta property="og:image" content="https://www.thrivecoaching.ai/assets/hero-banner-1920.jpg">
+    <meta property="og:image" content="https://www.thrivecoaching.ai/assets/colorful-thrive-method-logo.jpg">
+    <meta property="og:image:secure_url" content="https://www.thrivecoaching.ai/assets/colorful-thrive-method-logo.jpg">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="1678">
+    <meta property="og:image:height" content="937">
+    <meta property="og:image:alt" content="The THRiVE Method — SOLab Studios">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Session 0 Pre-Flight Onboarding Hub — THRiVE Coaching">
+    <meta name="twitter:description" content="Equipping Therapists, Coaches, and Case Managers to 3x Client Follow-Through. Complete your pre-flight workstation checklist before our Monday, Dec 7 launch.">
+    <meta name="twitter:image" content="https://www.thrivecoaching.ai/assets/colorful-thrive-method-logo.jpg">
+    <meta name="twitter:image:alt" content="The THRiVE Method — SOLab Studios">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Poppins:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
         /* ==========================================================================
@@ -404,17 +419,44 @@
             animation: soundwave-pulse 1s infinite ease-in-out;
         }
 
-        .soundwave-container.active .soundwave-bar:nth-child(1) { animation-delay: 0.0s; }
-        .soundwave-container.active .soundwave-bar:nth-child(2) { animation-delay: 0.2s; }
-        .soundwave-container.active .soundwave-bar:nth-child(3) { animation-delay: 0.4s; }
-        .soundwave-container.active .soundwave-bar:nth-child(4) { animation-delay: 0.1s; }
-        .soundwave-container.active .soundwave-bar:nth-child(5) { animation-delay: 0.3s; }
-        .soundwave-container.active .soundwave-bar:nth-child(6) { animation-delay: 0.5s; }
-        .soundwave-container.active .soundwave-bar:nth-child(7) { animation-delay: 0.2s; }
+        .soundwave-container.active .soundwave-bar:nth-child(1) {
+            animation-delay: 0.0s;
+        }
+
+        .soundwave-container.active .soundwave-bar:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .soundwave-container.active .soundwave-bar:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        .soundwave-container.active .soundwave-bar:nth-child(4) {
+            animation-delay: 0.1s;
+        }
+
+        .soundwave-container.active .soundwave-bar:nth-child(5) {
+            animation-delay: 0.3s;
+        }
+
+        .soundwave-container.active .soundwave-bar:nth-child(6) {
+            animation-delay: 0.5s;
+        }
+
+        .soundwave-container.active .soundwave-bar:nth-child(7) {
+            animation-delay: 0.2s;
+        }
 
         @keyframes soundwave-pulse {
-            0%, 100% { height: 10px; }
-            50% { height: 38px; }
+
+            0%,
+            100% {
+                height: 10px;
+            }
+
+            50% {
+                height: 38px;
+            }
         }
 
         .transcript-box {
@@ -428,7 +470,7 @@
             font-size: 0.95rem;
             color: var(--text-color);
             margin-bottom: 1.25rem;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
             white-space: pre-wrap;
         }
 
@@ -502,21 +544,31 @@
         }
 
         .pacing-meter-fill.flow {
-            background-color: #10B981; /* Green: 0-60s */
+            background-color: #10B981;
+            /* Green: 0-60s */
         }
 
         .pacing-meter-fill.window {
-            background-color: #F59E0B; /* Amber: 60-110s */
+            background-color: #F59E0B;
+            /* Amber: 60-110s */
         }
 
         .pacing-meter-fill.overdue {
-            background-color: #EF4444; /* Red: >110s */
+            background-color: #EF4444;
+            /* Red: >110s */
             animation: pulse-overdue 0.8s infinite;
         }
 
         @keyframes pulse-overdue {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.55; }
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.55;
+            }
         }
 
         .pacing-legend {
@@ -553,7 +605,7 @@
             font-size: 1rem;
             color: var(--text-color);
             margin-bottom: 1rem;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
             resize: vertical;
         }
 
@@ -641,13 +693,16 @@
             .hub-card {
                 padding: 1.25rem;
             }
+
             .checklist-item {
                 padding: 1rem;
                 gap: 0.75rem;
             }
+
             .checklist-item-title {
                 font-size: 0.95rem;
             }
+
             .checklist-item-badge {
                 margin-left: 0;
                 margin-top: 0.35rem;
@@ -655,10 +710,12 @@
         }
     </style>
 </head>
+
 <body class="subpage-body onboarding-page">
     <header class="header">
         <nav class="nav-left" aria-label="Primary Mobile Navigation">
-            <button class="hamburger" type="button" aria-label="Toggle Menu" aria-expanded="false" aria-controls="mobile-nav-drawer">
+            <button class="hamburger" type="button" aria-label="Toggle Menu" aria-expanded="false"
+                aria-controls="mobile-nav-drawer">
                 <span></span><span></span><span></span>
             </button>
         </nav>
@@ -673,7 +730,9 @@
                     <li><a href="approach.html">How It Works</a></li>
                     <li><a href="classes.html">Class Schedule</a></li>
                     <li class="dropdown resources-dropdown">
-                        <button type="button" class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" aria-controls="desktop-resources-menu">Resources <span class="dropdown-caret" aria-hidden="true">&#9662;</span></button>
+                        <button type="button" class="dropdown-toggle" aria-expanded="false" aria-haspopup="true"
+                            aria-controls="desktop-resources-menu">Resources <span class="dropdown-caret"
+                                aria-hidden="true">&#9662;</span></button>
                         <div class="dropdown-content resources-mega-menu" id="desktop-resources-menu">
                             <div class="resources-group">
                                 <div class="resources-group-label">Tools &amp; Assessments</div>
@@ -712,7 +771,9 @@
                 <li><a href="approach.html">How It Works</a></li>
                 <li><a href="classes.html">Class Schedule</a></li>
                 <li class="dropdown resources-dropdown">
-                    <button type="button" class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" aria-controls="mobile-resources-menu">Resources <span class="dropdown-caret" aria-hidden="true">&#9662;</span></button>
+                    <button type="button" class="dropdown-toggle" aria-expanded="false" aria-haspopup="true"
+                        aria-controls="mobile-resources-menu">Resources <span class="dropdown-caret"
+                            aria-hidden="true">&#9662;</span></button>
                     <div class="dropdown-content" id="mobile-resources-menu">
                         <div class="resources-group">
                             <div class="resources-group-label">Tools &amp; Assessments</div>
@@ -740,7 +801,8 @@
                         </div>
                     </div>
                 </li>
-                <li class="mobile-drawer-cta-wrap"><a href="funnel.html" class="mobile-drawer-cta">Claim Your Seat</a></li>
+                <li class="mobile-drawer-cta-wrap"><a href="funnel.html" class="mobile-drawer-cta">Claim Your Seat</a>
+                </li>
             </ul>
         </nav>
     </header>
@@ -752,12 +814,14 @@
                 <span class="section-eyebrow">Session 0 • Pre-Flight Onboarding Hub</span>
                 <h1>Welcome to the <span class="highlight">Practitioner Lab</span></h1>
                 <p class="section-lead">
-                    Equipping Therapists, Coaches, and Case Managers to 3x Client Follow-Through. Complete your pre-flight checklist below in any order Luke directs before our Monday, Dec 7 launch.
+                    Equipping Therapists, Coaches, and Case Managers to 3x Client Follow-Through. Complete your
+                    pre-flight checklist below in any order Luke directs before our Monday, Dec 7 launch.
                 </p>
                 <div class="hero-cohort-pills">
                     <span class="cohort-pill primary">⚡ 5 to THRiVE Founding Pilot Lab</span>
                     <span class="cohort-pill">📅 Session 0: Sat Dec 5 – Sun Dec 6 (Weekend Drop-In Tech Clinics)</span>
-                    <span class="cohort-pill">🚀 Cohort Launch: Monday, Dec 7, 2026 (4 Sessions • Mondays 5:00–6:30 PM MT)</span>
+                    <span class="cohort-pill">🚀 Cohort Launch: Monday, Dec 7, 2026 (4 Sessions • Mondays 5:00–6:30 PM
+                        MT)</span>
                     <span class="cohort-pill">👥 Capped at 21 Practitioners (3 Squads of 7)</span>
                 </div>
             </section>
@@ -768,9 +832,11 @@
                     <div class="hub-card-header-titles">
                         <span class="section-eyebrow">Pre-Flight Triage</span>
                         <h2>Session 0 Preparation Checklist</h2>
-                        <p>Complete these steps in any sequence. Your progress is saved automatically to your browser.</p>
+                        <p>Complete these steps in any sequence. Your progress is saved automatically to your browser.
+                        </p>
                     </div>
-                    <button id="btn-reset-checklist" class="btn-action-secondary" title="Reset checklist to initial state">
+                    <button id="btn-reset-checklist" class="btn-action-secondary"
+                        title="Reset checklist to initial state">
                         <span>↺ Reset Checklist</span>
                     </button>
                 </div>
@@ -787,94 +853,112 @@
 
                 <ul class="checklist-list" id="checklist-items">
                     <li class="checklist-item" data-key="triage_survey">
-                        <input type="checkbox" class="checklist-item-checkbox" id="check-triage_survey" aria-label="Toggle Baseline Flow Survey Triage">
+                        <input type="checkbox" class="checklist-item-checkbox" id="check-triage_survey"
+                            aria-label="Toggle Baseline Flow Survey Triage">
                         <div class="checklist-item-content">
                             <div class="checklist-item-title-row">
                                 <span class="checklist-item-title">1. Baseline Flow Survey Triage</span>
                                 <span class="checklist-item-badge">Pending</span>
                             </div>
                             <p class="checklist-item-desc">
-                                Pinpoint client friction ("Ugg") and measure baseline Agency, Clarity, and Momentum scores.
+                                Pinpoint client friction ("Ugg") and measure baseline Agency, Clarity, and Momentum
+                                scores.
                                 <a href="survey.html" target="_blank">Launch Flow Survey &rarr;</a>
                             </p>
                         </div>
                     </li>
 
                     <li class="checklist-item" data-key="thrive_report">
-                        <input type="checkbox" class="checklist-item-checkbox" id="check-thrive_report" aria-label="Toggle 6-Pillar THRiVE Report">
+                        <input type="checkbox" class="checklist-item-checkbox" id="check-thrive_report"
+                            aria-label="Toggle 6-Pillar THRiVE Report">
                         <div class="checklist-item-content">
                             <div class="checklist-item-title-row">
                                 <span class="checklist-item-title">2. 6-Pillar THRiVE Report Exploration</span>
                                 <span class="checklist-item-badge">Pending</span>
                             </div>
                             <p class="checklist-item-desc">
-                                Review the Traits, Hobbies, Relationships, Interests, Values, and Experiences framework with 3–5 item quotas per pillar.
+                                Review the Traits, Hobbies, Relationships, Interests, Values, and Experiences framework
+                                with 3–5 item quotas per pillar.
                                 <a href="profile.html" target="_blank">Open THRiVE Report &rarr;</a>
                             </p>
                         </div>
                     </li>
 
                     <li class="checklist-item" data-key="mic_calibration">
-                        <input type="checkbox" class="checklist-item-checkbox" id="check-mic_calibration" aria-label="Toggle Microphone Calibration">
+                        <input type="checkbox" class="checklist-item-checkbox" id="check-mic_calibration"
+                            aria-label="Toggle Microphone Calibration">
                         <div class="checklist-item-content">
                             <div class="checklist-item-title-row">
-                                <span class="checklist-item-title">3. Workstation Microphone &amp; Speech Dictation Calibration</span>
+                                <span class="checklist-item-title">3. Workstation Microphone &amp; Speech Dictation
+                                    Calibration</span>
                                 <span class="checklist-item-badge">Pending</span>
                             </div>
                             <p class="checklist-item-desc">
-                                Test and calibrate your microphone below using the Web Speech dictation tester. Capturing speech automatically completes this item.
+                                Test and calibrate your microphone below using the Web Speech dictation tester.
+                                Capturing speech automatically completes this item.
                             </p>
                         </div>
                     </li>
 
                     <li class="checklist-item" data-key="safesave_practice">
-                        <input type="checkbox" class="checklist-item-checkbox" id="check-safesave_practice" aria-label="Toggle Safe-Save Practice">
+                        <input type="checkbox" class="checklist-item-checkbox" id="check-safesave_practice"
+                            aria-label="Toggle Safe-Save Practice">
                         <div class="checklist-item-content">
                             <div class="checklist-item-title-row">
                                 <span class="checklist-item-title">4. "Safe-Save" Cadence Practice (Enter Key)</span>
                                 <span class="checklist-item-badge">Pending</span>
                             </div>
                             <p class="checklist-item-desc">
-                                Practice pressing the Enter key every 1–2 minutes (60–120s) to lock client memory. 3 successful saves automatically complete this item.
+                                Practice pressing the Enter key every 1–2 minutes (60–120s) to lock client memory. 3
+                                successful saves automatically complete this item.
                             </p>
                         </div>
                     </li>
 
                     <li class="checklist-item" data-key="learnworlds_login">
-                        <input type="checkbox" class="checklist-item-checkbox" id="check-learnworlds_login" aria-label="Toggle LearnWorlds LMS Login">
+                        <input type="checkbox" class="checklist-item-checkbox" id="check-learnworlds_login"
+                            aria-label="Toggle LearnWorlds LMS Login">
                         <div class="checklist-item-content">
                             <div class="checklist-item-title-row">
                                 <span class="checklist-item-title">5. LearnWorlds LMS Login &amp; Portal Bookmark</span>
                                 <span class="checklist-item-badge">Pending</span>
                             </div>
                             <p class="checklist-item-desc">
-                                Sign in at <a href="https://thrive-coaching.learnworlds.com" target="_blank" rel="noopener noreferrer">thrive-coaching.learnworlds.com</a> and bookmark your course portal for weekly homework.
+                                Sign in at <a href="https://thrive-coaching.learnworlds.com" target="_blank"
+                                    rel="noopener noreferrer">thrive-coaching.learnworlds.com</a> and bookmark your
+                                course portal for weekly homework.
                             </p>
                         </div>
                     </li>
 
                     <li class="checklist-item" data-key="squad_community">
-                        <input type="checkbox" class="checklist-item-checkbox" id="check-squad_community" aria-label="Toggle Squad Placement & Introduction">
+                        <input type="checkbox" class="checklist-item-checkbox" id="check-squad_community"
+                            aria-label="Toggle Squad Placement & Introduction">
                         <div class="checklist-item-content">
                             <div class="checklist-item-title-row">
-                                <span class="checklist-item-title">6. Squad Placement &amp; Introduction (Squad A, B, or C)</span>
+                                <span class="checklist-item-title">6. Squad Placement &amp; Introduction (Squad A, B, or
+                                    C)</span>
                                 <span class="checklist-item-badge">Pending</span>
                             </div>
                             <p class="checklist-item-desc">
-                                Confirm your 7-practitioner squad assignment (Squad A, B, or C) in LearnWorlds Community and post your clinical focus.
+                                Confirm your 7-practitioner squad assignment (Squad A, B, or C) in LearnWorlds Community
+                                and post your clinical focus.
                             </p>
                         </div>
                     </li>
 
                     <li class="checklist-item" data-key="calendar_sync">
-                        <input type="checkbox" class="checklist-item-checkbox" id="check-calendar_sync" aria-label="Toggle Calendar Sync">
+                        <input type="checkbox" class="checklist-item-checkbox" id="check-calendar_sync"
+                            aria-label="Toggle Calendar Sync">
                         <div class="checklist-item-content">
                             <div class="checklist-item-title-row">
-                                <span class="checklist-item-title">7. Calendar Sync (15-Event Practitioner Lab .ICS)</span>
+                                <span class="checklist-item-title">7. Calendar Sync (15-Event Practitioner Lab
+                                    .ICS)</span>
                                 <span class="checklist-item-badge">Pending</span>
                             </div>
                             <p class="checklist-item-desc">
-                                Sync all Monday &amp; Wednesday live labs (5:00–6:30 PM MT) and weekend IT clinics to your calendar.
+                                Sync all Monday &amp; Wednesday live labs (5:00–6:30 PM MT) and weekend IT clinics to
+                                your calendar.
                             </p>
                         </div>
                     </li>
@@ -887,20 +971,23 @@
                     <div class="hub-card-header-titles">
                         <span class="section-eyebrow">Hardware &amp; Speech Calibration</span>
                         <h2>Workstation Microphone &amp; Speech Dictation Tester</h2>
-                        <p>Personos AI relies on real-time speech-to-text dictation during client sessions. Calibrate your microphone and verify speech recognition below.</p>
+                        <p>Personos AI relies on real-time speech-to-text dictation during client sessions. Calibrate
+                            your microphone and verify speech recognition below.</p>
                     </div>
                 </div>
 
                 <div class="mic-prompt-box">
                     <div class="mic-prompt-label">Sample Clinical Intake Prompt (Read Aloud):</div>
                     <div class="mic-prompt-text" id="mic-prompt-text">
-                        "Client presents with high agency but is experiencing friction around between-session accountability. Recommending Strengths-First Observer stance."
+                        "Client presents with high agency but is experiencing friction around between-session
+                        accountability. Recommending Strengths-First Observer stance."
                     </div>
                 </div>
 
                 <div class="mic-status-banner" id="mic-status">
                     <span id="mic-status-icon">🎙️</span>
-                    <span id="mic-status-text">Microphone tester idle. Click "Start Mic Test" and read the sample prompt aloud.</span>
+                    <span id="mic-status-text">Microphone tester idle. Click "Start Mic Test" and read the sample prompt
+                        aloud.</span>
                 </div>
 
                 <div class="soundwave-container" id="mic-soundwave" aria-hidden="true">
@@ -913,7 +1000,9 @@
                     <div class="soundwave-bar"></div>
                 </div>
 
-                <div class="transcript-box" id="mic-transcript" placeholder="Transcribed speech will appear here in real time...">Transcribed speech will appear here in real time...</div>
+                <div class="transcript-box" id="mic-transcript"
+                    placeholder="Transcribed speech will appear here in real time...">Transcribed speech will appear
+                    here in real time...</div>
 
                 <div class="mic-controls">
                     <button id="btn-mic-start" class="btn-action-primary">
@@ -922,7 +1011,8 @@
                     <button id="btn-mic-stop" class="btn-action-secondary" style="display: none;">
                         <span>⏹ Stop Listening</span>
                     </button>
-                    <button id="btn-mic-simulate" class="btn-action-secondary" title="Simulate speech for automated testing or headless browsers">
+                    <button id="btn-mic-simulate" class="btn-action-secondary"
+                        title="Simulate speech for automated testing or headless browsers">
                         <span>⚡ Test Calibration</span>
                     </button>
                 </div>
@@ -934,7 +1024,10 @@
                     <div class="hub-card-header-titles">
                         <span class="section-eyebrow">Clinical Habit Training</span>
                         <h2>"Safe-Save" Cadence Practice Trainer</h2>
-                        <p>In Personos AI, pressing <kbd style="background:#eee;border:1px solid #aaa;border-radius:4px;padding:2px 6px;font-family:monospace;">Enter</kbd> every 60–120 seconds locks client memory and prevents dictation buffer loss. Practice your 1–2 minute saving cadence below.</p>
+                        <p>In Personos AI, pressing <kbd
+                                style="background:#eee;border:1px solid #aaa;border-radius:4px;padding:2px 6px;font-family:monospace;">Enter</kbd>
+                            every 60–120 seconds locks client memory and prevents dictation buffer loss. Practice your
+                            1–2 minute saving cadence below.</p>
                     </div>
                     <button id="btn-safesave-reset" class="btn-action-secondary">
                         <span>↺ Reset Trainer</span>
@@ -952,7 +1045,8 @@
                     </div>
                     <div class="trainer-stat-card">
                         <div class="trainer-stat-label">Cadence Status</div>
-                        <div class="trainer-stat-value" id="safesave-status-badge" style="font-size: 1.15rem; color: #10B981;">Flow State</div>
+                        <div class="trainer-stat-value" id="safesave-status-badge"
+                            style="font-size: 1.15rem; color: #10B981;">Flow State</div>
                     </div>
                 </div>
 
@@ -980,12 +1074,14 @@
                     </div>
                 </div>
 
-                <textarea class="trainer-textarea" id="safesave-textarea" placeholder="Start typing practice intake notes here... When the meter enters the amber window (60–110s), press Enter to commit your Safe-Save."></textarea>
+                <textarea class="trainer-textarea" id="safesave-textarea"
+                    placeholder="Start typing practice intake notes here... When the meter enters the amber window (60–110s), press Enter to commit your Safe-Save."></textarea>
 
                 <div class="trainer-feedback" id="safesave-feedback"></div>
 
                 <div class="mic-controls">
-                    <button id="btn-safesave-simulate" class="btn-action-secondary" title="Advance timer into the 60s+ window for testing">
+                    <button id="btn-safesave-simulate" class="btn-action-secondary"
+                        title="Advance timer into the 60s+ window for testing">
                         <span>⚡ Advance to 65s Window</span>
                     </button>
                 </div>
@@ -997,7 +1093,8 @@
                     <div class="hub-card-header-titles">
                         <span class="section-eyebrow">Ecosystem Directory</span>
                         <h2>Essential Practitioner Resources &amp; Tools</h2>
-                        <p>Direct links to all 3 tiers of the THRiVE clinical ecosystem, diagnostics, calendar bundles, and technical support.</p>
+                        <p>Direct links to all 3 tiers of the THRiVE clinical ecosystem, diagnostics, calendar bundles,
+                            and technical support.</p>
                     </div>
                 </div>
 
@@ -1008,11 +1105,13 @@
                             <div class="directory-card-icon">🧭</div>
                             <h3 class="directory-card-title">Flow Survey Triage</h3>
                             <p class="directory-card-desc">
-                                Baseline intake diagnostic assessing Agency, Clarity, and Momentum while pinpointing client friction ("Ugg").
+                                Baseline intake diagnostic assessing Agency, Clarity, and Momentum while pinpointing
+                                client friction ("Ugg").
                             </p>
                         </div>
                         <div class="directory-card-action">
-                            <a href="survey.html" class="btn-action-primary" style="width: 100%; justify-content: center;">Launch Survey &rarr;</a>
+                            <a href="survey.html" class="btn-action-primary"
+                                style="width: 100%; justify-content: center;">Launch Survey &rarr;</a>
                         </div>
                     </div>
 
@@ -1022,11 +1121,13 @@
                             <div class="directory-card-icon">📊</div>
                             <h3 class="directory-card-title">6-Pillar THRiVE Report</h3>
                             <p class="directory-card-desc">
-                                Strengths-first diagnostic capturing Traits, Hobbies, Relationships, Interests, Values, and Experiences (3–5 quota).
+                                Strengths-first diagnostic capturing Traits, Hobbies, Relationships, Interests, Values,
+                                and Experiences (3–5 quota).
                             </p>
                         </div>
                         <div class="directory-card-action">
-                            <a href="profile.html" class="btn-action-primary" style="width: 100%; justify-content: center;">Open Report &rarr;</a>
+                            <a href="profile.html" class="btn-action-primary"
+                                style="width: 100%; justify-content: center;">Open Report &rarr;</a>
                         </div>
                     </div>
 
@@ -1036,11 +1137,13 @@
                             <div class="directory-card-icon">✨</div>
                             <h3 class="directory-card-title">HoPE Index Diagnostic</h3>
                             <p class="directory-card-desc">
-                                Validated measure of hope pathways, agency thinking, and between-session client momentum over time.
+                                Validated measure of hope pathways, agency thinking, and between-session client momentum
+                                over time.
                             </p>
                         </div>
                         <div class="directory-card-action">
-                            <a href="hope-survey.html" class="btn-action-primary" style="width: 100%; justify-content: center;">Launch HoPE Index &rarr;</a>
+                            <a href="hope-survey.html" class="btn-action-primary"
+                                style="width: 100%; justify-content: center;">Launch HoPE Index &rarr;</a>
                         </div>
                     </div>
 
@@ -1050,11 +1153,13 @@
                             <div class="directory-card-icon">📖</div>
                             <h3 class="directory-card-title">Practitioner Guide</h3>
                             <p class="directory-card-desc">
-                                Visual walkthrough of the 3-Tier Ecosystem, LearnWorlds LMS navigation, Review Center homework, and live labs.
+                                Visual walkthrough of the 3-Tier Ecosystem, LearnWorlds LMS navigation, Review Center
+                                homework, and live labs.
                             </p>
                         </div>
                         <div class="directory-card-action">
-                            <a href="how-to-use.html" class="btn-action-primary" style="width: 100%; justify-content: center;">View Guide &rarr;</a>
+                            <a href="how-to-use.html" class="btn-action-primary"
+                                style="width: 100%; justify-content: center;">View Guide &rarr;</a>
                         </div>
                     </div>
 
@@ -1064,11 +1169,14 @@
                             <div class="directory-card-icon">🎓</div>
                             <h3 class="directory-card-title">LearnWorlds LMS Classroom</h3>
                             <p class="directory-card-desc">
-                                The central training classroom: 7 core modules, weekly video replays, Review Center homework, and Squad spaces.
+                                The central training classroom: 7 core modules, weekly video replays, Review Center
+                                homework, and Squad spaces.
                             </p>
                         </div>
                         <div class="directory-card-action">
-                            <a href="https://thrive-coaching.learnworlds.com" target="_blank" rel="noopener noreferrer" class="btn-action-primary" style="width: 100%; justify-content: center;">Sign In to LMS ↗</a>
+                            <a href="https://thrive-coaching.learnworlds.com" target="_blank" rel="noopener noreferrer"
+                                class="btn-action-primary" style="width: 100%; justify-content: center;">Sign In to LMS
+                                ↗</a>
                         </div>
                     </div>
 
@@ -1078,11 +1186,13 @@
                             <div class="directory-card-icon">🤖</div>
                             <h3 class="directory-card-title">Personos AI Execution Engine</h3>
                             <p class="directory-card-desc">
-                                Secure clinical container for voice dictation, automated DAP notes, and between-session Action Boards ($9/mo per seat).
+                                Secure clinical container for voice dictation, automated DAP notes, and between-session
+                                Action Boards ($9/mo per seat).
                             </p>
                         </div>
                         <div class="directory-card-action">
-                            <a href="how-to-use.html#tier-3-personos" class="btn-action-primary" style="width: 100%; justify-content: center;">Explore Personos &rarr;</a>
+                            <a href="how-to-use.html#tier-3-personos" class="btn-action-primary"
+                                style="width: 100%; justify-content: center;">Explore Personos &rarr;</a>
                         </div>
                     </div>
 
@@ -1092,11 +1202,13 @@
                             <div class="directory-card-icon">📅</div>
                             <h3 class="directory-card-title">15-Event Calendar (.ICS)</h3>
                             <p class="directory-card-desc">
-                                Sync all Monday &amp; Wednesday live labs (5:00–6:30 PM MT) and weekend IT clinics directly to Google/Apple/Outlook.
+                                Sync all Monday &amp; Wednesday live labs (5:00–6:30 PM MT) and weekend IT clinics
+                                directly to Google/Apple/Outlook.
                             </p>
                         </div>
                         <div class="directory-card-action">
-                            <button id="btn-download-practitioner-lab-ics" class="btn-action-primary" style="width: 100%; justify-content: center;">
+                            <button id="btn-download-practitioner-lab-ics" class="btn-action-primary"
+                                style="width: 100%; justify-content: center;">
                                 <span>Download .ICS 📥</span>
                             </button>
                         </div>
@@ -1108,11 +1220,13 @@
                             <div class="directory-card-icon">🛠️</div>
                             <h3 class="directory-card-title">IT Help Desk &amp; Clinics</h3>
                             <p class="directory-card-desc">
-                                Get help from Gerard for mic calibration, LearnWorlds login issues, or attend our Dec 5–6 Weekend Tech Clinics.
+                                Get help from Gerard for mic calibration, LearnWorlds login issues, or attend our Dec
+                                5–6 Weekend Tech Clinics.
                             </p>
                         </div>
                         <div class="directory-card-action">
-                            <a href="how-to-use.html#it-help-desk" class="btn-action-primary" style="width: 100%; justify-content: center;">Submit IT Ticket &rarr;</a>
+                            <a href="how-to-use.html#it-help-desk" class="btn-action-primary"
+                                style="width: 100%; justify-content: center;">Submit IT Ticket &rarr;</a>
                         </div>
                     </div>
                 </div>
@@ -1124,7 +1238,10 @@
                     <div class="hub-card-header-titles">
                         <span class="section-eyebrow">LMS Troubleshooting Notice</span>
                         <h2>Encountering a Blank White Screen on LearnWorlds?</h2>
-                        <p>Some ad blockers or privacy extensions block the setup wizard from loading at <code>thrive-coaching.learnworlds.com/author/courses</code>, leaving an empty white overlay. Use our 1-click DevTools bypass script below to unlock your dashboard immediately.</p>
+                        <p>Some ad blockers or privacy extensions block the setup wizard from loading at
+                            <code>thrive-coaching.learnworlds.com/author/courses</code>, leaving an empty white overlay.
+                            Use our 1-click DevTools bypass script below to unlock your dashboard immediately.
+                        </p>
                     </div>
                 </div>
 
@@ -1157,13 +1274,17 @@
             <section class="no-print" aria-label="Clinical Diagnostic Dossier Export">
                 <div class="dossier-cta-bar">
                     <div class="dossier-cta-info">
-                        <span class="dossier-status-pill" data-dossier-status>Ready to combine your 3 steps (0/3 saved so far)</span>
+                        <span class="dossier-status-pill" data-dossier-status>Ready to combine your 3 steps (0/3 saved
+                            so far)</span>
                         <h4>Export Your Baseline Clinical Dossier for Squad Homework</h4>
-                        <p>Once you complete your Flow Survey, THRiVE Report, or HoPE Index, copy your unified Clinical Dossier here for 1-click pasting into the LearnWorlds Review Center or Personos AI.</p>
+                        <p>Once you complete your Flow Survey, THRiVE Report, or HoPE Index, copy your unified Clinical
+                            Dossier here for 1-click pasting into the LearnWorlds Review Center or Personos AI.</p>
                     </div>
                     <div class="dossier-cta-actions">
-                        <button type="button" id="onboarding-export-dossier-btn" data-export-dossier="true" class="export-dossier-btn copy-master-prompt-btn">
-                            <span class="master-prompt-btn-label">📋 Export / Copy Clinical Dossier for LearnWorlds &amp; Personos</span>
+                        <button type="button" id="onboarding-export-dossier-btn" data-export-dossier="true"
+                            class="export-dossier-btn copy-master-prompt-btn">
+                            <span class="master-prompt-btn-label">📋 Export / Copy Clinical Dossier for LearnWorlds
+                                &amp; Personos</span>
                         </button>
                         <button type="button" data-share-master-prompt class="share-master-prompt-btn">
                             📤 Share Dossier
@@ -1178,7 +1299,8 @@
         <div class="footer-content">
             <div class="footer-brand">
                 <div class="footer-logo">THRiVE Coaching</div>
-                <p>Equipping Therapists, Coaches, and Case Managers to 3x Client Outcomes in the 167 Hours Between Sessions.</p>
+                <p>Equipping Therapists, Coaches, and Case Managers to 3x Client Outcomes in the 167 Hours Between
+                    Sessions.</p>
             </div>
             <div class="footer-nav">
                 <a href="approach.html">How It Works</a>
@@ -1206,656 +1328,657 @@
 
     <!-- INLINE APPLICATION LOGIC FOR SESSION 0 PRE-FLIGHT HUB -->
     <script>
-    (function initOnboardingHub() {
-        const STORAGE_KEY = 'thrive_onboarding_checklist_v1';
+        (function initOnboardingHub() {
+            const STORAGE_KEY = 'thrive_onboarding_checklist_v1';
 
-        const DEFAULT_CHECKLIST_STATE = {
-            checklist: {
-                triage_survey: false,
-                thrive_report: false,
-                mic_calibration: false,
-                safesave_practice: false,
-                learnworlds_login: false,
-                squad_community: false,
-                calendar_sync: false
-            },
-            completedCount: 0,
-            lastUpdated: new Date().toISOString()
-        };
+            const DEFAULT_CHECKLIST_STATE = {
+                checklist: {
+                    triage_survey: false,
+                    thrive_report: false,
+                    mic_calibration: false,
+                    safesave_practice: false,
+                    learnworlds_login: false,
+                    squad_community: false,
+                    calendar_sync: false
+                },
+                completedCount: 0,
+                lastUpdated: new Date().toISOString()
+            };
 
-        const VALID_CHECKLIST_KEYS = Object.keys(DEFAULT_CHECKLIST_STATE.checklist);
-        let state = JSON.parse(JSON.stringify(DEFAULT_CHECKLIST_STATE));
-        let manualUnchecked = {};
+            const VALID_CHECKLIST_KEYS = Object.keys(DEFAULT_CHECKLIST_STATE.checklist);
+            let state = JSON.parse(JSON.stringify(DEFAULT_CHECKLIST_STATE));
+            let manualUnchecked = {};
 
-        function safeReadJson(key) {
-            try {
-                if (typeof window !== 'undefined' && window.localStorage) {
-                    const raw = localStorage.getItem(key);
-                    return raw ? JSON.parse(raw) : null;
-                }
-            } catch (_) {}
-            return null;
-        }
-
-        function isFlowSurveyCompletedData(parsedFlow, parsedDossier) {
-            if (parsedFlow && typeof parsedFlow === 'object') {
-                if (
-                    Array.isArray(parsedFlow.answered) &&
-                    parsedFlow.answered.length === 20 &&
-                    parsedFlow.answered.every(Boolean)
-                ) {
-                    return true;
-                }
-                if (
-                    !Array.isArray(parsedFlow.answered) &&
-                    Array.isArray(parsedFlow.scores) &&
-                    parsedFlow.scores.length === 20 &&
-                    parsedFlow.scores.every(s => Number(s) >= 1 && Number(s) <= 5)
-                ) {
-                    return true;
-                }
+            function safeReadJson(key) {
+                try {
+                    if (typeof window !== 'undefined' && window.localStorage) {
+                        const raw = localStorage.getItem(key);
+                        return raw ? JSON.parse(raw) : null;
+                    }
+                } catch (_) { }
+                return null;
             }
-            const fs = parsedDossier && typeof parsedDossier === 'object' ? parsedDossier.flowSurvey : null;
-            return Boolean(fs && (typeof fs.currentScore === 'number' || fs.problem || fs.problemStatement));
-        }
 
-        function isThriveReportCompletedData(parsedProf, parsedDossier) {
-            if (parsedProf && typeof parsedProf === 'object') {
-                if (Number(parsedProf.step) >= 7) return true;
-                const rd = parsedProf.reportData;
-                if (rd && typeof rd === 'object' && ['traits', 'hobbies', 'relationships', 'interests', 'values', 'experiences'].some(k => rd[k] && String(rd[k]).trim())) {
-                    return true;
+            function isFlowSurveyCompletedData(parsedFlow, parsedDossier) {
+                if (parsedFlow && typeof parsedFlow === 'object') {
+                    if (
+                        Array.isArray(parsedFlow.answered) &&
+                        parsedFlow.answered.length === 20 &&
+                        parsedFlow.answered.every(Boolean)
+                    ) {
+                        return true;
+                    }
+                    if (
+                        !Array.isArray(parsedFlow.answered) &&
+                        Array.isArray(parsedFlow.scores) &&
+                        parsedFlow.scores.length === 20 &&
+                        parsedFlow.scores.every(s => Number(s) >= 1 && Number(s) <= 5)
+                    ) {
+                        return true;
+                    }
                 }
+                const fs = parsedDossier && typeof parsedDossier === 'object' ? parsedDossier.flowSurvey : null;
+                return Boolean(fs && (typeof fs.currentScore === 'number' || fs.problem || fs.problemStatement));
             }
-            const tr = parsedDossier && typeof parsedDossier === 'object' ? parsedDossier.thriveReport : null;
-            return Boolean(tr && tr.pillars && typeof tr.pillars === 'object' && Object.values(tr.pillars).some(v => v && String(v).trim()));
-        }
 
-        function loadChecklistState() {
-            let autoUpdated = false;
-            try {
-                if (typeof window !== 'undefined' && window.localStorage) {
-                    const raw = localStorage.getItem(STORAGE_KEY);
-                    if (raw) {
-                        const parsed = JSON.parse(raw);
-                        if (parsed && parsed.checklist && typeof parsed.checklist === 'object' && !Array.isArray(parsed.checklist)) {
-                            const nextChecklist = Object.assign({}, DEFAULT_CHECKLIST_STATE.checklist);
-                            VALID_CHECKLIST_KEYS.forEach(k => {
-                                if (Object.prototype.hasOwnProperty.call(parsed.checklist, k)) {
-                                    nextChecklist[k] = Boolean(parsed.checklist[k]);
-                                }
-                            });
-                            state.checklist = nextChecklist;
+            function isThriveReportCompletedData(parsedProf, parsedDossier) {
+                if (parsedProf && typeof parsedProf === 'object') {
+                    if (Number(parsedProf.step) >= 7) return true;
+                    const rd = parsedProf.reportData;
+                    if (rd && typeof rd === 'object' && ['traits', 'hobbies', 'relationships', 'interests', 'values', 'experiences'].some(k => rd[k] && String(rd[k]).trim())) {
+                        return true;
+                    }
+                }
+                const tr = parsedDossier && typeof parsedDossier === 'object' ? parsedDossier.thriveReport : null;
+                return Boolean(tr && tr.pillars && typeof tr.pillars === 'object' && Object.values(tr.pillars).some(v => v && String(v).trim()));
+            }
+
+            function loadChecklistState() {
+                let autoUpdated = false;
+                try {
+                    if (typeof window !== 'undefined' && window.localStorage) {
+                        const raw = localStorage.getItem(STORAGE_KEY);
+                        if (raw) {
+                            const parsed = JSON.parse(raw);
+                            if (parsed && parsed.checklist && typeof parsed.checklist === 'object' && !Array.isArray(parsed.checklist)) {
+                                const nextChecklist = Object.assign({}, DEFAULT_CHECKLIST_STATE.checklist);
+                                VALID_CHECKLIST_KEYS.forEach(k => {
+                                    if (Object.prototype.hasOwnProperty.call(parsed.checklist, k)) {
+                                        nextChecklist[k] = Boolean(parsed.checklist[k]);
+                                    }
+                                });
+                                state.checklist = nextChecklist;
+                            }
+                            if (parsed && parsed.manualUnchecked && typeof parsed.manualUnchecked === 'object' && !Array.isArray(parsed.manualUnchecked)) {
+                                const nextManual = {};
+                                VALID_CHECKLIST_KEYS.forEach(k => {
+                                    if (parsed.manualUnchecked[k] === true) nextManual[k] = true;
+                                });
+                                manualUnchecked = nextManual;
+                            }
                         }
-                        if (parsed && parsed.manualUnchecked && typeof parsed.manualUnchecked === 'object' && !Array.isArray(parsed.manualUnchecked)) {
-                            const nextManual = {};
-                            VALID_CHECKLIST_KEYS.forEach(k => {
-                                if (parsed.manualUnchecked[k] === true) nextManual[k] = true;
-                            });
-                            manualUnchecked = nextManual;
+
+                        const parsedDossier = safeReadJson('thrive_coaching_dossier_v1');
+                        const parsedFlow = safeReadJson('thrive_flow_survey_state_v1');
+                        const parsedProf = safeReadJson('thrive_profile_state_v1');
+
+                        if (!state.checklist.triage_survey && !manualUnchecked.triage_survey && isFlowSurveyCompletedData(parsedFlow, parsedDossier)) {
+                            state.checklist.triage_survey = true;
+                            autoUpdated = true;
+                        }
+                        if (!state.checklist.thrive_report && !manualUnchecked.thrive_report && isThriveReportCompletedData(parsedProf, parsedDossier)) {
+                            state.checklist.thrive_report = true;
+                            autoUpdated = true;
                         }
                     }
-
-                    const parsedDossier = safeReadJson('thrive_coaching_dossier_v1');
-                    const parsedFlow = safeReadJson('thrive_flow_survey_state_v1');
-                    const parsedProf = safeReadJson('thrive_profile_state_v1');
-
-                    if (!state.checklist.triage_survey && !manualUnchecked.triage_survey && isFlowSurveyCompletedData(parsedFlow, parsedDossier)) {
-                        state.checklist.triage_survey = true;
-                        autoUpdated = true;
-                    }
-                    if (!state.checklist.thrive_report && !manualUnchecked.thrive_report && isThriveReportCompletedData(parsedProf, parsedDossier)) {
-                        state.checklist.thrive_report = true;
-                        autoUpdated = true;
-                    }
+                } catch (err) {
+                    console.warn('[Onboarding Hub] localStorage read failed:', err);
                 }
-            } catch (err) {
-                console.warn('[Onboarding Hub] localStorage read failed:', err);
-            }
-            if (autoUpdated) {
-                saveChecklistState();
-            }
-            recomputeAndRenderChecklist();
-        }
-
-        function saveChecklistState() {
-            let completed = 0;
-            VALID_CHECKLIST_KEYS.forEach(k => {
-                if (state.checklist[k]) completed++;
-            });
-            state.completedCount = completed;
-            state.lastUpdated = new Date().toISOString();
-
-            try {
-                if (typeof window !== 'undefined' && window.localStorage) {
-                    const payload = Object.assign({}, state, { manualUnchecked });
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+                if (autoUpdated) {
+                    saveChecklistState();
                 }
-            } catch (err) {
-                console.warn('[Onboarding Hub] localStorage write failed:', err);
-            }
-            renderProgress();
-        }
-
-        function recomputeAndRenderChecklist() {
-            let completed = 0;
-            VALID_CHECKLIST_KEYS.forEach(key => {
-                const isChecked = Boolean(state.checklist[key]);
-                if (isChecked) completed++;
-
-                const li = document.querySelector(`.checklist-item[data-key="${key}"]`);
-                const cb = document.getElementById(`check-${key}`);
-                if (cb) cb.checked = isChecked;
-
-                if (li) {
-                    if (isChecked) {
-                        li.classList.add('completed');
-                        const badge = li.querySelector('.checklist-item-badge');
-                        if (badge) badge.textContent = 'Complete ✓';
-                    } else {
-                        li.classList.remove('completed');
-                        const badge = li.querySelector('.checklist-item-badge');
-                        if (badge) badge.textContent = 'Pending';
-                    }
-                }
-            });
-            state.completedCount = completed;
-            renderProgress();
-        }
-
-        function renderProgress() {
-            const total = VALID_CHECKLIST_KEYS.length;
-            const count = state.completedCount || 0;
-            const pct = total > 0 ? Math.round((count / total) * 100) : 0;
-
-            const progressBar = document.getElementById('checklist-progress-bar');
-            const progressText = document.getElementById('checklist-progress-text');
-
-            if (progressBar) progressBar.style.width = pct + '%';
-            if (progressText) progressText.textContent = `${count} of ${total} Completed • ${pct}%`;
-        }
-
-        function setChecklistItem(key, completed) {
-            if (Object.prototype.hasOwnProperty.call(DEFAULT_CHECKLIST_STATE.checklist, key)) {
-                const boolVal = Boolean(completed);
-                state.checklist[key] = boolVal;
-                if (boolVal) {
-                    delete manualUnchecked[key];
-                } else {
-                    manualUnchecked[key] = true;
-                }
-                saveChecklistState();
                 recomputeAndRenderChecklist();
             }
-        }
 
-        // Checklist Event Listeners
-        const checklistItems = document.querySelectorAll('.checklist-item');
-        checklistItems.forEach(item => {
-            const key = item.getAttribute('data-key');
-            const checkbox = item.querySelector('.checklist-item-checkbox');
-
-            item.addEventListener('click', (e) => {
-                const anchor = e.target && typeof e.target.closest === 'function'
-                    ? e.target.closest('a')
-                    : (e.target && String(e.target.tagName || '').toLowerCase() === 'a' ? e.target : null);
-                if (anchor) {
-                    const href = String((anchor.getAttribute && anchor.getAttribute('href')) || '');
-                    if (href.includes('learnworlds.com')) {
-                        setChecklistItem('learnworlds_login', true);
-                    }
-                    return; // Allow normal link navigation
-                }
-                if (e.target !== checkbox) {
-                    checkbox.checked = !checkbox.checked;
-                }
-                setChecklistItem(key, checkbox.checked);
-            });
-
-            if (checkbox) {
-                checkbox.addEventListener('change', () => {
-                    setChecklistItem(key, checkbox.checked);
+            function saveChecklistState() {
+                let completed = 0;
+                VALID_CHECKLIST_KEYS.forEach(k => {
+                    if (state.checklist[k]) completed++;
                 });
-            }
-        });
+                state.completedCount = completed;
+                state.lastUpdated = new Date().toISOString();
 
-        // Reset Checklist
-        const btnResetChecklist = document.getElementById('btn-reset-checklist');
-        if (btnResetChecklist) {
-            btnResetChecklist.addEventListener('click', () => {
-                if (confirm('Are you sure you want to reset your Session 0 checklist progress?')) {
-                    VALID_CHECKLIST_KEYS.forEach(k => {
-                        state.checklist[k] = false;
-                        manualUnchecked[k] = true;
-                    });
+                try {
+                    if (typeof window !== 'undefined' && window.localStorage) {
+                        const payload = Object.assign({}, state, { manualUnchecked });
+                        localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+                    }
+                } catch (err) {
+                    console.warn('[Onboarding Hub] localStorage write failed:', err);
+                }
+                renderProgress();
+            }
+
+            function recomputeAndRenderChecklist() {
+                let completed = 0;
+                VALID_CHECKLIST_KEYS.forEach(key => {
+                    const isChecked = Boolean(state.checklist[key]);
+                    if (isChecked) completed++;
+
+                    const li = document.querySelector(`.checklist-item[data-key="${key}"]`);
+                    const cb = document.getElementById(`check-${key}`);
+                    if (cb) cb.checked = isChecked;
+
+                    if (li) {
+                        if (isChecked) {
+                            li.classList.add('completed');
+                            const badge = li.querySelector('.checklist-item-badge');
+                            if (badge) badge.textContent = 'Complete ✓';
+                        } else {
+                            li.classList.remove('completed');
+                            const badge = li.querySelector('.checklist-item-badge');
+                            if (badge) badge.textContent = 'Pending';
+                        }
+                    }
+                });
+                state.completedCount = completed;
+                renderProgress();
+            }
+
+            function renderProgress() {
+                const total = VALID_CHECKLIST_KEYS.length;
+                const count = state.completedCount || 0;
+                const pct = total > 0 ? Math.round((count / total) * 100) : 0;
+
+                const progressBar = document.getElementById('checklist-progress-bar');
+                const progressText = document.getElementById('checklist-progress-text');
+
+                if (progressBar) progressBar.style.width = pct + '%';
+                if (progressText) progressText.textContent = `${count} of ${total} Completed • ${pct}%`;
+            }
+
+            function setChecklistItem(key, completed) {
+                if (Object.prototype.hasOwnProperty.call(DEFAULT_CHECKLIST_STATE.checklist, key)) {
+                    const boolVal = Boolean(completed);
+                    state.checklist[key] = boolVal;
+                    if (boolVal) {
+                        delete manualUnchecked[key];
+                    } else {
+                        manualUnchecked[key] = true;
+                    }
                     saveChecklistState();
                     recomputeAndRenderChecklist();
                 }
-            });
-        }
-
-        // ======================================================================
-        // COMPONENT 2: WORKSTATION MIC & SPEECH DICTATION TESTER
-        // ======================================================================
-        const btnMicStart = document.getElementById('btn-mic-start');
-        const btnMicStop = document.getElementById('btn-mic-stop');
-        const btnMicSimulate = document.getElementById('btn-mic-simulate');
-        const micStatus = document.getElementById('mic-status');
-        const micStatusText = document.getElementById('mic-status-text');
-        const micStatusIcon = document.getElementById('mic-status-icon');
-        const micSoundwave = document.getElementById('mic-soundwave');
-        const micTranscript = document.getElementById('mic-transcript');
-
-        let recognition = null;
-        let isListening = false;
-
-        const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-        function updateMicStatus(type, message, icon) {
-            if (!micStatus) return;
-            micStatus.className = 'mic-status-banner ' + type;
-            if (micStatusText) micStatusText.textContent = message;
-            if (micStatusIcon) micStatusIcon.textContent = icon || '🎙️';
-        }
-
-        function onSpeechSuccess(transcriptText) {
-            if (micTranscript) {
-                micTranscript.textContent = transcriptText;
             }
-            if (micSoundwave) micSoundwave.classList.remove('active');
-            updateMicStatus('success', 'Speech captured successfully! Workstation microphone is calibrated for Personos AI.', '✅');
-            setChecklistItem('mic_calibration', true);
-            if (btnMicStart) btnMicStart.style.display = 'inline-flex';
-            if (btnMicStop) btnMicStop.style.display = 'none';
-            isListening = false;
-        }
 
-        if (SpeechRec) {
-            try {
-                recognition = new SpeechRec();
-                recognition.continuous = true;
-                recognition.interimResults = true;
-                recognition.lang = 'en-US';
+            // Checklist Event Listeners
+            const checklistItems = document.querySelectorAll('.checklist-item');
+            checklistItems.forEach(item => {
+                const key = item.getAttribute('data-key');
+                const checkbox = item.querySelector('.checklist-item-checkbox');
 
-                recognition.onstart = () => {
-                    isListening = true;
-                    if (micSoundwave) micSoundwave.classList.add('active');
-                    updateMicStatus('listening', 'Listening... speak clearly into your workstation microphone.', '🔴');
-                    if (btnMicStart) btnMicStart.style.display = 'none';
-                    if (btnMicStop) btnMicStop.style.display = 'inline-flex';
-                };
-
-                recognition.onresult = (event) => {
-                    let interim = '';
-                    let finalTranscript = '';
-                    for (let i = event.resultIndex; i < event.results.length; ++i) {
-                        const transcript = event.results[i][0].transcript;
-                        if (event.results[i].isFinal) {
-                            finalTranscript += transcript + ' ';
-                        } else {
-                            interim += transcript;
+                item.addEventListener('click', (e) => {
+                    const anchor = e.target && typeof e.target.closest === 'function'
+                        ? e.target.closest('a')
+                        : (e.target && String(e.target.tagName || '').toLowerCase() === 'a' ? e.target : null);
+                    if (anchor) {
+                        const href = String((anchor.getAttribute && anchor.getAttribute('href')) || '');
+                        if (href.includes('learnworlds.com')) {
+                            setChecklistItem('learnworlds_login', true);
                         }
+                        return; // Allow normal link navigation
                     }
-                    const fullText = (finalTranscript + interim).trim();
-                    if (micTranscript && fullText) {
-                        micTranscript.textContent = fullText;
+                    if (e.target !== checkbox) {
+                        checkbox.checked = !checkbox.checked;
                     }
-                    if (fullText.length > 15) {
-                        onSpeechSuccess(fullText);
-                        try { recognition.stop(); } catch(e){}
-                    }
-                };
+                    setChecklistItem(key, checkbox.checked);
+                });
 
-                recognition.onerror = (event) => {
-                    if (micSoundwave) micSoundwave.classList.remove('active');
-                    isListening = false;
-                    if (btnMicStart) btnMicStart.style.display = 'inline-flex';
-                    if (btnMicStop) btnMicStop.style.display = 'none';
+                if (checkbox) {
+                    checkbox.addEventListener('change', () => {
+                        setChecklistItem(key, checkbox.checked);
+                    });
+                }
+            });
 
-                    if (event.error === 'not-allowed') {
-                        updateMicStatus('error', 'Microphone access denied. Click the lock icon in your browser address bar to allow microphone permissions.', '⚠️');
-                    } else if (event.error === 'no-speech') {
-                        updateMicStatus('error', 'No speech detected. Check your system audio input device and try speaking again.', '⚠️');
-                    } else {
-                        updateMicStatus('error', `Speech error (${event.error}). You can manually check off this task above.`, '⚠️');
+            // Reset Checklist
+            const btnResetChecklist = document.getElementById('btn-reset-checklist');
+            if (btnResetChecklist) {
+                btnResetChecklist.addEventListener('click', () => {
+                    if (confirm('Are you sure you want to reset your Session 0 checklist progress?')) {
+                        VALID_CHECKLIST_KEYS.forEach(k => {
+                            state.checklist[k] = false;
+                            manualUnchecked[k] = true;
+                        });
+                        saveChecklistState();
+                        recomputeAndRenderChecklist();
                     }
-                };
+                });
+            }
 
-                recognition.onend = () => {
-                    if (isListening) {
+            // ======================================================================
+            // COMPONENT 2: WORKSTATION MIC & SPEECH DICTATION TESTER
+            // ======================================================================
+            const btnMicStart = document.getElementById('btn-mic-start');
+            const btnMicStop = document.getElementById('btn-mic-stop');
+            const btnMicSimulate = document.getElementById('btn-mic-simulate');
+            const micStatus = document.getElementById('mic-status');
+            const micStatusText = document.getElementById('mic-status-text');
+            const micStatusIcon = document.getElementById('mic-status-icon');
+            const micSoundwave = document.getElementById('mic-soundwave');
+            const micTranscript = document.getElementById('mic-transcript');
+
+            let recognition = null;
+            let isListening = false;
+
+            const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+            function updateMicStatus(type, message, icon) {
+                if (!micStatus) return;
+                micStatus.className = 'mic-status-banner ' + type;
+                if (micStatusText) micStatusText.textContent = message;
+                if (micStatusIcon) micStatusIcon.textContent = icon || '🎙️';
+            }
+
+            function onSpeechSuccess(transcriptText) {
+                if (micTranscript) {
+                    micTranscript.textContent = transcriptText;
+                }
+                if (micSoundwave) micSoundwave.classList.remove('active');
+                updateMicStatus('success', 'Speech captured successfully! Workstation microphone is calibrated for Personos AI.', '✅');
+                setChecklistItem('mic_calibration', true);
+                if (btnMicStart) btnMicStart.style.display = 'inline-flex';
+                if (btnMicStop) btnMicStop.style.display = 'none';
+                isListening = false;
+            }
+
+            if (SpeechRec) {
+                try {
+                    recognition = new SpeechRec();
+                    recognition.continuous = true;
+                    recognition.interimResults = true;
+                    recognition.lang = 'en-US';
+
+                    recognition.onstart = () => {
+                        isListening = true;
+                        if (micSoundwave) micSoundwave.classList.add('active');
+                        updateMicStatus('listening', 'Listening... speak clearly into your workstation microphone.', '🔴');
+                        if (btnMicStart) btnMicStart.style.display = 'none';
+                        if (btnMicStop) btnMicStop.style.display = 'inline-flex';
+                    };
+
+                    recognition.onresult = (event) => {
+                        let interim = '';
+                        let finalTranscript = '';
+                        for (let i = event.resultIndex; i < event.results.length; ++i) {
+                            const transcript = event.results[i][0].transcript;
+                            if (event.results[i].isFinal) {
+                                finalTranscript += transcript + ' ';
+                            } else {
+                                interim += transcript;
+                            }
+                        }
+                        const fullText = (finalTranscript + interim).trim();
+                        if (micTranscript && fullText) {
+                            micTranscript.textContent = fullText;
+                        }
+                        if (fullText.length > 15) {
+                            onSpeechSuccess(fullText);
+                            try { recognition.stop(); } catch (e) { }
+                        }
+                    };
+
+                    recognition.onerror = (event) => {
                         if (micSoundwave) micSoundwave.classList.remove('active');
                         isListening = false;
                         if (btnMicStart) btnMicStart.style.display = 'inline-flex';
                         if (btnMicStop) btnMicStop.style.display = 'none';
-                    }
-                };
-            } catch (err) {
-                console.warn('[Onboarding Hub] SpeechRecognition init failed:', err);
-            }
-        }
 
-        if (btnMicStart) {
-            btnMicStart.addEventListener('click', () => {
-                if (!SpeechRec || !recognition) {
-                    updateMicStatus('error', 'Speech recognition is not supported in this browser. Recommended: Google Chrome, Microsoft Edge, or Safari. You can still test via calibration below or check off manually.', '⚠️');
-                    return;
-                }
-                try {
-                    recognition.start();
-                } catch (e) {
-                    try { recognition.stop(); } catch(err){}
-                    setTimeout(() => {
-                        try { recognition.start(); } catch(err2){
-                            updateMicStatus('error', 'Could not activate microphone. Check browser permissions.', '⚠️');
+                        if (event.error === 'not-allowed') {
+                            updateMicStatus('error', 'Microphone access denied. Click the lock icon in your browser address bar to allow microphone permissions.', '⚠️');
+                        } else if (event.error === 'no-speech') {
+                            updateMicStatus('error', 'No speech detected. Check your system audio input device and try speaking again.', '⚠️');
+                        } else {
+                            updateMicStatus('error', `Speech error (${event.error}). You can manually check off this task above.`, '⚠️');
                         }
-                    }, 200);
+                    };
+
+                    recognition.onend = () => {
+                        if (isListening) {
+                            if (micSoundwave) micSoundwave.classList.remove('active');
+                            isListening = false;
+                            if (btnMicStart) btnMicStart.style.display = 'inline-flex';
+                            if (btnMicStop) btnMicStop.style.display = 'none';
+                        }
+                    };
+                } catch (err) {
+                    console.warn('[Onboarding Hub] SpeechRecognition init failed:', err);
                 }
-            });
-        }
+            }
 
-        if (btnMicStop) {
-            btnMicStop.addEventListener('click', () => {
-                if (recognition) {
-                    try { recognition.stop(); } catch (e) {}
-                }
-                if (micSoundwave) micSoundwave.classList.remove('active');
-                updateMicStatus('ready', 'Microphone tester idle. Click "Start Mic Test" and read the sample prompt aloud.', '🎙️');
-                btnMicStart.style.display = 'inline-flex';
-                btnMicStop.style.display = 'none';
-                isListening = false;
-            });
-        }
-
-        if (btnMicSimulate) {
-            btnMicSimulate.addEventListener('click', () => {
-                const sample = "Client presents with high agency but is experiencing friction around between-session accountability. Recommending Strengths-First Observer stance.";
-                onSpeechSuccess(sample);
-            });
-        }
-
-        // ======================================================================
-        // COMPONENT 3: SAFE-SAVE CADENCE PRACTICE TRAINER
-        // ======================================================================
-        const timerDisplay = document.getElementById('safesave-timer-display');
-        const streakDisplay = document.getElementById('safesave-streak-display');
-        const statusBadge = document.getElementById('safesave-status-badge');
-        const pacingBar = document.getElementById('safesave-pacing-bar');
-        const pacingText = document.getElementById('safesave-pacing-text');
-        const textarea = document.getElementById('safesave-textarea');
-        const feedback = document.getElementById('safesave-feedback');
-        const btnResetTrainer = document.getElementById('btn-safesave-reset');
-        const btnSimulateSave = document.getElementById('btn-safesave-simulate');
-
-        let elapsedSeconds = 0;
-        let timerInterval = null;
-        let saveStreak = 0;
-        let timerRunning = false;
-
-        function startTrainerTimer() {
-            if (timerRunning) return;
-            timerRunning = true;
-            timerInterval = setInterval(() => {
-                elapsedSeconds++;
-                updateTrainerUI();
-            }, 1000);
-        }
-
-        function stopTrainerTimer() {
-            if (timerInterval) clearInterval(timerInterval);
-            timerInterval = null;
-            timerRunning = false;
-        }
-
-        function formatTimer(secs) {
-            const m = Math.floor(secs / 60);
-            const s = secs % 60;
-            return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')} / 02:00`;
-        }
-
-        function updateTrainerUI() {
-            if (timerDisplay) timerDisplay.textContent = formatTimer(elapsedSeconds);
-
-            const pct = Math.min(100, Math.round((elapsedSeconds / 120) * 100));
-            if (pacingBar) {
-                pacingBar.style.width = pct + '%';
-                pacingBar.className = 'pacing-meter-fill';
-                if (elapsedSeconds <= 60) {
-                    pacingBar.classList.add('flow');
-                    if (pacingText) pacingText.textContent = 'Pacing Good — In the Flow';
-                    if (statusBadge) {
-                        statusBadge.textContent = 'Flow State';
-                        statusBadge.style.color = '#10B981';
+            if (btnMicStart) {
+                btnMicStart.addEventListener('click', () => {
+                    if (!SpeechRec || !recognition) {
+                        updateMicStatus('error', 'Speech recognition is not supported in this browser. Recommended: Google Chrome, Microsoft Edge, or Safari. You can still test via calibration below or check off manually.', '⚠️');
+                        return;
                     }
-                } else if (elapsedSeconds <= 110) {
-                    pacingBar.classList.add('window');
-                    if (pacingText) pacingText.textContent = 'Safe-Save Window — Press Enter soon to commit client memory!';
-                    if (statusBadge) {
-                        statusBadge.textContent = 'Optimal Window';
-                        statusBadge.style.color = '#F59E0B';
+                    try {
+                        recognition.start();
+                    } catch (e) {
+                        try { recognition.stop(); } catch (err) { }
+                        setTimeout(() => {
+                            try { recognition.start(); } catch (err2) {
+                                updateMicStatus('error', 'Could not activate microphone. Check browser permissions.', '⚠️');
+                            }
+                        }, 200);
                     }
-                } else {
-                    pacingBar.classList.add('overdue');
-                    if (pacingText) pacingText.textContent = '⚠️ Safe-Save Overdue — Press Enter now!';
-                    if (statusBadge) {
-                        statusBadge.textContent = 'Overdue Alert';
-                        statusBadge.style.color = '#EF4444';
+                });
+            }
+
+            if (btnMicStop) {
+                btnMicStop.addEventListener('click', () => {
+                    if (recognition) {
+                        try { recognition.stop(); } catch (e) { }
+                    }
+                    if (micSoundwave) micSoundwave.classList.remove('active');
+                    updateMicStatus('ready', 'Microphone tester idle. Click "Start Mic Test" and read the sample prompt aloud.', '🎙️');
+                    btnMicStart.style.display = 'inline-flex';
+                    btnMicStop.style.display = 'none';
+                    isListening = false;
+                });
+            }
+
+            if (btnMicSimulate) {
+                btnMicSimulate.addEventListener('click', () => {
+                    const sample = "Client presents with high agency but is experiencing friction around between-session accountability. Recommending Strengths-First Observer stance.";
+                    onSpeechSuccess(sample);
+                });
+            }
+
+            // ======================================================================
+            // COMPONENT 3: SAFE-SAVE CADENCE PRACTICE TRAINER
+            // ======================================================================
+            const timerDisplay = document.getElementById('safesave-timer-display');
+            const streakDisplay = document.getElementById('safesave-streak-display');
+            const statusBadge = document.getElementById('safesave-status-badge');
+            const pacingBar = document.getElementById('safesave-pacing-bar');
+            const pacingText = document.getElementById('safesave-pacing-text');
+            const textarea = document.getElementById('safesave-textarea');
+            const feedback = document.getElementById('safesave-feedback');
+            const btnResetTrainer = document.getElementById('btn-safesave-reset');
+            const btnSimulateSave = document.getElementById('btn-safesave-simulate');
+
+            let elapsedSeconds = 0;
+            let timerInterval = null;
+            let saveStreak = 0;
+            let timerRunning = false;
+
+            function startTrainerTimer() {
+                if (timerRunning) return;
+                timerRunning = true;
+                timerInterval = setInterval(() => {
+                    elapsedSeconds++;
+                    updateTrainerUI();
+                }, 1000);
+            }
+
+            function stopTrainerTimer() {
+                if (timerInterval) clearInterval(timerInterval);
+                timerInterval = null;
+                timerRunning = false;
+            }
+
+            function formatTimer(secs) {
+                const m = Math.floor(secs / 60);
+                const s = secs % 60;
+                return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')} / 02:00`;
+            }
+
+            function updateTrainerUI() {
+                if (timerDisplay) timerDisplay.textContent = formatTimer(elapsedSeconds);
+
+                const pct = Math.min(100, Math.round((elapsedSeconds / 120) * 100));
+                if (pacingBar) {
+                    pacingBar.style.width = pct + '%';
+                    pacingBar.className = 'pacing-meter-fill';
+                    if (elapsedSeconds <= 60) {
+                        pacingBar.classList.add('flow');
+                        if (pacingText) pacingText.textContent = 'Pacing Good — In the Flow';
+                        if (statusBadge) {
+                            statusBadge.textContent = 'Flow State';
+                            statusBadge.style.color = '#10B981';
+                        }
+                    } else if (elapsedSeconds <= 110) {
+                        pacingBar.classList.add('window');
+                        if (pacingText) pacingText.textContent = 'Safe-Save Window — Press Enter soon to commit client memory!';
+                        if (statusBadge) {
+                            statusBadge.textContent = 'Optimal Window';
+                            statusBadge.style.color = '#F59E0B';
+                        }
+                    } else {
+                        pacingBar.classList.add('overdue');
+                        if (pacingText) pacingText.textContent = '⚠️ Safe-Save Overdue — Press Enter now!';
+                        if (statusBadge) {
+                            statusBadge.textContent = 'Overdue Alert';
+                            statusBadge.style.color = '#EF4444';
+                        }
                     }
                 }
             }
-        }
 
-        function executeSafeSave() {
-            const saveSecs = elapsedSeconds;
-            elapsedSeconds = 0;
-            saveStreak++;
-
-            if (streakDisplay) {
-                streakDisplay.textContent = `${Math.min(3, saveStreak)} / 3 Safe-Saves`;
-            }
-
-            if (feedback) {
-                feedback.textContent = `✓ Profile Memory Locked! Safe-Save successful (${saveSecs}s elapsed).`;
-                feedback.style.color = '#065F46';
-            }
-
-            if (saveStreak >= 3) {
-                setChecklistItem('safesave_practice', true);
-                if (feedback) {
-                    feedback.textContent = '🎉 Safe-Save Cadence Certified! 3 of 3 Safe-Saves completed. Checklist updated!';
-                    feedback.style.color = '#059669';
-                }
-            }
-            updateTrainerUI();
-        }
-
-        if (textarea) {
-            textarea.addEventListener('focus', () => {
-                startTrainerTimer();
-            });
-
-            textarea.addEventListener('keydown', (e) => {
-                if (!timerRunning) startTrainerTimer();
-                if (e.key === 'Enter' && !e.isComposing) {
-                    // Trigger safe-save
-                    executeSafeSave();
-                }
-            });
-        }
-
-        if (btnResetTrainer) {
-            btnResetTrainer.addEventListener('click', () => {
-                stopTrainerTimer();
+            function executeSafeSave() {
+                const saveSecs = elapsedSeconds;
                 elapsedSeconds = 0;
-                saveStreak = 0;
-                if (streakDisplay) streakDisplay.textContent = '0 / 3 Safe-Saves';
-                if (textarea) textarea.value = '';
-                if (feedback) feedback.textContent = '';
-                updateTrainerUI();
-            });
-        }
+                saveStreak++;
 
-        if (btnSimulateSave) {
-            btnSimulateSave.addEventListener('click', () => {
-                startTrainerTimer();
-                elapsedSeconds = 65; // Advance into amber Safe-Save window
-                updateTrainerUI();
-                executeSafeSave();
-            });
-        }
-
-        // ======================================================================
-        // COMPONENT 4: CALENDAR SYNC & DIRECTORY CARD AUTO-CHECK
-        // ======================================================================
-        const labIcsBtn = document.getElementById('btn-download-practitioner-lab-ics');
-        if (labIcsBtn) {
-            labIcsBtn._hasLabIcsListener = true;
-            labIcsBtn.addEventListener('click', () => {
-                setChecklistItem('calendar_sync', true);
-                if (typeof window.downloadPractitionerLabIcs === 'function') {
-                    window.downloadPractitionerLabIcs();
+                if (streakDisplay) {
+                    streakDisplay.textContent = `${Math.min(3, saveStreak)} / 3 Safe-Saves`;
                 }
-            });
-        }
 
-        const directoryGrid = document.getElementById('onboarding-directory-grid');
-        if (directoryGrid && typeof directoryGrid.addEventListener === 'function') {
-            directoryGrid.addEventListener('click', (e) => {
-                const anchor = e && e.target && typeof e.target.closest === 'function'
-                    ? e.target.closest('a')
-                    : (e && e.target && String(e.target.tagName || '').toLowerCase() === 'a' ? e.target : null);
-                const href = anchor ? String((anchor.getAttribute && anchor.getAttribute('href')) || anchor.href || '') : '';
-                if (href.includes('learnworlds.com')) {
-                    setChecklistItem('learnworlds_login', true);
+                if (feedback) {
+                    feedback.textContent = `✓ Profile Memory Locked! Safe-Save successful (${saveSecs}s elapsed).`;
+                    feedback.style.color = '#065F46';
                 }
-            });
-        }
 
-        // ======================================================================
-        // COMPONENT 5: DEVTOOLS SNIPPET 1-CLICK COPY
-        // ======================================================================
-        const btnCopyDevtools = document.getElementById('btn-copy-devtools');
-        const devtoolsCode = document.getElementById('devtools-snippet-code');
-        function markDevtoolsCopied() {
-            if (!btnCopyDevtools) return;
-            if (!btnCopyDevtools.dataset) btnCopyDevtools.dataset = {};
-            const originalHtml = btnCopyDevtools.dataset.originalHtml || btnCopyDevtools.innerHTML;
-            btnCopyDevtools.dataset.originalHtml = originalHtml;
-            btnCopyDevtools.innerHTML = '<span>✓ Copied to Clipboard!</span>';
-            btnCopyDevtools.style.backgroundColor = '#10B981';
-            if (typeof clearTimeout === 'function') clearTimeout(btnCopyDevtools._copyTimer);
-            if (typeof setTimeout === 'function') {
-                btnCopyDevtools._copyTimer = setTimeout(() => {
-                    btnCopyDevtools.innerHTML = originalHtml;
-                    btnCopyDevtools.style.backgroundColor = '';
-                }, 2500);
+                if (saveStreak >= 3) {
+                    setChecklistItem('safesave_practice', true);
+                    if (feedback) {
+                        feedback.textContent = '🎉 Safe-Save Cadence Certified! 3 of 3 Safe-Saves completed. Checklist updated!';
+                        feedback.style.color = '#059669';
+                    }
+                }
+                updateTrainerUI();
             }
-        }
-        function fallbackCopyDevtools(text) {
-            try {
-                const ta = document.createElement('textarea');
-                ta.value = text;
-                ta.setAttribute('readonly', '');
-                ta.style.position = 'fixed';
-                ta.style.left = '-9999px';
-                document.body.appendChild(ta);
-                ta.select();
-                const ok = Boolean(document.execCommand && document.execCommand('copy'));
-                document.body.removeChild(ta);
-                if (ok) {
-                    markDevtoolsCopied();
-                    return;
-                }
-            } catch (_) {}
-            if (btnCopyDevtools) {
+
+            if (textarea) {
+                textarea.addEventListener('focus', () => {
+                    startTrainerTimer();
+                });
+
+                textarea.addEventListener('keydown', (e) => {
+                    if (!timerRunning) startTrainerTimer();
+                    if (e.key === 'Enter' && !e.isComposing) {
+                        // Trigger safe-save
+                        executeSafeSave();
+                    }
+                });
+            }
+
+            if (btnResetTrainer) {
+                btnResetTrainer.addEventListener('click', () => {
+                    stopTrainerTimer();
+                    elapsedSeconds = 0;
+                    saveStreak = 0;
+                    if (streakDisplay) streakDisplay.textContent = '0 / 3 Safe-Saves';
+                    if (textarea) textarea.value = '';
+                    if (feedback) feedback.textContent = '';
+                    updateTrainerUI();
+                });
+            }
+
+            if (btnSimulateSave) {
+                btnSimulateSave.addEventListener('click', () => {
+                    startTrainerTimer();
+                    elapsedSeconds = 65; // Advance into amber Safe-Save window
+                    updateTrainerUI();
+                    executeSafeSave();
+                });
+            }
+
+            // ======================================================================
+            // COMPONENT 4: CALENDAR SYNC & DIRECTORY CARD AUTO-CHECK
+            // ======================================================================
+            const labIcsBtn = document.getElementById('btn-download-practitioner-lab-ics');
+            if (labIcsBtn) {
+                labIcsBtn._hasLabIcsListener = true;
+                labIcsBtn.addEventListener('click', () => {
+                    setChecklistItem('calendar_sync', true);
+                    if (typeof window.downloadPractitionerLabIcs === 'function') {
+                        window.downloadPractitionerLabIcs();
+                    }
+                });
+            }
+
+            const directoryGrid = document.getElementById('onboarding-directory-grid');
+            if (directoryGrid && typeof directoryGrid.addEventListener === 'function') {
+                directoryGrid.addEventListener('click', (e) => {
+                    const anchor = e && e.target && typeof e.target.closest === 'function'
+                        ? e.target.closest('a')
+                        : (e && e.target && String(e.target.tagName || '').toLowerCase() === 'a' ? e.target : null);
+                    const href = anchor ? String((anchor.getAttribute && anchor.getAttribute('href')) || anchor.href || '') : '';
+                    if (href.includes('learnworlds.com')) {
+                        setChecklistItem('learnworlds_login', true);
+                    }
+                });
+            }
+
+            // ======================================================================
+            // COMPONENT 5: DEVTOOLS SNIPPET 1-CLICK COPY
+            // ======================================================================
+            const btnCopyDevtools = document.getElementById('btn-copy-devtools');
+            const devtoolsCode = document.getElementById('devtools-snippet-code');
+            function markDevtoolsCopied() {
+                if (!btnCopyDevtools) return;
                 if (!btnCopyDevtools.dataset) btnCopyDevtools.dataset = {};
                 const originalHtml = btnCopyDevtools.dataset.originalHtml || btnCopyDevtools.innerHTML;
                 btnCopyDevtools.dataset.originalHtml = originalHtml;
-                btnCopyDevtools.innerHTML = '<span>Please copy manually</span>';
-                btnCopyDevtools.style.backgroundColor = '';
+                btnCopyDevtools.innerHTML = '<span>✓ Copied to Clipboard!</span>';
+                btnCopyDevtools.style.backgroundColor = '#10B981';
                 if (typeof clearTimeout === 'function') clearTimeout(btnCopyDevtools._copyTimer);
                 if (typeof setTimeout === 'function') {
                     btnCopyDevtools._copyTimer = setTimeout(() => {
                         btnCopyDevtools.innerHTML = originalHtml;
+                        btnCopyDevtools.style.backgroundColor = '';
                     }, 2500);
                 }
             }
-        }
-        if (btnCopyDevtools && devtoolsCode) {
-            btnCopyDevtools.addEventListener('click', () => {
-                const text = devtoolsCode.textContent || '';
-                if (typeof navigator !== 'undefined' && navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
-                    navigator.clipboard.writeText(text).then(markDevtoolsCopied).catch(() => fallbackCopyDevtools(text));
-                } else {
-                    fallbackCopyDevtools(text);
+            function fallbackCopyDevtools(text) {
+                try {
+                    const ta = document.createElement('textarea');
+                    ta.value = text;
+                    ta.setAttribute('readonly', '');
+                    ta.style.position = 'fixed';
+                    ta.style.left = '-9999px';
+                    document.body.appendChild(ta);
+                    ta.select();
+                    const ok = Boolean(document.execCommand && document.execCommand('copy'));
+                    document.body.removeChild(ta);
+                    if (ok) {
+                        markDevtoolsCopied();
+                        return;
+                    }
+                } catch (_) { }
+                if (btnCopyDevtools) {
+                    if (!btnCopyDevtools.dataset) btnCopyDevtools.dataset = {};
+                    const originalHtml = btnCopyDevtools.dataset.originalHtml || btnCopyDevtools.innerHTML;
+                    btnCopyDevtools.dataset.originalHtml = originalHtml;
+                    btnCopyDevtools.innerHTML = '<span>Please copy manually</span>';
+                    btnCopyDevtools.style.backgroundColor = '';
+                    if (typeof clearTimeout === 'function') clearTimeout(btnCopyDevtools._copyTimer);
+                    if (typeof setTimeout === 'function') {
+                        btnCopyDevtools._copyTimer = setTimeout(() => {
+                            btnCopyDevtools.innerHTML = originalHtml;
+                        }, 2500);
+                    }
                 }
-            });
-        }
+            }
+            if (btnCopyDevtools && devtoolsCode) {
+                btnCopyDevtools.addEventListener('click', () => {
+                    const text = devtoolsCode.textContent || '';
+                    if (typeof navigator !== 'undefined' && navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+                        navigator.clipboard.writeText(text).then(markDevtoolsCopied).catch(() => fallbackCopyDevtools(text));
+                    } else {
+                        fallbackCopyDevtools(text);
+                    }
+                });
+            }
 
-        // Cross-tab storage & same-tab return listeners for live checklist & diagnostic updates
-        if (typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
-            window.addEventListener('storage', (e) => {
-                if (!e || e.key === STORAGE_KEY) {
+            // Cross-tab storage & same-tab return listeners for live checklist & diagnostic updates
+            if (typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
+                window.addEventListener('storage', (e) => {
+                    if (!e || e.key === STORAGE_KEY) {
+                        loadChecklistState();
+                    } else if (e.key === 'thrive_flow_survey_state_v1' && e.newValue) {
+                        try {
+                            const parsed = JSON.parse(e.newValue);
+                            if (isFlowSurveyCompletedData(parsed, null)) {
+                                setChecklistItem('triage_survey', true);
+                            }
+                        } catch (_) { }
+                    } else if (e.key === 'thrive_profile_state_v1' && e.newValue) {
+                        try {
+                            const parsed = JSON.parse(e.newValue);
+                            if (isThriveReportCompletedData(parsed, null)) {
+                                setChecklistItem('thrive_report', true);
+                            }
+                        } catch (_) { }
+                    } else if (e.key === 'thrive_coaching_dossier_v1' && e.newValue) {
+                        try {
+                            const parsed = JSON.parse(e.newValue);
+                            if (isFlowSurveyCompletedData(null, parsed)) {
+                                setChecklistItem('triage_survey', true);
+                            }
+                            if (isThriveReportCompletedData(null, parsed)) {
+                                setChecklistItem('thrive_report', true);
+                            }
+                        } catch (_) { }
+                    }
+                });
+                window.addEventListener('pageshow', () => {
                     loadChecklistState();
-                } else if (e.key === 'thrive_flow_survey_state_v1' && e.newValue) {
-                    try {
-                        const parsed = JSON.parse(e.newValue);
-                        if (isFlowSurveyCompletedData(parsed, null)) {
-                            setChecklistItem('triage_survey', true);
-                        }
-                    } catch (_) {}
-                } else if (e.key === 'thrive_profile_state_v1' && e.newValue) {
-                    try {
-                        const parsed = JSON.parse(e.newValue);
-                        if (isThriveReportCompletedData(parsed, null)) {
-                            setChecklistItem('thrive_report', true);
-                        }
-                    } catch (_) {}
-                } else if (e.key === 'thrive_coaching_dossier_v1' && e.newValue) {
-                    try {
-                        const parsed = JSON.parse(e.newValue);
-                        if (isFlowSurveyCompletedData(null, parsed)) {
-                            setChecklistItem('triage_survey', true);
-                        }
-                        if (isThriveReportCompletedData(null, parsed)) {
-                            setChecklistItem('thrive_report', true);
-                        }
-                    } catch (_) {}
-                }
-            });
-            window.addEventListener('pageshow', () => {
-                loadChecklistState();
-            });
-            window.addEventListener('focus', () => {
-                loadChecklistState();
-            });
-            window.addEventListener('thrive-dossier-updated', () => {
-                loadChecklistState();
-            });
-        }
+                });
+                window.addEventListener('focus', () => {
+                    loadChecklistState();
+                });
+                window.addEventListener('thrive-dossier-updated', () => {
+                    loadChecklistState();
+                });
+            }
 
-        // Initialize state on load
-        loadChecklistState();
-        updateTrainerUI();
+            // Initialize state on load
+            loadChecklistState();
+            updateTrainerUI();
 
-        // Expose testing helpers to window for automated validation
-        if (typeof window !== 'undefined') {
-            window.ThriveOnboarding = {
-                getState: () => state,
-                setChecklistItem: setChecklistItem,
-                executeSafeSave: executeSafeSave,
-                onSpeechSuccess: onSpeechSuccess,
-                resetChecklist: () => {
-                    VALID_CHECKLIST_KEYS.forEach(k => {
-                        state.checklist[k] = false;
-                        manualUnchecked[k] = true;
-                    });
-                    saveChecklistState();
-                    recomputeAndRenderChecklist();
-                }
-            };
-        }
-    })();
+            // Expose testing helpers to window for automated validation
+            if (typeof window !== 'undefined') {
+                window.ThriveOnboarding = {
+                    getState: () => state,
+                    setChecklistItem: setChecklistItem,
+                    executeSafeSave: executeSafeSave,
+                    onSpeechSuccess: onSpeechSuccess,
+                    resetChecklist: () => {
+                        VALID_CHECKLIST_KEYS.forEach(k => {
+                            state.checklist[k] = false;
+                            manualUnchecked[k] = true;
+                        });
+                        saveChecklistState();
+                        recomputeAndRenderChecklist();
+                    }
+                };
+            }
+        })();
     </script>
     <script src="script.js" defer></script>
 </body>
+
 </html>

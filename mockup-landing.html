@@ -1,128 +1,520 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Claim Your Seat — 5 to THRiVE Practitioner Lab | SOL THRiVE Enrollment</title>
-<meta name="description" content="Enroll directly in the 4-session 5 to THRiVE Founding Pilot Lab starting Monday, Dec 7 ($500 founding tuition, $995 regular; 21-seat cap) or schedule your optional cohort intake briefing.">
-<meta name="theme-color" content="#F7EBD5">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="THRiVE Coaching">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" type="image/svg+xml" href="favicon.svg">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="SOL THRiVE Coaching">
-<meta property="og:title" content="Claim Your Seat — 5 to THRiVE Practitioner Lab | SOL THRiVE Enrollment">
-<meta property="og:description" content="Enroll directly in the 4-session 5 to THRiVE Founding Pilot Lab starting Monday, Dec 7 ($500 founding tuition, $995 regular; 21-seat cap) or schedule your optional cohort intake briefing.">
-<meta property="og:url" content="https://sol-th-ri-ve.vercel.app/mockup-landing.html">
-<meta property="og:image" content="https://sol-th-ri-ve.vercel.app/assets/hero-banner-1920.jpg">
-<meta property="og:image:width" content="1920">
-<meta property="og:image:height" content="1070">
-<meta property="og:image:alt" content="SOL THRiVE Coaching — From Tangled Friction to Blooming Flow">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Claim Your Seat — 5 to THRiVE Practitioner Lab | SOL THRiVE Enrollment">
-<meta name="twitter:description" content="Enroll directly in the 4-session 5 to THRiVE Founding Pilot Lab starting Monday, Dec 7 ($500 founding tuition, $995 regular; 21-seat cap) or schedule your optional cohort intake briefing.">
-<meta name="twitter:image" content="https://sol-th-ri-ve.vercel.app/assets/hero-banner-1920.jpg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Nunito:wght@700;800;900&family=Plus+Jakarta+Sans:wght@800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-<script src="script.js" defer></script>
-<style>
-:root{
-  --cream:#F7EBD5; --white:#FFFDF8; --ink:#1F1B16; --slate:#4E463D;
-  --violet:#4D6278; --gold:#DCB055;
-  --grad:linear-gradient(90deg,#CC5F57 0%,#AC4038 100%);
-  --shadow:0 3px 0 #1F1B16; --line:1.5px solid #1F1B16;
-}
-body.funnel-page{background-color:var(--cream);color:var(--slate);font-family:'Inter',sans-serif;font-weight:400;line-height:1.55;min-height:100vh;
-  background-image:radial-gradient(rgba(31,27,22,.055) 1px,transparent 1px);background-size:22px 22px}
-main.funnel-main{max-width:1240px;margin:auto;padding:32px 28px 80px;width:100%}
-.funnel-main h1,.funnel-main h2,.funnel-main h3{font-family:'Plus Jakarta Sans','Nunito',sans-serif;font-weight:800;color:var(--ink);letter-spacing:-.02em;line-height:1.12}
-.funnel-main strong,.funnel-main b,.funnel-main button,.funnel-main input,.funnel-main label{font-weight:600}
-/* Buttons */
-.funnel-main .btn{font-family:'Inter',sans-serif;font-weight:600;font-size:1rem;border-radius:9999px;padding:14px 28px;cursor:pointer;border:0;transition:transform .15s,box-shadow .15s,opacity .2s;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px}
-.funnel-main .btn-primary{background:var(--grad);color:#FFFDF8;box-shadow:0 8px 20px -6px rgba(172,64,56,.50)}
-.funnel-main .btn-primary:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 26px -6px rgba(172,64,56,.62)}
-.funnel-main .btn-primary:disabled{opacity:.45;cursor:not-allowed}
-.funnel-main .btn-sm{padding:10px 20px;font-size:.9rem}
-.funnel-main .btn-white{background:var(--white);color:var(--ink);border:var(--line);box-shadow:var(--shadow)}
-.funnel-main .btn-white:hover{transform:translateY(-1px);box-shadow:0 4px 0 var(--ink)}
-.funnel-main .btn-white:active{transform:translateY(3px);box-shadow:0 0 0 var(--ink)}
-.funnel-main .btn-block{width:100%}
-/* View Switcher / Stepper */
-.stepper{display:flex;gap:8px;justify-content:center;margin-bottom:24px;flex-wrap:wrap}
-.stepper button{font-family:'Inter',sans-serif;font-size:.8rem;font-weight:600;padding:7px 15px;border-radius:9999px;border:1.5px solid rgba(31,27,22,.22);color:var(--slate);background:var(--white);cursor:pointer;transition:.2s}
-.stepper button:hover{border-color:var(--ink);color:var(--ink)}
-.stepper button:focus-visible{outline:2.5px solid var(--brand-blue-dark,#4D6278);outline-offset:2px}
-.stepper button.on{border-color:var(--ink);color:#FFFDF8;background:var(--violet);box-shadow:var(--shadow)}
-.stepper button.done{color:var(--ink);border-color:var(--ink)}
-.eyebrow{display:inline-block;font-size:.75rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#455B70;background:#DCE5EE;padding:5px 12px;border-radius:9999px;margin-bottom:12px}
-.funnel-hero{text-align:center;max-width:840px;margin:0 auto 28px;background:transparent;overflow:visible}
-.funnel-hero h1{font-size:clamp(1.85rem,4vw,3rem);margin-bottom:10px}
-.funnel-hero h1 em{font-style:normal;background:linear-gradient(90deg,#B54840,#4D6278);-webkit-background-clip:text;background-clip:text;color:transparent}
-.funnel-hero p{font-size:1.02rem;color:var(--slate)}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start}
-.card{background:var(--white);border:var(--line);border-radius:24px;box-shadow:var(--shadow);padding:28px}
-.card h2{font-size:1.5rem;margin-bottom:6px}
-.card .sub{margin-bottom:18px;font-size:.94rem}
-.view{display:none;animation:in .45s cubic-bezier(.2,.8,.2,1)}
-.view.active{display:block}
-.col-swap{animation:in .45s cubic-bezier(.2,.8,.2,1)}
-@keyframes in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-/* SOL THRiVE Integrated Callout in Direct Checkout */
-.sol-story-box{margin-top:18px;padding:16px 18px;background:var(--cream);border:1.5px dashed rgba(31,27,22,.28);border-radius:16px}
-.sol-story-box .sol-badge{font-size:.7rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--violet);margin-bottom:6px;display:block}
-.sol-story-box p{font-size:.88rem;line-height:1.5;color:var(--ink);margin-bottom:10px}
-.sol-story-quote{font-size:.84rem;color:var(--slate);display:flex;align-items:center;gap:10px;margin-bottom:12px}
-.sol-quick-links{display:flex;flex-wrap:wrap;gap:8px}
-.sol-link-chip{background:var(--white);border:1.5px solid rgba(31,27,22,.22);border-radius:9999px;padding:6px 12px;font-size:.8rem;font-weight:600;color:var(--ink);cursor:pointer;transition:.15s}
-.sol-link-chip:hover{border-color:var(--violet);color:var(--violet)}
-/* Form */
-.field{margin-bottom:12px}
-.field label{display:block;font-size:.8rem;color:var(--ink);margin-bottom:4px}
-.field input{width:100%;font-family:'Inter';font-weight:400;font-size:.96rem;padding:10px 13px;border:var(--line);border-radius:12px;background:#FAF2E3;color:var(--ink);outline:none;transition:.15s}
-.field input:focus{background:#FFFDF8;border-color:var(--violet);box-shadow:0 0 0 3px rgba(77,98,120,.2)}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.err{color:#B54840;font-size:.82rem;margin-top:8px;min-height:1.2em}
-.fine{font-size:.78rem;text-align:center;margin-top:10px}
-/* Checkout */
-.line{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid rgba(24,24,27,.12);font-size:.93rem}
-.line span:last-child{font-weight:600;color:var(--ink);white-space:nowrap}
-.line.total{border:0;font-size:1.18rem;color:var(--ink);font-weight:600;padding-top:12px}
-.success{text-align:center;padding:36px 18px}
-.success h2{font-size:1.85rem;margin:14px 0 8px}
-@media(max-width:900px){.grid{grid-template-columns:1fr}.row2{grid-template-columns:1fr}main.funnel-main{padding:24px 16px 64px}}
-@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Claim Your Seat — 5 to THRiVE Practitioner Lab | SOL THRiVE Enrollment</title>
+  <meta name="description"
+    content="Enroll directly in the 4-session 5 to THRiVE Founding Pilot Lab starting Monday, Dec 7 ($500 founding tuition, $995 regular; 21-seat cap) or schedule your optional cohort intake briefing.">
+  <meta name="theme-color" content="#F7EBD5">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="THRiVE Coaching">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="SOL THRiVE Coaching">
+  <meta property="og:title" content="Claim Your Seat — 5 to THRiVE Practitioner Lab | SOL THRiVE Enrollment">
+  <meta property="og:description"
+    content="Enroll directly in the 4-session 5 to THRiVE Founding Pilot Lab starting Monday, Dec 7 ($500 founding tuition, $995 regular; 21-seat cap) or schedule your optional cohort intake briefing.">
+  <meta property="og:url" content="https://www.thrivecoaching.ai/mockup-landing.html">
+  <meta property="og:image" content="https://www.thrivecoaching.ai/assets/colorful-thrive-method-logo.jpg">
+  <meta property="og:image:secure_url" content="https://www.thrivecoaching.ai/assets/colorful-thrive-method-logo.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1678">
+  <meta property="og:image:height" content="937">
+  <meta property="og:image:alt" content="The THRiVE Method — SOLab Studios">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Claim Your Seat — 5 to THRiVE Practitioner Lab | SOL THRiVE Enrollment">
+  <meta name="twitter:description" content="Enroll directly in the 4-session 5 to THRiVE Founding Pilot Lab starting Monday, Dec 7 ($500 founding tuition, $995 regular; 21-seat cap) or schedule your optional cohort intake briefing.">
+  <meta name="twitter:image" content="https://www.thrivecoaching.ai/assets/colorful-thrive-method-logo.jpg">
+  <meta name="twitter:image:alt" content="The THRiVE Method — SOLab Studios">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Nunito:wght@700;800;900&family=Plus+Jakarta+Sans:wght@800&family=Poppins:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+  <style>
+    :root {
+      --cream: #F7EBD5;
+      --white: #FFFDF8;
+      --ink: #1F1B16;
+      --slate: #4E463D;
+      --violet: #4D6278;
+      --gold: #DCB055;
+      --grad: linear-gradient(90deg, #CC5F57 0%, #AC4038 100%);
+      --shadow: 0 3px 0 #1F1B16;
+      --line: 1.5px solid #1F1B16;
+    }
+
+    body.funnel-page {
+      background-color: var(--cream);
+      color: var(--slate);
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      line-height: 1.55;
+      min-height: 100vh;
+      background-image: radial-gradient(rgba(31, 27, 22, .055) 1px, transparent 1px);
+      background-size: 22px 22px
+    }
+
+    main.funnel-main {
+      max-width: 1240px;
+      margin: auto;
+      padding: 32px 28px 80px;
+      width: 100%
+    }
+
+    .funnel-main h1,
+    .funnel-main h2,
+    .funnel-main h3 {
+      font-family: 'Plus Jakarta Sans', 'Nunito', sans-serif;
+      font-weight: 800;
+      color: var(--ink);
+      letter-spacing: -.02em;
+      line-height: 1.12
+    }
+
+    .funnel-main strong,
+    .funnel-main b,
+    .funnel-main button,
+    .funnel-main input,
+    .funnel-main label {
+      font-weight: 600
+    }
+
+    /* Buttons */
+    .funnel-main .btn {
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      border-radius: 9999px;
+      padding: 14px 28px;
+      cursor: pointer;
+      border: 0;
+      transition: transform .15s, box-shadow .15s, opacity .2s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px
+    }
+
+    .funnel-main .btn-primary {
+      background: var(--grad);
+      color: #FFFDF8;
+      box-shadow: 0 8px 20px -6px rgba(172, 64, 56, .50)
+    }
+
+    .funnel-main .btn-primary:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 26px -6px rgba(172, 64, 56, .62)
+    }
+
+    .funnel-main .btn-primary:disabled {
+      opacity: .45;
+      cursor: not-allowed
+    }
+
+    .funnel-main .btn-sm {
+      padding: 10px 20px;
+      font-size: .9rem
+    }
+
+    .funnel-main .btn-white {
+      background: var(--white);
+      color: var(--ink);
+      border: var(--line);
+      box-shadow: var(--shadow)
+    }
+
+    .funnel-main .btn-white:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 0 var(--ink)
+    }
+
+    .funnel-main .btn-white:active {
+      transform: translateY(3px);
+      box-shadow: 0 0 0 var(--ink)
+    }
+
+    .funnel-main .btn-block {
+      width: 100%
+    }
+
+    /* View Switcher / Stepper */
+    .stepper {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap
+    }
+
+    .stepper button {
+      font-family: 'Inter', sans-serif;
+      font-size: .8rem;
+      font-weight: 600;
+      padding: 7px 15px;
+      border-radius: 9999px;
+      border: 1.5px solid rgba(31, 27, 22, .22);
+      color: var(--slate);
+      background: var(--white);
+      cursor: pointer;
+      transition: .2s
+    }
+
+    .stepper button:hover {
+      border-color: var(--ink);
+      color: var(--ink)
+    }
+
+    .stepper button:focus-visible {
+      outline: 2.5px solid var(--brand-blue-dark, #4D6278);
+      outline-offset: 2px
+    }
+
+    .stepper button.on {
+      border-color: var(--ink);
+      color: #FFFDF8;
+      background: var(--violet);
+      box-shadow: var(--shadow)
+    }
+
+    .stepper button.done {
+      color: var(--ink);
+      border-color: var(--ink)
+    }
+
+    .eyebrow {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: #455B70;
+      background: #DCE5EE;
+      padding: 5px 12px;
+      border-radius: 9999px;
+      margin-bottom: 12px
+    }
+
+    .funnel-hero {
+      text-align: center;
+      max-width: 840px;
+      margin: 0 auto 28px;
+      background: transparent;
+      overflow: visible
+    }
+
+    .funnel-hero h1 {
+      font-size: clamp(1.85rem, 4vw, 3rem);
+      margin-bottom: 10px
+    }
+
+    .funnel-hero h1 em {
+      font-style: normal;
+      background: linear-gradient(90deg, #B54840, #4D6278);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent
+    }
+
+    .funnel-hero p {
+      font-size: 1.02rem;
+      color: var(--slate)
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      align-items: start
+    }
+
+    .card {
+      background: var(--white);
+      border: var(--line);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      padding: 28px
+    }
+
+    .card h2 {
+      font-size: 1.5rem;
+      margin-bottom: 6px
+    }
+
+    .card .sub {
+      margin-bottom: 18px;
+      font-size: .94rem
+    }
+
+    .view {
+      display: none;
+      animation: in .45s cubic-bezier(.2, .8, .2, 1)
+    }
+
+    .view.active {
+      display: block
+    }
+
+    .col-swap {
+      animation: in .45s cubic-bezier(.2, .8, .2, 1)
+    }
+
+    @keyframes in {
+      from {
+        opacity: 0;
+        transform: translateY(14px)
+      }
+
+      to {
+        opacity: 1;
+        transform: none
+      }
+    }
+
+    /* SOL THRiVE Integrated Callout in Direct Checkout */
+    .sol-story-box {
+      margin-top: 18px;
+      padding: 16px 18px;
+      background: var(--cream);
+      border: 1.5px dashed rgba(31, 27, 22, .28);
+      border-radius: 16px
+    }
+
+    .sol-story-box .sol-badge {
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      color: var(--violet);
+      margin-bottom: 6px;
+      display: block
+    }
+
+    .sol-story-box p {
+      font-size: .88rem;
+      line-height: 1.5;
+      color: var(--ink);
+      margin-bottom: 10px
+    }
+
+    .sol-story-quote {
+      font-size: .84rem;
+      color: var(--slate);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px
+    }
+
+    .sol-quick-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px
+    }
+
+    .sol-link-chip {
+      background: var(--white);
+      border: 1.5px solid rgba(31, 27, 22, .22);
+      border-radius: 9999px;
+      padding: 6px 12px;
+      font-size: .8rem;
+      font-weight: 600;
+      color: var(--ink);
+      cursor: pointer;
+      transition: .15s
+    }
+
+    .sol-link-chip:hover {
+      border-color: var(--violet);
+      color: var(--violet)
+    }
+
+    /* Form */
+    .field {
+      margin-bottom: 12px
+    }
+
+    .field label {
+      display: block;
+      font-size: .8rem;
+      color: var(--ink);
+      margin-bottom: 4px
+    }
+
+    .field input {
+      width: 100%;
+      font-family: 'Inter';
+      font-weight: 400;
+      font-size: .96rem;
+      padding: 10px 13px;
+      border: var(--line);
+      border-radius: 12px;
+      background: #FAF2E3;
+      color: var(--ink);
+      outline: none;
+      transition: .15s
+    }
+
+    .field input:focus {
+      background: #FFFDF8;
+      border-color: var(--violet);
+      box-shadow: 0 0 0 3px rgba(77, 98, 120, .2)
+    }
+
+    .row2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px
+    }
+
+    .err {
+      color: #B54840;
+      font-size: .82rem;
+      margin-top: 8px;
+      min-height: 1.2em
+    }
+
+    .fine {
+      font-size: .78rem;
+      text-align: center;
+      margin-top: 10px
+    }
+
+    /* Checkout */
+    .line {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 9px 0;
+      border-bottom: 1px solid rgba(24, 24, 27, .12);
+      font-size: .93rem
+    }
+
+    .line span:last-child {
+      font-weight: 600;
+      color: var(--ink);
+      white-space: nowrap
+    }
+
+    .line.total {
+      border: 0;
+      font-size: 1.18rem;
+      color: var(--ink);
+      font-weight: 600;
+      padding-top: 12px
+    }
+
+    .success {
+      text-align: center;
+      padding: 36px 18px
+    }
+
+    .success h2 {
+      font-size: 1.85rem;
+      margin: 14px 0 8px
+    }
+
+    @media(max-width:900px) {
+      .grid {
+        grid-template-columns: 1fr
+      }
+
+      .row2 {
+        grid-template-columns: 1fr
+      }
+
+      main.funnel-main {
+        padding: 24px 16px 64px
+      }
+    }
+
+    @media(prefers-reduced-motion:reduce) {
+      * {
+        animation: none !important;
+        transition: none !important
+      }
+    }
+  </style>
 </head>
+
 <body class="funnel-page">
 
-<header class="header">
-  <nav class="nav-left" aria-label="Primary Mobile Navigation">
-    <button class="hamburger" type="button" aria-label="Toggle Menu" aria-expanded="false" aria-controls="mobile-nav-drawer">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-  </nav>
-  <div class="logo">
-    <a href="index.html" class="brand-logo-link">
-      <span class="brand-mark">THRiVE</span> <span class="brand-sub">Coaching</span>
-    </a>
-  </div>
-  <div class="nav-right">
-    <nav class="desktop-menu" aria-label="Primary Navigation">
-      <ul class="nav-links">
+  <header class="header">
+    <nav class="nav-left" aria-label="Primary Mobile Navigation">
+      <button class="hamburger" type="button" aria-label="Toggle Menu" aria-expanded="false"
+        aria-controls="mobile-nav-drawer">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </nav>
+    <div class="logo">
+      <a href="index.html" class="brand-logo-link">
+        <span class="brand-mark">THRiVE</span> <span class="brand-sub">Coaching</span>
+      </a>
+    </div>
+    <div class="nav-right">
+      <nav class="desktop-menu" aria-label="Primary Navigation">
+        <ul class="nav-links">
+          <li><a href="approach.html">How It Works</a></li>
+          <li><a href="classes.html">Class Schedule</a></li>
+          <li class="dropdown resources-dropdown">
+            <button type="button" class="dropdown-toggle" aria-expanded="false" aria-haspopup="true"
+              aria-controls="desktop-resources-menu">Resources <span class="dropdown-caret"
+                aria-hidden="true">&#9662;</span></button>
+            <div class="dropdown-content resources-mega-menu" id="desktop-resources-menu">
+              <div class="resources-group">
+                <div class="resources-group-label">Tools &amp; Assessments</div>
+                <a href="profile.html">THRiVE Report</a>
+                <a href="hope-survey.html">HoPE Index</a>
+                <a href="survey.html">Flow Survey</a>
+              </div>
+              <div class="resources-group">
+                <div class="resources-group-label">Learning</div>
+                <a href="how-to-use.html">Overview &amp; Guide</a>
+                <a href="index.html#video-section">Video</a>
+                <a href="clinical-ecosystem.html">Built for Clinical Authority</a>
+                <a href="clinical-ecosystem.html#ecosystem-section">3-Tier Ecosystem</a>
+                <a href="clinical-ecosystem.html#offer-section">Inside the 5 to THRiVE</a>
+              </div>
+              <div class="resources-group">
+                <div class="resources-group-label">Practical Guides</div>
+                <a href="rebuilding-life-challenges.html">Rebuilding Life Challenges</a>
+                <a href="employment-challenges.html">Employment Challenges</a>
+              </div>
+              <div class="resources-group">
+                <div class="resources-group-label">Events</div>
+                <a href="lunch-and-learn.html">Thursday Lunch &amp; Learn</a>
+                <a href="clinical-ecosystem.html#survey">Ready to 3x Follow-Through?</a>
+              </div>
+            </div>
+          </li>
+          <li><a href="funnel.html" class="nav-cta-pill active" aria-current="page">Claim Your Seat</a></li>
+        </ul>
+      </nav>
+      <a href="funnel.html" class="mobile-header-cta active" aria-current="page">Claim Your Seat</a>
+    </div>
+
+    <nav class="nav-menu mobile-drawer" id="mobile-nav-drawer" aria-label="Mobile Navigation">
+      <div class="menu-title">FIND YOUR FLOW</div>
+      <ul>
         <li><a href="approach.html">How It Works</a></li>
         <li><a href="classes.html">Class Schedule</a></li>
         <li class="dropdown resources-dropdown">
-          <button type="button" class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" aria-controls="desktop-resources-menu">Resources <span class="dropdown-caret" aria-hidden="true">&#9662;</span></button>
-          <div class="dropdown-content resources-mega-menu" id="desktop-resources-menu">
+          <button type="button" class="dropdown-toggle" aria-expanded="false" aria-haspopup="true"
+            aria-controls="mobile-resources-menu">Resources <span class="dropdown-caret"
+              aria-hidden="true">&#9662;</span></button>
+          <div class="dropdown-content" id="mobile-resources-menu">
             <div class="resources-group">
               <div class="resources-group-label">Tools &amp; Assessments</div>
               <a href="profile.html">THRiVE Report</a>
@@ -149,327 +541,319 @@ main.funnel-main{max-width:1240px;margin:auto;padding:32px 28px 80px;width:100%}
             </div>
           </div>
         </li>
-        <li><a href="funnel.html" class="nav-cta-pill active" aria-current="page">Claim Your Seat</a></li>
+        <li class="mobile-drawer-cta-wrap"><a href="funnel.html" class="mobile-drawer-cta active"
+            aria-current="page">Claim Your Seat</a></li>
       </ul>
     </nav>
-    <a href="funnel.html" class="mobile-header-cta active" aria-current="page">Claim Your Seat</a>
-  </div>
+  </header>
 
-  <nav class="nav-menu mobile-drawer" id="mobile-nav-drawer" aria-label="Mobile Navigation">
-    <div class="menu-title">FIND YOUR FLOW</div>
-    <ul>
-      <li><a href="approach.html">How It Works</a></li>
-      <li><a href="classes.html">Class Schedule</a></li>
-      <li class="dropdown resources-dropdown">
-        <button type="button" class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" aria-controls="mobile-resources-menu">Resources <span class="dropdown-caret" aria-hidden="true">&#9662;</span></button>
-        <div class="dropdown-content" id="mobile-resources-menu">
-          <div class="resources-group">
-            <div class="resources-group-label">Tools &amp; Assessments</div>
-            <a href="profile.html">THRiVE Report</a>
-            <a href="hope-survey.html">HoPE Index</a>
-            <a href="survey.html">Flow Survey</a>
+  <main class="funnel-main">
+    <div class="stepper" id="stepper" role="tablist" aria-label="Enrollment Options">
+      <button type="button" role="tab" data-view="pay" class="on" aria-selected="true">Direct Enrollment ($500)</button>
+      <button type="button" role="tab" data-view="book" aria-selected="false">Optional Intake Briefing</button>
+    </div>
+
+    <!-- ========== DEFAULT VIEW: Direct Enrollment & Approved Checkout ========== -->
+    <section class="view active" id="v-pay">
+      <header class="funnel-hero">
+        <span class="eyebrow">Founding Pilot Cohort &bull; Starts Monday, Dec 7</span>
+        <h1>Claim 1 of 21 Founding Seats in the <em>Practitioner Lab.</em></h1>
+        <p>Join our 4-session Founding Pilot Lab starting Monday, Dec 7 to turn strengths-based intake into 21 daily
+          strides and automated DAP notes without losing the human touch.</p>
+      </header>
+      <div class="grid" id="pay-grid">
+        <div class="card">
+          <h2>Order Summary</h2>
+          <p class="sub">5 to THRiVE Founding Pilot Lab (Starts Mon, Dec 7, 2026)</p>
+          <div class="line"><span>4-Session Founding Pilot Lab (21-Seat Cap)</span><span><s
+                style="color:#6B7280;font-weight:500;margin-right:6px">$995.00</s>$500.00</span></div>
+          <div class="line"><span>Private Squad Placement (Squad A, B, or C — 7 Seats Each)</span><span>Included</span>
           </div>
-          <div class="resources-group">
-            <div class="resources-group-label">Learning</div>
-            <a href="how-to-use.html">Overview &amp; Guide</a>
-            <a href="index.html#video-section">Video</a>
-            <a href="clinical-ecosystem.html">Built for Clinical Authority</a>
-            <a href="clinical-ecosystem.html#ecosystem-section">3-Tier Ecosystem</a>
-            <a href="clinical-ecosystem.html#offer-section">Inside the 5 to THRiVE</a>
+          <div class="line"><span>Personos AI DAP Note Generator &amp; Caseload Setup</span><span>Included</span></div>
+          <div class="line"><span>Session 0 Pre-Flight &amp; Weekend Tech Clinics (Dec 5–6)</span><span>Included</span>
           </div>
-          <div class="resources-group">
-            <div class="resources-group-label">Practical Guides</div>
-            <a href="rebuilding-life-challenges.html">Rebuilding Life Challenges</a>
-            <a href="employment-challenges.html">Employment Challenges</a>
-          </div>
-          <div class="resources-group">
-            <div class="resources-group-label">Events</div>
-            <a href="lunch-and-learn.html">Thursday Lunch &amp; Learn</a>
-            <a href="clinical-ecosystem.html#survey">Ready to 3x Follow-Through?</a>
+          <div class="line"><span>5 to THRiVE Practitioner Certification</span><span>Included</span></div>
+          <div class="line"><span>Intake Briefing</span><span id="pay-when" style="text-align:right">Included (Optional
+              Scheduling)</span></div>
+          <div class="line total"><span>Total due (Founding Rate)</span><span><s
+                style="color:#6B7280;font-weight:500;font-size:.95rem;margin-right:8px">$995.00</s>$500.00</span></div>
+
+          <div class="sol-story-box">
+            <span class="sol-badge">The SOL THRiVE Standard</span>
+            <p>Bring SOL Theory, voice-driven Strengths Intake, and HIPAA-guardrailed Personos AI directly into your
+              caseload ($9/mo optional client seats).</p>
+            <div class="sol-story-quote">
+              <svg width="28" height="28" viewBox="0 0 40 40" fill="none" stroke="#18181B" stroke-width="1.8"
+                stroke-linecap="round" style="flex:none">
+                <circle cx="14" cy="14" r="6" />
+                <path d="M14 20c-1 6-4 8-8 10M14 20c1 5 4 8 7 9" />
+                <circle cx="29" cy="22" r="4" />
+                <path d="M29 26v8M25 30h8" />
+              </svg>
+              <span>“We don’t need more promises. We need a plan we can build together.” — <strong>Dr. Steve Huff,
+                  Founder</strong></span>
+            </div>
+            <div class="sol-quick-links">
+              <button type="button" class="sol-link-chip" data-open-view="book">Schedule Optional Briefing
+                &rarr;</button>
+            </div>
           </div>
         </div>
-      </li>
-      <li class="mobile-drawer-cta-wrap"><a href="funnel.html" class="mobile-drawer-cta active" aria-current="page">Claim Your Seat</a></li>
-    </ul>
-  </nav>
-</header>
 
-<main class="funnel-main">
-  <div class="stepper" id="stepper" role="tablist" aria-label="Enrollment Options">
-    <button type="button" role="tab" data-view="pay" class="on" aria-selected="true">Direct Enrollment ($500)</button>
-    <button type="button" role="tab" data-view="book" aria-selected="false">Optional Intake Briefing</button>
-  </div>
-
-  <!-- ========== DEFAULT VIEW: Direct Enrollment & Approved Checkout ========== -->
-  <section class="view active" id="v-pay">
-    <header class="funnel-hero">
-      <span class="eyebrow">Founding Pilot Cohort &bull; Starts Monday, Dec 7</span>
-      <h1>Claim 1 of 21 Founding Seats in the <em>Practitioner Lab.</em></h1>
-      <p>Join our 4-session Founding Pilot Lab starting Monday, Dec 7 to turn strengths-based intake into 21 daily strides and automated DAP notes without losing the human touch.</p>
-    </header>
-    <div class="grid" id="pay-grid">
-      <div class="card">
-        <h2>Order Summary</h2>
-        <p class="sub">5 to THRiVE Founding Pilot Lab (Starts Mon, Dec 7, 2026)</p>
-        <div class="line"><span>4-Session Founding Pilot Lab (21-Seat Cap)</span><span><s style="color:#6B7280;font-weight:500;margin-right:6px">$995.00</s>$500.00</span></div>
-        <div class="line"><span>Private Squad Placement (Squad A, B, or C — 7 Seats Each)</span><span>Included</span></div>
-        <div class="line"><span>Personos AI DAP Note Generator &amp; Caseload Setup</span><span>Included</span></div>
-        <div class="line"><span>Session 0 Pre-Flight &amp; Weekend Tech Clinics (Dec 5–6)</span><span>Included</span></div>
-        <div class="line"><span>5 to THRiVE Practitioner Certification</span><span>Included</span></div>
-        <div class="line"><span>Intake Briefing</span><span id="pay-when" style="text-align:right">Included (Optional Scheduling)</span></div>
-        <div class="line total"><span>Total due (Founding Rate)</span><span><s style="color:#6B7280;font-weight:500;font-size:.95rem;margin-right:8px">$995.00</s>$500.00</span></div>
-
-        <div class="sol-story-box">
-          <span class="sol-badge">The SOL THRiVE Standard</span>
-          <p>Bring SOL Theory, voice-driven Strengths Intake, and HIPAA-guardrailed Personos AI directly into your caseload ($9/mo optional client seats).</p>
-          <div class="sol-story-quote">
-            <svg width="28" height="28" viewBox="0 0 40 40" fill="none" stroke="#18181B" stroke-width="1.8" stroke-linecap="round" style="flex:none"><circle cx="14" cy="14" r="6"/><path d="M14 20c-1 6-4 8-8 10M14 20c1 5 4 8 7 9"/><circle cx="29" cy="22" r="4"/><path d="M29 26v8M25 30h8"/></svg>
-            <span>“We don’t need more promises. We need a plan we can build together.” — <strong>Dr. Steve Huff, Founder</strong></span>
+        <form class="card" id="pay-form" novalidate>
+          <h2>Secure Enrollment Checkout</h2>
+          <p class="sub">Enter your details and complete payment via Stripe to reserve your seat immediately.</p>
+          <div class="row2">
+            <div class="field"><label for="pay-fn">First Name</label><input id="pay-fn" autocomplete="given-name"
+                required></div>
+            <div class="field"><label for="pay-ln">Last Name</label><input id="pay-ln" autocomplete="family-name"
+                required></div>
           </div>
-          <div class="sol-quick-links">
-            <button type="button" class="sol-link-chip" data-open-view="book">Schedule Optional Briefing &rarr;</button>
+          <div class="row2">
+            <div class="field"><label for="pay-em">Email Address</label><input id="pay-em" type="email"
+                autocomplete="email" required></div>
+            <div class="field"><label for="pay-ph">Phone Number (Optional)</label><input id="pay-ph" type="tel"
+                autocomplete="tel"></div>
           </div>
-        </div>
+          <div class="field"><label for="pay-org">Organization / Practice (Optional)</label><input id="pay-org"
+              autocomplete="organization"></div>
+          <div id="payment-element" style="margin:10px 0 18px;min-height:110px"></div>
+          <button class="btn btn-primary btn-block" id="pay-btn" type="submit" disabled>Pay $500.00 &amp; Enroll in
+            Founding Pilot Lab</button>
+          <div class="err" id="pay-err" role="alert"></div>
+          <p class="fine">Secured by Stripe. We never see or store your card details.</p>
+        </form>
       </div>
 
-      <form class="card" id="pay-form" novalidate>
-        <h2>Secure Enrollment Checkout</h2>
-        <p class="sub">Enter your details and complete payment via Stripe to reserve your seat immediately.</p>
-        <div class="row2">
-          <div class="field"><label for="pay-fn">First Name</label><input id="pay-fn" autocomplete="given-name" required></div>
-          <div class="field"><label for="pay-ln">Last Name</label><input id="pay-ln" autocomplete="family-name" required></div>
-        </div>
-        <div class="row2">
-          <div class="field"><label for="pay-em">Email Address</label><input id="pay-em" type="email" autocomplete="email" required></div>
-          <div class="field"><label for="pay-ph">Phone Number (Optional)</label><input id="pay-ph" type="tel" autocomplete="tel"></div>
-        </div>
-        <div class="field"><label for="pay-org">Organization / Practice (Optional)</label><input id="pay-org" autocomplete="organization"></div>
-        <div id="payment-element" style="margin:10px 0 18px;min-height:110px"></div>
-        <button class="btn btn-primary btn-block" id="pay-btn" type="submit" disabled>Pay $500.00 &amp; Enroll in Founding Pilot Lab</button>
-        <div class="err" id="pay-err" role="alert"></div>
-        <p class="fine">Secured by Stripe. We never see or store your card details.</p>
-      </form>
+      <div class="card success" id="success" style="display:none;max-width:560px;margin:auto">
+        <svg width="90" height="90" viewBox="0 0 90 90" fill="none" stroke="#1F1B16" stroke-width="2.2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="45" cy="45" r="32" />
+          <path d="M30 46l11 11 20-24" stroke="#5B8A49" stroke-width="4" />
+        </svg>
+        <h2>You’re enrolled in the Founding Pilot Lab!</h2>
+        <p id="ok-msg"></p>
+        <a class="btn btn-primary" href="onboarding.html" style="margin-top:16px">Launch Session 0 Pre-Flight Hub
+          &rarr;</a>
+      </div>
+    </section>
+
+    <!-- ========== OPTIONAL: Calendar ========== -->
+    <section class="view" id="v-book">
+      <header class="funnel-hero">
+        <span class="eyebrow">Optional Intake Briefing</span>
+        <h1>Schedule Your Intake Briefing.</h1>
+        <p>Pick an optional intake briefing date leading into our Monday, Dec 7 launch (4-session Founding Pilot Lab •
+          Mondays 5:00–6:30 PM MT).</p>
+      </header>
+      <div class="card" style="max-width:860px;margin:0 auto;width:100%">
+        <iframe id="qiNYlb85QHIu0foCh24A" src="https://link.visioncontrol.io/widget/booking/qiNYlb85QHIu0foCh24A"
+          allow="payment" title="Booking Calendar" style="width:100%;min-height:640px;border:none;overflow:hidden"
+          scrolling="no"></iframe>
+        <button class="btn btn-primary btn-block" id="book-submit" type="button" style="margin-top:14px">Continue to
+          $500 Checkout &rarr;</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <div class="footer-logo">THRiVE Coaching</div>
+        <p>Equipping Therapists, Coaches, and Case Managers to 3x Client Outcomes in the 167 Hours Between Sessions.</p>
+      </div>
+      <div class="footer-nav">
+        <a href="approach.html">How It Works</a>
+        <a href="classes.html">Class Schedule</a>
+        <a href="profile.html">THRiVE Report</a>
+        <a href="hope-survey.html">HoPE Index</a>
+        <a href="survey.html">Flow Survey</a>
+        <a href="how-to-use.html">Overview &amp; Guide</a>
+        <a href="clinical-ecosystem.html">Clinical Authority &amp; Ecosystem</a>
+        <a href="rebuilding-life-challenges.html">Rebuilding Life Challenges</a>
+        <a href="employment-challenges.html">Employment Challenges</a>
+        <a href="lunch-and-learn.html">Lunch &amp; Learn</a>
+        <a href="funnel.html">Claim Your Seat</a>
+      </div>
+      <div class="footer-contact">
+        <a href="mailto:team@thrivecoaching.ai">team@thrivecoaching.ai</a>
+        <span class="separator">|</span>
+        <a href="tel:7205882002">(720) 588-2002</a>
+      </div>
+      <div class="footer-copyright">
+        &copy; 2026 THRiVE Coaching AI. All rights reserved.
+      </div>
     </div>
+  </footer>
 
-    <div class="card success" id="success" style="display:none;max-width:560px;margin:auto">
-      <svg width="90" height="90" viewBox="0 0 90 90" fill="none" stroke="#1F1B16" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="45" cy="45" r="32"/><path d="M30 46l11 11 20-24" stroke="#5B8A49" stroke-width="4"/></svg>
-      <h2>You’re enrolled in the Founding Pilot Lab!</h2>
-      <p id="ok-msg"></p>
-      <a class="btn btn-primary" href="onboarding.html" style="margin-top:16px">Launch Session 0 Pre-Flight Hub &rarr;</a>
-    </div>
-  </section>
+  <script>
+    (function () {
+      const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+      const state = { lead: {}, bookedCalendar: false };
 
-  <!-- ========== OPTIONAL: Calendar ========== -->
-  <section class="view" id="v-book">
-    <header class="funnel-hero">
-      <span class="eyebrow">Optional Intake Briefing</span>
-      <h1>Schedule Your Intake Briefing.</h1>
-      <p>Pick an optional intake briefing date leading into our Monday, Dec 7 launch (4-session Founding Pilot Lab • Mondays 5:00–6:30 PM MT).</p>
-    </header>
-    <div class="card" style="max-width:860px;margin:0 auto;width:100%">
-      <iframe id="qiNYlb85QHIu0foCh24A" src="https://link.visioncontrol.io/widget/booking/qiNYlb85QHIu0foCh24A" allow="payment" title="Booking Calendar" style="width:100%;min-height:640px;border:none;overflow:hidden" scrolling="no"></iframe>
-      <button class="btn btn-primary btn-block" id="book-submit" type="button" style="margin-top:14px">Continue to $500 Checkout &rarr;</button>
-    </div>
-  </section>
-</main>
-
-<footer class="footer">
-  <div class="footer-content">
-    <div class="footer-brand">
-      <div class="footer-logo">THRiVE Coaching</div>
-      <p>Equipping Therapists, Coaches, and Case Managers to 3x Client Outcomes in the 167 Hours Between Sessions.</p>
-    </div>
-    <div class="footer-nav">
-      <a href="approach.html">How It Works</a>
-      <a href="classes.html">Class Schedule</a>
-      <a href="profile.html">THRiVE Report</a>
-      <a href="hope-survey.html">HoPE Index</a>
-      <a href="survey.html">Flow Survey</a>
-      <a href="how-to-use.html">Overview &amp; Guide</a>
-      <a href="clinical-ecosystem.html">Clinical Authority &amp; Ecosystem</a>
-      <a href="rebuilding-life-challenges.html">Rebuilding Life Challenges</a>
-      <a href="employment-challenges.html">Employment Challenges</a>
-      <a href="lunch-and-learn.html">Lunch &amp; Learn</a>
-      <a href="funnel.html">Claim Your Seat</a>
-    </div>
-    <div class="footer-contact">
-      <a href="mailto:team@thrivecoaching.ai">team@thrivecoaching.ai</a>
-      <span class="separator">|</span>
-      <a href="tel:7205882002">(720) 588-2002</a>
-    </div>
-    <div class="footer-copyright">
-      &copy; 2026 THRiVE Coaching AI. All rights reserved.
-    </div>
-  </div>
-</footer>
-
-<script>
-(function(){
-  const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
-  const state={lead:{},bookedCalendar:false};
-
-  // Hydrate lead fields if visitor previously entered contact info on this browser
-  try{
-    const saved=JSON.parse(sessionStorage.getItem('solThrive')||localStorage.getItem('solThriveLead')||localStorage.getItem('solThrive')||'null');
-    if(saved&&typeof saved==='object'){
-      state.lead={
-        fn:(saved.fn||saved.first||'').trim(),
-        ln:(saved.ln||saved.last||'').trim(),
-        org:(saved.org||saved.organization||'').trim(),
-        em:(saved.em||saved.email||'').trim(),
-        ph:(saved.ph||saved.phone||'').trim()
-      };
-    }
-  }catch(e){}
-
-  function syncLeadInputs(){
-    const L=state.lead||{};
-    if($('#pay-fn')&&L.fn)$('#pay-fn').value=L.fn;
-    if($('#pay-ln')&&L.ln)$('#pay-ln').value=L.ln;
-    if($('#pay-org')&&L.org)$('#pay-org').value=L.org;
-    if($('#pay-em')&&L.em)$('#pay-em').value=L.em;
-    if($('#pay-ph')&&L.ph)$('#pay-ph').value=L.ph;
-  }
-  if(state.lead&&(state.lead.fn||state.lead.ln||state.lead.em||state.lead.org||state.lead.ph)){
-    syncLeadInputs();
-  }
-
-  function track(type,data){
-    try{fetch('/api/event',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type,data,lead:state.lead,ts:new Date().toISOString()}),keepalive:true}).catch(()=>{})}catch(e){}
-  }
-
-  function showView(viewKey){
-    const map={pay:'v-pay',book:'v-book'};
-    const key=map[viewKey]?viewKey:'pay';
-    const targetId=map[key];
-    $$('.view').forEach(v=>v.classList.toggle('active',v.id===targetId));
-    $$('#stepper button').forEach(btn=>{
-      const isOn=btn.dataset.view===key;
-      btn.classList.toggle('on',isOn);
-      btn.setAttribute('aria-selected',String(isOn));
-    });
-    if(key==='book')initBooking();
-    window.scrollTo({top:0,behavior:'smooth'});
-  }
-
-  $$('#stepper button, [data-open-view]').forEach(el=>{
-    el.addEventListener('click',()=>{
-      const target=el.dataset.view||el.dataset.openView||'pay';
-      showView(target);
-    });
-  });
-
-  function persistLead(extra){
-    try{
-      const ts=new Date().toISOString(),L=state.lead||{};
-      const payload=Object.assign({first:L.fn||'',last:L.ln||'',email:L.em||'',phone:L.ph||'',organization:L.org||'',fn:L.fn||'',ln:L.ln||'',em:L.em||'',ph:L.ph||'',org:L.org||'',completedAt:ts},extra||{});
-      if(typeof sessionStorage!=='undefined'&&sessionStorage)sessionStorage.setItem('solThrive',JSON.stringify(payload));
-      if(typeof localStorage!=='undefined'&&localStorage){
-        localStorage.setItem('solThrive',JSON.stringify(payload));
-        if(L.fn)localStorage.setItem('solThriveLead',JSON.stringify(payload));
-      }
-    }catch(e){}
-  }
-
-  // Calendar (Booking Calendar embed)
-  function initBooking(){
-    const L=state.lead||{};
-    const fr=$('#qiNYlb85QHIu0foCh24A'),base='https://link.visioncontrol.io/widget/booking/qiNYlb85QHIu0foCh24A';
-    const q=new URLSearchParams({first_name:L.fn||'',last_name:L.ln||'',email:L.em||'',phone:L.ph||''});
-    if(!fr.dataset.loaded){fr.src=base+'?'+q;fr.dataset.loaded='1'}
-  }
-  $('#book-submit').onclick=()=>{
-    state.bookedCalendar=true;
-    $('#pay-when').textContent='Booked via Booking Calendar';
-    track('booking',{label:'Booking Calendar'});
-    showView('pay');
-  };
-
-  // Direct Stripe Checkout via Deferred Intent (loads Payment Element immediately without prerequisite gates)
-  let stripe,elements,stripeReady=false;
-  async function initStripe(){
-    if(stripeReady)return;
-    const err=$('#pay-err');
-    try{
-      const cfg=await (await fetch('/api/config')).json();
-      if(!cfg.publishableKey)throw new Error('Payments are not configured yet.');
-      if(typeof Stripe!=='function')throw new Error('Stripe checkout library is unavailable.');
-      stripe=Stripe(cfg.publishableKey);
-      elements=stripe.elements({
-        mode:'payment',
-        amount:50000,
-        currency:'usd',
-        appearance:{theme:'stripe',variables:{colorPrimary:'#B54840',colorText:'#1F1B16',colorBackground:'#FFFDF8',fontFamily:'Inter, sans-serif',borderRadius:'12px'}}
-      });
-      elements.create('payment',{
-        defaultValues:{
-          billingDetails:{
-            name:((state.lead.fn||'')+' '+(state.lead.ln||'')).trim()||undefined,
-            email:state.lead.em||undefined,
-            phone:state.lead.ph||undefined
-          }
+      // Hydrate lead fields if visitor previously entered contact info on this browser
+      try {
+        const saved = JSON.parse(sessionStorage.getItem('solThrive') || localStorage.getItem('solThriveLead') || localStorage.getItem('solThrive') || 'null');
+        if (saved && typeof saved === 'object') {
+          state.lead = {
+            fn: (saved.fn || saved.first || '').trim(),
+            ln: (saved.ln || saved.last || '').trim(),
+            org: (saved.org || saved.organization || '').trim(),
+            em: (saved.em || saved.email || '').trim(),
+            ph: (saved.ph || saved.phone || '').trim()
+          };
         }
-      }).mount('#payment-element');
-      stripeReady=true;$('#pay-btn').disabled=false;err.textContent='';
-    }catch(e){
-      if(err)err.textContent=e.message;
-    }
-  }
+      } catch (e) { }
 
-  $('#pay-form').addEventListener('submit',async e=>{
-    e.preventDefault();
-    const fn=$('#pay-fn').value.trim(), ln=$('#pay-ln').value.trim(), em=$('#pay-em').value.trim(), ph=$('#pay-ph').value.trim(), org=$('#pay-org').value.trim();
-    if(!fn||!ln||!em){$('#pay-err').textContent='Please enter your first name, last name, and email address.';return}
-    if(!/^\S+@\S+\.\S+$/.test(em)){$('#pay-err').textContent='Please enter a valid email address.';return}
-    state.lead={fn,ln,org:org||'Independent Practice',em,ph};
-    syncLeadInputs();
-    persistLead();
-    if(!stripeReady||!stripe||!elements){$('#pay-err').textContent='Secure payment form is still initializing. Please try again in a moment.';return}
-    const btn=$('#pay-btn');btn.disabled=true;btn.textContent='Processing…';$('#pay-err').textContent='';
-    try{
-      const {error:submitError}=await elements.submit();
-      if(submitError){$('#pay-err').textContent=submitError.message;btn.disabled=false;btn.textContent='Pay $500.00 & Enroll in Founding Pilot Lab';return}
-      const r=await fetch('/api/create-payment-intent',{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({
-          lead:state.lead,
-          booking:{calendar:state.bookedCalendar?'Booking Calendar':'Direct Enrollment',label:$('#pay-when').textContent}
-        })
-      });
-      const j=await r.json();
-      if(!j.clientSecret)throw new Error(j.error||'Could not start checkout.');
-      const {error}=await stripe.confirmPayment({
-        elements,
-        clientSecret:j.clientSecret,
-        redirect:'if_required',
-        confirmParams:{return_url:location.origin+location.pathname,receipt_email:state.lead.em}
-      });
-      if(error){$('#pay-err').textContent=error.message;btn.disabled=false;btn.textContent='Pay $500.00 & Enroll in Founding Pilot Lab';return}
-      track('checkout_complete',{direct:true});
-      $('#pay-grid').style.display='none';$('#success').style.display='block';$('#success').classList.add('col-swap');
-      $('#ok-msg').textContent='A confirmation is on its way to '+state.lead.em+'. You will receive your LearnWorlds classroom invite and Squad assignment for Session 0 Pre-Flight (Dec 5–6).';
-      window.scrollTo({top:0,behavior:'smooth'});
-    }catch(ex){
-      $('#pay-err').textContent=ex.message||'Payment processing failed.';
-      btn.disabled=false;btn.textContent='Pay $500.00 & Enroll in Founding Pilot Lab';
-    }
-  });
+      function syncLeadInputs() {
+        const L = state.lead || {};
+        if ($('#pay-fn') && L.fn) $('#pay-fn').value = L.fn;
+        if ($('#pay-ln') && L.ln) $('#pay-ln').value = L.ln;
+        if ($('#pay-org') && L.org) $('#pay-org').value = L.org;
+        if ($('#pay-em') && L.em) $('#pay-em').value = L.em;
+        if ($('#pay-ph') && L.ph) $('#pay-ph').value = L.ph;
+      }
+      if (state.lead && (state.lead.fn || state.lead.ln || state.lead.em || state.lead.org || state.lead.ph)) {
+        syncLeadInputs();
+      }
 
-  // Handle query/hash view selection & Stripe 3DS return status cleanly
-  const qs=new URLSearchParams((location&&location.search)||'');
-  const hashStr=(location&&location.hash)||'';
-  const reqView=(qs.get('view')==='book'||hashStr==='#book')?'book':'pay';
-  if(qs.get('redirect_status')==='succeeded'){
-    $('#pay-grid').style.display='none';$('#success').style.display='block';
-    $('#ok-msg').textContent='Your payment succeeded! Check your inbox for your LearnWorlds classroom invite and Squad assignment for Session 0 Pre-Flight (Dec 5–6).';
-  } else {
-    showView(reqView);
-    if(document.readyState==='complete'||typeof window.addEventListener!=='function'){initStripe()}else{window.addEventListener('load',initStripe)}
-  }
-})();
-</script>
-<script src="https://link.visioncontrol.io/js/form_embed.js" type="text/javascript"></script>
-<script src="https://js.stripe.com/v3/"></script>
+      function track(type, data) {
+        try { fetch('/api/event', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ type, data, lead: state.lead, ts: new Date().toISOString() }), keepalive: true }).catch(() => { }) } catch (e) { }
+      }
+
+      function showView(viewKey) {
+        const map = { pay: 'v-pay', book: 'v-book' };
+        const key = map[viewKey] ? viewKey : 'pay';
+        const targetId = map[key];
+        $$('.view').forEach(v => v.classList.toggle('active', v.id === targetId));
+        $$('#stepper button').forEach(btn => {
+          const isOn = btn.dataset.view === key;
+          btn.classList.toggle('on', isOn);
+          btn.setAttribute('aria-selected', String(isOn));
+        });
+        if (key === 'book') initBooking();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      $$('#stepper button, [data-open-view]').forEach(el => {
+        el.addEventListener('click', () => {
+          const target = el.dataset.view || el.dataset.openView || 'pay';
+          showView(target);
+        });
+      });
+
+      function persistLead(extra) {
+        try {
+          const ts = new Date().toISOString(), L = state.lead || {};
+          const payload = Object.assign({ first: L.fn || '', last: L.ln || '', email: L.em || '', phone: L.ph || '', organization: L.org || '', fn: L.fn || '', ln: L.ln || '', em: L.em || '', ph: L.ph || '', org: L.org || '', completedAt: ts }, extra || {});
+          if (typeof sessionStorage !== 'undefined' && sessionStorage) sessionStorage.setItem('solThrive', JSON.stringify(payload));
+          if (typeof localStorage !== 'undefined' && localStorage) {
+            localStorage.setItem('solThrive', JSON.stringify(payload));
+            if (L.fn) localStorage.setItem('solThriveLead', JSON.stringify(payload));
+          }
+        } catch (e) { }
+      }
+
+      // Calendar (Booking Calendar embed)
+      function initBooking() {
+        const L = state.lead || {};
+        const fr = $('#qiNYlb85QHIu0foCh24A'), base = 'https://link.visioncontrol.io/widget/booking/qiNYlb85QHIu0foCh24A';
+        const q = new URLSearchParams({ first_name: L.fn || '', last_name: L.ln || '', email: L.em || '', phone: L.ph || '' });
+        if (!fr.dataset.loaded) { fr.src = base + '?' + q; fr.dataset.loaded = '1' }
+      }
+      $('#book-submit').onclick = () => {
+        state.bookedCalendar = true;
+        $('#pay-when').textContent = 'Booked via Booking Calendar';
+        track('booking', { label: 'Booking Calendar' });
+        showView('pay');
+      };
+
+      // Direct Stripe Checkout via Deferred Intent (loads Payment Element immediately without prerequisite gates)
+      let stripe, elements, stripeReady = false;
+      async function initStripe() {
+        if (stripeReady) return;
+        const err = $('#pay-err');
+        try {
+          const cfg = await (await fetch('/api/config')).json();
+          if (!cfg.publishableKey) throw new Error('Payments are not configured yet.');
+          if (typeof Stripe !== 'function') throw new Error('Stripe checkout library is unavailable.');
+          stripe = Stripe(cfg.publishableKey);
+          elements = stripe.elements({
+            mode: 'payment',
+            amount: 50000,
+            currency: 'usd',
+            appearance: { theme: 'stripe', variables: { colorPrimary: '#B54840', colorText: '#1F1B16', colorBackground: '#FFFDF8', fontFamily: 'Inter, sans-serif', borderRadius: '12px' } }
+          });
+          elements.create('payment', {
+            defaultValues: {
+              billingDetails: {
+                name: ((state.lead.fn || '') + ' ' + (state.lead.ln || '')).trim() || undefined,
+                email: state.lead.em || undefined,
+                phone: state.lead.ph || undefined
+              }
+            }
+          }).mount('#payment-element');
+          stripeReady = true; $('#pay-btn').disabled = false; err.textContent = '';
+        } catch (e) {
+          if (err) err.textContent = e.message;
+        }
+      }
+
+      $('#pay-form').addEventListener('submit', async e => {
+        e.preventDefault();
+        const fn = $('#pay-fn').value.trim(), ln = $('#pay-ln').value.trim(), em = $('#pay-em').value.trim(), ph = $('#pay-ph').value.trim(), org = $('#pay-org').value.trim();
+        if (!fn || !ln || !em) { $('#pay-err').textContent = 'Please enter your first name, last name, and email address.'; return }
+        if (!/^\S+@\S+\.\S+$/.test(em)) { $('#pay-err').textContent = 'Please enter a valid email address.'; return }
+        state.lead = { fn, ln, org: org || 'Independent Practice', em, ph };
+        syncLeadInputs();
+        persistLead();
+        if (!stripeReady || !stripe || !elements) { $('#pay-err').textContent = 'Secure payment form is still initializing. Please try again in a moment.'; return }
+        const btn = $('#pay-btn'); btn.disabled = true; btn.textContent = 'Processing…'; $('#pay-err').textContent = '';
+        try {
+          const { error: submitError } = await elements.submit();
+          if (submitError) { $('#pay-err').textContent = submitError.message; btn.disabled = false; btn.textContent = 'Pay $500.00 & Enroll in Founding Pilot Lab'; return }
+          const r = await fetch('/api/create-payment-intent', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              lead: state.lead,
+              booking: { calendar: state.bookedCalendar ? 'Booking Calendar' : 'Direct Enrollment', label: $('#pay-when').textContent }
+            })
+          });
+          const j = await r.json();
+          if (!j.clientSecret) throw new Error(j.error || 'Could not start checkout.');
+          const { error } = await stripe.confirmPayment({
+            elements,
+            clientSecret: j.clientSecret,
+            redirect: 'if_required',
+            confirmParams: { return_url: location.origin + location.pathname, receipt_email: state.lead.em }
+          });
+          if (error) { $('#pay-err').textContent = error.message; btn.disabled = false; btn.textContent = 'Pay $500.00 & Enroll in Founding Pilot Lab'; return }
+          track('checkout_complete', { direct: true });
+          $('#pay-grid').style.display = 'none'; $('#success').style.display = 'block'; $('#success').classList.add('col-swap');
+          $('#ok-msg').textContent = 'A confirmation is on its way to ' + state.lead.em + '. You will receive your LearnWorlds classroom invite and Squad assignment for Session 0 Pre-Flight (Dec 5–6).';
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } catch (ex) {
+          $('#pay-err').textContent = ex.message || 'Payment processing failed.';
+          btn.disabled = false; btn.textContent = 'Pay $500.00 & Enroll in Founding Pilot Lab';
+        }
+      });
+
+      // Handle query/hash view selection & Stripe 3DS return status cleanly
+      const qs = new URLSearchParams((location && location.search) || '');
+      const hashStr = (location && location.hash) || '';
+      const reqView = (qs.get('view') === 'book' || hashStr === '#book') ? 'book' : 'pay';
+      if (qs.get('redirect_status') === 'succeeded') {
+        $('#pay-grid').style.display = 'none'; $('#success').style.display = 'block';
+        $('#ok-msg').textContent = 'Your payment succeeded! Check your inbox for your LearnWorlds classroom invite and Squad assignment for Session 0 Pre-Flight (Dec 5–6).';
+      } else {
+        showView(reqView);
+        if (document.readyState === 'complete' || typeof window.addEventListener !== 'function') { initStripe() } else { window.addEventListener('load', initStripe) }
+      }
+    })();
+  </script>
+  <script src="https://link.visioncontrol.io/js/form_embed.js" type="text/javascript"></script>
+  <script src="https://js.stripe.com/v3/"></script>
 </body>
+
 </html>
