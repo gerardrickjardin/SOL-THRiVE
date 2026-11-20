@@ -1400,13 +1400,13 @@ a {
     margin-right: auto;
 }
 
-.video-section .video-copy-above h2 {
+.video-section .video-copy-above h2.video-title-single {
     max-width: none;
     font-size: clamp(1.25rem, 2.45vw, 2.05rem);
 }
 
 @media (min-width: 641px) {
-    .video-section .video-copy-above h2 {
+    .video-section .video-copy-above h2.video-title-single {
         white-space: nowrap;
     }
 }
