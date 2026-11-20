@@ -371,7 +371,7 @@ const initThriveUI = () => {
 
             if (parsed.hash) {
                 let targetEl = null;
-                try { targetEl = document.querySelector(parsed.hash); } catch (_) {}
+                try { targetEl = document.querySelector(parsed.hash); } catch (_) { }
                 if (targetEl) {
                     e.preventDefault();
                     if (window.history && typeof window.history.pushState === 'function') {
@@ -400,36 +400,68 @@ const initThriveUI = () => {
     window.addEventListener('hashchange', () => updateActiveNavLinks());
     window.addEventListener('popstate', () => updateActiveNavLinks());
 
-    // Overview YouTube Video (Muted Autoplay + Click to Restart and Unmute)
-    const ytIframe = document.getElementById('overview-youtube-iframe');
-    const restartUnmuteBtn = document.getElementById('video-restart-unmute-btn');
-    if (ytIframe && restartUnmuteBtn) {
-        const YT_VIDEO_ID = 'LfzsKMef61A';
-        let ytPlayer = null;
-        let ytPlayerReady = false;
+    // Homepage YouTube Videos (Sizzle Autoplay Muted + Steve Overview + Restart/Unmute Controls)
+    const ytEntries = [
+        { iframeId: 'sizzle-youtube-iframe', btnId: 'sizzle-restart-unmute-btn', videoId: 'HlYRZZ1zpx0', autoplayMuted: true },
+        { iframeId: 'overview-youtube-iframe', btnId: 'video-restart-unmute-btn', videoId: 'LfzsKMef61A', autoplayMuted: false }
+    ].map(cfg => ({
+        ...cfg,
+        iframe: document.getElementById(cfg.iframeId),
+        btn: document.getElementById(cfg.btnId),
+        player: null,
+        ready: false
+    })).filter(entry => entry.iframe);
 
-        const initYouTubePlayer = () => {
-            if (ytPlayer || !window.YT || typeof window.YT.Player !== 'function') return;
-            ytPlayer = new window.YT.Player('overview-youtube-iframe', {
-                events: {
-                    onReady: (event) => {
-                        ytPlayerReady = true;
-                        try {
-                            event.target.mute();
-                            event.target.playVideo();
-                        } catch (_) {}
-                    }
+    if (ytEntries.length > 0) {
+        const pauseOtherYouTubePlayers = (activeEntry) => {
+            ytEntries.forEach(other => {
+                if (other === activeEntry) return;
+                if (other.player && other.ready && typeof other.player.pauseVideo === 'function') {
+                    try { other.player.pauseVideo(); } catch (_) { }
+                } else if (other.iframe && other.iframe.contentWindow) {
+                    try {
+                        other.iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'pauseVideo', args: [] }), '*');
+                    } catch (_) { }
                 }
             });
         };
 
+        const initYouTubePlayers = () => {
+            if (!window.YT || typeof window.YT.Player !== 'function') return;
+            ytEntries.forEach(entry => {
+                if (entry.player) return;
+                entry.player = new window.YT.Player(entry.iframeId, {
+                    events: {
+                        onReady: (event) => {
+                            entry.ready = true;
+                            if (entry.autoplayMuted) {
+                                try {
+                                    event.target.mute();
+                                    event.target.playVideo();
+                                } catch (_) { }
+                            }
+                        },
+                        onStateChange: (event) => {
+                            if (window.YT && window.YT.PlayerState && event.data === window.YT.PlayerState.PLAYING) {
+                                try {
+                                    if (typeof event.target.isMuted === 'function' && !event.target.isMuted()) {
+                                        pauseOtherYouTubePlayers(entry);
+                                    }
+                                } catch (_) { }
+                            }
+                        }
+                    }
+                });
+            });
+        };
+
         if (window.YT && typeof window.YT.Player === 'function') {
-            initYouTubePlayer();
+            initYouTubePlayers();
         } else {
             const prevReady = window.onYouTubeIframeAPIReady;
             window.onYouTubeIframeAPIReady = function () {
                 if (typeof prevReady === 'function') prevReady();
-                initYouTubePlayer();
+                initYouTubePlayers();
             };
             if (!document.querySelector('script[src="https://www.youtube.com/iframe_api"]')) {
                 const tag = document.createElement('script');
@@ -439,33 +471,73 @@ const initThriveUI = () => {
             }
         }
 
-        restartUnmuteBtn.addEventListener('click', () => {
-            fireThriveHaptic(15);
-            if (ytPlayer && ytPlayerReady && typeof ytPlayer.seekTo === 'function' && typeof ytPlayer.unMute === 'function') {
-                try {
-                    ytPlayer.unMute();
-                    if (typeof ytPlayer.setVolume === 'function') ytPlayer.setVolume(100);
-                    ytPlayer.seekTo(0, true);
-                    ytPlayer.playVideo();
-                    return;
-                } catch (_) {}
-            }
-
-            // Fallback when YT.Player API is still loading or blocked: reload embed at 0:00 unmuted inside user gesture
-            ytPlayer = null;
-            ytPlayerReady = false;
-            ytIframe.src = `https://www.youtube.com/embed/${YT_VIDEO_ID}?autoplay=1&mute=0&playsinline=1&rel=0&modestbranding=1&enablejsapi=1&_r=${Date.now()}`;
-            setTimeout(() => {
-                if (window.YT && typeof window.YT.Player === 'function') {
-                    initYouTubePlayer();
+        ytEntries.forEach(entry => {
+            if (!entry.btn) return;
+            entry.btn.addEventListener('click', () => {
+                fireThriveHaptic(15);
+                pauseOtherYouTubePlayers(entry);
+                if (entry.player && entry.ready && typeof entry.player.seekTo === 'function' && typeof entry.player.unMute === 'function') {
+                    try {
+                        entry.player.unMute();
+                        if (typeof entry.player.setVolume === 'function') entry.player.setVolume(100);
+                        entry.player.seekTo(0, true);
+                        entry.player.playVideo();
+                        return;
+                    } catch (_) { }
                 }
-            }, 600);
+
+                // Fallback when YT.Player API is still loading or blocked: reload embed at 0:00 unmuted inside user gesture
+                entry.player = null;
+                entry.ready = false;
+                entry.iframe.src = `https://www.youtube.com/embed/${entry.videoId}?autoplay=1&mute=0&playsinline=1&rel=0&modestbranding=1&enablejsapi=1&_r=${Date.now()}`;
+                setTimeout(() => {
+                    if (window.YT && typeof window.YT.Player === 'function') {
+                        initYouTubePlayers();
+                    }
+                }, 600);
+            });
+        });
+    }
+
+    // GoFundMe Share / Copy Link Button
+    const copyGfmBtn = document.getElementById('copy-gofundme-link-btn');
+    const copyGfmLabel = document.getElementById('copy-gofundme-label');
+    if (copyGfmBtn && copyGfmLabel) {
+        let copyResetTimer = null;
+        copyGfmBtn.addEventListener('click', async () => {
+            const urlToCopy = copyGfmBtn.getAttribute('data-copy-url') || 'https://gofund.me/91bfe6d29';
+            fireThriveHaptic(12);
+            let copied = false;
+            if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+                try {
+                    await navigator.clipboard.writeText(urlToCopy);
+                    copied = true;
+                } catch (_) { }
+            }
+            if (!copied) {
+                try {
+                    const tmp = document.createElement('textarea');
+                    tmp.value = urlToCopy;
+                    tmp.setAttribute('readonly', '');
+                    tmp.style.position = 'fixed';
+                    tmp.style.opacity = '0';
+                    document.body.appendChild(tmp);
+                    tmp.select();
+                    copied = document.execCommand('copy');
+                    document.body.removeChild(tmp);
+                } catch (_) { }
+            }
+            copyGfmLabel.textContent = copied ? 'Link Copied!' : urlToCopy;
+            if (copyResetTimer) clearTimeout(copyResetTimer);
+            copyResetTimer = setTimeout(() => {
+                copyGfmLabel.textContent = 'Copy Link';
+            }, 2200);
         });
     }
 
     const cancelPageSpeech = () => {
         if (window.speechSynthesis) {
-            try { window.speechSynthesis.cancel(); } catch (_) {}
+            try { window.speechSynthesis.cancel(); } catch (_) { }
         }
     };
     window.addEventListener('pagehide', cancelPageSpeech);
@@ -728,7 +800,7 @@ const initThriveUI = () => {
                             const sFmt = new Intl.DateTimeFormat('en-US', { timeZone: tzOpt, hour: 'numeric', minute: '2-digit' }).format(startObj);
                             const eFmt = new Intl.DateTimeFormat('en-US', { timeZone: tzOpt, hour: 'numeric', minute: '2-digit', timeZoneName: 'short' }).format(endObj);
                             lunchStr = `${sFmt} – ${eFmt} (30 min)`;
-                        } catch (_) {}
+                        } catch (_) { }
                     }
                     el.innerHTML = `&#128197; ${dateLabel} &bull; &#9200; ${lunchStr}`;
                 } else if (mode === 'lab') {
@@ -746,7 +818,7 @@ const initThriveUI = () => {
                             const sFmt = new Intl.DateTimeFormat('en-US', { timeZone: tzOpt, hour: 'numeric', minute: '2-digit' }).format(startObj);
                             const eFmt = new Intl.DateTimeFormat('en-US', { timeZone: tzOpt, hour: 'numeric', minute: '2-digit', timeZoneName: 'short' }).format(endObj);
                             labStr = `${sFmt} – ${eFmt} (90 min)`;
-                        } catch (_) {}
+                        } catch (_) { }
                     }
                     el.innerHTML = `&#128197; ${dateLabel} &bull; &#9200; ${labStr}`;
                 }
@@ -1019,7 +1091,7 @@ const initThriveUI = () => {
                             ts: new Date().toISOString()
                         }),
                         keepalive: true
-                    }).catch(() => {});
+                    }).catch(() => { });
 
                     if (statusEl) {
                         statusEl.textContent = `✓ Seat reserved for ${fn} (${practiceType})! Your calendar invite (.ics) has been downloaded and confirmation logged for ${em}.`;
@@ -1088,7 +1160,7 @@ const initThriveUI = () => {
             try {
                 await navigator.clipboard.writeText(text);
                 return true;
-            } catch (_) {}
+            } catch (_) { }
         }
         try {
             const textarea = document.createElement('textarea');
@@ -1142,7 +1214,7 @@ const initThriveUI = () => {
             if (typeof localStorage !== 'undefined' && localStorage) {
                 return localStorage.getItem(key);
             }
-        } catch (_) {}
+        } catch (_) { }
         return null;
     };
 

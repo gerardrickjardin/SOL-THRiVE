@@ -1437,6 +1437,17 @@ a {
     margin: 0 auto;
 }
 
+.video-feature-block {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.video-feature-overview {
+    margin-top: clamp(2.5rem, 4.5vw, 3.5rem);
+    padding-top: clamp(2.25rem, 4vw, 3.25rem);
+    border-top: 1px solid rgba(31, 27, 22, 0.1);
+}
+
 .video-embed-card {
     width: 100%;
     max-width: 820px;
@@ -1513,6 +1524,11 @@ a {
 }
 
 @media (max-width: 640px) {
+    .video-feature-overview {
+        margin-top: 2rem;
+        padding-top: 2rem;
+    }
+
     .video-embed-card {
         border-radius: 16px;
         margin-top: 0;

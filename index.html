@@ -155,37 +155,71 @@
             </div>
         </section>
 
-        <!-- Primary 2-Minute Overview Video Section (Second Section — Video Peeks Up First, Copy Below) -->
+        <!-- Video Sequence Section (Jason McBride Sizzle First, Followed by Steve's Overview) -->
         <section id="video-section" class="video-section">
             <div id="practitioner-media" class="video-container">
-                <!-- Embedded Autoplaying Muted YouTube Overview Video -->
-                <div class="video-embed-card" id="video-player-card">
-                    <iframe
-                        id="overview-youtube-iframe"
-                        class="video-youtube-iframe"
-                        src="https://www.youtube.com/embed/LfzsKMef61A?autoplay=1&amp;mute=1&amp;playsinline=1&amp;loop=1&amp;playlist=LfzsKMef61A&amp;rel=0&amp;modestbranding=1&amp;enablejsapi=1"
-                        title="Why Clients Stall Between Tuesday and Next Week: And How We Fix It — 2-Minute Overview"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        referrerpolicy="strict-origin-when-cross-origin"
-                        allowfullscreen>
-                    </iframe>
+                <!-- Video 1: Jason McBride Sizzle Video (Directly Below Hero) -->
+                <div class="video-feature-block video-feature-sizzle" id="sizzle-video-block">
+                    <div class="video-embed-card" id="sizzle-player-card">
+                        <iframe
+                            id="sizzle-youtube-iframe"
+                            class="video-youtube-iframe"
+                            src="https://www.youtube.com/embed/HlYRZZ1zpx0?autoplay=1&amp;mute=1&amp;playsinline=1&amp;loop=1&amp;playlist=HlYRZZ1zpx0&amp;rel=0&amp;modestbranding=1&amp;enablejsapi=1"
+                            title="The THRiVE Method Sizzle with Jason McBride"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin"
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+
+                    <div class="video-restart-actions">
+                        <button type="button" class="video-restart-unmute-btn" id="sizzle-restart-unmute-btn" data-yt-target="sizzle-youtube-iframe" data-yt-id="HlYRZZ1zpx0">
+                            <svg class="video-restart-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                                <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                            </svg>
+                            <span>Click to Restart and Unmute</span>
+                        </button>
+                    </div>
+
+                    <div class="video-copy-below">
+                        <span class="section-eyebrow video-overview-eyebrow">INTRODUCTION &middot; JASON MCBRIDE</span>
+                        <h2>The THRiVE Method <span class="hero-mark hero-mark-yellow">With Jason McBride</span></h2>
+                        <p class="section-lead">Start with Jason McBride&rsquo;s introduction to the movement, then watch Steve walk through how the class works below.</p>
+                    </div>
                 </div>
 
-                <div class="video-restart-actions">
-                    <button type="button" class="video-restart-unmute-btn" id="video-restart-unmute-btn">
-                        <svg class="video-restart-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-                            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-                            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
-                        </svg>
-                        <span>Click to Restart and Unmute</span>
-                    </button>
-                </div>
+                <!-- Video 2: Existing 2-Minute Overview Video Featuring Steve -->
+                <div class="video-feature-block video-feature-overview" id="overview-video-block">
+                    <div class="video-embed-card" id="video-player-card">
+                        <iframe
+                            id="overview-youtube-iframe"
+                            class="video-youtube-iframe"
+                            src="https://www.youtube.com/embed/LfzsKMef61A?rel=0&amp;modestbranding=1&amp;playsinline=1&amp;enablejsapi=1"
+                            title="Why Clients Stall Between Tuesday and Next Week: And How We Fix It — 2-Minute Overview"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin"
+                            allowfullscreen>
+                        </iframe>
+                    </div>
 
-                <div class="video-copy-below">
-                    <span class="section-eyebrow video-overview-eyebrow">THE 2-MINUTE OVERVIEW</span>
-                    <h2>Why Clients Stall Between Tuesday and Next Week: <span class="hero-mark hero-mark-red">And How We Fix It</span></h2>
-                    <p class="section-lead">Watch how solo practitioners and case managers use <strong>Personos AI</strong> to bridge the 167-hour gap between sessions.</p>
+                    <div class="video-restart-actions">
+                        <button type="button" class="video-restart-unmute-btn" id="video-restart-unmute-btn" data-yt-target="overview-youtube-iframe" data-yt-id="LfzsKMef61A">
+                            <svg class="video-restart-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                                <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                            </svg>
+                            <span>Click to Restart and Unmute</span>
+                        </button>
+                    </div>
+
+                    <div class="video-copy-below">
+                        <span class="section-eyebrow video-overview-eyebrow">THE 2-MINUTE OVERVIEW &middot; STEVE HUFF</span>
+                        <h2>Why Clients Stall Between Tuesday and Next Week: <span class="hero-mark hero-mark-red">And How We Fix It</span></h2>
+                        <p class="section-lead">Watch how solo practitioners and case managers use <strong>Personos AI</strong> to bridge the 167-hour gap between sessions.</p>
+                    </div>
                 </div>
             </div>
         </section>
