@@ -952,7 +952,7 @@ a {
 }
 
 .hero.hero-full-screen.hero-coach-canvas {
-    background-color: #F4D899;
+    background-color: #F6D795;
 }
 
 .hero-coach-canvas .hero-eyebrow-mobile {
@@ -990,12 +990,12 @@ a {
 }
 
 .hero-coach-canvas .hero-drawing-wrap {
-    inset: -12px 0 -1px 0;
+    inset: -8px 0 0 0;
 }
 
 .hero-coach-canvas .hero-drawing-img {
-    width: min(100%, calc((100vh - var(--header-height) - var(--hero-peek) + 13px) * 1.7917));
-    width: min(100%, calc((100svh - var(--header-height) - var(--hero-peek) + 13px) * 1.7917));
+    width: min(100%, calc((100vh - var(--header-height) - var(--hero-peek) + 8px) * 1.7917));
+    width: min(100%, calc((100svh - var(--header-height) - var(--hero-peek) + 8px) * 1.7917));
     transform: none;
     -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 3.2%, #000 96.8%, transparent 100%);
     mask-image: linear-gradient(to right, transparent 0%, #000 3.2%, #000 96.8%, transparent 100%);
