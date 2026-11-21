@@ -1,5 +1,14 @@
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
+
+const shortFileHash = (filePath) => {
+  if (!fs.existsSync(filePath)) return '1';
+  return crypto.createHash('sha256').update(fs.readFileSync(filePath)).digest('hex').slice(0, 8);
+};
+
+const cssHash = shortFileHash(path.join(__dirname, 'style.css'));
+const jsHash = shortFileHash(path.join(__dirname, 'script.js'));
 
 // Archival design files kept in the repo but never referenced by any page.
 // They are skipped during the build (and any stale copies are removed from the output).
@@ -94,6 +103,16 @@ const removeIfExists = (filePath) => {
       content = content.replace(/%VITE_GEMINI_API_KEY%/g, geminiToken);
       fs.writeFileSync(filePath, content);
     }
+  });
+
+  // Stamp content-hash cache busters on style.css and script.js across all built HTML pages
+  // so mobile browsers and in-app webviews never serve stale CSS/JS after deployments.
+  fs.readdirSync(outDir).filter(f => f.endsWith('.html')).forEach(htmlFile => {
+    const htmlPath = path.join(outDir, htmlFile);
+    let html = fs.readFileSync(htmlPath, 'utf8');
+    html = html.replace(/href="style\.css(?:\?v=[^"]*)?"/g, `href="style.css?v=${cssHash}"`);
+    html = html.replace(/src="script\.js(?:\?v=[^"]*)?"/g, `src="script.js?v=${jsHash}"`);
+    fs.writeFileSync(htmlPath, html);
   });
 });
 

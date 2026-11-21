@@ -814,38 +814,7 @@
         </div>
     </footer>
 
+    <script src="https://www.youtube.com/iframe_api" async></script>
     <script src="script.js" defer></script>
-    <script>
-        (function () {
-            var btn = document.getElementById('copy-gofundme-link-btn');
-            var label = document.getElementById('copy-gofundme-label');
-            if (!btn || !label) return;
-            var resetTimer = null;
-            btn.addEventListener('click', function () {
-                var url = btn.getAttribute('data-copy-url') || 'https://gofund.me/91bfe6d29';
-                var copied = false;
-                try {
-                    var tmp = document.createElement('textarea');
-                    tmp.value = url;
-                    tmp.setAttribute('readonly', '');
-                    tmp.style.position = 'fixed';
-                    tmp.style.opacity = '0';
-                    document.body.appendChild(tmp);
-                    tmp.select();
-                    copied = Boolean(document.execCommand('copy'));
-                    document.body.removeChild(tmp);
-                } catch (_) {}
-                if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
-                    navigator.clipboard.writeText(url).catch(function () {});
-                    copied = true;
-                }
-                label.textContent = copied ? 'Link Copied!' : url;
-                if (resetTimer) clearTimeout(resetTimer);
-                resetTimer = setTimeout(function () {
-                    label.textContent = 'Copy Link';
-                }, 2200);
-            });
-        })();
-    </script>
 </body>
 </html>
