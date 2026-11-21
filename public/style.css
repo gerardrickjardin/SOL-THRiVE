@@ -1001,8 +1001,8 @@ a {
     mask-image: linear-gradient(to right, transparent 0%, #000 3.2%, #000 96.8%, transparent 100%);
 }
 
-.hero-mobile-visuals {
-    display: none;
+.hero-drawing-picture {
+    display: contents;
 }
 
 .hero-br-desktop {
@@ -1210,77 +1210,16 @@ a {
     }
 
     .hero-coach-canvas .hero-drawing-wrap {
-        display: none;
-    }
-
-    .hero-mobile-visuals {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
         width: 100%;
-        padding: 0 0 0.85rem;
-        margin-top: 0.25rem;
-        pointer-events: none;
-    }
-
-    .hero-mobile-sides {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-end;
-        width: 100%;
-        gap: 0.75rem;
-    }
-
-    .hero-crop-frame {
-        position: relative;
-        overflow: hidden;
-        flex-shrink: 0;
-    }
-
-    .hero-crop-frame img {
-        position: absolute;
         max-width: none;
-        display: block;
-        user-select: none;
-        pointer-events: none;
+        margin: -1.15rem auto 0;
+        padding: 0;
     }
 
-    .hero-crop-before {
-        width: 43%;
-        aspect-ratio: 1624 / 2089;
-    }
-
-    .hero-crop-before img {
-        width: 338.98%;
-        height: 147.06%;
-        left: -10.51%;
-        top: -34.12%;
-    }
-
-    .hero-crop-after {
-        width: 43%;
-        aspect-ratio: 1624 / 2009;
-    }
-
-    .hero-crop-after img {
-        width: 338.98%;
-        height: 152.91%;
-        left: -233.22%;
-        top: -42.20%;
-    }
-
-    .hero-crop-phone {
-        width: 34%;
-        max-width: 132px;
-        aspect-ratio: 826 / 1487;
-        margin-top: -1.35rem;
-    }
-
-    .hero-crop-phone img {
-        width: 666.67%;
-        height: 206.61%;
-        left: -288.00%;
-        top: -72.31%;
+    .hero-coach-canvas .hero-drawing-img {
+        width: 100%;
+        max-width: 100%;
+        margin-left: 0;
     }
 
     .hero-drawing-wrap {
