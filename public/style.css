@@ -990,12 +990,12 @@ a {
 }
 
 .hero-coach-canvas .hero-drawing-wrap {
-    inset: -78px 0 -4px 0;
+    inset: -84px 0 -4px 0;
 }
 
 .hero-coach-canvas .hero-drawing-img {
-    width: min(103%, calc((100vh - var(--header-height) - var(--hero-peek) + 84px) * 1.7917));
-    width: min(103%, calc((100svh - var(--header-height) - var(--hero-peek) + 84px) * 1.7917));
+    width: min(105%, calc((100vh - var(--header-height) - var(--hero-peek) + 90px) * 1.7917));
+    width: min(105%, calc((100svh - var(--header-height) - var(--hero-peek) + 90px) * 1.7917));
     transform: none;
     -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 3.2%, #000 96.8%, transparent 100%);
     mask-image: linear-gradient(to right, transparent 0%, #000 3.2%, #000 96.8%, transparent 100%);
@@ -1218,8 +1218,8 @@ a {
         flex-direction: column;
         align-items: center;
         width: 100%;
-        padding: 0 0.2rem 1rem;
-        margin-top: 0.35rem;
+        padding: 0 0 0.85rem;
+        margin-top: 0.25rem;
         pointer-events: none;
     }
 
@@ -1228,7 +1228,7 @@ a {
         justify-content: space-between;
         align-items: flex-end;
         width: 100%;
-        gap: 0.35rem;
+        gap: 0.75rem;
     }
 
     .hero-crop-frame {
@@ -1246,41 +1246,41 @@ a {
     }
 
     .hero-crop-before {
-        width: 48%;
-        aspect-ratio: 1695 / 2089;
+        width: 43%;
+        aspect-ratio: 1624 / 2089;
     }
 
     .hero-crop-before img {
-        width: 324.68%;
+        width: 338.98%;
         height: 147.06%;
-        left: -7.14%;
+        left: -10.51%;
         top: -34.12%;
     }
 
     .hero-crop-after {
-        width: 48%;
-        aspect-ratio: 1684 / 2009;
+        width: 43%;
+        aspect-ratio: 1624 / 2009;
     }
 
     .hero-crop-after img {
-        width: 326.80%;
+        width: 338.98%;
         height: 152.91%;
-        left: -222.88%;
+        left: -233.22%;
         top: -42.20%;
     }
 
     .hero-crop-phone {
         width: 34%;
-        max-width: 134px;
-        aspect-ratio: 826 / 1499;
-        margin-top: -0.25rem;
+        max-width: 132px;
+        aspect-ratio: 826 / 1487;
+        margin-top: -1.35rem;
     }
 
     .hero-crop-phone img {
         width: 666.67%;
-        height: 204.92%;
+        height: 206.61%;
         left: -288.00%;
-        top: -95.90%;
+        top: -72.31%;
     }
 
     .hero-drawing-wrap {
