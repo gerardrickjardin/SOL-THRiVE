@@ -1174,64 +1174,74 @@ a {
 
 @media (max-width: 640px) {
     .hero.hero-full-screen {
-        padding: 1.25rem 0 0.65rem;
+        padding: 0.55rem 0 0.35rem;
     }
 
     .hero.hero-full-screen.hero-coach-canvas {
-        padding: 1.25rem 0 0;
+        padding: 0.45rem 0 0;
     }
 
     .hero-content {
-        padding: 0 1.25rem;
+        padding: 0 0.85rem;
     }
 
     .hero-eyebrow {
         display: inline-block;
         max-width: 315px;
-        font-size: 0.62rem;
-        letter-spacing: 0.04em;
-        line-height: 1.4;
-        padding: 0.36rem 0.82rem;
+        font-size: 0.56rem;
+        letter-spacing: 0.035em;
+        line-height: 1.28;
+        padding: 0.24rem 0.65rem;
         border-radius: 12px;
-        margin-bottom: 0.72rem;
+        margin-bottom: 0.34rem;
         text-wrap: balance;
+    }
+
+    .hero-br-desktop.hero-br-mobile {
+        display: inline;
+    }
+
+    .hero-m-l1,
+    .hero-m-l2 {
+        display: inline-block;
+        white-space: nowrap;
     }
 
     .hero h1,
     .hero h1.practitioner-hero-title {
-        font-size: clamp(1.48rem, 6.3vw, 1.86rem);
+        font-size: clamp(1.2rem, 5vw, 1.44rem);
         font-weight: 900;
-        line-height: 1.15;
+        line-height: 1.1;
         letter-spacing: -0.02em;
-        margin-bottom: 0.72rem;
+        margin-bottom: 0.3rem;
         text-wrap: balance;
     }
 
     .hero p,
     .hero-coach-canvas p {
-        font-size: 0.89rem;
-        line-height: 1.56;
-        max-width: 38ch;
-        margin: 0 auto 1rem;
+        font-size: clamp(0.69rem, 2.86vw, 0.74rem);
+        line-height: 1.3;
+        max-width: 100%;
+        margin: 0 auto 0.38rem;
         color: #2B251E;
-        text-wrap: pretty;
+        text-wrap: wrap;
     }
 
     .hero-cta-stack {
-        gap: 0.52rem;
+        gap: 0.16rem;
         width: 100%;
     }
 
     .cta-button.hero-primary-cta {
         width: 100%;
         max-width: 340px;
-        padding: 0.8rem 1.15rem;
-        font-size: 0.92rem;
+        padding: 0.48rem 0.9rem;
+        font-size: 0.82rem;
     }
 
     .hero-secondary-link {
-        font-size: clamp(0.73rem, 3.4vw, 0.82rem);
-        line-height: 1.4;
+        font-size: clamp(0.7rem, 3.15vw, 0.77rem);
+        line-height: 1.24;
         white-space: nowrap;
     }
 
@@ -1267,8 +1277,8 @@ a {
     .hero-mobile-slideshow {
         display: block;
         width: 100%;
-        margin: 0.7rem auto 0;
-        padding-bottom: 0.72rem;
+        margin: 0.26rem auto 0;
+        padding-bottom: 0.34rem;
         position: relative;
         z-index: 2;
     }
@@ -1291,7 +1301,7 @@ a {
         flex: 0 0 100%;
         width: 100%;
         margin: 0;
-        padding: 0 0.45rem;
+        padding: 0 0.3rem;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -1301,26 +1311,26 @@ a {
 
     .hero-slide-heading {
         font-family: 'Caveat', 'Bradley Hand', 'Chalkboard SE', cursive;
-        font-size: clamp(1.9rem, 7.6vw, 2.35rem);
+        font-size: clamp(1.3rem, 5.4vw, 1.54rem);
         font-weight: 700;
-        line-height: 1.05;
+        line-height: 1;
         letter-spacing: 0.01em;
         color: #1F1B16;
         text-align: center;
-        margin: 0 0 0.3rem;
+        margin: 0 0 0.08rem;
         user-select: none;
     }
 
     .hero-slide-media {
         width: 100%;
-        height: clamp(335px, 50svh, 425px);
+        height: clamp(176px, 24.5svh, 212px);
         display: flex;
         align-items: center;
         justify-content: center;
     }
 
     .hero-slide-media--solution {
-        height: calc(clamp(335px, 50svh, 425px) + 2.35rem);
+        height: calc(clamp(176px, 24.5svh, 212px) + 1.55rem);
     }
 
     .hero-slide-img {
@@ -1341,8 +1351,8 @@ a {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 0.72rem;
-        margin-top: 0.4rem;
+        gap: 0.65rem;
+        margin-top: 0.2rem;
     }
 
     .hero-slide-arrow {
