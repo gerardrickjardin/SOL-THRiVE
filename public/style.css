@@ -7070,3 +7070,41 @@ button.resume-btn-secondary:hover,
     background-color: #F3DFAF !important;
     color: #1F1B16 !important;
 }
+
+/* Bot Shield & Anti-Spam Form Protection */
+.hp-field-wrap {
+    position: absolute !important;
+    left: -9999px !important;
+    top: -9999px !important;
+    width: 1px !important;
+    height: 1px !important;
+    opacity: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+}
+
+.bot-shield-slot {
+    margin: 0.65rem 0 0.85rem;
+}
+
+.bot-shield-note {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.42rem;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: #5C5349;
+    line-height: 1.3;
+}
+
+.bot-shield-note svg {
+    color: #4D6278;
+    flex-shrink: 0;
+}
+
+.turnstile-widget-host {
+    display: flex;
+    justify-content: center;
+    min-height: 65px;
+}

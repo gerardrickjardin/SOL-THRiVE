@@ -1051,6 +1051,9 @@ const initThriveUI = () => {
                 }
 
                 try {
+                    const _shield = window.ThriveBotShield
+                        ? await window.ThriveBotShield.prepareSubmission(form)
+                        : undefined;
                     const res = await fetch('/api/event', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -1069,6 +1072,7 @@ const initThriveUI = () => {
                                 ph,
                                 org: ''
                             },
+                            _shield,
                             ts: new Date().toISOString()
                         })
                     });
@@ -1080,16 +1084,24 @@ const initThriveUI = () => {
                             statusEl.style.display = 'block';
                         }
                         form.reset();
+                        window.ThriveBotShield?.resetForm(form);
                         fireThriveHaptic([20, 50, 20]);
                     } else {
-                        throw new Error('Server returned error status ' + res.status);
+                        const errPayload = await res.json().catch(() => null);
+                        throw new Error((errPayload && errPayload.error) || ('Server returned error status ' + res.status));
                     }
                 } catch (err) {
                     if (statusEl) {
-                        statusEl.innerHTML = 'Unable to send online right now. Please email us directly at <a href="mailto:team@thrivecoaching.ai">team@thrivecoaching.ai</a> or call <a href="tel:7205882002">(720) 588-2002</a>.';
+                        const msgLower = String(err && err.message || '');
+                        if (/spam|bot|security|verification|origin|too many requests|review your information/i.test(msgLower)) {
+                            statusEl.textContent = msgLower;
+                        } else {
+                            statusEl.innerHTML = 'Unable to send online right now. Please email us directly at <a href="mailto:team@thrivecoaching.ai">team@thrivecoaching.ai</a> or call <a href="tel:7205882002">(720) 588-2002</a>.';
+                        }
                         statusEl.className = 'form-status-msg error';
                         statusEl.style.display = 'block';
                     }
+                    window.ThriveBotShield?.resetForm(form);
                 } finally {
                     if (submitBtn) {
                         submitBtn.disabled = false;
@@ -1201,7 +1213,10 @@ const initThriveUI = () => {
                 }
 
                 try {
-                    await fetch('/api/event', {
+                    const _shield = window.ThriveBotShield
+                        ? await window.ThriveBotShield.prepareSubmission(llForm)
+                        : undefined;
+                    const res = await fetch('/api/event', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
@@ -1218,10 +1233,22 @@ const initThriveUI = () => {
                                 ph: '',
                                 org: practiceType
                             },
+                            _shield,
                             ts: new Date().toISOString()
                         }),
                         keepalive: true
-                    }).catch(() => { });
+                    }).catch(() => null);
+
+                    if (res && [400, 403, 429].includes(res.status)) {
+                        const errJson = await res.json().catch(() => null);
+                        if (statusEl) {
+                            statusEl.textContent = (errJson && errJson.error) || 'Submission blocked by security verification. Please try again.';
+                            statusEl.className = 'form-status-msg error';
+                            statusEl.style.display = 'block';
+                        }
+                        window.ThriveBotShield?.resetForm(llForm);
+                        return;
+                    }
 
                     if (statusEl) {
                         statusEl.textContent = `✓ Seat reserved for ${fn} (${practiceType})! Your calendar invite (.ics) has been downloaded and confirmation logged for ${em}.`;
@@ -1231,7 +1258,14 @@ const initThriveUI = () => {
                     if (calActionsEl) {
                         calActionsEl.style.display = 'block';
                     }
+                    window.ThriveBotShield?.resetForm(llForm);
                     downloadLunchAndLearnIcs();
+                } catch (shieldErr) {
+                    if (statusEl) {
+                        statusEl.textContent = (shieldErr && shieldErr.message) || 'Please complete verification and try again.';
+                        statusEl.className = 'form-status-msg error';
+                        statusEl.style.display = 'block';
+                    }
                 } finally {
                     if (submitBtn) {
                         submitBtn.disabled = false;

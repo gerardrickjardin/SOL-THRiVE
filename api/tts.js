@@ -1,3 +1,5 @@
+const { verifyRequest } = require('./_bot-shield');
+
 const REVOKED_KEYS = new Set([
   "AIzaSyDhByu-gVi8PNLtDdl41ETxOmu2JOEVt8A",
   "sk_d2fc2ac281afdb8a56178f44c8ebca76f21da62f7a256bf8"
@@ -33,6 +35,14 @@ module.exports = async function handler(req, res) {
     res.status(405).json({ error: "Method Not Allowed" });
     return;
   }
+
+  const guard = await verifyRequest(req, res, {
+    bucket: "tts",
+    maxRequests: 40,
+    windowMs: 10 * 60 * 1000,
+    requireFormShield: false
+  });
+  if (!guard.ok) return;
 
   let body = req.body;
   if (typeof body === "string") {

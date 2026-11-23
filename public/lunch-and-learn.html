@@ -38,7 +38,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Poppins:wght@400;500;600;700&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=11933a15">
+    <link rel="stylesheet" href="style.css?v=2a81995b">
 </head>
 
 <body class="subpage-body">
@@ -214,7 +214,7 @@
                         <p class="form-card-sub">Enter your details below to receive your instant Google/Outlook
                             calendar invite and priority access to the 21-seat December 7 Founding Pilot Lab.</p>
 
-                        <form id="lunch-learn-form" class="lunch-form" novalidate>
+                        <form id="lunch-learn-form" class="lunch-form" data-bot-protect="true" novalidate>
                             <div class="form-group">
                                 <label for="ll-first-name">First Name *</label>
                                 <input type="text" id="ll-first-name" name="first_name" autocomplete="given-name"
@@ -237,6 +237,8 @@
                                     </option>
                                 </select>
                             </div>
+
+                            <div class="bot-shield-slot"></div>
 
                             <button type="submit" class="cta-button primary btn-block" id="ll-submit-btn">
                                 Register &amp; Download Calendar Invite &rarr;
@@ -299,7 +301,8 @@
         </div>
     </footer>
 
-    <script src="script.js?v=c266683a" defer></script>
+    <script src="bot-shield.js?v=6373a65f" defer></script>
+    <script src="script.js?v=8a062add" defer></script>
 </body>
 
 </html>

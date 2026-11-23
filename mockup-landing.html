@@ -38,6 +38,7 @@
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Nunito:wght@700;800;900&family=Plus+Jakarta+Sans:wght@800&family=Poppins:wght@400;500;600;700&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <script src="bot-shield.js" defer></script>
   <script src="script.js" defer></script>
   <style>
     :root {
@@ -599,7 +600,7 @@
           </div>
         </div>
 
-        <form class="card" id="pay-form" novalidate>
+        <form class="card" id="pay-form" data-bot-protect="true" novalidate>
           <h2>Secure Enrollment Checkout</h2>
           <p class="sub">Enter your details and complete payment via Stripe to reserve your seat immediately.</p>
           <div class="row2">
@@ -617,6 +618,7 @@
           <div class="field"><label for="pay-org">Organization / Practice (Optional)</label><input id="pay-org"
               autocomplete="organization"></div>
           <div id="payment-element" style="margin:10px 0 18px;min-height:110px"></div>
+          <div class="bot-shield-slot"></div>
           <button class="btn btn-primary btn-block" id="pay-btn" type="submit" disabled>Pay $500.00 &amp; Enroll in
             Founding Pilot Lab</button>
           <div class="err" id="pay-err" role="alert"></div>
@@ -717,7 +719,10 @@
       }
 
       function track(type, data) {
-        try { fetch('/api/event', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ type, data, lead: state.lead, ts: new Date().toISOString() }), keepalive: true }).catch(() => { }) } catch (e) { }
+        try {
+          const _shield = window.ThriveBotShield ? window.ThriveBotShield.getPassivePayload($('#pay-form')) : undefined;
+          fetch('/api/event', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ type, data, lead: state.lead, _shield, ts: new Date().toISOString() }), keepalive: true }).catch(() => { });
+        } catch (e) { }
       }
 
       function showView(viewKey) {
@@ -773,7 +778,7 @@
         if (stripeReady) return;
         const err = $('#pay-err');
         try {
-          const cfg = await (await fetch('/api/config')).json();
+          const cfg = window.ThriveBotShield ? await window.ThriveBotShield.getConfig() : await (await fetch('/api/config')).json();
           if (!cfg.publishableKey) throw new Error('Payments are not configured yet.');
           if (typeof Stripe !== 'function') throw new Error('Stripe checkout library is unavailable.');
           stripe = Stripe(cfg.publishableKey);
@@ -809,14 +814,16 @@
         if (!stripeReady || !stripe || !elements) { $('#pay-err').textContent = 'Secure payment form is still initializing. Please try again in a moment.'; return }
         const btn = $('#pay-btn'); btn.disabled = true; btn.textContent = 'Processing…'; $('#pay-err').textContent = '';
         try {
+          const _shield = window.ThriveBotShield ? await window.ThriveBotShield.prepareSubmission($('#pay-form')) : undefined;
           const { error: submitError } = await elements.submit();
-          if (submitError) { $('#pay-err').textContent = submitError.message; btn.disabled = false; btn.textContent = 'Pay $500.00 & Enroll in Founding Pilot Lab'; return }
+          if (submitError) { $('#pay-err').textContent = submitError.message; btn.disabled = false; btn.textContent = 'Pay $500.00 & Enroll in Founding Pilot Lab'; window.ThriveBotShield?.resetForm($('#pay-form')); return }
           const r = await fetch('/api/create-payment-intent', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               lead: state.lead,
-              booking: { calendar: state.bookedCalendar ? 'Booking Calendar' : 'Direct Enrollment', label: $('#pay-when').textContent }
+              booking: { calendar: state.bookedCalendar ? 'Booking Calendar' : 'Direct Enrollment', label: $('#pay-when').textContent },
+              _shield
             })
           });
           const j = await r.json();
@@ -827,14 +834,16 @@
             redirect: 'if_required',
             confirmParams: { return_url: location.origin + location.pathname, receipt_email: state.lead.em }
           });
-          if (error) { $('#pay-err').textContent = error.message; btn.disabled = false; btn.textContent = 'Pay $500.00 & Enroll in Founding Pilot Lab'; return }
+          if (error) { $('#pay-err').textContent = error.message; btn.disabled = false; btn.textContent = 'Pay $500.00 & Enroll in Founding Pilot Lab'; window.ThriveBotShield?.resetForm($('#pay-form')); return }
           track('checkout_complete', { direct: true });
+          window.ThriveBotShield?.resetForm($('#pay-form'));
           $('#pay-grid').style.display = 'none'; $('#success').style.display = 'block'; $('#success').classList.add('col-swap');
           $('#ok-msg').textContent = 'A confirmation is on its way to ' + state.lead.em + '. You will receive your LearnWorlds classroom invite and Squad assignment for Session 0 Pre-Flight (Dec 5–6).';
           window.scrollTo({ top: 0, behavior: 'smooth' });
         } catch (ex) {
           $('#pay-err').textContent = ex.message || 'Payment processing failed.';
           btn.disabled = false; btn.textContent = 'Pay $500.00 & Enroll in Founding Pilot Lab';
+          window.ThriveBotShield?.resetForm($('#pay-form'));
         }
       });
 

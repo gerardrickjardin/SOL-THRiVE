@@ -214,7 +214,7 @@
                         <p class="form-card-sub">Enter your details below to receive your instant Google/Outlook
                             calendar invite and priority access to the 21-seat December 7 Founding Pilot Lab.</p>
 
-                        <form id="lunch-learn-form" class="lunch-form" novalidate>
+                        <form id="lunch-learn-form" class="lunch-form" data-bot-protect="true" novalidate>
                             <div class="form-group">
                                 <label for="ll-first-name">First Name *</label>
                                 <input type="text" id="ll-first-name" name="first_name" autocomplete="given-name"
@@ -237,6 +237,8 @@
                                     </option>
                                 </select>
                             </div>
+
+                            <div class="bot-shield-slot"></div>
 
                             <button type="submit" class="cta-button primary btn-block" id="ll-submit-btn">
                                 Register &amp; Download Calendar Invite &rarr;
@@ -299,6 +301,7 @@
         </div>
     </footer>
 
+    <script src="bot-shield.js" defer></script>
     <script src="script.js" defer></script>
 </body>
 

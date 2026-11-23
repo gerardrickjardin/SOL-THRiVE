@@ -29,7 +29,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=11933a15">
+    <link rel="stylesheet" href="style.css?v=2a81995b">
 </head>
 <body class="subpage-body classes-page">
     <header class="header">
@@ -508,7 +508,7 @@
                     </div>
 
                     <div class="contact-form-card">
-                        <form id="program-inquiry-form" class="inquiry-form" novalidate>
+                        <form id="program-inquiry-form" class="inquiry-form" data-bot-protect="true" novalidate>
                             <h3>Ask a Question or Request Lab Info</h3>
                             <div class="form-row-two">
                                 <div class="form-group">
@@ -545,6 +545,7 @@
                                 <label for="inq-msg">How can we support your practice? *</label>
                                 <textarea id="inq-msg" name="message" rows="4" required></textarea>
                             </div>
+                            <div class="bot-shield-slot"></div>
                             <button type="submit" class="cta-button primary btn-block" id="inq-submit-btn">
                                 Send Inquiry &rarr;
                             </button>
@@ -612,6 +613,7 @@
         </div>
     </footer>
 
-    <script src="script.js?v=c266683a" defer></script>
+    <script src="bot-shield.js?v=6373a65f" defer></script>
+    <script src="script.js?v=8a062add" defer></script>
 </body>
 </html>

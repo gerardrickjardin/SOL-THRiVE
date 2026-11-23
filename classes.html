@@ -508,7 +508,7 @@
                     </div>
 
                     <div class="contact-form-card">
-                        <form id="program-inquiry-form" class="inquiry-form" novalidate>
+                        <form id="program-inquiry-form" class="inquiry-form" data-bot-protect="true" novalidate>
                             <h3>Ask a Question or Request Lab Info</h3>
                             <div class="form-row-two">
                                 <div class="form-group">
@@ -545,6 +545,7 @@
                                 <label for="inq-msg">How can we support your practice? *</label>
                                 <textarea id="inq-msg" name="message" rows="4" required></textarea>
                             </div>
+                            <div class="bot-shield-slot"></div>
                             <button type="submit" class="cta-button primary btn-block" id="inq-submit-btn">
                                 Send Inquiry &rarr;
                             </button>
@@ -612,6 +613,7 @@
         </div>
     </footer>
 
+    <script src="bot-shield.js" defer></script>
     <script src="script.js" defer></script>
 </body>
 </html>

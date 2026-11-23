@@ -33,7 +33,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=Nunito:wght@700;800;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=11933a15">
+    <link rel="stylesheet" href="style.css?v=2a81995b">
     <style>
         /* Scoped High-Impact Styling for Practitioner Guide & IT Help Desk */
         .page-content {
@@ -800,7 +800,7 @@
                         </div>
 
                         <div class="helpdesk-form-card">
-                            <form id="it-helpdesk-form" novalidate>
+                            <form id="it-helpdesk-form" data-bot-protect="true" novalidate>
                                 <h3 style="font-size: 1.25rem; margin-bottom: 1rem; color: var(--text-color, #141824);">Submit an IT Support Request</h3>
 
                                 <div class="form-row-two">
@@ -862,6 +862,8 @@
                                     <label for="it-msg">Describe the Technical Issue * (Minimum 10 characters)</label>
                                     <textarea id="it-msg" name="message" rows="4" required minlength="10" placeholder="Please describe your browser (Chrome, Edge, Safari), workstation mic setup, or any specific error messages you encountered..."></textarea>
                                 </div>
+
+                                <div class="bot-shield-slot"></div>
 
                                 <button type="submit" id="it-submit-btn" class="cta-button primary btn-block" style="width: 100%; justify-content: center; font-size: 1rem; padding: 0.85rem;">
                                     Submit Ticket to IT Team &rarr;
@@ -1121,6 +1123,11 @@
                 };
 
                 try {
+                    const _shield = window.ThriveBotShield
+                        ? await window.ThriveBotShield.prepareSubmission(form)
+                        : undefined;
+                    payload._shield = _shield;
+
                     const response = await fetch('/api/event', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -1132,14 +1139,23 @@
                         if (data && (data.ok === true || response.status === 200)) {
                             showStatus('✓ Ticket Logged! Gerard and the IT support team have received your request. We will follow up via email. For immediate help, attend our Session 0 Weekend Tech Clinics on Saturday Nov 28 or Sunday Nov 29.', true);
                             if (form) form.reset();
+                            window.ThriveBotShield?.resetForm(form);
                             return true;
                         }
                     }
 
-                    showStatus('⚠️ Unable to submit ticket. Please email team@thrivecoaching.ai or contact Gerard directly.', false);
+                    const errData = await response.json().catch(() => null);
+                    showStatus((errData && errData.error) || '⚠️ Unable to submit ticket. Please email team@thrivecoaching.ai or contact Gerard directly.', false);
+                    window.ThriveBotShield?.resetForm(form);
                     return false;
                 } catch (err) {
-                    showStatus('⚠️ Unable to reach IT support server. Please email team@thrivecoaching.ai or visit our weekend drop-in clinic.', false);
+                    const msgText = String(err && err.message || '');
+                    if (/spam|bot|security|verification|origin|too many requests|review your information/i.test(msgText)) {
+                        showStatus(msgText, false);
+                    } else {
+                        showStatus('⚠️ Unable to reach IT support server. Please email team@thrivecoaching.ai or visit our weekend drop-in clinic.', false);
+                    }
+                    window.ThriveBotShield?.resetForm(form);
                     return false;
                 } finally {
                     if (submitBtn) {
@@ -1162,6 +1178,7 @@
             }
         })();
     </script>
-    <script src="script.js?v=c266683a" defer></script>
+    <script src="bot-shield.js?v=6373a65f" defer></script>
+    <script src="script.js?v=8a062add" defer></script>
 </body>
 </html>

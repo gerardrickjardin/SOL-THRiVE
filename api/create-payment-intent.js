@@ -1,8 +1,21 @@
+const { verifyRequest, validateLeadPayload } = require('./_bot-shield');
+
 // Creates a Stripe PaymentIntent. Price is fixed server-side so it can't be tampered with.
 const AMOUNT_CENTS = 50000; // $500.00 Founding Seat Rate (Regular $995.00)
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+  const guard = await verifyRequest(req, res, {
+    bucket: 'checkout',
+    maxRequests: 8,
+    windowMs: 10 * 60 * 1000,
+    requireFormShield: true
+  });
+  if (!guard.ok) return;
+
+  const leadCheck = validateLeadPayload(req.body);
+  if (!leadCheck.ok) return res.status(leadCheck.status).json({ error: leadCheck.error });
+
   const key = process.env.STRIPE_SECRET_KEY;
   if (!key) return res.status(500).json({ error: 'Payments are not configured yet.' });
 

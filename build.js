@@ -9,6 +9,7 @@ const shortFileHash = (filePath) => {
 
 const cssHash = shortFileHash(path.join(__dirname, 'style.css'));
 const jsHash = shortFileHash(path.join(__dirname, 'script.js'));
+const shieldJsHash = shortFileHash(path.join(__dirname, 'bot-shield.js'));
 
 // Archival design files kept in the repo but never referenced by any page.
 // They are skipped during the build (and any stale copies are removed from the output).
@@ -44,7 +45,7 @@ const removeIfExists = (filePath) => {
     fs.mkdirSync(outDir);
   }
 
-  const files = ['index.html', 'lunch-and-learn.html', 'clinical-ecosystem.html', 'classes.html', 'onboarding.html', '404.html', 'mockup-landing.html', 'funnel.html', 'results.html', 'profile.html', 'survey.html', 'approach.html', 'how-to-use.html', 'rebuilding-life-challenges.html', 'employment-challenges.html', 'style.css', 'tailwind.css', 'script.js', 'hope-survey.html', 'manifest.webmanifest', 'favicon.svg', 'favicon-32x32.png', 'apple-touch-icon.png', 'icon-192.png', 'icon-512.png', 'ai-avatar.png', 'minds-eye.png', 'minds-eye-animated.mp4', 'minds-eye-animated.webm', 'minds-eye-white-bg.mp4'];
+  const files = ['index.html', 'lunch-and-learn.html', 'clinical-ecosystem.html', 'classes.html', 'onboarding.html', '404.html', 'mockup-landing.html', 'funnel.html', 'results.html', 'profile.html', 'survey.html', 'approach.html', 'how-to-use.html', 'rebuilding-life-challenges.html', 'employment-challenges.html', 'style.css', 'tailwind.css', 'script.js', 'bot-shield.js', 'hope-survey.html', 'manifest.webmanifest', 'favicon.svg', 'favicon-32x32.png', 'apple-touch-icon.png', 'icon-192.png', 'icon-512.png', 'ai-avatar.png', 'minds-eye.png', 'minds-eye-animated.mp4', 'minds-eye-animated.webm', 'minds-eye-white-bg.mp4'];
 
   files.forEach(file => {
     if (fs.existsSync(file)) {
@@ -114,6 +115,7 @@ const removeIfExists = (filePath) => {
     let html = fs.readFileSync(htmlPath, 'utf8');
     html = html.replace(/href="style\.css(?:\?v=[^"]*)?"/g, `href="style.css?v=${cssHash}"`);
     html = html.replace(/src="script\.js(?:\?v=[^"]*)?"/g, `src="script.js?v=${jsHash}"`);
+    html = html.replace(/src="bot-shield\.js(?:\?v=[^"]*)?"/g, `src="bot-shield.js?v=${shieldJsHash}"`);
     fs.writeFileSync(htmlPath, html);
   });
 });

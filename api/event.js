@@ -1,3 +1,5 @@
+const { verifyRequest, validateLeadPayload } = require('./_bot-shield');
+
 // Forwards funnel events (lead, vote, booking, payment) to Vision Control.
 // Vision Control's real API/webhook format isn't confirmed yet: adjust `forward()` below once known.
 async function forward(payload) {
@@ -17,6 +19,20 @@ module.exports = async (req, res) => {
   const { type, data, lead, ts } = req.body || {};
   if (!['lead', 'vote', 'booking', 'support'].includes(type)) return res.status(400).json({ error: 'Bad event type' });
   // 'payment' is intentionally NOT accepted from the browser; see stripe-webhook.js
+
+  const guard = await verifyRequest(req, res, {
+    bucket: 'event',
+    maxRequests: 12,
+    windowMs: 10 * 60 * 1000,
+    requireFormShield: true
+  });
+  if (!guard.ok) return;
+
+  if (type === 'lead' || type === 'support') {
+    const leadCheck = validateLeadPayload(req.body);
+    if (!leadCheck.ok) return res.status(leadCheck.status).json({ error: leadCheck.error });
+  }
+
   try {
     const l = lead || {};
     const r = (data && data.ratings) || [];
