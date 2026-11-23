@@ -450,10 +450,10 @@
             margin-top: 4px;
         }
 
-        /* Below-Fold Interactive Waiver Section (Revealed after CTA click or #waiver hash) */
+        /* Interactive Waiver Form Section */
         .waiver-below {
             max-width: 820px;
-            margin: 34px auto 0;
+            margin: 0 auto;
         }
 
         .waiver-below[hidden] {
@@ -1163,135 +1163,13 @@
     </header>
 
     <main class="waiver-main">
-        <!-- Headline Banner -->
-        <div class="waiver-hero-head">
-            <span class="waiver-eyebrow">SOLab Studios &bull; THE THRiVE METHOD&trade;</span>
-            <h1><span class="hl-red">Nobody Plays Alone</span> &mdash; Begin Your <span class="hl-mark">21-Day Sprint</span></h1>
-            <p>Watch the quick overview, pick what matters most to you right now, and sign your Participation Agreement &amp; Waiver below.</p>
-        </div>
-
-        <!-- TOP TWO-COLUMN INTRO SHELL (Inspired by Station Onboarding) -->
-        <section class="waiver-shell" aria-label="Program orientation and focus selection">
-            <!-- LEFT COLUMN: Video + What to Expect -->
-            <div class="w-col">
-                <div class="w-card">
-                    <div class="w-video-frame">
-                        <iframe id="waiver-youtube-iframe"
-                            src="https://www.youtube.com/embed/HlYRZZ1zpx0?autoplay=1&amp;mute=1&amp;playsinline=1&amp;loop=1&amp;playlist=HlYRZZ1zpx0&amp;rel=0&amp;modestbranding=1&amp;enablejsapi=1"
-                            title="The THRiVE Method Overview Video"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                    </div>
-                    <button type="button" class="w-btn restart-btn" id="waiverRestartBtn"
-                        aria-label="Restart overview video with sound">
-                        <span>&#8635; Click to Restart and Unmute</span>
-                    </button>
-                    <p class="w-fine">Playing muted &mdash; tap the button above for sound.</p>
-                </div>
-
-                <div class="w-card">
-                    <div class="w-tag-row">
-                        <span class="w-tag gold">What to Expect</span>
-                        <span class="w-tag">SOLab Studios</span>
-                    </div>
-                    <ul class="w-points">
-                        <li class="w-point">
-                            <div class="ic" aria-hidden="true">&#9889;</div>
-                            <div>
-                                <b>21-Day Guided Sprint</b>
-                                <span>Complete your 6-Pillar THRiVE Report, Day-1 Flow Survey baseline, and ActionBoard with certified THRiVE Coach onboarding.</span>
-                            </div>
-                        </li>
-                        <li class="w-point">
-                            <div class="ic" aria-hidden="true">&#129302;</div>
-                            <div>
-                                <b>Personos (&ldquo;Pur&rdquo;) + Real Coaching</b>
-                                <span>Daily strength-based AI reflections between sessions &mdash; educational support only, not therapy, diagnosis, or crisis care.</span>
-                            </div>
-                        </li>
-                        <li class="w-point">
-                            <div class="ic" aria-hidden="true">&#129309;</div>
-                            <div>
-                                <b>THRiVE Squads &mdash; &ldquo;Nobody Plays Alone&rdquo;</b>
-                                <span>Transition into peer accountability held in strict mutual confidentiality &mdash; zero screenshots or outside sharing.</span>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- RIGHT COLUMN: Focus Selector + Guarantee Notice + Reveal CTA -->
-            <div class="w-col">
-                <div class="w-card">
-                    <div class="w-tag-row">
-                        <span class="w-tag green">&#10024; THE THRiVE METHOD&trade;</span>
-                        <span class="w-tag dark">21-Day Sprint</span>
-                    </div>
-                    <h2 class="ct">Educational Growth &mdash; Grounded in Science</h2>
-                    <p class="w-sub">The THRiVE Method&trade; blends behavioral science, strength-based frameworks, Personos (&ldquo;Pur&rdquo;), certified coaching, and THRiVE Squads into one structured sprint.</p>
-                </div>
-
-                <fieldset class="focus-fieldset" id="focusFieldset">
-                    <legend class="sr-only-legend">Which outcome is most important to you right now?</legend>
-                    <h2 class="ct" aria-hidden="true" style="font-family:var(--font-heading);font-size:1.12rem;font-weight:900;margin-bottom:4px;">Which outcome matters most to you right now?</h2>
-                    <div class="focus-stack" id="focusStack">
-                        <label class="focus-opt" data-focus="friction">
-                            <input type="radio" name="thriveFocus" value="friction">
-                            <span class="focus-dot" aria-hidden="true"></span>
-                            <div>
-                                <b>Break Free From Friction</b>
-                                <span class="focus-desc">Identify what is keeping you stuck via the Flow Survey and rebuild forward momentum.</span>
-                            </div>
-                        </label>
-                        <label class="focus-opt" data-focus="clarity">
-                            <input type="radio" name="thriveFocus" value="clarity">
-                            <span class="focus-dot" aria-hidden="true"></span>
-                            <div>
-                                <b>Clarity &amp; Daily ActionBoard</b>
-                                <span class="focus-desc">Turn your 6-Pillar THRiVE Report and Personos (&ldquo;Pur&rdquo;) insights into 21 daily strides.</span>
-                            </div>
-                        </label>
-                        <label class="focus-opt" data-focus="squad">
-                            <input type="radio" name="thriveFocus" value="squad">
-                            <span class="focus-dot" aria-hidden="true"></span>
-                            <div>
-                                <b>Real Connection &amp; THRiVE Squads</b>
-                                <span class="focus-desc">Pair certified onboarding coaching with peer accountability where nobody plays alone.</span>
-                            </div>
-                        </label>
-                    </div>
-                    <p class="w-error" id="focusError" role="alert"></p>
-                </fieldset>
-
-                <div class="w-offer-box">
-                    <b>&#128737; Program Fee &amp; 50% Risk-Split Guarantee:</b> Direct Self-Pay ($1,000 Sprint) qualifies for our Conditional 50% ($500) Risk-Split Guarantee upon verified completion. GoFundMe, scholarship &amp; sponsored seats cover tuition without cash refund eligibility.
-                </div>
-
-                <button type="button" class="w-btn gold-cta" id="revealWaiverBtn">
-                    GET STARTED &mdash; COMPLETE THE WAIVER &rarr;
-                </button>
-                <p class="w-fine">Takes ~2 minutes &bull; Electronic signature + printable record included</p>
-            </div>
-        </section>
-
-        <!-- BOTTOM SECTION: COMPLETE YOUR WAIVER (Appears cleanly below when CTA clicked or #waiver hash) -->
-        <section class="waiver-below" id="waiverSection" aria-label="Complete Your Waiver" hidden>
+        <!-- WAIVER FORM & AGREEMENT SECTION -->
+        <section class="waiver-below" id="waiverSection" aria-label="Participation Agreement and Waiver">
             <div class="waiver-card-main">
                 <div class="waiver-head-center">
-                    <h2 id="waiverTitle" tabindex="-1">Complete Your Waiver</h2>
+                    <span class="waiver-eyebrow" style="margin-bottom:10px;">SOLab Studios &bull; THE THRiVE METHOD&trade;</span>
+                    <h1 id="waiverTitle" tabindex="-1" style="font-family:var(--font-heading);font-size:clamp(1.45rem,2.8vw,1.95rem);font-weight:900;color:var(--ink-border);margin-bottom:6px;">Participation Agreement, Release &amp; Waiver</h1>
                     <p>Review the SOLab Studios &mdash; The THRiVE Method&trade; Participation Agreement below, complete your details, and submit your electronic signature.</p>
-                </div>
-
-                <!-- Personalized Card (populated after picking focus above) -->
-                <div class="cust-banner" id="personalizedBanner">
-                    <span class="w-tag gold">Personalized For You</span>
-                    <h3 id="persTitle">Your 21-Day Sprint Focus</h3>
-                    <p id="persCopy">Great choice. We have prepared your agreement packet below so you can review the educational scope, Personos AI boundaries, Squad confidentiality, and fee terms before signing.</p>
-                    <div class="cust-rec">
-                        <span class="cust-rec-label">Recommended Next Step After Signing</span>
-                        <strong id="persRecTitle">Baseline Flow Survey + 6-Pillar THRiVE Report</strong>
-                        <span id="persRecDesc">Establishes your Day-1 baseline Flow Score and launches your personalized ActionBoard.</span>
-                    </div>
                 </div>
 
                 <!-- WAIVER FORM VIEW -->
@@ -1506,7 +1384,7 @@
                         <div class="receipt-item"><span>Email</span><strong id="rec-email">&mdash;</strong></div>
                         <div class="receipt-item"><span>Funding Source</span><strong id="rec-funding">&mdash;</strong></div>
                         <div class="receipt-item"><span>Signed Date</span><strong id="rec-date">&mdash;</strong></div>
-                        <div class="receipt-item"><span>Sprint Focus</span><strong id="rec-focus">&mdash;</strong></div>
+                        <div class="receipt-item"><span>Agreement Version</span><strong id="rec-version">SOLab-THRiVE-Method-v1</strong></div>
                         <div class="receipt-item"><span>Confirmation Ref</span><strong id="rec-ref">&mdash;</strong></div>
                     </div>
 
@@ -1572,31 +1450,6 @@
         (function () {
             const $ = (id) => document.getElementById(id);
 
-            const FOCUS_META = {
-                friction: {
-                    label: 'Breaking free from friction',
-                    title: 'You picked: Break Free From Friction',
-                    copy: 'Great choice. Your Day-1 Flow Survey baseline and ActionBoard will pinpoint the hidden bottlenecks keeping you stuck so you can move forward one concrete step at a time.',
-                    recTitle: 'Day-1 Flow Survey Baseline + 21 Daily Strides',
-                    recDesc: 'Measure where friction sits today so your Sprint progress is clear by Day 21.'
-                },
-                clarity: {
-                    label: 'Clarity and daily action with Personos',
-                    title: 'You picked: Clarity & Daily ActionBoard',
-                    copy: 'Great choice. Pairing your 6-Pillar THRiVE Report with Personos ("Pur") helps turn personal strengths into practical daily micro-actions between sessions.',
-                    recTitle: '6-Pillar THRiVE Report + Personos ("Pur") Setup',
-                    recDesc: 'Capture your strengths foundation and build your personalized Kanban ActionBoard.'
-                },
-                squad: {
-                    label: 'Real human connection and THRiVE Squad accountability',
-                    title: 'You picked: Real Connection & THRiVE Squads',
-                    copy: 'Great choice. Nobody plays alone. After certified coaching onboarding, your confidential THRiVE Squad keeps accountability human and grounded.',
-                    recTitle: 'THRiVE Coach Onboarding + Squad Placement',
-                    recDesc: 'Review your Squad Confidentiality & Release of Information commitment below before signing.'
-                }
-            };
-
-            let selectedFocus = '';
             let sigMode = 'draw'; // 'draw' | 'type'
             let hasDrawnStroke = false;
             let printedEditedManually = false;
@@ -1612,40 +1465,6 @@
                 dateEl.value = `${yyyy}-${mm}-${dd}`;
             })();
 
-            // Video Restart & Unmute button
-            const restartBtn = $('waiverRestartBtn');
-            if (restartBtn) {
-                restartBtn.addEventListener('click', () => {
-                    const iframe = $('waiver-youtube-iframe');
-                    if (iframe) {
-                        iframe.src = `https://www.youtube.com/embed/HlYRZZ1zpx0?autoplay=1&mute=0&playsinline=1&rel=0&modestbranding=1&enablejsapi=1&_r=${Date.now()}`;
-                    }
-                    restartBtn.innerHTML = '<span>&#9654; Video Unmuted &amp; Playing</span>';
-                });
-            }
-
-            // Focus radio card selection
-            const focusRadios = document.querySelectorAll('input[name="thriveFocus"]');
-            const focusCards = document.querySelectorAll('.focus-opt');
-            function updatePersonalizedBanner(key) {
-                const meta = FOCUS_META[key];
-                if (!meta) return;
-                $('persTitle').textContent = meta.title;
-                $('persCopy').textContent = meta.copy;
-                $('persRecTitle').textContent = meta.recTitle;
-                $('persRecDesc').textContent = meta.recDesc;
-            }
-            focusRadios.forEach((radio) => {
-                radio.addEventListener('change', () => {
-                    selectedFocus = radio.value;
-                    $('focusError').textContent = '';
-                    focusCards.forEach((card) => {
-                        card.classList.toggle('selected', card.dataset.focus === selectedFocus);
-                    });
-                    updatePersonalizedBanner(selectedFocus);
-                });
-            });
-
             // Funding Source card selection highlight
             document.querySelectorAll('input[name="fundingSource"]').forEach((radio) => {
                 radio.addEventListener('change', () => {
@@ -1656,43 +1475,10 @@
                 });
             });
 
-            // CTA -> Reveal Waiver section cleanly below
-            function openWaiverSection(scrollToTitle) {
-                const sec = $('waiverSection');
-                sec.hidden = false;
-                if (scrollToTitle) {
-                    requestAnimationFrame(() => {
-                        initSignatureCanvasSize();
-                        sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        setTimeout(() => $('waiverTitle').focus({ preventScroll: true }), 450);
-                    });
-                } else {
-                    initSignatureCanvasSize();
-                }
-            }
-
-            $('revealWaiverBtn').addEventListener('click', () => {
-                if (!selectedFocus) {
-                    $('focusError').textContent = 'Please select which outcome matters most to you before continuing.';
-                    $('focusFieldset').scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    return;
-                }
-                openWaiverSection(true);
-            });
-
-            $('waiverBackTopBtn').addEventListener('click', () => {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
-
-            // Allow direct anchor /waiver#waiver or /waiver#sign
-            if (typeof window !== 'undefined' && /^#(waiver|sign|agreement)$/i.test(window.location.hash || '')) {
-                selectedFocus = 'friction';
-                const firstRadio = document.querySelector('input[name="thriveFocus"][value="friction"]');
-                if (firstRadio) {
-                    firstRadio.checked = true;
-                    firstRadio.dispatchEvent(new Event('change'));
-                }
-                openWaiverSection(false);
+            if ($('waiverBackTopBtn')) {
+                $('waiverBackTopBtn').addEventListener('click', () => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
             }
 
             // Expand / Compact Agreement toggle
@@ -1788,6 +1574,8 @@
                 window.addEventListener('resize', () => {
                     if (!$('waiverSection').hidden) initSignatureCanvasSize();
                 });
+                requestAnimationFrame(initSignatureCanvasSize);
+                window.addEventListener('load', initSignatureCanvasSize);
             }
 
             // Toggle Draw vs Type signature
@@ -1910,7 +1698,6 @@
 
                     const { fn, ln } = splitName(fullName);
                     const confirmationRef = 'THR-' + Date.now().toString(36).toUpperCase().slice(-6);
-                    const focusLabel = (FOCUS_META[selectedFocus] && FOCUS_META[selectedFocus].label) || '21-Day Sprint';
                     const signaturePreviewUrl = sigMode === 'draw' && sigCanvas ? sigCanvas.toDataURL('image/png') : '';
 
                     const payload = {
@@ -1930,7 +1717,6 @@
                             confirmation_ref: confirmationRef,
                             funding_source: fundingSource,
                             sponsor_org: sponsorOrg,
-                            focus_selection: selectedFocus || 'general',
                             printed_name: printedName,
                             signed_date: signedDate,
                             signature_mode: sigMode,
@@ -1938,7 +1724,7 @@
                             ack_18_plus_and_terms: true,
                             ack_nonclinical_988_911: true,
                             ack_roi_squad_confidentiality: true,
-                            message: `THRiVE Waiver Signed (${confirmationRef}) | Focus: ${focusLabel} | Funding: ${fundingSource} | Printed: ${printedName} | Date: ${signedDate}`
+                            message: `THRiVE Waiver Signed (${confirmationRef}) | Funding: ${fundingSource} | Printed: ${printedName} | Date: ${signedDate}`
                         },
                         _shield
                     };
@@ -1960,7 +1746,6 @@
                     $('rec-email').textContent = email;
                     $('rec-funding').textContent = fundingSource;
                     $('rec-date').textContent = signedDate;
-                    $('rec-focus').textContent = focusLabel;
                     $('rec-ref').textContent = confirmationRef;
 
                     if (sigMode === 'draw' && signaturePreviewUrl) {
@@ -1974,7 +1759,6 @@
                     }
 
                     form.hidden = true;
-                    $('personalizedBanner').hidden = true;
                     $('waiverReceipt').hidden = false;
                     $('waiverSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
                 } catch (err) {
