@@ -975,10 +975,10 @@ a {
 
 .hero-coach-canvas h1,
 .hero-coach-canvas h1.practitioner-hero-title {
-    font-size: clamp(1.56rem, min(2.25vw, 3.7vh), 2.18rem);
+    font-size: clamp(1.36rem, min(2.05vw, 3.5vh), 2.08rem);
     font-weight: 900;
     letter-spacing: -0.022em;
-    max-width: min(760px, 53vw);
+    max-width: min(880px, 86vw);
     line-height: 1.13;
     margin-bottom: 0.56rem;
 }
@@ -1014,6 +1014,12 @@ a {
 
 .hero-keep {
     white-space: nowrap;
+}
+
+@media (min-width: 961px) {
+    .hero-line-desktop {
+        white-space: nowrap;
+    }
 }
 
 @media (max-width: 960px) {
@@ -1064,9 +1070,9 @@ a {
 
     .hero-full-screen h1,
     .hero h1.practitioner-hero-title {
-        font-size: clamp(1.52rem, min(2.15vw, 3.45vh), 2.04rem);
+        font-size: clamp(1.36rem, min(2.02vw, 3.35vh), 1.96rem);
         margin-bottom: 0.44rem;
-        max-width: min(700px, 51vw);
+        max-width: min(840px, 86vw);
     }
 
     .hero-full-screen .hero-content p {
@@ -1100,9 +1106,9 @@ a {
 
     .hero-full-screen h1,
     .hero h1.practitioner-hero-title {
-        font-size: clamp(1.38rem, min(2.02vw, 3.35vh), 1.78rem);
+        font-size: clamp(1.3rem, min(1.95vw, 3.25vh), 1.74rem);
         margin-bottom: 0.34rem;
-        max-width: min(620px, 48vw);
+        max-width: min(780px, 86vw);
     }
 
     .hero-full-screen .hero-content p {
