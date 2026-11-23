@@ -198,7 +198,8 @@ const initThriveUI = () => {
         'results',
         'classes',
         'schedule',
-        'onboarding'
+        'onboarding',
+        'waiver'
     ]);
 
     const normalizePageSlug = (rawPath) => {
