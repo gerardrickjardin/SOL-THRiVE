@@ -970,23 +970,26 @@ a {
 }
 
 .hero-coach-canvas .hero-content.practitioner-hero-content {
-    margin: clamp(1rem, 4.4vh, 2.35rem) auto 0;
+    margin: clamp(1.6rem, 3.1vh, 1.95rem) auto 0;
 }
 
 .hero-coach-canvas h1,
 .hero-coach-canvas h1.practitioner-hero-title {
-    font-size: clamp(1.52rem, min(2.2vw, 3.65vh), 2.12rem);
-    max-width: min(760px, 52vw);
-    line-height: 1.15;
-    margin-bottom: 0.52rem;
+    font-size: clamp(1.56rem, min(2.25vw, 3.7vh), 2.18rem);
+    font-weight: 900;
+    letter-spacing: -0.022em;
+    max-width: min(760px, 53vw);
+    line-height: 1.13;
+    margin-bottom: 0.56rem;
 }
 
 .hero-coach-canvas p {
-    font-size: clamp(0.82rem, min(0.95vw, 1.68vh), 0.94rem);
+    font-size: clamp(0.81rem, min(0.94vw, 1.62vh), 0.92rem);
     line-height: 1.48;
-    max-width: min(600px, 46vw);
-    margin-bottom: 0.72rem;
+    max-width: min(650px, 47vw);
+    margin: 0 auto 0.72rem;
     color: #2B251E;
+    text-wrap: pretty;
 }
 
 .hero-coach-canvas .hero-drawing-wrap {
@@ -1009,6 +1012,10 @@ a {
     display: inline;
 }
 
+.hero-keep {
+    white-space: nowrap;
+}
+
 @media (max-width: 960px) {
     .hero-br-desktop {
         display: none;
@@ -1023,7 +1030,7 @@ a {
     }
 
     .hero-coach-canvas p {
-        max-width: 520px;
+        max-width: 580px;
     }
 
     .hero-coach-canvas .hero-drawing-wrap {
@@ -1048,7 +1055,7 @@ a {
     }
 
     .hero-coach-canvas .hero-content.practitioner-hero-content {
-        margin-top: clamp(0.7rem, 2.5vh, 1.35rem);
+        margin-top: clamp(1.55rem, 2.4vh, 1.75rem);
     }
 
     .hero-eyebrow {
@@ -1057,14 +1064,16 @@ a {
 
     .hero-full-screen h1,
     .hero h1.practitioner-hero-title {
-        font-size: clamp(1.5rem, min(2.12vw, 3.45vh), 2.02rem);
-        margin-bottom: 0.42rem;
-        max-width: min(690px, 50vw);
+        font-size: clamp(1.52rem, min(2.15vw, 3.45vh), 2.04rem);
+        margin-bottom: 0.44rem;
+        max-width: min(700px, 51vw);
     }
 
     .hero-full-screen .hero-content p {
-        font-size: clamp(0.8rem, min(0.92vw, 1.62vh), 0.9rem);
-        margin-bottom: 0.58rem;
+        font-size: clamp(0.78rem, min(0.9vw, 1.56vh), 0.88rem);
+        line-height: 1.44;
+        max-width: min(620px, 47vw);
+        margin-bottom: 0.54rem;
     }
 
     .hero-cta-stack {
@@ -1091,15 +1100,16 @@ a {
 
     .hero-full-screen h1,
     .hero h1.practitioner-hero-title {
-        font-size: clamp(1.36rem, min(2.02vw, 3.35vh), 1.76rem);
-        margin-bottom: 0.32rem;
-        max-width: min(600px, 47vw);
+        font-size: clamp(1.38rem, min(2.02vw, 3.35vh), 1.78rem);
+        margin-bottom: 0.34rem;
+        max-width: min(620px, 48vw);
     }
 
     .hero-full-screen .hero-content p {
-        font-size: 0.78rem;
-        line-height: 1.4;
-        margin-bottom: 0.44rem;
+        font-size: 0.75rem;
+        line-height: 1.38;
+        max-width: min(590px, 47vw);
+        margin-bottom: 0.42rem;
     }
 
     .hero-cta-stack {
@@ -1166,7 +1176,7 @@ a {
     }
 
     .hero-content {
-        padding: 0 1.1rem;
+        padding: 0 1.25rem;
     }
 
     .hero-eyebrow {
@@ -1177,22 +1187,28 @@ a {
         line-height: 1.4;
         padding: 0.36rem 0.82rem;
         border-radius: 12px;
-        margin-bottom: 0.65rem;
+        margin-bottom: 0.72rem;
         text-wrap: balance;
     }
 
     .hero h1,
     .hero h1.practitioner-hero-title {
-        font-size: clamp(1.45rem, 6.2vw, 1.82rem);
-        line-height: 1.16;
-        margin-bottom: 0.58rem;
+        font-size: clamp(1.48rem, 6.3vw, 1.86rem);
+        font-weight: 900;
+        line-height: 1.15;
+        letter-spacing: -0.02em;
+        margin-bottom: 0.72rem;
         text-wrap: balance;
     }
 
-    .hero p {
-        font-size: 0.88rem;
-        line-height: 1.52;
-        margin-bottom: 0.9rem;
+    .hero p,
+    .hero-coach-canvas p {
+        font-size: 0.89rem;
+        line-height: 1.56;
+        max-width: 38ch;
+        margin: 0 auto 1rem;
+        color: #2B251E;
+        text-wrap: pretty;
     }
 
     .hero-cta-stack {
