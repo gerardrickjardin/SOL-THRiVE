@@ -984,7 +984,7 @@ a {
 .hero-coach-canvas p {
     font-size: clamp(0.82rem, min(0.95vw, 1.68vh), 0.94rem);
     line-height: 1.48;
-    max-width: 520px;
+    max-width: min(600px, 46vw);
     margin-bottom: 0.72rem;
     color: #2B251E;
 }
@@ -1020,6 +1020,10 @@ a {
 
     .hero-coach-canvas .hero-content.practitioner-hero-content {
         margin: 0 auto;
+    }
+
+    .hero-coach-canvas p {
+        max-width: 520px;
     }
 
     .hero-coach-canvas .hero-drawing-wrap {
