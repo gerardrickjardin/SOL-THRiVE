@@ -2199,8 +2199,267 @@ const initThriveUI = () => {
 })();
 
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initThriveUI);
+    document.addEventListener('DOMContentLoaded', () => {
+        initThriveUI();
+        initHeroMobileSlideshow();
+    });
 } else {
     initThriveUI();
+    initHeroMobileSlideshow();
+}
+
+function initHeroMobileSlideshow() {
+    const root = document.getElementById('hero-mobile-slideshow');
+    const viewport = document.getElementById('hero-slideshow-viewport');
+    const track = document.getElementById('hero-slideshow-track');
+    if (!root || !viewport || !track) return;
+
+    const originalSlides = Array.from(track.querySelectorAll(':scope > .hero-slide'));
+    const count = originalSlides.length;
+    if (count < 2) return;
+
+    const dots = Array.from(root.querySelectorAll('.hero-slide-dot'));
+    const prevBtn = document.getElementById('hero-slide-prev');
+    const nextBtn = document.getElementById('hero-slide-next');
+    const SLIDE_INTERVAL_MS = 4000;
+    const TRANSITION_CSS = 'transform 620ms cubic-bezier(0.22, 1, 0.36, 1)';
+    const mobileMedia = window.matchMedia('(max-width: 640px)');
+    const reducedMotionMedia = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    // Build seamless loop clones: [cloneLast, real0, real1, real2, cloneFirst]
+    const firstClone = originalSlides[0].cloneNode(true);
+    const lastClone = originalSlides[count - 1].cloneNode(true);
+    firstClone.dataset.clone = 'true';
+    lastClone.dataset.clone = 'true';
+    firstClone.setAttribute('aria-hidden', 'true');
+    lastClone.setAttribute('aria-hidden', 'true');
+    track.insertBefore(lastClone, originalSlides[0]);
+    track.appendChild(firstClone);
+
+    const allSlides = Array.from(track.querySelectorAll(':scope > .hero-slide'));
+    let virtualIndex = 1; // logical slide 0
+    let isAnimating = false;
+    let autoTimer = null;
+    let wrapFallbackTimer = null;
+
+    const getLogicalIndex = (vIdx) => ((vIdx - 1) % count + count) % count;
+
+    const updateIndicators = (logicalIdx) => {
+        dots.forEach((dot, idx) => {
+            const active = idx === logicalIdx;
+            dot.classList.toggle('is-active', active);
+            dot.setAttribute('aria-selected', String(active));
+        });
+        originalSlides.forEach((slide, idx) => {
+            slide.setAttribute('aria-hidden', String(idx !== logicalIdx));
+        });
+    };
+
+    const setTrackTransform = (pct, animate) => {
+        const shouldAnimate = Boolean(animate && !reducedMotionMedia.matches);
+        track.style.transition = shouldAnimate ? TRANSITION_CSS : 'none';
+        track.style.transform = `translate3d(${pct}%, 0, 0)`;
+    };
+
+    const snapIfClone = () => {
+        if (wrapFallbackTimer) {
+            clearTimeout(wrapFallbackTimer);
+            wrapFallbackTimer = null;
+        }
+        isAnimating = false;
+        if (virtualIndex === 0) {
+            virtualIndex = count;
+            setTrackTransform(-virtualIndex * 100, false);
+            void track.offsetHeight;
+        } else if (virtualIndex === count + 1) {
+            virtualIndex = 1;
+            setTrackTransform(-virtualIndex * 100, false);
+            void track.offsetHeight;
+        }
+    };
+
+    const goToVirtual = (targetVirtual, animate = true) => {
+        if (targetVirtual < 0) targetVirtual = 0;
+        if (targetVirtual > count + 1) targetVirtual = count + 1;
+
+        virtualIndex = targetVirtual;
+        const logicalIdx = getLogicalIndex(virtualIndex);
+        updateIndicators(logicalIdx);
+
+        if (!animate || reducedMotionMedia.matches) {
+            setTrackTransform(-virtualIndex * 100, false);
+            snapIfClone();
+            return;
+        }
+
+        isAnimating = true;
+        setTrackTransform(-virtualIndex * 100, true);
+        if (wrapFallbackTimer) clearTimeout(wrapFallbackTimer);
+        wrapFallbackTimer = setTimeout(snapIfClone, 700);
+    };
+
+    const goToLogical = (logicalIdx, animate = true) => {
+        const currentLogical = getLogicalIndex(virtualIndex);
+        if (currentLogical === logicalIdx && !isAnimating) return;
+        // If jumping from last slide (2) to first slide (0), slide seamlessly forward through cloneFirst!
+        if (currentLogical === count - 1 && logicalIdx === 0) {
+            goToVirtual(count + 1, animate);
+            return;
+        }
+        goToVirtual(logicalIdx + 1, animate);
+    };
+
+    track.addEventListener('transitionend', (e) => {
+        if (e.target === track && e.propertyName === 'transform') {
+            snapIfClone();
+        }
+    });
+
+    const stopAutoPlay = () => {
+        if (autoTimer) {
+            clearInterval(autoTimer);
+            autoTimer = null;
+        }
+    };
+
+    const startAutoPlay = () => {
+        stopAutoPlay();
+        if (!mobileMedia.matches || reducedMotionMedia.matches || document.hidden) return;
+        autoTimer = setInterval(() => {
+            if (!mobileMedia.matches || reducedMotionMedia.matches || document.hidden) return;
+            if (isAnimating) snapIfClone();
+            goToVirtual(virtualIndex + 1, true);
+        }, SLIDE_INTERVAL_MS);
+    };
+
+    const restartAutoPlay = () => {
+        startAutoPlay();
+    };
+
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            if (isAnimating) snapIfClone();
+            goToVirtual(virtualIndex - 1, true);
+            restartAutoPlay();
+        });
+    }
+
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            if (isAnimating) snapIfClone();
+            goToVirtual(virtualIndex + 1, true);
+            restartAutoPlay();
+        });
+    }
+
+    dots.forEach((dot, idx) => {
+        dot.addEventListener('click', () => {
+            if (isAnimating) snapIfClone();
+            goToLogical(idx, true);
+            restartAutoPlay();
+        });
+    });
+
+    // Touch swipe support with vertical-scroll protection
+    let touchActive = false;
+    let startX = 0;
+    let startY = 0;
+    let lastDx = 0;
+    let axisLocked = null; // 'x' | 'y' | null
+
+    viewport.addEventListener('touchstart', (e) => {
+        if (!mobileMedia.matches || e.touches.length !== 1) return;
+        if (isAnimating) snapIfClone();
+        touchActive = true;
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+        lastDx = 0;
+        axisLocked = null;
+        stopAutoPlay();
+    }, { passive: true });
+
+    viewport.addEventListener('touchmove', (e) => {
+        if (!touchActive || e.touches.length !== 1) return;
+        const dx = e.touches[0].clientX - startX;
+        const dy = e.touches[0].clientY - startY;
+
+        if (!axisLocked) {
+            if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
+            axisLocked = Math.abs(dx) >= Math.abs(dy) ? 'x' : 'y';
+        }
+        if (axisLocked !== 'x') return;
+
+        lastDx = dx;
+        const width = viewport.getBoundingClientRect().width || window.innerWidth || 360;
+        const dragPct = (dx / width) * 100;
+        setTrackTransform(-virtualIndex * 100 + dragPct, false);
+    }, { passive: true });
+
+    const finishTouch = () => {
+        if (!touchActive) return;
+        touchActive = false;
+        if (axisLocked === 'x') {
+            const width = viewport.getBoundingClientRect().width || window.innerWidth || 360;
+            const threshold = Math.min(48, width * 0.14);
+            if (lastDx <= -threshold) {
+                goToVirtual(virtualIndex + 1, true);
+            } else if (lastDx >= threshold) {
+                goToVirtual(virtualIndex - 1, true);
+            } else {
+                goToVirtual(virtualIndex, true);
+            }
+        }
+        axisLocked = null;
+        lastDx = 0;
+        restartAutoPlay();
+    };
+
+    viewport.addEventListener('touchend', finishTouch, { passive: true });
+    viewport.addEventListener('touchcancel', finishTouch, { passive: true });
+
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) stopAutoPlay();
+        else startAutoPlay();
+    });
+
+    if (typeof mobileMedia.addEventListener === 'function') {
+        mobileMedia.addEventListener('change', startAutoPlay);
+    }
+    if (typeof reducedMotionMedia.addEventListener === 'function') {
+        reducedMotionMedia.addEventListener('change', () => {
+            if (reducedMotionMedia.matches) stopAutoPlay();
+            else startAutoPlay();
+        });
+    }
+
+    // Initialize stationary at Slide 1 without transition flicker
+    setTrackTransform(-virtualIndex * 100, false);
+    updateIndicators(0);
+    startAutoPlay();
+
+    window.__thriveHeroSlideshow = {
+        getState: () => ({
+            virtualIndex,
+            logicalIndex: getLogicalIndex(virtualIndex),
+            slideCount: allSlides.length,
+            isAutoPlaying: Boolean(autoTimer),
+            intervalMs: SLIDE_INTERVAL_MS
+        }),
+        next: () => {
+            if (isAnimating) snapIfClone();
+            goToVirtual(virtualIndex + 1, true);
+            restartAutoPlay();
+        },
+        prev: () => {
+            if (isAnimating) snapIfClone();
+            goToVirtual(virtualIndex - 1, true);
+            restartAutoPlay();
+        },
+        goToSlide: (idx) => {
+            if (isAnimating) snapIfClone();
+            goToLogical(idx, true);
+            restartAutoPlay();
+        }
+    };
 }
 

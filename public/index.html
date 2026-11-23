@@ -32,8 +32,8 @@
     <meta name="twitter:image:alt" content="The THRiVE Method — SOLab Studios">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=0e8c9751">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Nunito:wght@700;800;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=d4b4fc0b">
 </head>
 <body>
     <header class="header">
@@ -155,6 +155,59 @@
                              alt="Illustration showing Before (client running in circles alone with phone while coach worries) and After (client climbing ladder out of pit with coach and Personos AI robot), with Did you know? Harvard Business Review card noting Therapy & emotional support are the #1 use case for AI"
                              class="hero-drawing-img">
                     </picture>
+                </div>
+
+                <!-- Mobile-Only Enlarged 3-Slide Visual Story (Before -> After -> Solution) -->
+                <div class="hero-mobile-slideshow" id="hero-mobile-slideshow" aria-roledescription="carousel" aria-label="Before and After THRiVE Transformation">
+                    <div class="hero-slideshow-viewport" id="hero-slideshow-viewport">
+                        <div class="hero-slideshow-track" id="hero-slideshow-track">
+                            <figure class="hero-slide" data-slide-index="0" aria-hidden="false">
+                                <figcaption class="hero-slide-heading">Running in Circles</figcaption>
+                                <div class="hero-slide-media">
+                                    <img src="assets/hero-mobile-before.png"
+                                         width="1000" height="1274"
+                                         fetchpriority="high"
+                                         decoding="async"
+                                         alt="Before: Woman running in circles inside a pit looking at her phone while therapist sits watching above"
+                                         class="hero-slide-img">
+                                </div>
+                            </figure>
+                            <figure class="hero-slide" data-slide-index="1" aria-hidden="true">
+                                <figcaption class="hero-slide-heading">Unstuck</figcaption>
+                                <div class="hero-slide-media">
+                                    <img src="assets/hero-mobile-after.png"
+                                         width="1000" height="1211"
+                                         loading="eager"
+                                         decoding="async"
+                                         alt="After: Woman climbing a ladder out of the hole with help from a human coach and Personos AI robot"
+                                         class="hero-slide-img">
+                                </div>
+                            </figure>
+                            <figure class="hero-slide hero-slide--solution" data-slide-index="2" aria-hidden="true">
+                                <div class="hero-slide-media hero-slide-media--solution">
+                                    <img src="assets/hero-mobile-solution.png"
+                                         width="732" height="1492"
+                                         loading="eager"
+                                         decoding="async"
+                                         alt="Did you know? Harvard Business Review phone screen noting Therapy and emotional support are the number 1 use case for AI"
+                                         class="hero-slide-img">
+                                </div>
+                            </figure>
+                        </div>
+                    </div>
+                    <div class="hero-slideshow-controls">
+                        <button type="button" class="hero-slide-arrow" id="hero-slide-prev" aria-label="Previous slide">
+                            <span aria-hidden="true">&#8249;</span>
+                        </button>
+                        <div class="hero-slideshow-dots" role="tablist" aria-label="Slideshow navigation">
+                            <button type="button" class="hero-slide-dot is-active" role="tab" aria-selected="true" aria-label="Slide 1: Running in Circles" data-slide-target="0"></button>
+                            <button type="button" class="hero-slide-dot" role="tab" aria-selected="false" aria-label="Slide 2: Unstuck" data-slide-target="1"></button>
+                            <button type="button" class="hero-slide-dot" role="tab" aria-selected="false" aria-label="Slide 3: The THRiVE Solution" data-slide-target="2"></button>
+                        </div>
+                        <button type="button" class="hero-slide-arrow" id="hero-slide-next" aria-label="Next slide">
+                            <span aria-hidden="true">&#8250;</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </section>
@@ -784,6 +837,6 @@
     </footer>
 
     <script src="https://www.youtube.com/iframe_api" async></script>
-    <script src="script.js?v=8a062add" defer></script>
+    <script src="script.js?v=c3113828" defer></script>
 </body>
 </html>
