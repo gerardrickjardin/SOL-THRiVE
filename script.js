@@ -852,6 +852,38 @@ const initThriveUI = () => {
         }
     ];
 
+    const LUNCH_AND_LEARN_MEET = {
+        title: '5 to THRiVE Lunch & Learn',
+        dateTimeLabel: 'Tuesday, November 24 · 12:00 – 1:00pm',
+        timeZone: 'America/Denver',
+        meetUrl: 'https://meet.google.com/bro-rgxh-rzd',
+        dialNumber: '(US) +1 567-331-1188',
+        dialPin: '756 129 618#',
+        moreNumbersUrl: 'https://tel.meet/bro-rgxh-rzd?pin=4024608972368'
+    };
+
+    function renderLunchLearnJoinCardHtml() {
+        return `
+            <div style="margin-top:0.85rem;padding:1rem 1.1rem;border-radius:14px;border:2px solid #2D2A26;background:#FFFDF8;text-align:left;line-height:1.5;box-shadow:3px 3px 0 #2D2A26;">
+                <div style="font-weight:800;font-size:0.98rem;color:#1F1B16;margin-bottom:0.25rem;">${LUNCH_AND_LEARN_MEET.title}</div>
+                <div style="font-size:0.86rem;color:#4B443D;margin-bottom:0.55rem;">
+                    <strong>When:</strong> ${LUNCH_AND_LEARN_MEET.dateTimeLabel} (${LUNCH_AND_LEARN_MEET.timeZone})
+                </div>
+                <div style="margin-bottom:0.6rem;">
+                    <a href="${LUNCH_AND_LEARN_MEET.meetUrl}" target="_blank" rel="noopener noreferrer"
+                       style="display:inline-flex;align-items:center;gap:6px;padding:0.55rem 0.95rem;border-radius:999px;background:#B54840;color:#FFFDF8;font-weight:800;font-size:0.86rem;text-decoration:none;border:2px solid #2D2A26;">
+                        Join Google Meet &rarr;
+                    </a>
+                </div>
+                <div style="font-size:0.82rem;color:#2D2A26;word-break:break-word;">
+                    <div><strong>Video call link:</strong> <a href="${LUNCH_AND_LEARN_MEET.meetUrl}" target="_blank" rel="noopener noreferrer">${LUNCH_AND_LEARN_MEET.meetUrl}</a></div>
+                    <div><strong>Or dial:</strong> ${LUNCH_AND_LEARN_MEET.dialNumber} <strong>PIN:</strong> ${LUNCH_AND_LEARN_MEET.dialPin}</div>
+                    <div><strong>More phone numbers:</strong> <a href="${LUNCH_AND_LEARN_MEET.moreNumbersUrl}" target="_blank" rel="noopener noreferrer">${LUNCH_AND_LEARN_MEET.moreNumbersUrl}</a></div>
+                </div>
+            </div>
+        `;
+    }
+
     function generateIcsContent(sessions) {
         const lines = [
             'BEGIN:VCALENDAR',
@@ -868,7 +900,8 @@ const initThriveUI = () => {
             lines.push(`DTEND:${s.dtendUtc}`);
             lines.push(`SUMMARY:${s.title}`);
             lines.push(`DESCRIPTION:${s.description}`);
-            lines.push('LOCATION:THRiVE Coaching Live Classroom (Zoom)');
+            lines.push(`LOCATION:${s.location || 'THRiVE Coaching Live Classroom (Zoom)'}`);
+            if (s.url) lines.push(`URL:${s.url}`);
             lines.push('STATUS:CONFIRMED');
             lines.push('END:VEVENT');
         });
@@ -917,20 +950,20 @@ const initThriveUI = () => {
                 const mode = el.getAttribute('data-lab-tz-mode');
                 const dateLabel = el.getAttribute('data-date-label') || '';
                 if (mode === 'lunch') {
-                    // Thu Nov 19, 2026 12:00 PM - 12:30 PM MST (19:00 - 19:30 UTC)
-                    let lunchStr = '12:00 PM – 12:30 PM MT / 2:00 PM ET';
+                    // Tue Nov 24, 2026 12:00 PM - 1:00 PM America/Denver MST (19:00 - 20:00 UTC)
+                    let lunchStr = '12:00 – 1:00 PM MT (America/Denver)';
                     if (tz === 'America/Denver') {
-                        lunchStr = '12:00 PM – 12:30 PM MT (30 min)';
+                        lunchStr = '12:00 – 1:00 PM MT (America/Denver)';
                     } else if (tz === 'America/New_York') {
-                        lunchStr = '2:00 PM – 2:30 PM ET (30 min)';
+                        lunchStr = '2:00 – 3:00 PM ET (60 min)';
                     } else if (tz) {
                         try {
-                            const startObj = new Date(Date.UTC(2026, 10, 19, 19, 0, 0));
-                            const endObj = new Date(Date.UTC(2026, 10, 19, 19, 30, 0));
+                            const startObj = new Date(Date.UTC(2026, 10, 24, 19, 0, 0));
+                            const endObj = new Date(Date.UTC(2026, 10, 24, 20, 0, 0));
                             const tzOpt = tz === 'local' ? undefined : tz;
                             const sFmt = new Intl.DateTimeFormat('en-US', { timeZone: tzOpt, hour: 'numeric', minute: '2-digit' }).format(startObj);
                             const eFmt = new Intl.DateTimeFormat('en-US', { timeZone: tzOpt, hour: 'numeric', minute: '2-digit', timeZoneName: 'short' }).format(endObj);
-                            lunchStr = `${sFmt} – ${eFmt} (30 min)`;
+                            lunchStr = `${sFmt} – ${eFmt} (60 min)`;
                         } catch (_) { }
                     }
                     el.innerHTML = `&#128197; ${dateLabel} &bull; &#9200; ${lunchStr}`;
@@ -1064,7 +1097,8 @@ const initThriveUI = () => {
                                 source: 'classes_inquiry_form',
                                 inquiry_type: type,
                                 message: msg,
-                                label: `Program Inquiry: ${type}`
+                                label: `Program Inquiry: ${type}`,
+                                meet_url: LUNCH_AND_LEARN_MEET.meetUrl
                             },
                             lead: {
                                 fn,
@@ -1083,6 +1117,11 @@ const initThriveUI = () => {
                             statusEl.textContent = '✓ Inquiry sent! A THRiVE coach will review your question and respond within 24 hours.';
                             statusEl.className = 'form-status-msg success';
                             statusEl.style.display = 'block';
+                        }
+                        const inqMeetBox = document.getElementById('inq-lunch-meet-box');
+                        if (inqMeetBox) {
+                            inqMeetBox.innerHTML = renderLunchLearnJoinCardHtml();
+                            inqMeetBox.style.display = 'block';
                         }
                         form.reset();
                         window.ThriveBotShield?.resetForm(form);
@@ -1114,11 +1153,13 @@ const initThriveUI = () => {
     };
 
     const LUNCH_AND_LEARN_SESSION = {
-        week: 'lunch-learn-nov19',
-        title: "5 to THRiVE Founding Pilot Lab — Thursday Lunch & Learn Live Demo",
-        description: "30-minute live clinical demonstration of the THRiVE Report voice dictation protocol, 21 daily strides, automated DAP note generation, and the $9/month client seat model. Dec 7 Founding Pilot Lab is strictly capped at 21 seats (3 Squads of 7).",
-        dtstartUtc: "20261119T190000Z", // Thu Nov 19 12:00 PM MST = 19:00 UTC
-        dtendUtc: "20261119T193000Z"
+        week: 'lunch-learn-nov24',
+        title: "5 to THRiVE Lunch & Learn",
+        description: "Tuesday, November 24 · 12:00 – 1:00pm (America/Denver)\\nGoogle Meet joining info\\nVideo call link: https://meet.google.com/bro-rgxh-rzd\\nOr dial: (US) +1 567-331-1188 PIN: 756 129 618#\\nMore phone numbers: https://tel.meet/bro-rgxh-rzd?pin=4024608972368",
+        location: LUNCH_AND_LEARN_MEET.meetUrl,
+        url: LUNCH_AND_LEARN_MEET.meetUrl,
+        dtstartUtc: "20261124T190000Z", // Tue Nov 24 12:00 PM America/Denver MST = 19:00 UTC
+        dtendUtc: "20261124T200000Z"
     };
 
     const PRACTITIONER_LAB_SESSIONS = [
@@ -1175,7 +1216,7 @@ const initThriveUI = () => {
 
     function downloadLunchAndLearnIcs() {
         const ics = generateIcsContent([LUNCH_AND_LEARN_SESSION]);
-        triggerIcsDownload('thrive-lunch-and-learn-nov19.ics', ics);
+        triggerIcsDownload('thrive-lunch-and-learn-nov24.ics', ics);
         fireThriveHaptic(15);
     }
 
@@ -1223,9 +1264,10 @@ const initThriveUI = () => {
                         body: JSON.stringify({
                             type: 'lead',
                             data: {
-                                source: 'thursday_lunch_and_learn_nov19',
+                                source: 'lunch_and_learn_nov24',
                                 practice_type: practiceType,
-                                label: `Thursday Lunch & Learn (Nov 19) — ${practiceType}`
+                                meet_url: LUNCH_AND_LEARN_MEET.meetUrl,
+                                label: `5 to THRiVE Lunch & Learn (Nov 24) — ${practiceType}`
                             },
                             lead: {
                                 fn,
@@ -1252,9 +1294,13 @@ const initThriveUI = () => {
                     }
 
                     if (statusEl) {
-                        statusEl.textContent = `✓ Seat reserved for ${fn} (${practiceType})! Your calendar invite (.ics) has been downloaded and confirmation logged for ${em}.`;
+                        statusEl.textContent = `✓ Seat reserved for ${fn} (${practiceType})! Your calendar invite (.ics) has been downloaded and your Google Meet link is ready below.`;
                         statusEl.className = 'form-status-msg success';
                         statusEl.style.display = 'block';
+                    }
+                    const llMeetBox = document.getElementById('ll-meet-join-box');
+                    if (llMeetBox) {
+                        llMeetBox.innerHTML = renderLunchLearnJoinCardHtml();
                     }
                     if (calActionsEl) {
                         calActionsEl.style.display = 'block';

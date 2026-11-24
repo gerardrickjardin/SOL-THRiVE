@@ -42,11 +42,11 @@ Every form submission and assessment completion forwards flat top-level fields t
 5. Wait 1 minute -> Send **Welcome Email** & **Welcome SMS**:
 
 **Welcome Email:**
-- **Subject:** `Welcome to THRiVE — Your Waiver ({{contact.waiver_ref}}) & Session 0 Steps`
-- **Body:** Confirm `{{contact.waiver_ref}}`, link directly to Session 0 Onboarding Hub (`https://www.thrivecoaching.ai/onboarding`), Day-1 Flow Survey (`https://www.thrivecoaching.ai/survey`), 6-Pillar THRiVE Report (`https://www.thrivecoaching.ai/profile`), and Class Schedule (`https://www.thrivecoaching.ai/classes`).
+- **Subject:** `Welcome to THRiVE — Your Waiver ({{contact.waiver_ref}}) & Next Steps`
+- **Body:** Confirm `{{contact.waiver_ref}}`, include the Lunch & Learn Google Meet joining link (`https://meet.google.com/bro-rgxh-rzd`, Tuesday, Nov 24 · 12:00 – 1:00pm America/Denver, Dial `(US) +1 567-331-1188 PIN: 756 129 618#`, More numbers: `https://tel.meet/bro-rgxh-rzd?pin=4024608972368`), and link directly to Session 0 Onboarding Hub (`https://www.thrivecoaching.ai/onboarding`), Day-1 Flow Survey (`https://www.thrivecoaching.ai/survey`), 6-Pillar THRiVE Report (`https://www.thrivecoaching.ai/profile`), and Class Schedule (`https://www.thrivecoaching.ai/classes`).
 
 **Welcome SMS:**
-> Welcome to THRiVE, {{contact.first_name}}! Your Participation Waiver ({{contact.waiver_ref}}) is on file. Open your Session 0 Onboarding Hub before Day 1 -> https://www.thrivecoaching.ai/onboarding Reply HELP anytime. Team THRiVE
+> Welcome to THRiVE, {{contact.first_name}}! Your Waiver ({{contact.waiver_ref}}) is on file. Join our Lunch & Learn (Tue Nov 24, 12–1pm MT): https://meet.google.com/bro-rgxh-rzd (PIN 756 129 618#) & open Onboarding: https://www.thrivecoaching.ai/onboarding
 
 ### Workflow C — Session 0 Onboarding Nudge & Readiness (`T + 24 Hours`)
 1. Wait 24 hours after `waiver-signed`.
