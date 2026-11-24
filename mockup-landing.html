@@ -442,6 +442,79 @@
       text-decoration: none
     }
 
+    .coupon-box {
+      margin: 10px 0 14px;
+      padding: 12px 14px;
+      background: #FAF5EA;
+      border: 1.5px dashed rgba(31, 27, 22, .24);
+      border-radius: 14px
+    }
+
+    .coupon-box label {
+      display: block;
+      font-size: .8rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 6px
+    }
+
+    .coupon-row {
+      display: flex;
+      gap: 8px;
+      align-items: stretch
+    }
+
+    .coupon-row input {
+      flex: 1 1 auto;
+      min-width: 0;
+      font-family: 'Inter';
+      font-size: .94rem;
+      padding: 9px 12px;
+      border: var(--line);
+      border-radius: 11px;
+      background: #FFFDF8;
+      color: var(--ink);
+      outline: none
+    }
+
+    .coupon-row input:focus {
+      border-color: var(--violet);
+      box-shadow: 0 0 0 3px rgba(77, 98, 120, .2)
+    }
+
+    .coupon-apply-btn {
+      flex: 0 0 auto;
+      padding: 0 16px;
+      border-radius: 11px;
+      border: 1.5px solid #1F1B16;
+      background: #1F1B16;
+      color: #FFFDF8;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: .84rem;
+      cursor: pointer
+    }
+
+    .coupon-apply-btn.is-applied {
+      background: #4B763B;
+      border-color: #2D4A22
+    }
+
+    .coupon-status {
+      font-size: .8rem;
+      font-weight: 600;
+      margin-top: 6px;
+      min-height: 1em
+    }
+
+    .coupon-status.ok {
+      color: #356226
+    }
+
+    .coupon-status.err {
+      color: #B54840
+    }
+
     /* Checkout */
     .line {
       display: flex;
@@ -629,7 +702,8 @@
           <div class="line"><span>5 to THRiVE Practitioner Certification</span><span>Included</span></div>
           <div class="line"><span>Intake Briefing</span><span id="pay-when" style="text-align:right">Included (Optional
               Scheduling)</span></div>
-          <div class="line total"><span>Total due (Founding Rate)</span><span><s
+          <div class="line" id="coupon-discount-line" style="display:none;color:#356226"><span>Sponsor Coupon (<strong id="coupon-badge-code">McBride</strong> — 100% Covered)</span><span style="color:#356226">-$500.00</span></div>
+          <div class="line total"><span>Total due (Founding Rate)</span><span id="pay-total-amount"><s
                 style="color:#6B7280;font-weight:500;font-size:.95rem;margin-right:8px">$995.00</s>$500.00</span></div>
 
           <div class="sol-story-box">
@@ -671,6 +745,14 @@
           </div>
           <div class="field"><label for="pay-org">Organization / Practice (Optional)</label><input id="pay-org"
               autocomplete="organization"></div>
+          <div class="coupon-box">
+            <label for="pay-coupon">Sponsor / Coupon Code (Optional)</label>
+            <div class="coupon-row">
+              <input type="text" id="pay-coupon" placeholder="Enter coupon code" autocomplete="off" autocapitalize="none" spellcheck="false">
+              <button type="button" class="coupon-apply-btn" id="apply-coupon-btn">Apply</button>
+            </div>
+            <div class="coupon-status" id="coupon-status" aria-live="polite"></div>
+          </div>
           <div id="payment-element" style="margin:10px 0 18px;min-height:110px"></div>
           <label class="consent-box" for="pay-waiver-consent">
             <input type="checkbox" id="pay-waiver-consent" required>
@@ -680,7 +762,7 @@
           <button class="btn btn-primary btn-block" id="pay-btn" type="submit" disabled>Pay $500.00 &amp; Enroll in
             Founding Pilot Lab</button>
           <div class="err" id="pay-err" role="alert"></div>
-          <p class="fine">Secured by Stripe. We never see or store your card details.</p>
+          <p class="fine" id="stripe-fine-note">Secured by Stripe. We never see or store your card details.</p>
         </form>
       </div>
 
@@ -758,7 +840,83 @@
   <script>
     (function () {
       const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
-      const state = { lead: {}, bookedCalendar: false };
+      const state = { lead: {}, bookedCalendar: false, appliedCoupon: '' };
+
+      function applyCouponCode(rawCode, silent) {
+        const cleaned = String(rawCode || '').trim();
+        const statusEl = $('#coupon-status');
+        const applyBtn = $('#apply-coupon-btn');
+        const discountLine = $('#coupon-discount-line');
+        const totalEl = $('#pay-total-amount');
+        const payEl = $('#payment-element');
+        const fineEl = $('#stripe-fine-note');
+        const payBtn = $('#pay-btn');
+
+        if (!cleaned) {
+          state.appliedCoupon = '';
+          if (statusEl) { statusEl.textContent = ''; statusEl.className = 'coupon-status'; }
+          if (applyBtn) { applyBtn.textContent = 'Apply'; applyBtn.classList.remove('is-applied'); }
+          if (discountLine) discountLine.style.display = 'none';
+          if (totalEl) totalEl.innerHTML = '<s style="color:#6B7280;font-weight:500;font-size:.95rem;margin-right:8px">$995.00</s>$500.00';
+          if (payEl) payEl.style.display = 'block';
+          if (fineEl) fineEl.textContent = 'Secured by Stripe. We never see or store your card details.';
+          if (payBtn) { payBtn.textContent = 'Pay $500.00 & Enroll in Founding Pilot Lab'; payBtn.disabled = !stripeReady; }
+          return false;
+        }
+
+        if (cleaned.toLowerCase() === 'mcbride') {
+          state.appliedCoupon = 'McBride';
+          if ($('#pay-coupon') && $('#pay-coupon').value.trim().toLowerCase() !== 'mcbride') $('#pay-coupon').value = 'McBride';
+          if (statusEl) {
+            statusEl.innerHTML = '✓ Coupon "McBride" applied — payment bypassed ($0.00 due). <button type="button" id="remove-coupon-link" style="background:none;border:0;padding:0;margin-left:6px;color:#4B763B;text-decoration:underline;font:inherit;cursor:pointer;">Remove</button>';
+            statusEl.className = 'coupon-status ok';
+            const rm = document.getElementById('remove-coupon-link');
+            if (rm) rm.addEventListener('click', () => { if ($('#pay-coupon')) $('#pay-coupon').value = ''; applyCouponCode(''); });
+          }
+          if (applyBtn) { applyBtn.textContent = '✓ Applied'; applyBtn.classList.add('is-applied'); }
+          if (discountLine) discountLine.style.display = 'flex';
+          if (totalEl) totalEl.innerHTML = '<s style="color:#6B7280;font-weight:500;font-size:.95rem;margin-right:8px">$500.00</s>$0.00';
+          if (payEl) payEl.style.display = 'none';
+          if (fineEl) fineEl.textContent = 'Sponsored registration via McBride coupon — no payment card required.';
+          if (payBtn) { payBtn.disabled = false; payBtn.textContent = 'Complete Free Sponsored Registration →'; }
+          if ($('#pay-err')) $('#pay-err').textContent = '';
+          return true;
+        }
+
+        state.appliedCoupon = '';
+        if (discountLine) discountLine.style.display = 'none';
+        if (totalEl) totalEl.innerHTML = '<s style="color:#6B7280;font-weight:500;font-size:.95rem;margin-right:8px">$995.00</s>$500.00';
+        if (payEl) payEl.style.display = 'block';
+        if (fineEl) fineEl.textContent = 'Secured by Stripe. We never see or store your card details.';
+        if (payBtn) { payBtn.textContent = 'Pay $500.00 & Enroll in Founding Pilot Lab'; payBtn.disabled = !stripeReady; }
+        if (!silent && statusEl) { statusEl.textContent = 'Coupon code not recognized. Please check spelling and try again.'; statusEl.className = 'coupon-status err'; }
+        return false;
+      }
+
+      if ($('#apply-coupon-btn')) {
+        $('#apply-coupon-btn').addEventListener('click', () => {
+          applyCouponCode($('#pay-coupon') ? $('#pay-coupon').value : '', false);
+        });
+      }
+      if ($('#pay-coupon')) {
+        $('#pay-coupon').addEventListener('input', () => {
+          const val = $('#pay-coupon').value.trim();
+          if (val.toLowerCase() === 'mcbride') {
+            applyCouponCode(val, true);
+          } else if (state.appliedCoupon) {
+            applyCouponCode('', true);
+          } else if ($('#coupon-status')) {
+            $('#coupon-status').textContent = '';
+            $('#coupon-status').className = 'coupon-status';
+          }
+        });
+        $('#pay-coupon').addEventListener('keydown', e => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            applyCouponCode($('#pay-coupon').value, false);
+          }
+        });
+      }
 
       // Hydrate lead fields if visitor previously entered contact info on this browser
       try {
@@ -873,7 +1031,9 @@
 
       function buildWaiverPrefillUrl() {
         const L = state.lead || {};
-        const q = new URLSearchParams({ funding: 'direct', paid: '1' });
+        const isCoupon = state.appliedCoupon === 'McBride';
+        const q = new URLSearchParams({ funding: isCoupon ? 'sponsored' : 'direct', paid: '1' });
+        if (isCoupon) q.set('coupon', 'McBride');
         if (L.fn) q.set('fn', L.fn);
         if (L.ln) q.set('ln', L.ln);
         if (L.em) q.set('em', L.em);
@@ -885,25 +1045,75 @@
       function persistEnrollmentPrefill(extra) {
         try {
           const L = state.lead || {};
+          const isCoupon = state.appliedCoupon === 'McBride';
           localStorage.setItem('thrive_enrollment_prefill_v1', JSON.stringify(Object.assign({
-            fn: L.fn || '', ln: L.ln || '', em: L.em || '', ph: L.ph || '', org: L.org || '', funding: 'direct', paid: true
+            fn: L.fn || '', ln: L.ln || '', em: L.em || '', ph: L.ph || '', org: L.org || '', funding: isCoupon ? 'sponsored' : 'direct', couponCode: isCoupon ? 'McBride' : '', paid: true
           }, extra || {})));
         } catch (e) { }
       }
 
       $('#pay-form').addEventListener('submit', async e => {
         e.preventDefault();
+        const rawCoupon = ($('#pay-coupon') ? $('#pay-coupon').value : '').trim();
+        if (rawCoupon && rawCoupon.toLowerCase() === 'mcbride' && !state.appliedCoupon) {
+          applyCouponCode(rawCoupon, true);
+        } else if (rawCoupon && rawCoupon.toLowerCase() !== 'mcbride') {
+          applyCouponCode(rawCoupon, false);
+          return;
+        }
+        const isCoupon = state.appliedCoupon === 'McBride';
         const fn = $('#pay-fn').value.trim(), ln = $('#pay-ln').value.trim(), em = $('#pay-em').value.trim(), ph = $('#pay-ph').value.trim(), org = $('#pay-org').value.trim();
         const consentEl = $('#pay-waiver-consent');
         if (!fn || !ln || !em) { $('#pay-err').textContent = 'Please enter your first name, last name, and email address.'; return }
         if (!/^\S+@\S+\.\S+$/.test(em)) { $('#pay-err').textContent = 'Please enter a valid email address.'; return }
         if (consentEl && !consentEl.checked) { $('#pay-err').textContent = 'Please agree to the Participation Waiver terms and onboarding notifications before enrolling.'; return }
-        state.lead = { fn, ln, org: org || 'Independent Practice', em, ph };
+        state.lead = { fn, ln, org: org || (isCoupon ? 'McBride Impact' : 'Independent Practice'), em, ph };
         syncLeadInputs();
         persistLead();
         persistEnrollmentPrefill({ waiverAccepted: true, smsConsent: true, paid: false });
+        const btn = $('#pay-btn');
+        if (isCoupon) {
+          btn.disabled = true; btn.textContent = 'Completing Free Registration…'; $('#pay-err').textContent = '';
+          try {
+            const _shield = window.ThriveBotShield ? await window.ThriveBotShield.prepareSubmission($('#pay-form')) : undefined;
+            const r = await fetch('/api/event', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                type: 'lead',
+                lead: state.lead,
+                data: {
+                  source: 'coupon_sponsored_enrollment',
+                  coupon_code: 'McBride',
+                  sponsor_org: state.lead.org,
+                  funding_source: 'GoFundMe / Scholarship / Sponsor',
+                  amount_usd: 0,
+                  waiver_accepted: true,
+                  sms_consent: true,
+                  label: 'Sponsored Seat Enrolled (Coupon: McBride)',
+                  message: `McBride coupon sponsored registration ($0.00 due) | Attendee: ${fn} ${ln} | Org: ${state.lead.org}`
+                },
+                _shield,
+                ts: new Date().toISOString()
+              })
+            });
+            const j = await r.json().catch(() => ({}));
+            if (!r.ok || !j.ok) throw new Error(j.error || 'Could not complete sponsored registration right now.');
+            persistEnrollmentPrefill({ waiverAccepted: true, smsConsent: true, paid: true });
+            window.ThriveBotShield?.resetForm($('#pay-form'));
+            if ($('#success-waiver-link')) $('#success-waiver-link').href = buildWaiverPrefillUrl();
+            $('#pay-grid').style.display = 'none'; $('#success').style.display = 'block'; $('#success').classList.add('col-swap');
+            $('#ok-msg').textContent = 'Coupon "McBride" applied ($0.00 due) — registration complete for ' + state.lead.em + '! Next step: complete your pre-filled e-signature waiver, then launch your Session 0 Pre-Flight Hub.';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          } catch (ex) {
+            $('#pay-err').textContent = ex.message || 'Registration could not be completed.';
+            btn.disabled = false; btn.textContent = 'Complete Free Sponsored Registration →';
+            window.ThriveBotShield?.resetForm($('#pay-form'));
+          }
+          return;
+        }
         if (!stripeReady || !stripe || !elements) { $('#pay-err').textContent = 'Secure payment form is still initializing. Please try again in a moment.'; return }
-        const btn = $('#pay-btn'); btn.disabled = true; btn.textContent = 'Processing…'; $('#pay-err').textContent = '';
+        btn.disabled = true; btn.textContent = 'Processing…'; $('#pay-err').textContent = '';
         try {
           const _shield = window.ThriveBotShield ? await window.ThriveBotShield.prepareSubmission($('#pay-form')) : undefined;
           const { error: submitError } = await elements.submit();
@@ -945,6 +1155,8 @@
       const qs = new URLSearchParams((location && location.search) || '');
       const hashStr = (location && location.hash) || '';
       const reqView = (qs.get('view') === 'book' || hashStr === '#book') ? 'book' : 'pay';
+      const urlCoupon = (qs.get('coupon') || qs.get('code') || '').trim();
+      if (urlCoupon) { applyCouponCode(urlCoupon, false); }
       if (qs.get('redirect_status') === 'succeeded') {
         if ($('#success-waiver-link')) $('#success-waiver-link').href = buildWaiverPrefillUrl();
         $('#pay-grid').style.display = 'none'; $('#success').style.display = 'block';

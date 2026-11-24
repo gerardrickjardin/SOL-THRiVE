@@ -48,6 +48,13 @@ module.exports = async (req, res) => {
     const d = data || {};
     const r = d.ratings || [];
     const eventSource = d.source || 'thrive-funnel';
+    let normalizedCoupon = String(d.coupon_code || '').trim();
+    if (eventSource === 'coupon_sponsored_enrollment') {
+      if (normalizedCoupon.toLowerCase() !== 'mcbride') {
+        return res.status(400).json({ error: 'Invalid or unrecognized coupon code.' });
+      }
+      normalizedCoupon = 'McBride';
+    }
     const cleanSigUrl = sanitizeSignatureDataUrl(d.signature_data_url);
     const fullName = [l.fn, l.ln].filter(Boolean).join(' ');
     await forward({
@@ -75,10 +82,13 @@ module.exports = async (req, res) => {
       support_urgency: d.urgency || '',
       support_squad: d.squad || '',
       waiver_signed: Boolean(d.waiver_signed),
+      waiver_accepted: Boolean(d.waiver_accepted),
       waiver_ref: d.confirmation_ref || '',
       agreement_version: d.agreement_version || '',
       funding_source: d.funding_source || '',
       sponsor_org: d.sponsor_org || '',
+      coupon_code: normalizedCoupon,
+      amount_usd: d.amount_usd != null ? d.amount_usd : '',
       printed_name: d.printed_name || '',
       signed_date: d.signed_date || '',
       signature_mode: d.signature_mode || '',
