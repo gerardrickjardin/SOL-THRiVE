@@ -1718,15 +1718,81 @@ const initThriveUI = () => {
         }));
     };
 
+    const resolveSavedParticipantLead = (fallbackEmail, fallbackName) => {
+        const storedWaiver = safeParseJSON(safeGetStorageItem('local', 'thrive_waiver_status_v1')) || {};
+        const storedPrefill = safeParseJSON(safeGetStorageItem('local', 'thrive_enrollment_prefill_v1')) || {};
+        const storedSolLead = safeParseJSON(safeGetStorageItem('local', 'solThriveLead')) || safeParseJSON(safeGetStorageItem('local', 'solThrive')) || {};
+        const email = String(fallbackEmail || storedWaiver.email || storedPrefill.email || storedSolLead.em || storedSolLead.email || '').trim();
+        const rawName = String(fallbackName || storedWaiver.fullName || [storedPrefill.fn, storedPrefill.ln].filter(Boolean).join(' ') || [storedSolLead.fn, storedSolLead.ln].filter(Boolean).join(' ') || '').trim();
+        const parts = rawName.split(/\s+/).filter(Boolean);
+        return {
+            fn: storedPrefill.fn || storedSolLead.fn || (parts[0] || ''),
+            ln: storedPrefill.ln || storedSolLead.ln || (parts.slice(1).join(' ') || ''),
+            em: email,
+            ph: storedWaiver.phone || storedPrefill.phone || storedSolLead.ph || storedSolLead.phone || '',
+            org: storedWaiver.org || storedPrefill.org || storedSolLead.org || storedSolLead.organization || ''
+        };
+    };
+
+    const syncAssessmentCompletionToCrm = (sourceKey, assessmentName, assessmentScore, leadOverrides = {}) => {
+        try {
+            if (typeof fetch !== 'function' || typeof window === 'undefined') return;
+            const lead = resolveSavedParticipantLead(leadOverrides.em, leadOverrides.name);
+            if (!lead.em || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(lead.em)) return;
+
+            const dedupeKey = `thrive_crm_sync_${sourceKey}`;
+            const sig = `${lead.em}:${String(assessmentScore || 'done')}`;
+            try {
+                if (window.sessionStorage && window.sessionStorage.getItem(dedupeKey) === sig) return;
+                if (window.sessionStorage) window.sessionStorage.setItem(dedupeKey, sig);
+            } catch (_) { }
+
+            const summary = getCompletionSummary();
+            const completedList = [
+                summary.hasProfile ? 'THRiVE Report' : '',
+                summary.hasFlow ? 'Flow Survey' : '',
+                summary.hasHope ? 'HoPE Index' : ''
+            ].filter(Boolean).join(', ');
+
+            const shieldPayload = window.ThriveBotShield && typeof window.ThriveBotShield.getPassivePayload === 'function'
+                ? window.ThriveBotShield.getPassivePayload(document.body)
+                : undefined;
+
+            fetch('/api/event', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                keepalive: true,
+                body: JSON.stringify({
+                    type: 'assessment',
+                    ts: new Date().toISOString(),
+                    lead,
+                    data: {
+                        source: sourceKey,
+                        assessment_name: assessmentName,
+                        assessment_score: assessmentScore != null ? assessmentScore : '',
+                        completed_assessments: completedList || assessmentName,
+                        message: `${assessmentName} completed (${assessmentScore != null ? assessmentScore : 'Recorded'}) | Completed: ${completedList || assessmentName}`
+                    },
+                    _shield: shieldPayload
+                })
+            }).catch(() => { });
+        } catch (_) { }
+    };
+
     const saveFlowSurvey = (flowData) => {
         const normalized = normalizeFlowSurveyPayload(flowData) || {};
-        return writeDossier(prev => ({
+        const next = writeDossier(prev => ({
             ...prev,
             flowSurvey: {
                 completedAt: new Date().toISOString(),
                 ...normalized
             }
         }));
+        const scoreVal = typeof normalized.currentScore === 'number' ? normalized.currentScore : (normalized.baselineScore ?? '');
+        if (scoreVal !== '' || normalized.problem || normalized.problemStatement) {
+            syncAssessmentCompletionToCrm('flow-survey-complete', 'Flow Survey', scoreVal);
+        }
+        return next;
     };
 
     const saveThriveReport = (reportPayload = {}) => {
@@ -1739,7 +1805,7 @@ const initThriveUI = () => {
             interviewer,
             email
         };
-        return writeDossier(prev => ({
+        const next = writeDossier(prev => ({
             ...prev,
             thriveReport: {
                 completedAt: reportPayload.completedAt || prev.thriveReport?.completedAt || new Date().toISOString(),
@@ -1751,16 +1817,28 @@ const initThriveUI = () => {
                 pillars
             }
         }));
+        const filledPillars = Object.values(pillars || {}).filter(v => v && String(v).trim().length > 0).length;
+        if (filledPillars > 0) {
+            syncAssessmentCompletionToCrm('thrive-report-complete', '6-Pillar THRiVE Report', `${filledPillars}/6 pillars`, {
+                em: email,
+                name: interviewee
+            });
+        }
+        return next;
     };
 
     const saveHopeIndex = (hopePayload) => {
-        return writeDossier(prev => ({
+        const next = writeDossier(prev => ({
             ...prev,
             hopeIndex: {
                 completedAt: new Date().toISOString(),
                 ...hopePayload
             }
         }));
+        if (hopePayload && typeof hopePayload.totalHoPEScore100 === 'number') {
+            syncAssessmentCompletionToCrm('hope-index-complete', 'HoPE Index', hopePayload.totalHoPEScore100);
+        }
+        return next;
     };
 
     const getCompletionSummary = (customDossier) => {

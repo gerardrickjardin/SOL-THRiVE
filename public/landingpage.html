@@ -35,7 +35,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Nunito:wght@700;800;900&family=Plus+Jakarta+Sans:wght@800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css?v=99c71da4">
 <script src="bot-shield.js?v=6373a65f" defer></script>
-<script src="script.js?v=c6f66a7d" defer></script>
+<script src="script.js?v=59f1a21a" defer></script>
 <style>
 :root{
   --cream:#F7EBD5; --white:#FFFDF8; --ink:#1F1B16; --slate:#4E463D;
@@ -94,6 +94,11 @@ main.funnel-main{max-width:1240px;margin:auto;padding:32px 28px 80px;width:100%}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .err{color:#B54840;font-size:.82rem;margin-top:8px;min-height:1.2em}
 .fine{font-size:.78rem;text-align:center;margin-top:10px}
+.consent-box{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;background:#FAF5EA;border:1.5px solid rgba(31,27,22,.22);border-radius:12px;margin:12px 0;font-size:.82rem;line-height:1.45;color:var(--ink);cursor:pointer}
+.consent-box input[type="checkbox"]{flex:0 0 auto;width:18px;height:18px;margin-top:2px;accent-color:#B54840;cursor:pointer}
+.consent-box a{color:#B54840;font-weight:700;text-decoration:underline}
+.success-actions{display:flex;flex-direction:column;gap:10px;align-items:center;margin-top:16px}
+.btn-outline-funnel{display:inline-flex;align-items:center;justify-content:center;padding:10px 18px;border-radius:12px;border:1.5px solid rgba(31,27,22,.28);background:#FAF5EA;color:var(--ink);font-weight:600;font-size:.9rem;text-decoration:none}
 /* Checkout */
 .line{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid rgba(24,24,27,.12);font-size:.93rem}
 .line span:last-child{font-weight:600;color:var(--ink);white-space:nowrap}
@@ -251,6 +256,10 @@ main.funnel-main{max-width:1240px;margin:auto;padding:32px 28px 80px;width:100%}
         </div>
         <div class="field"><label for="pay-org">Organization / Practice (Optional)</label><input id="pay-org" autocomplete="organization"></div>
         <div id="payment-element" style="margin:10px 0 18px;min-height:110px"></div>
+        <label class="consent-box" for="pay-waiver-consent">
+          <input type="checkbox" id="pay-waiver-consent" required>
+          <span>I agree to the <a href="waiver.html" target="_blank" rel="noopener noreferrer">THRiVE Participation Agreement, Release &amp; Waiver</a> (non-clinical coaching scope, 50% Risk-Split / refund terms, and Squad confidentiality) and consent to cohort onboarding emails &amp; SMS reminders.</span>
+        </label>
         <div class="bot-shield-slot"></div>
         <button class="btn btn-primary btn-block" id="pay-btn" type="submit" disabled>Pay $500.00 &amp; Enroll in Founding Pilot Lab</button>
         <div class="err" id="pay-err" role="alert"></div>
@@ -262,7 +271,10 @@ main.funnel-main{max-width:1240px;margin:auto;padding:32px 28px 80px;width:100%}
       <svg width="90" height="90" viewBox="0 0 90 90" fill="none" stroke="#1F1B16" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="45" cy="45" r="32"/><path d="M30 46l11 11 20-24" stroke="#5B8A49" stroke-width="4"/></svg>
       <h2>You’re enrolled in the Founding Pilot Lab!</h2>
       <p id="ok-msg"></p>
-      <a class="btn btn-primary" href="onboarding.html" style="margin-top:16px">Launch Session 0 Pre-Flight Hub &rarr;</a>
+      <div class="success-actions">
+        <a class="btn btn-primary" id="success-waiver-link" href="waiver.html?funding=direct&amp;paid=1">Step 1: Complete E-Signature Waiver (Pre-Filled) &rarr;</a>
+        <a class="btn-outline-funnel" href="onboarding.html">Skip to Session 0 Pre-Flight Hub &rarr;</a>
+      </div>
     </div>
   </section>
 
@@ -428,14 +440,37 @@ main.funnel-main{max-width:1240px;margin:auto;padding:32px 28px 80px;width:100%}
     }
   }
 
+  function buildWaiverPrefillUrl(){
+    const L=state.lead||{};
+    const q=new URLSearchParams({funding:'direct',paid:'1'});
+    if(L.fn)q.set('fn',L.fn);
+    if(L.ln)q.set('ln',L.ln);
+    if(L.em)q.set('em',L.em);
+    if(L.ph)q.set('ph',L.ph);
+    if(L.org)q.set('org',L.org);
+    return 'waiver.html?'+q.toString();
+  }
+
+  function persistEnrollmentPrefill(extra){
+    try{
+      const L=state.lead||{};
+      localStorage.setItem('thrive_enrollment_prefill_v1',JSON.stringify(Object.assign({
+        fn:L.fn||'',ln:L.ln||'',em:L.em||'',ph:L.ph||'',org:L.org||'',funding:'direct',paid:true
+      },extra||{})));
+    }catch(e){}
+  }
+
   $('#pay-form').addEventListener('submit',async e=>{
     e.preventDefault();
     const fn=$('#pay-fn').value.trim(), ln=$('#pay-ln').value.trim(), em=$('#pay-em').value.trim(), ph=$('#pay-ph').value.trim(), org=$('#pay-org').value.trim();
+    const consentEl=$('#pay-waiver-consent');
     if(!fn||!ln||!em){$('#pay-err').textContent='Please enter your first name, last name, and email address.';return}
     if(!/^\S+@\S+\.\S+$/.test(em)){$('#pay-err').textContent='Please enter a valid email address.';return}
+    if(consentEl&&!consentEl.checked){$('#pay-err').textContent='Please agree to the Participation Waiver terms and onboarding notifications before enrolling.';return}
     state.lead={fn,ln,org:org||'Independent Practice',em,ph};
     syncLeadInputs();
     persistLead();
+    persistEnrollmentPrefill({waiverAccepted:true,smsConsent:true,paid:false});
     if(!stripeReady||!stripe||!elements){$('#pay-err').textContent='Secure payment form is still initializing. Please try again in a moment.';return}
     const btn=$('#pay-btn');btn.disabled=true;btn.textContent='Processing…';$('#pay-err').textContent='';
     try{
@@ -448,6 +483,7 @@ main.funnel-main{max-width:1240px;margin:auto;padding:32px 28px 80px;width:100%}
         body:JSON.stringify({
           lead:state.lead,
           booking:{calendar:state.bookedCalendar?'Booking Calendar':'Direct Enrollment',label:$('#pay-when').textContent},
+          consent:{waiverAccepted:true,smsConsent:true},
           _shield
         })
       });
@@ -460,10 +496,12 @@ main.funnel-main{max-width:1240px;margin:auto;padding:32px 28px 80px;width:100%}
         confirmParams:{return_url:location.origin+location.pathname,receipt_email:state.lead.em}
       });
       if(error){$('#pay-err').textContent=error.message;btn.disabled=false;btn.textContent='Pay $500.00 & Enroll in Founding Pilot Lab';window.ThriveBotShield?.resetForm($('#pay-form'));return}
+      persistEnrollmentPrefill({waiverAccepted:true,smsConsent:true,paid:true});
       track('checkout_complete',{direct:true});
       window.ThriveBotShield?.resetForm($('#pay-form'));
+      if($('#success-waiver-link'))$('#success-waiver-link').href=buildWaiverPrefillUrl();
       $('#pay-grid').style.display='none';$('#success').style.display='block';$('#success').classList.add('col-swap');
-      $('#ok-msg').textContent='A confirmation is on its way to '+state.lead.em+'. You will receive your LearnWorlds classroom invite and Squad assignment for Session 0 Pre-Flight (Dec 5–6).';
+      $('#ok-msg').textContent='A confirmation is on its way to '+state.lead.em+'. Complete your pre-filled e-signature waiver next, then launch your Session 0 Pre-Flight Hub.';
       window.scrollTo({top:0,behavior:'smooth'});
     }catch(ex){
       $('#pay-err').textContent=ex.message||'Payment processing failed.';
@@ -477,8 +515,9 @@ main.funnel-main{max-width:1240px;margin:auto;padding:32px 28px 80px;width:100%}
   const hashStr=(location&&location.hash)||'';
   const reqView=(qs.get('view')==='book'||hashStr==='#book')?'book':'pay';
   if(qs.get('redirect_status')==='succeeded'){
+    if($('#success-waiver-link'))$('#success-waiver-link').href=buildWaiverPrefillUrl();
     $('#pay-grid').style.display='none';$('#success').style.display='block';
-    $('#ok-msg').textContent='Your payment succeeded! Check your inbox for your LearnWorlds classroom invite and Squad assignment for Session 0 Pre-Flight (Dec 5–6).';
+    $('#ok-msg').textContent='Your payment succeeded! Next step: complete your pre-filled e-signature waiver, then launch your Session 0 Pre-Flight Hub.';
   } else {
     showView(reqView);
     if(document.readyState==='complete'||typeof window.addEventListener!=='function'){initStripe()}else{window.addEventListener('load',initStripe)}

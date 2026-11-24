@@ -19,7 +19,7 @@ module.exports = async (req, res) => {
   const key = process.env.STRIPE_SECRET_KEY;
   if (!key) return res.status(500).json({ error: 'Payments are not configured yet.' });
 
-  const { lead = {}, booking = {} } = req.body || {};
+  const { lead = {}, booking = {}, consent = {} } = req.body || {};
   const params = new URLSearchParams({
     amount: String(AMOUNT_CENTS),
     currency: 'usd',
@@ -33,6 +33,9 @@ module.exports = async (req, res) => {
     'metadata[phone]': lead.ph || '',
     'metadata[session_date]': booking.date || '',
     'metadata[session_time]': booking.time || '',
+    'metadata[funding_source]': 'Direct Self-Pay',
+    'metadata[waiver_accepted]': consent.waiverAccepted ? 'true' : 'false',
+    'metadata[sms_consent]': consent.smsConsent ? 'true' : 'false',
   });
   if (!lead.em) params.delete('receipt_email');
 

@@ -846,7 +846,7 @@
                 <div class="progress-container">
                     <div class="progress-header">
                         <span>Pre-Flight Readiness</span>
-                        <span id="checklist-progress-text">0 of 7 Completed • 0%</span>
+                        <span id="checklist-progress-text">0 of 8 Completed • 0%</span>
                     </div>
                     <div class="progress-track" aria-label="Checklist completion progress">
                         <div class="progress-bar-fill" id="checklist-progress-bar" style="width: 0%;"></div>
@@ -854,12 +854,28 @@
                 </div>
 
                 <ul class="checklist-list" id="checklist-items">
+                    <li class="checklist-item" data-key="waiver_signed">
+                        <input type="checkbox" class="checklist-item-checkbox" id="check-waiver_signed"
+                            aria-label="Toggle Participation Agreement and Waiver Signed">
+                        <div class="checklist-item-content">
+                            <div class="checklist-item-title-row">
+                                <span class="checklist-item-title">1. Participation Agreement, Release &amp; Waiver Signed</span>
+                                <span class="checklist-item-badge">Pending</span>
+                            </div>
+                            <p class="checklist-item-desc">
+                                Complete your e-signature waiver covering non-clinical coaching scope, Squad confidentiality, and 50% Risk-Split terms.
+                                <span id="waiver-ref-note"></span>
+                                <a href="waiver.html">Open Waiver Form &rarr;</a>
+                            </p>
+                        </div>
+                    </li>
+
                     <li class="checklist-item" data-key="triage_survey">
                         <input type="checkbox" class="checklist-item-checkbox" id="check-triage_survey"
                             aria-label="Toggle Baseline Flow Survey Triage">
                         <div class="checklist-item-content">
                             <div class="checklist-item-title-row">
-                                <span class="checklist-item-title">1. Baseline Flow Survey Triage</span>
+                                <span class="checklist-item-title">2. Baseline Flow Survey Triage</span>
                                 <span class="checklist-item-badge">Pending</span>
                             </div>
                             <p class="checklist-item-desc">
@@ -875,7 +891,7 @@
                             aria-label="Toggle 6-Pillar THRiVE Report">
                         <div class="checklist-item-content">
                             <div class="checklist-item-title-row">
-                                <span class="checklist-item-title">2. 6-Pillar THRiVE Report Exploration</span>
+                                <span class="checklist-item-title">3. 6-Pillar THRiVE Report Exploration</span>
                                 <span class="checklist-item-badge">Pending</span>
                             </div>
                             <p class="checklist-item-desc">
@@ -891,7 +907,7 @@
                             aria-label="Toggle Microphone Calibration">
                         <div class="checklist-item-content">
                             <div class="checklist-item-title-row">
-                                <span class="checklist-item-title">3. Workstation Microphone &amp; Speech Dictation
+                                <span class="checklist-item-title">4. Workstation Microphone &amp; Speech Dictation
                                     Calibration</span>
                                 <span class="checklist-item-badge">Pending</span>
                             </div>
@@ -904,15 +920,15 @@
 
                     <li class="checklist-item" data-key="safesave_practice">
                         <input type="checkbox" class="checklist-item-checkbox" id="check-safesave_practice"
-                            aria-label="Toggle Safe-Save Practice">
+                            aria-label="Toggle Safe-Save Practice and Personos Setup">
                         <div class="checklist-item-content">
                             <div class="checklist-item-title-row">
-                                <span class="checklist-item-title">4. "Safe-Save" Cadence Practice (Enter Key)</span>
+                                <span class="checklist-item-title">5. Personos (&ldquo;Pur&rdquo;) Setup &amp; "Safe-Save" Cadence Practice</span>
                                 <span class="checklist-item-badge">Pending</span>
                             </div>
                             <p class="checklist-item-desc">
-                                Practice pressing the Enter key every 1–2 minutes (60–120s) to lock client memory. 3
-                                successful saves automatically complete this item.
+                                Test your Personos AI prompt and practice pressing the Enter key every 1–2 minutes to lock memory (3 saves auto-complete this item).
+                                <a href="personos-prompt.html" target="_blank">Copy Personos System Prompt &rarr;</a>
                             </p>
                         </div>
                     </li>
@@ -922,7 +938,7 @@
                             aria-label="Toggle LearnWorlds LMS Login">
                         <div class="checklist-item-content">
                             <div class="checklist-item-title-row">
-                                <span class="checklist-item-title">5. LearnWorlds LMS Login &amp; Portal Bookmark</span>
+                                <span class="checklist-item-title">6. LearnWorlds LMS Login &amp; Portal Bookmark</span>
                                 <span class="checklist-item-badge">Pending</span>
                             </div>
                             <p class="checklist-item-desc">
@@ -938,13 +954,12 @@
                             aria-label="Toggle Squad Placement & Introduction">
                         <div class="checklist-item-content">
                             <div class="checklist-item-title-row">
-                                <span class="checklist-item-title">6. Squad Placement &amp; Introduction (Squad A, B, or
+                                <span class="checklist-item-title">7. Squad Placement &amp; Introduction (Squad A, B, or
                                     C)</span>
                                 <span class="checklist-item-badge">Pending</span>
                             </div>
                             <p class="checklist-item-desc">
-                                Confirm your 7-practitioner squad assignment (Squad A, B, or C) in LearnWorlds Community
-                                and post your clinical focus.
+                                Confirm your 7-practitioner squad assignment (Squad A, B, or C), review zero-screenshot Squad confidentiality, and post your intro.
                             </p>
                         </div>
                     </li>
@@ -954,13 +969,12 @@
                             aria-label="Toggle Calendar Sync">
                         <div class="checklist-item-content">
                             <div class="checklist-item-title-row">
-                                <span class="checklist-item-title">7. Calendar Sync (15-Event Practitioner Lab
-                                    .ICS)</span>
+                                <span class="checklist-item-title">8. Calendar Sync (Cohort &amp; Tech Clinics .ICS)</span>
                                 <span class="checklist-item-badge">Pending</span>
                             </div>
                             <p class="checklist-item-desc">
-                                Sync all Monday &amp; Wednesday live labs (5:00–6:30 PM MT) and weekend IT clinics to
-                                your calendar.
+                                Sync all live sessions and weekend tech clinics to your calendar.
+                                <a href="classes.html">View Schedule &amp; Export Calendar &rarr;</a>
                             </p>
                         </div>
                     </li>
@@ -1336,6 +1350,7 @@
 
             const DEFAULT_CHECKLIST_STATE = {
                 checklist: {
+                    waiver_signed: false,
                     triage_survey: false,
                     thrive_report: false,
                     mic_calibration: false,
@@ -1421,10 +1436,21 @@
                             }
                         }
 
+                        const parsedWaiver = safeReadJson('thrive_waiver_status_v1');
                         const parsedDossier = safeReadJson('thrive_coaching_dossier_v1');
                         const parsedFlow = safeReadJson('thrive_flow_survey_state_v1');
                         const parsedProf = safeReadJson('thrive_profile_state_v1');
 
+                        if (parsedWaiver && parsedWaiver.signed) {
+                            const refNote = document.getElementById('waiver-ref-note');
+                            if (refNote && parsedWaiver.ref) {
+                                refNote.textContent = ` (Signed ✓ Ref: ${parsedWaiver.ref})`;
+                            }
+                            if (!state.checklist.waiver_signed && !manualUnchecked.waiver_signed) {
+                                state.checklist.waiver_signed = true;
+                                autoUpdated = true;
+                            }
+                        }
                         if (!state.checklist.triage_survey && !manualUnchecked.triage_survey && isFlowSurveyCompletedData(parsedFlow, parsedDossier)) {
                             state.checklist.triage_survey = true;
                             autoUpdated = true;

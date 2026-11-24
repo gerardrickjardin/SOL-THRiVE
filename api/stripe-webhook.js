@@ -22,10 +22,41 @@ module.exports = async (req, res) => {
   if (event.type === 'payment_intent.succeeded') {
     const pi = event.data.object;
     const m = pi.metadata || {};
+    const fullName = [m.first_name, m.last_name].filter(Boolean).join(' ');
     try {
       await forward({
-        source: 'thrive-funnel', type: 'payment', ts: new Date().toISOString(),
-        data: { paymentIntent: pi.id, amount: pi.amount, currency: pi.currency, session_date: m.session_date, session_time: m.session_time },
+        source: 'stripe-payment',
+        event_source: 'stripe-payment',
+        funnel_app: 'thrive-coaching',
+        type: 'payment',
+        ts: new Date().toISOString(),
+        first_name: m.first_name || '',
+        last_name: m.last_name || '',
+        firstName: m.first_name || '',
+        lastName: m.last_name || '',
+        full_name: fullName,
+        name: fullName,
+        company_name: m.organization || '',
+        companyName: m.organization || '',
+        email: m.email || '',
+        phone: m.phone || '',
+        amount_usd: Number(pi.amount || 0) / 100,
+        funding_source: m.funding_source || 'Direct Self-Pay',
+        waiver_accepted: m.waiver_accepted === 'true',
+        sms_consent: m.sms_consent === 'true',
+        payment_intent: pi.id,
+        data: {
+          source: 'stripe-payment',
+          paymentIntent: pi.id,
+          amount: pi.amount,
+          amount_usd: Number(pi.amount || 0) / 100,
+          currency: pi.currency,
+          session_date: m.session_date,
+          session_time: m.session_time,
+          funding_source: m.funding_source || 'Direct Self-Pay',
+          waiver_accepted: m.waiver_accepted === 'true',
+          sms_consent: m.sms_consent === 'true'
+        },
         lead: { fn: m.first_name, ln: m.last_name, org: m.organization, em: m.email, ph: m.phone },
       });
     } catch (e) { console.error(e); return res.status(502).end(); }

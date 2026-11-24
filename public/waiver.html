@@ -36,7 +36,7 @@
         rel="stylesheet">
     <link rel="stylesheet" href="style.css?v=99c71da4">
     <script src="bot-shield.js?v=6373a65f" defer></script>
-    <script src="script.js?v=c6f66a7d" defer></script>
+    <script src="script.js?v=59f1a21a" defer></script>
 
     <style>
         /* ==========================================================================
@@ -1222,6 +1222,11 @@
                         </div>
                     </div>
 
+                    <label class="screen-check-card" style="margin-top:4px;">
+                        <input type="checkbox" id="chk-sms-consent">
+                        <span><strong>Cohort Welcome Email &amp; SMS Reminders:</strong> Yes, send my signed waiver confirmation, Session 0 prep reminders, and live class alerts via email &amp; text message to the number above (msg &amp; data rates may apply; reply STOP to opt out anytime).</span>
+                    </label>
+
                     <!-- Before You Begin: Safety, Crisis & Confidentiality Screen (Inspired by Screenshot) -->
                     <div class="wf-section-title">2. Before You Begin &mdash; Safety &amp; Program Scope Screen</div>
 
@@ -1465,6 +1470,50 @@
                 dateEl.value = `${yyyy}-${mm}-${dd}`;
             })();
 
+            // Hydrate from checkout query params or localStorage prefill so paid buyers don't re-type details
+            (function hydratePrefill() {
+                try {
+                    const qs = new URLSearchParams(window.location.search || '');
+                    let stored = {};
+                    try {
+                        stored = JSON.parse(localStorage.getItem('thrive_enrollment_prefill_v1') || localStorage.getItem('solThriveLead') || localStorage.getItem('solThrive') || '{}') || {};
+                    } catch (_) { }
+                    const fn = (qs.get('fn') || stored.fn || stored.first || '').trim();
+                    const ln = (qs.get('ln') || stored.ln || stored.last || '').trim();
+                    const full = [fn, ln].filter(Boolean).join(' ') || (qs.get('name') || stored.fullName || '').trim();
+                    const em = (qs.get('em') || stored.em || stored.email || '').trim();
+                    const ph = (qs.get('ph') || stored.ph || stored.phone || '').trim();
+                    const org = (qs.get('org') || stored.org || stored.organization || '').trim();
+                    const fundingParam = (qs.get('funding') || stored.funding || '').toLowerCase();
+
+                    if (full && $('w-full-name')) {
+                        $('w-full-name').value = full;
+                        if ($('w-printed-name') && !$('w-printed-name').value) $('w-printed-name').value = full;
+                    }
+                    if (em && $('w-email')) $('w-email').value = em;
+                    if (ph && $('w-phone')) $('w-phone').value = ph;
+                    if (org && $('w-org')) $('w-org').value = org;
+
+                    if (fundingParam === 'direct' || qs.get('paid') === '1') {
+                        const directRadio = document.querySelector('.funding-opt[data-funding="direct"] input[type="radio"]');
+                        if (directRadio) {
+                            directRadio.checked = true;
+                            directRadio.dispatchEvent(new Event('change'));
+                        }
+                    } else if (fundingParam === 'sponsored') {
+                        const sponRadio = document.querySelector('.funding-opt[data-funding="sponsored"] input[type="radio"]');
+                        if (sponRadio) {
+                            sponRadio.checked = true;
+                            sponRadio.dispatchEvent(new Event('change'));
+                        }
+                    }
+
+                    if ((qs.get('paid') === '1' || stored.smsConsent) && $('chk-sms-consent')) {
+                        $('chk-sms-consent').checked = true;
+                    }
+                } catch (_) { }
+            })();
+
             // Funding Source card selection highlight
             document.querySelectorAll('input[name="fundingSource"]').forEach((radio) => {
                 radio.addEventListener('change', () => {
@@ -1699,6 +1748,7 @@
                     const { fn, ln } = splitName(fullName);
                     const confirmationRef = 'THR-' + Date.now().toString(36).toUpperCase().slice(-6);
                     const signaturePreviewUrl = sigMode === 'draw' && sigCanvas ? sigCanvas.toDataURL('image/png') : '';
+                    const smsConsentOk = Boolean($('chk-sms-consent') && $('chk-sms-consent').checked);
 
                     const payload = {
                         type: 'lead',
@@ -1721,10 +1771,12 @@
                             signed_date: signedDate,
                             signature_mode: sigMode,
                             typed_signature: sigMode === 'type' ? typedSig : '',
+                            signature_data_url: (signaturePreviewUrl && signaturePreviewUrl.length <= 90000) ? signaturePreviewUrl : '',
+                            sms_consent: smsConsentOk,
                             ack_18_plus_and_terms: true,
                             ack_nonclinical_988_911: true,
                             ack_roi_squad_confidentiality: true,
-                            message: `THRiVE Waiver Signed (${confirmationRef}) | Funding: ${fundingSource} | Printed: ${printedName} | Date: ${signedDate}`
+                            message: `THRiVE Waiver Signed (${confirmationRef}) | Funding: ${fundingSource} | SMS Opt-In: ${smsConsentOk ? 'Yes' : 'No'} | Printed: ${printedName} | Date: ${signedDate}`
                         },
                         _shield
                     };
@@ -1738,6 +1790,28 @@
                     if (!resp.ok || !resJson.ok) {
                         throw new Error(resJson.error || 'Could not submit waiver right now. Please try again.');
                     }
+
+                    // Persist signed waiver & participant info locally for Onboarding Hub & assessment CRM sync
+                    try {
+                        localStorage.setItem('thrive_waiver_status_v1', JSON.stringify({
+                            signed: true,
+                            ref: confirmationRef,
+                            signedDate,
+                            fundingSource,
+                            fullName,
+                            printedName,
+                            email,
+                            phone,
+                            org: sponsorOrg || fundingSource,
+                            smsConsent: smsConsentOk,
+                            agreementVersion: 'SOLab-THRiVE-Method-v1',
+                            savedAt: new Date().toISOString()
+                        }));
+                        localStorage.setItem('solThriveLead', JSON.stringify({
+                            fn, ln, em: email, ph: phone, org: sponsorOrg || fundingSource,
+                            first: fn, last: ln, email, phone, organization: sponsorOrg || fundingSource
+                        }));
+                    } catch (_) { }
 
                     window.ThriveBotShield?.resetForm(form);
 
