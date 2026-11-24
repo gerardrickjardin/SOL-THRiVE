@@ -442,6 +442,165 @@
       text-decoration: none
     }
 
+    .lunch-meet-card {
+      margin-top: 18px;
+      padding: 18px;
+      background: #FAF4E6;
+      border: 1.5px solid var(--ink);
+      border-radius: 18px;
+      box-shadow: 0 3px 0 rgba(31, 27, 22, .9);
+      text-align: left
+    }
+
+    .lunch-meet-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px
+    }
+
+    .lunch-meet-badge {
+      display: inline-block;
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      color: #455B70;
+      background: #DCE5EE;
+      padding: 4px 10px;
+      border-radius: 9999px
+    }
+
+    .lunch-meet-tz {
+      font-size: .76rem;
+      color: var(--slate);
+      font-weight: 600
+    }
+
+    .lunch-meet-title {
+      font-family: 'Plus Jakarta Sans', 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 1.08rem;
+      color: var(--ink);
+      margin: 0 0 4px
+    }
+
+    .lunch-meet-when {
+      font-size: .88rem;
+      color: var(--slate);
+      margin: 0 0 14px
+    }
+
+    .lunch-meet-cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 12px
+    }
+
+    .meet-join-cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 11px 18px;
+      border-radius: 9999px;
+      background: #2E6B4E;
+      color: #FFFDF8 !important;
+      border: 1.5px solid var(--ink);
+      box-shadow: 0 2.5px 0 var(--ink);
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: .9rem;
+      text-decoration: none !important;
+      transition: transform .15s, box-shadow .15s, background .15s
+    }
+
+    .meet-join-cta:hover {
+      background: #24573F;
+      transform: translateY(-1px);
+      box-shadow: 0 3.5px 0 var(--ink)
+    }
+
+    .lunch-cal-section {
+      padding-top: 10px;
+      margin-bottom: 12px;
+      border-top: 1px dashed rgba(31, 27, 22, .2)
+    }
+
+    .lunch-cal-label {
+      display: block;
+      font-size: .74rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--slate);
+      margin-bottom: 7px
+    }
+
+    .lunch-cal-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px
+    }
+
+    .meet-cal-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 13px;
+      border-radius: 10px;
+      background: var(--white);
+      color: var(--ink) !important;
+      border: 1.5px solid rgba(31, 27, 22, .32);
+      font-family: 'Inter', sans-serif;
+      font-size: .82rem;
+      font-weight: 600;
+      text-decoration: none !important;
+      cursor: pointer;
+      transition: .15s
+    }
+
+    .meet-cal-btn:hover {
+      border-color: var(--ink);
+      background: #FFF6E5;
+      transform: translateY(-1px)
+    }
+
+    .lunch-meet-details {
+      background: var(--white);
+      border: 1px solid rgba(31, 27, 22, .16);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: .82rem;
+      line-height: 1.55;
+      color: var(--ink)
+    }
+
+    .lunch-meet-detail-row {
+      margin-bottom: 5px;
+      word-break: break-word
+    }
+
+    .lunch-meet-detail-row:last-child {
+      margin-bottom: 0
+    }
+
+    .meet-inline-link {
+      color: #2B5B84 !important;
+      text-decoration: underline !important;
+      text-underline-offset: 2px;
+      font-weight: 600
+    }
+
+    .meet-inline-link:hover {
+      color: #B54840 !important
+    }
+
     .coupon-box {
       margin: 10px 0 14px;
       padding: 12px 14px;
@@ -774,12 +933,30 @@
         </svg>
         <h2>You’re enrolled in the Founding Pilot Lab!</h2>
         <p id="ok-msg"></p>
-        <div class="sol-story-box" id="success-lunch-meet" style="text-align:left;margin-top:16px;">
-          <span class="sol-badge">Join the Lunch &amp; Learn Briefing</span>
-          <p style="margin-bottom:6px;"><strong>5 to THRiVE Lunch &amp; Learn</strong> &bull; Tuesday, November 24 · 12:00 – 1:00pm (Time zone: America/Denver)</p>
-          <p style="margin-bottom:6px;"><strong>Video call link:</strong> <a href="https://meet.google.com/bro-rgxh-rzd" target="_blank" rel="noopener noreferrer">https://meet.google.com/bro-rgxh-rzd</a></p>
-          <p style="margin-bottom:4px;"><strong>Or dial:</strong> (US) +1 567-331-1188 <strong>PIN:</strong> 756 129 618#</p>
-          <p style="margin-bottom:0;"><strong>More phone numbers:</strong> <a href="https://tel.meet/bro-rgxh-rzd?pin=4024608972368" target="_blank" rel="noopener noreferrer">https://tel.meet/bro-rgxh-rzd?pin=4024608972368</a></p>
+        <div class="lunch-meet-card" id="success-lunch-meet">
+          <div class="lunch-meet-head">
+            <span class="lunch-meet-badge">Join the Lunch &amp; Learn Briefing</span>
+            <span class="lunch-meet-tz">America/Denver (MT)</span>
+          </div>
+          <h3 class="lunch-meet-title">5 to THRiVE Lunch &amp; Learn</h3>
+          <p class="lunch-meet-when">&#128197; Tuesday, November 24 &middot; 12:00 &ndash; 1:00 PM</p>
+          <div class="lunch-meet-cta-row">
+            <a href="https://meet.google.com/bro-rgxh-rzd" target="_blank" rel="noopener noreferrer" class="meet-join-cta" id="success-meet-join-btn">
+              &#128249; Join Google Meet &rarr;
+            </a>
+          </div>
+          <div class="lunch-cal-section">
+            <span class="lunch-cal-label">Add Event to Your Calendar</span>
+            <div class="lunch-cal-row">
+              <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=5+to+THRiVE+Lunch+%26+Learn&dates=20261124T190000Z/20261124T200000Z&details=Google+Meet+joining+info%0AVideo+call+link%3A+https%3A%2F%2Fmeet.google.com%2Fbro-rgxh-rzd%0AOr+dial%3A+(US)+%2B1+567-331-1188+PIN%3A+756+129+618%23%0AMore+phone+numbers%3A+https%3A%2F%2Ftel.meet%2Fbro-rgxh-rzd%3Fpin%3D4024608972368&location=https%3A%2F%2Fmeet.google.com%2Fbro-rgxh-rzd" target="_blank" rel="noopener noreferrer" class="meet-cal-btn" id="success-gcal-btn">+ Google Calendar</a>
+              <button type="button" class="meet-cal-btn" id="success-ics-btn">&#128229; Apple / Outlook (.ics)</button>
+            </div>
+          </div>
+          <div class="lunch-meet-details">
+            <div class="lunch-meet-detail-row"><strong>Video call link:</strong> <a href="https://meet.google.com/bro-rgxh-rzd" target="_blank" rel="noopener noreferrer" class="meet-inline-link">https://meet.google.com/bro-rgxh-rzd</a></div>
+            <div class="lunch-meet-detail-row"><strong>Or dial:</strong> <a href="tel:+15673311188" class="meet-inline-link">(US) +1 567-331-1188</a> &middot; <strong>PIN:</strong> 756 129 618#</div>
+            <div class="lunch-meet-detail-row"><strong>More phone numbers:</strong> <a href="https://tel.meet/bro-rgxh-rzd?pin=4024608972368" target="_blank" rel="noopener noreferrer" class="meet-inline-link">https://tel.meet/bro-rgxh-rzd?pin=4024608972368</a></div>
+          </div>
         </div>
         <div class="success-actions">
           <a class="btn btn-primary" id="success-waiver-link" href="waiver.html?funding=direct&amp;paid=1">Step 1: Complete E-Signature Waiver (Pre-Filled) &rarr;</a>
@@ -1150,6 +1327,41 @@
           window.ThriveBotShield?.resetForm($('#pay-form'));
         }
       });
+
+      const icsBtn = $('#success-ics-btn');
+      if (icsBtn) {
+        icsBtn.addEventListener('click', () => {
+          if (typeof window.downloadLunchAndLearnIcs === 'function') {
+            window.downloadLunchAndLearnIcs();
+            return;
+          }
+          const ics = [
+            'BEGIN:VCALENDAR',
+            'VERSION:2.0',
+            'PRODID:-//THRiVE Coaching//Lunch & Learn//EN',
+            'CALSCALE:GREGORIAN',
+            'METHOD:PUBLISH',
+            'BEGIN:VEVENT',
+            'UID:thrive-lunch-learn-nov24-2026@thrivecoaching.ai',
+            'DTSTAMP:20261101T000000Z',
+            'DTSTART:20261124T190000Z',
+            'DTEND:20261124T200000Z',
+            'SUMMARY:5 to THRiVE Lunch & Learn',
+            'DESCRIPTION:Google Meet joining info\\nVideo call link: https://meet.google.com/bro-rgxh-rzd\\nOr dial: (US) +1 567-331-1188 PIN: 756 129 618#\\nMore phone numbers: https://tel.meet/bro-rgxh-rzd?pin=4024608972368',
+            'LOCATION:https://meet.google.com/bro-rgxh-rzd',
+            'URL:https://meet.google.com/bro-rgxh-rzd',
+            'STATUS:CONFIRMED',
+            'END:VEVENT',
+            'END:VCALENDAR'
+          ].join('\r\n');
+          const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url; a.download = 'thrive-lunch-and-learn-nov24.ics';
+          document.body.appendChild(a); a.click(); document.body.removeChild(a);
+          setTimeout(() => URL.revokeObjectURL(url), 1000);
+        });
+      }
 
       // Handle query/hash view selection & Stripe 3DS return status cleanly
       const qs = new URLSearchParams((location && location.search) || '');

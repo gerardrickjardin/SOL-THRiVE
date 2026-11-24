@@ -869,16 +869,20 @@ const initThriveUI = () => {
                 <div style="font-size:0.86rem;color:#4B443D;margin-bottom:0.55rem;">
                     <strong>When:</strong> ${LUNCH_AND_LEARN_MEET.dateTimeLabel} (${LUNCH_AND_LEARN_MEET.timeZone})
                 </div>
-                <div style="margin-bottom:0.6rem;">
+                <div style="margin-bottom:0.6rem;display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
                     <a href="${LUNCH_AND_LEARN_MEET.meetUrl}" target="_blank" rel="noopener noreferrer"
-                       style="display:inline-flex;align-items:center;gap:6px;padding:0.55rem 0.95rem;border-radius:999px;background:#B54840;color:#FFFDF8;font-weight:800;font-size:0.86rem;text-decoration:none;border:2px solid #2D2A26;">
-                        Join Google Meet &rarr;
+                       style="display:inline-flex;align-items:center;gap:6px;padding:0.55rem 0.95rem;border-radius:999px;background:#2E6B4E;color:#FFFDF8;font-weight:800;font-size:0.86rem;text-decoration:none;border:2px solid #2D2A26;">
+                        &#128249; Join Google Meet &rarr;
+                    </a>
+                    <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=5+to+THRiVE+Lunch+%26+Learn&dates=20261124T190000Z/20261124T200000Z&details=Google+Meet+joining+info%0AVideo+call+link%3A+https%3A%2F%2Fmeet.google.com%2Fbro-rgxh-rzd%0AOr+dial%3A+(US)+%2B1+567-331-1188+PIN%3A+756+129+618%23%0AMore+phone+numbers%3A+https%3A%2F%2Ftel.meet%2Fbro-rgxh-rzd%3Fpin%3D4024608972368&location=https%3A%2F%2Fmeet.google.com%2Fbro-rgxh-rzd" target="_blank" rel="noopener noreferrer"
+                       style="display:inline-flex;align-items:center;gap:4px;padding:0.48rem 0.85rem;border-radius:10px;background:#FAF4E6;color:#1F1B16;font-weight:700;font-size:0.8rem;text-decoration:none;border:1.5px solid #2D2A26;">
+                        + Google Calendar
                     </a>
                 </div>
                 <div style="font-size:0.82rem;color:#2D2A26;word-break:break-word;">
-                    <div><strong>Video call link:</strong> <a href="${LUNCH_AND_LEARN_MEET.meetUrl}" target="_blank" rel="noopener noreferrer">${LUNCH_AND_LEARN_MEET.meetUrl}</a></div>
-                    <div><strong>Or dial:</strong> ${LUNCH_AND_LEARN_MEET.dialNumber} <strong>PIN:</strong> ${LUNCH_AND_LEARN_MEET.dialPin}</div>
-                    <div><strong>More phone numbers:</strong> <a href="${LUNCH_AND_LEARN_MEET.moreNumbersUrl}" target="_blank" rel="noopener noreferrer">${LUNCH_AND_LEARN_MEET.moreNumbersUrl}</a></div>
+                    <div><strong>Video call link:</strong> <a href="${LUNCH_AND_LEARN_MEET.meetUrl}" target="_blank" rel="noopener noreferrer" style="color:#2B5B84;text-decoration:underline;font-weight:600;">${LUNCH_AND_LEARN_MEET.meetUrl}</a></div>
+                    <div><strong>Or dial:</strong> <a href="tel:+15673311188" style="color:#2B5B84;text-decoration:underline;font-weight:600;">${LUNCH_AND_LEARN_MEET.dialNumber}</a> <strong>PIN:</strong> ${LUNCH_AND_LEARN_MEET.dialPin}</div>
+                    <div><strong>More phone numbers:</strong> <a href="${LUNCH_AND_LEARN_MEET.moreNumbersUrl}" target="_blank" rel="noopener noreferrer" style="color:#2B5B84;text-decoration:underline;font-weight:600;">${LUNCH_AND_LEARN_MEET.moreNumbersUrl}</a></div>
                 </div>
             </div>
         `;
