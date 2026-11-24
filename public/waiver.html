@@ -1494,17 +1494,17 @@
                     if (ph && $('w-phone')) $('w-phone').value = ph;
                     if (org && $('w-org')) $('w-org').value = org;
 
-                    if (fundingParam === 'direct' || qs.get('paid') === '1') {
-                        const directRadio = document.querySelector('.funding-opt[data-funding="direct"] input[type="radio"]');
-                        if (directRadio) {
-                            directRadio.checked = true;
-                            directRadio.dispatchEvent(new Event('change'));
-                        }
-                    } else if (fundingParam === 'sponsored') {
+                    if (fundingParam === 'sponsored') {
                         const sponRadio = document.querySelector('.funding-opt[data-funding="sponsored"] input[type="radio"]');
                         if (sponRadio) {
                             sponRadio.checked = true;
                             sponRadio.dispatchEvent(new Event('change'));
+                        }
+                    } else if (fundingParam === 'direct' || qs.get('paid') === '1') {
+                        const directRadio = document.querySelector('.funding-opt[data-funding="direct"] input[type="radio"]');
+                        if (directRadio) {
+                            directRadio.checked = true;
+                            directRadio.dispatchEvent(new Event('change'));
                         }
                     }
 
@@ -1750,6 +1750,13 @@
                     const signaturePreviewUrl = sigMode === 'draw' && sigCanvas ? sigCanvas.toDataURL('image/png') : '';
                     const smsConsentOk = Boolean($('chk-sms-consent') && $('chk-sms-consent').checked);
 
+                    const qsWaiver = new URLSearchParams(window.location.search || '');
+                    let prefillMeta = {};
+                    try { prefillMeta = JSON.parse(localStorage.getItem('thrive_enrollment_prefill_v1') || 'null') || {}; } catch (_) { }
+                    const waiverCouponCode = (qsWaiver.get('coupon') || prefillMeta.couponCode || '').trim();
+                    const waiverAttribution = (qsWaiver.get('attribution') || prefillMeta.attributionInitiative || '').trim();
+                    const waiverAttrOwner = (prefillMeta.attributionOwner || '').trim();
+
                     const payload = {
                         type: 'lead',
                         ts: new Date().toISOString(),
@@ -1767,6 +1774,9 @@
                             confirmation_ref: confirmationRef,
                             funding_source: fundingSource,
                             sponsor_org: sponsorOrg,
+                            coupon_code: waiverCouponCode,
+                            attribution_owner: waiverAttrOwner,
+                            attribution_initiative: waiverAttribution,
                             printed_name: printedName,
                             signed_date: signedDate,
                             signature_mode: sigMode,
@@ -1776,7 +1786,7 @@
                             ack_18_plus_and_terms: true,
                             ack_nonclinical_988_911: true,
                             ack_roi_squad_confidentiality: true,
-                            message: `THRiVE Waiver Signed (${confirmationRef}) | Funding: ${fundingSource} | SMS Opt-In: ${smsConsentOk ? 'Yes' : 'No'} | Printed: ${printedName} | Date: ${signedDate}`
+                            message: `THRiVE Waiver Signed (${confirmationRef}) | Funding: ${fundingSource}${waiverCouponCode ? ' | Coupon: ' + waiverCouponCode : ''}${waiverAttribution ? ' (' + waiverAttribution + ')' : ''} | SMS Opt-In: ${smsConsentOk ? 'Yes' : 'No'} | Printed: ${printedName} | Date: ${signedDate}`
                         },
                         _shield
                     };

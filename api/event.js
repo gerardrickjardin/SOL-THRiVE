@@ -14,6 +14,40 @@ async function forward(payload) {
   if (!r.ok) throw new Error(`Vision Control responded ${r.status}`);
 }
 
+const COUPON_DEFINITIONS = [
+  {
+    code: 'Solab',
+    aliases: ['solab', 'soullab', 'sollab'],
+    attribution_owner: 'Steve Huff',
+    attribution_initiative: "Steve Huff's Initiatives",
+    default_org: 'SOLab / Steve Huff Initiatives'
+  },
+  {
+    code: 'Ayers22',
+    aliases: ['ayers22'],
+    attribution_owner: 'Jsun',
+    attribution_initiative: 'Jsun',
+    default_org: 'Jsun (Ayers22)'
+  },
+  {
+    code: 'McBride',
+    aliases: ['mcbride'],
+    attribution_owner: 'Jason McBride',
+    attribution_initiative: "Jason McBride's Scholarship Sign-Ups",
+    default_org: 'McBride Impact'
+  }
+];
+
+function normalizeCouponKey(raw) {
+  return String(raw || '').trim().toLowerCase().replace(/[\s_-]+/g, '');
+}
+
+function resolveCouponConfig(raw) {
+  const key = normalizeCouponKey(raw);
+  if (!key) return null;
+  return COUPON_DEFINITIONS.find(def => def.aliases.includes(key)) || null;
+}
+
 function sanitizeSignatureDataUrl(val) {
   if (typeof val !== 'string') return '';
   const trimmed = val.trim();
@@ -48,15 +82,26 @@ module.exports = async (req, res) => {
     const d = data || {};
     const r = d.ratings || [];
     const eventSource = d.source || 'thrive-funnel';
-    let normalizedCoupon = String(d.coupon_code || '').trim();
+    const rawCouponInput = String(d.coupon_code || '').trim();
+    const couponConfig = resolveCouponConfig(rawCouponInput);
+    let normalizedCoupon = rawCouponInput;
+    let couponOwner = String(d.attribution_owner || d.coupon_owner || '').trim();
+    let couponAttribution = String(d.attribution_initiative || d.coupon_attribution || '').trim();
     if (eventSource === 'coupon_sponsored_enrollment') {
-      if (normalizedCoupon.toLowerCase() !== 'mcbride') {
+      if (!couponConfig) {
         return res.status(400).json({ error: 'Invalid or unrecognized coupon code.' });
       }
-      normalizedCoupon = 'McBride';
+      normalizedCoupon = couponConfig.code;
+      couponOwner = couponConfig.attribution_owner;
+      couponAttribution = couponConfig.attribution_initiative;
+    } else if (couponConfig) {
+      normalizedCoupon = couponConfig.code;
+      couponOwner = couponOwner || couponConfig.attribution_owner;
+      couponAttribution = couponAttribution || couponConfig.attribution_initiative;
     }
     const cleanSigUrl = sanitizeSignatureDataUrl(d.signature_data_url);
     const fullName = [l.fn, l.ln].filter(Boolean).join(' ');
+    const resolvedSponsorOrg = d.sponsor_org || (couponConfig ? (l.org || couponConfig.default_org) : '');
     await forward({
       source: eventSource,
       event_source: eventSource,
@@ -86,8 +131,13 @@ module.exports = async (req, res) => {
       waiver_ref: d.confirmation_ref || '',
       agreement_version: d.agreement_version || '',
       funding_source: d.funding_source || '',
-      sponsor_org: d.sponsor_org || '',
+      sponsor_org: resolvedSponsorOrg,
       coupon_code: normalizedCoupon,
+      coupon_entered: String(d.coupon_entered || rawCouponInput || '').trim(),
+      coupon_owner: couponOwner,
+      coupon_attribution: couponAttribution,
+      attribution_owner: couponOwner,
+      attribution_initiative: couponAttribution,
       amount_usd: d.amount_usd != null ? d.amount_usd : '',
       printed_name: d.printed_name || '',
       signed_date: d.signed_date || '',
@@ -111,3 +161,4 @@ module.exports = async (req, res) => {
 };
 
 module.exports.forward = forward;
+module.exports.resolveCouponConfig = resolveCouponConfig;
